@@ -6,6 +6,6 @@ package homemade.game;
 public class Game
 {
     public static final int CELL_EMPTY = 0;
-
+    public static final int CELL_MARKED_FOR_SPAWN = -1;
 
 }
