@@ -1,5 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.Game;
+
 import java.util.Timer;
 
 /**
@@ -10,14 +12,16 @@ public class GameModel
     private Field field;
     private Timer timer;
 
-    public GameModel(int width, int height)
+    public GameModel()
     {
+        int width = Game.FIELD_WIDTH, height = Game.FIELD_HEIGHT;
+
         this.field = new Field(width, height);
 
         this.timer = new Timer();
 
         long delay = 500; //time before the timertask is executed
-        long period = 3000; //TODO: move to settings
+        long period = 1000; //TODO: move to settings
         this.timer.schedule(new GameTimerTask(this), delay, period);
 
 
@@ -29,6 +33,11 @@ public class GameModel
 
         this.field.spawnBlocks();
         this.field.markCells(attemptsToSpawn);
+    }
+
+    public int [] getData()
+    {
+        return this.field.toArray();
     }
 
     public void gameOver()

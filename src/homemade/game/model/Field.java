@@ -99,6 +99,11 @@ class Field
 
         return number;
     }
+
+    public int [] toArray()
+    {
+        return this.cells.clone();
+    }
 }
 
 //we cycle through the same stuff a lot, could optimize if needed
