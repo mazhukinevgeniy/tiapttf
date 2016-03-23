@@ -49,7 +49,11 @@ class Field
             for (int j = 0; j < height; j++)
             {
                 if (this.cells[i + j * width] == Game.CELL_MARKED_FOR_SPAWN)
+                {
                     this.cells[i + j * width] = this.getNumber();
+
+                    System.out.println("block spawned: " + i + ", " + j + " | " + this.cells[i + j * width]);
+                }
             }
     }
 
@@ -71,9 +75,9 @@ class Field
 
             for (int i = 0; i < Math.min(targetAmount, width * height - cellsUsed); i++)
             {
-                int position = (int)(Math.random() * freeCells.size());
+                int position = (int)(Math.random() * (double)freeCells.size());
 
-                this.cells[position] = Game.CELL_MARKED_FOR_SPAWN;
+                this.cells[freeCells.get(position)] = Game.CELL_MARKED_FOR_SPAWN;
 
                 freeCells.removeElementAt(position);
             }
@@ -87,7 +91,7 @@ class Field
     private int getNumber()
     {
         int length = this.availableNumbers.size();
-        int position = (int)(Math.random() * length);
+        int position = (int)(Math.random() * (double)length);
         int number = this.availableNumbers.get(position);
 
         this.usedNumbers.add(number);
