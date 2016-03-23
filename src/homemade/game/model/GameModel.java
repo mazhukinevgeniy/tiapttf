@@ -24,7 +24,7 @@ public class GameModel
         long delay = 500; //time before the timertask is executed
         long period = 1000; //TODO: move to settings
         this.timer.schedule(new GameTimerTask(this), delay, period);
-
+        //TODO: measure and show the actual period
 
     }
 
