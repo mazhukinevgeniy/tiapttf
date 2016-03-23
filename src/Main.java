@@ -1,4 +1,5 @@
 import homemade.game.controller.GameController;
+import homemade.resources.Assets;
 
 import javax.swing.*;
 
@@ -9,6 +10,8 @@ public class Main
 {
     public static void main(String [] args)
     {
+        Assets.loadAssets();
+
         JFrame frame = new JFrame("there's a pattern there to follow");
         frame.setVisible(true);
 

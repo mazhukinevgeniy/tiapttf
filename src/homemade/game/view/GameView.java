@@ -2,12 +2,10 @@ package homemade.game.view;
 
 import homemade.game.Game;
 import homemade.game.controller.GameController;
+import homemade.resources.Assets;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,16 +20,10 @@ public class GameView
     private BufferStrategy strategy;
     private Timer timer;
 
-    private Image grid;
-    private Image normalBlock;
-    private Image smallBlock;
-
 
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
     {
         this.controller = controller;
-
-        this.loadAssets();
 
 
         this.canvas = new Canvas();
@@ -46,21 +38,6 @@ public class GameView
         long delay = 0; //time before the timertask is executed
         long period = 1000 / 30; //TODO: move to settings
         this.timer.schedule(new ViewTimerTask(controller), delay, period);
-    }
-
-    private void loadAssets()
-    {
-        try
-        {
-            this.grid = ImageIO.read(new File("res/grid.png"));
-
-            this.normalBlock = ImageIO.read(new File("res/normal_block.png"));
-            this.smallBlock = ImageIO.read(new File("res/small_block.png"));
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     public void renderNextFrame(int[] data)
@@ -78,7 +55,7 @@ public class GameView
 
                 int cellWidth = 50 + 1;
 
-                graphics.drawImage(this.grid, 1, 1, null);
+                graphics.drawImage(Assets.grid, 1, 1, null);
 
                 for (int i = 0; i < Game.FIELD_WIDTH; i++)
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -91,11 +68,11 @@ public class GameView
                         }
                         else if (value == Game.CELL_MARKED_FOR_SPAWN)
                         {
-                            graphics.drawImage(this.smallBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
+                            graphics.drawImage(Assets.smallBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
                         }
                         else if (value > 0) //condition is always true if codes stay unchanged
                         {
-                            graphics.drawImage(this.normalBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
+                            graphics.drawImage(Assets.normalBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
                         }
                     }
 
