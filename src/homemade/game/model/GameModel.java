@@ -3,6 +3,7 @@ package homemade.game.model;
 import homemade.game.Game;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by user3 on 22.03.2016.
@@ -44,5 +45,22 @@ public class GameModel
     {
         this.timer.cancel();
         this.timer.purge();
+    }
+
+    private class GameTimerTask extends TimerTask
+    {
+        private GameModel model;
+
+        GameTimerTask(GameModel model)
+        {
+            this.model = model;
+        }
+
+        @Override
+        public void run()
+        {
+            this.model.handleTimerTask();
+            //I guess it's ok to have no logic here because we might want to replace timer
+        }
     }
 }
