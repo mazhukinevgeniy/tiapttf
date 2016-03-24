@@ -14,10 +14,17 @@ import java.util.TimerTask;
  */
 public class GameView
 {
+    static final int CellWidth = 50;
+    static final int CellOffset = 1;
+    //TODO: use these constants in calculations
+
     private GameController controller;
 
     private Canvas canvas;
+
     private BufferStrategy strategy;
+    private GameMouseAdapter mouseAdapter;
+
     private Timer timer;
 
 
@@ -29,6 +36,10 @@ public class GameView
         this.canvas = new Canvas();
         this.canvas.setPreferredSize(new Dimension(460, 460));//TODO: fix magic numbers
         mainFrame.add(this.canvas);
+
+        this.mouseAdapter = new GameMouseAdapter(controller);
+        canvas.addMouseListener(this.mouseAdapter);
+        canvas.addMouseMotionListener(this.mouseAdapter);
 
         canvas.createBufferStrategy(2);
 
@@ -106,7 +117,7 @@ public class GameView
         public void run()
         {
             this.controller.viewTimerUpdated();
-            System.out.println("game view timer task executed");
+            //System.out.println("game view timer task executed");
         }
     }
 }

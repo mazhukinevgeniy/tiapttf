@@ -23,4 +23,9 @@ public class GameController
     {
         this.view.renderNextFrame(this.model.getData());
     }
+
+    public void handleMouseRelease(int cellX, int cellY)
+    {
+        System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
+    }
 }
