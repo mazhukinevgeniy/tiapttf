@@ -15,6 +15,7 @@ public class GameController
     private GameView view;
 
     private Selection selection;
+    //TODO: add selection tracker which will proceed related updates from View
 
     public GameController(Frame mainFrame)
     {
@@ -29,8 +30,11 @@ public class GameController
         this.view.renderNextFrame(this.model.getData(), this.selection);
     }
 
-    public void handleMouseRelease(int cellX, int cellY)
+    public void handleMouseRelease(int canvasX, int canvasY)
     {
+        int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
+        int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
+
         if (this.model.getData()[cellX + Game.FIELD_WIDTH * cellY] > 0)
         {
             this.selection.active = true;

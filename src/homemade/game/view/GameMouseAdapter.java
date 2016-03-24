@@ -21,10 +21,7 @@ class GameMouseAdapter extends MouseAdapter
     @Override
     public void mouseReleased(MouseEvent e)
     {
-        int cellX = e.getX() / (GameView.CellWidth + GameView.CellOffset);
-        int cellY = e.getY() / (GameView.CellWidth + GameView.CellOffset);
-
-        this.controller.handleMouseRelease(cellX, cellY);
+        this.controller.handleMouseRelease(e.getX(), e.getY());
     }
 
     //TODO: allow multiple block selection
