@@ -15,9 +15,11 @@ import java.util.TimerTask;
  */
 public class GameView
 {
-    static final int CellWidth = 50;
-    static final int CellOffset = 1;
-    //TODO: use these constants in calculations
+    public static final int CellWidth = 50;
+    public static final int CellOffset = 1;
+    public static final int GridOffset = 1;
+    public static final int CanvasWidth = 460;
+    public static final int CanvasHeight = 460;
 
     private GameController controller;
 
@@ -35,7 +37,7 @@ public class GameView
 
 
         this.canvas = new Canvas();
-        this.canvas.setPreferredSize(new Dimension(460, 460));//TODO: fix magic numbers
+        this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
         mainFrame.add(this.canvas);
 
         this.mouseAdapter = new GameMouseAdapter(controller);
@@ -65,9 +67,9 @@ public class GameView
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
 
-                int cellWidth = 50 + 1;
+                int cellWidth = GameView.CellWidth + GameView.CellOffset;
 
-                graphics.drawImage(Assets.grid, 1, 1, null);
+                graphics.drawImage(Assets.grid, GameView.GridOffset, GameView.GridOffset, null);
 
                 for (int i = 0; i < Game.FIELD_WIDTH; i++)
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -80,19 +82,25 @@ public class GameView
                         }
                         else if (value == Game.CELL_MARKED_FOR_SPAWN)
                         {
-                            graphics.drawImage(Assets.smallBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
+                            graphics.drawImage(Assets.smallBlock,
+                                               GameView.GridOffset + cellWidth * i,
+                                               GameView.GridOffset + cellWidth * j,
+                                               null);
                         }
                         else if (value > 0) //condition is always true if codes stay unchanged
                         {
-                            graphics.drawImage(Assets.normalBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
+                            graphics.drawImage(Assets.normalBlock,
+                                               GameView.GridOffset + cellWidth * i,
+                                               GameView.GridOffset + cellWidth * j,
+                                               null);
                         }
                     }
 
                 if (selection.isActive())
                 {
                     graphics.drawImage(Assets.normalBlockSelected,
-                                       1 + cellWidth * selection.getX(),
-                                       1 + cellWidth * selection.getY(),
+                                       GameView.GridOffset + cellWidth * selection.getX(),
+                                       GameView.GridOffset + cellWidth * selection.getY(),
                                        null);
                 }
                 //TODO: design special data format so that we can render numbers AND selections in a sensible way
