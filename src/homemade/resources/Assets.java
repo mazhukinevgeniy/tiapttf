@@ -12,6 +12,7 @@ public class Assets
 {
     public static Image grid;
     public static Image normalBlock;
+    public static Image normalBlockSelected;
     public static Image smallBlock;
 
     public static void loadAssets()
@@ -31,6 +32,9 @@ public class Assets
 
             input = getClass().getResourceAsStream("normal_block.png");
             Assets.normalBlock = ImageIO.read(input);
+
+            input = getClass().getResourceAsStream("normal_block_selected.png");
+            Assets.normalBlockSelected = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("small_block.png");
             Assets.smallBlock = ImageIO.read(input);
