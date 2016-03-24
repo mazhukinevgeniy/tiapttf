@@ -13,25 +13,20 @@ class Field
     //has number if value>0
     //has special function if value<0
 
-    private int width, height;
-
     private int[] cells;
 
     private Vector<Integer> usedNumbers, availableNumbers;
 
-    Field(int width, int height)
+    Field()
     {
-        this.width = width;
-        this.height = height;
-
-        int numberOfCells = width * height;
+        int numberOfCells = Game.FIELD_WIDTH * Game.FIELD_HEIGHT;
 
         this.cells = new int[numberOfCells];
 
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
+        for (int i = 0; i < Game.FIELD_WIDTH; i++)
+            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                this.cells[i + j * width] = Game.CELL_EMPTY;
+                this.cells[i + j * Game.FIELD_WIDTH] = Game.CELL_EMPTY;
             }
 
         this.usedNumbers = new Vector<Integer>(numberOfCells);
@@ -45,14 +40,14 @@ class Field
 
     void spawnBlocks()
     {
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
+        for (int i = 0; i < Game.FIELD_WIDTH; i++)
+            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                if (this.cells[i + j * width] == Game.CELL_MARKED_FOR_SPAWN)
+                if (this.cells[i + j * Game.FIELD_WIDTH] == Game.CELL_MARKED_FOR_SPAWN)
                 {
-                    this.cells[i + j * width] = this.getNumber();
+                    this.cells[i + j * Game.FIELD_WIDTH] = this.getNumber();
 
-                    System.out.println("block spawned: " + i + ", " + j + " | " + this.cells[i + j * width]);
+                    System.out.println("block spawned: " + i + ", " + j + " | " + this.cells[i + j * Game.FIELD_WIDTH]);
                 }
             }
     }
@@ -62,18 +57,18 @@ class Field
         int cellsUsed = this.usedNumbers.size();
         //this depends on every powerup being removed at the stage of spawning blocks
 
-        if (cellsUsed < width * height)
+        if (cellsUsed < Game.FIELD_WIDTH * Game.FIELD_HEIGHT)
         {
-            Vector<Integer> freeCells = new Vector<Integer>(width * height - cellsUsed);
+            Vector<Integer> freeCells = new Vector<Integer>(Game.FIELD_WIDTH * Game.FIELD_HEIGHT - cellsUsed);
 
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
+            for (int i = 0; i < Game.FIELD_WIDTH; i++)
+                for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                 {
-                    if (this.cells[i + j * width] == Game.CELL_EMPTY)
-                        freeCells.add(i + j * width);
+                    if (this.cells[i + j * Game.FIELD_WIDTH] == Game.CELL_EMPTY)
+                        freeCells.add(i + j * Game.FIELD_WIDTH);
                 }
 
-            for (int i = 0; i < Math.min(targetAmount, width * height - cellsUsed); i++)
+            for (int i = 0; i < Math.min(targetAmount, Game.FIELD_WIDTH * Game.FIELD_HEIGHT - cellsUsed); i++)
             {
                 int position = (int)(Math.random() * (double)freeCells.size());
 
@@ -100,10 +95,8 @@ class Field
         return number;
     }
 
-    public int [] toArray()
+    int [] cloneToArray()
     {
         return this.cells.clone();
     }
 }
-
-//we cycle through the same stuff a lot, could optimize if needed

@@ -1,6 +1,7 @@
 package homemade.game.model;
 
 import homemade.game.Game;
+import homemade.game.GameState;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,14 +11,15 @@ import java.util.TimerTask;
  */
 public class GameModel
 {
+    private ArrayBasedGameState gameStateSnapshot;
+
     private Field field;
     private Timer timer;
 
     public GameModel()
     {
-        int width = Game.FIELD_WIDTH, height = Game.FIELD_HEIGHT;
-
-        this.field = new Field(width, height);
+        this.field = new Field();
+        this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
 
         this.timer = new Timer();
 
@@ -34,11 +36,13 @@ public class GameModel
 
         this.field.spawnBlocks();
         this.field.markCells(attemptsToSpawn);
+
+        this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
     }
 
-    public int [] getData()
+    public GameState copyGameState()
     {
-        return this.field.toArray();
+        return this.gameStateSnapshot;
     }
 
     public void gameOver()

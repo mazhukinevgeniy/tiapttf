@@ -1,6 +1,6 @@
 package homemade.game.controller;
 
-import homemade.game.Game;
+import homemade.game.GameState;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
 
@@ -14,37 +14,24 @@ public class GameController
     private GameModel model;
     private GameView view;
 
-    private Selection selection;
-    //TODO: add selection tracker which will proceed related updates from View
+    private SelectionManager selectionManager;
 
     public GameController(Frame mainFrame)
     {
+        this.selectionManager = new SelectionManager(this);
+
         this.model = new GameModel();
         this.view = new GameView(this, mainFrame);
-
-        this.selection = new Selection();
     }
+
+    GameState state() { return this.model.copyGameState(); }
+
+    public MouseInputHandler mouseInputHandler() { return this.selectionManager; }
 
     public void viewTimerUpdated()
     {
-        this.view.renderNextFrame(this.model.getData(), this.selection);
+        this.view.renderNextFrame(this.model.copyGameState(), this.selectionManager.getSelectionState());
     }
 
-    public void handleMouseRelease(int canvasX, int canvasY)
-    {
-        int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
-        int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
 
-        if (this.model.getData()[cellX + Game.FIELD_WIDTH * cellY] > 0)
-        {
-            this.selection.active = true;
-            this.selection.x = cellX;
-            this.selection.y = cellY;
-        }
-        //TODO: could use simple CellCoordinates class for arguments and simple manipulations, comparisons etc
-        //TODO: add ability to move blocks by clicking at empty nearby cells
-        //TODO: ATM getData is rather expensive, redesign the access methods
-
-        System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
-    }
 }

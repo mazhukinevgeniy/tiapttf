@@ -1,8 +1,9 @@
 package homemade.game.view;
 
 import homemade.game.Game;
+import homemade.game.GameState;
+import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
-import homemade.game.controller.Selection;
 import homemade.resources.Assets;
 
 import java.awt.*;
@@ -21,8 +22,6 @@ public class GameView
     public static final int CanvasWidth = 460;
     public static final int CanvasHeight = 460;
 
-    private GameController controller;
-
     private Canvas canvas;
 
     private BufferStrategy strategy;
@@ -33,14 +32,11 @@ public class GameView
 
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
     {
-        this.controller = controller;
-
-
         this.canvas = new Canvas();
         this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
         mainFrame.add(this.canvas);
 
-        this.mouseAdapter = new GameMouseAdapter(controller);
+        this.mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
         canvas.addMouseListener(this.mouseAdapter);
         canvas.addMouseMotionListener(this.mouseAdapter);
 
@@ -54,7 +50,7 @@ public class GameView
         this.timer.schedule(new ViewTimerTask(controller), delay, period);
     }
 
-    public void renderNextFrame(int[] data, Selection selection)
+    public void renderNextFrame(GameState state, SelectionState selection)
     {
         // Render single frame
         do
@@ -74,36 +70,35 @@ public class GameView
                 for (int i = 0; i < Game.FIELD_WIDTH; i++)
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                     {
-                        int value = data[i + j * Game.FIELD_WIDTH];
+                        int value = state.getCellValue(i, j);
 
                         if (value == Game.CELL_EMPTY)
                         {
                             //?
                         }
-                        else if (value == Game.CELL_MARKED_FOR_SPAWN)
+                        else
                         {
-                            graphics.drawImage(Assets.smallBlock,
-                                               GameView.GridOffset + cellWidth * i,
-                                               GameView.GridOffset + cellWidth * j,
-                                               null);
-                        }
-                        else if (value > 0) //condition is always true if codes stay unchanged
-                        {
-                            graphics.drawImage(Assets.normalBlock,
-                                               GameView.GridOffset + cellWidth * i,
-                                               GameView.GridOffset + cellWidth * j,
-                                               null);
-                        }
-                    }
+                            Image sprite;
 
-                if (selection.isActive())
-                {
-                    graphics.drawImage(Assets.normalBlockSelected,
-                                       GameView.GridOffset + cellWidth * selection.getX(),
-                                       GameView.GridOffset + cellWidth * selection.getY(),
-                                       null);
-                }
-                //TODO: design special data format so that we can render numbers AND selections in a sensible way
+                            if (value == Game.CELL_MARKED_FOR_SPAWN)
+                            {
+                                sprite = Assets.smallBlock;
+                            }
+                            else //if (value > 0) //condition is always true if codes stay unchanged
+                            {
+                                if (selection.isSelected(i, j))
+                                    sprite = Assets.normalBlockSelected;
+                                else
+                                    sprite = Assets.normalBlock;
+                            }
+
+                            graphics.drawImage(sprite,
+                                               GameView.GridOffset + cellWidth * i,
+                                               GameView.GridOffset + cellWidth * j,
+                                               null);
+                        }
+
+                    }
 
                 // Render to graphics
                 // ...

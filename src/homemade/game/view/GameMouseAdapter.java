@@ -1,6 +1,6 @@
 package homemade.game.view;
 
-import homemade.game.controller.GameController;
+import homemade.game.controller.MouseInputHandler;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,18 +10,18 @@ import java.awt.event.MouseEvent;
  */
 class GameMouseAdapter extends MouseAdapter
 {
-    private GameController controller;
+    private MouseInputHandler inputHandler;
 
-    GameMouseAdapter(GameController controller)
+    GameMouseAdapter(MouseInputHandler inputHandler)
     {
-        this.controller = controller;
+        this.inputHandler = inputHandler;
     }
 
 
     @Override
     public void mouseReleased(MouseEvent e)
     {
-        this.controller.handleMouseRelease(e.getX(), e.getY());
+        this.inputHandler.handleMouseRelease(e.getX(), e.getY());
     }
 
     //TODO: allow multiple block selection
