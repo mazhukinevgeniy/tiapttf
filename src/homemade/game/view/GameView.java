@@ -2,6 +2,7 @@ package homemade.game.view;
 
 import homemade.game.Game;
 import homemade.game.controller.GameController;
+import homemade.game.controller.Selection;
 import homemade.resources.Assets;
 
 import java.awt.*;
@@ -51,7 +52,7 @@ public class GameView
         this.timer.schedule(new ViewTimerTask(controller), delay, period);
     }
 
-    public void renderNextFrame(int[] data)
+    public void renderNextFrame(int[] data, Selection selection)
     {
         // Render single frame
         do
@@ -86,6 +87,15 @@ public class GameView
                             graphics.drawImage(Assets.normalBlock, 1 + cellWidth * i, 1 + cellWidth * j, null);
                         }
                     }
+
+                if (selection.isActive())
+                {
+                    graphics.drawImage(Assets.normalBlockSelected,
+                                       1 + cellWidth * selection.getX(),
+                                       1 + cellWidth * selection.getY(),
+                                       null);
+                }
+                //TODO: design special data format so that we can render numbers AND selections in a sensible way
 
                 // Render to graphics
                 // ...

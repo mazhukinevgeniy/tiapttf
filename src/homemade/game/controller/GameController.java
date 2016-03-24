@@ -1,5 +1,6 @@
 package homemade.game.controller;
 
+import homemade.game.Game;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
 
@@ -13,19 +14,33 @@ public class GameController
     private GameModel model;
     private GameView view;
 
+    private Selection selection;
+
     public GameController(Frame mainFrame)
     {
         this.model = new GameModel();
         this.view = new GameView(this, mainFrame);
+
+        this.selection = new Selection();
     }
 
     public void viewTimerUpdated()
     {
-        this.view.renderNextFrame(this.model.getData());
+        this.view.renderNextFrame(this.model.getData(), this.selection);
     }
 
     public void handleMouseRelease(int cellX, int cellY)
     {
+        if (this.model.getData()[cellX + Game.FIELD_WIDTH * cellY] > 0)
+        {
+            this.selection.active = true;
+            this.selection.x = cellX;
+            this.selection.y = cellY;
+        }
+        //TODO: could use simple CellCoordinates class for arguments and simple manipulations, comparisons etc
+        //TODO: add ability to move blocks by clicking at empty nearby cells
+        //TODO: ATM getData is rather expensive, redesign the access methods
+
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }
 }
