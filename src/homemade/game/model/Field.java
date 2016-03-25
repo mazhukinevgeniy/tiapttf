@@ -38,7 +38,7 @@ class Field
         }
     }
 
-    void spawnBlocks()
+    synchronized void spawnBlocks()
     {
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -52,7 +52,7 @@ class Field
             }
     }
 
-    void markCells(int targetAmount)
+    synchronized void markCells(int targetAmount)
     {
         int cellsUsed = this.usedNumbers.size();
         //this depends on every powerup being removed at the stage of spawning blocks
@@ -70,7 +70,7 @@ class Field
 
             for (int i = 0; i < Math.min(targetAmount, Game.FIELD_WIDTH * Game.FIELD_HEIGHT - cellsUsed); i++)
             {
-                int position = (int)(Math.random() * (double)freeCells.size());
+                int position = (int) (Math.random() * (double) freeCells.size());
 
                 this.cells[freeCells.get(position)] = Game.CELL_MARKED_FOR_SPAWN;
 
@@ -81,6 +81,23 @@ class Field
         {
             //TODO: game over (:
         }
+    }
+
+    synchronized boolean tryMoveBlock(int cellCodeFrom, int cellCodeTo)
+    {
+        boolean success = false;
+
+        int cellToValue = cells[cellCodeTo], cellFromValue = cells[cellCodeFrom];
+
+        if (cellToValue <= 0 && cellFromValue > 0)
+        {
+            cells[cellCodeTo] = cellFromValue;
+            cells[cellCodeFrom] = Game.CELL_EMPTY;
+
+            success = true;
+        }
+
+        return success;
     }
 
     private int getNumber()
@@ -95,7 +112,7 @@ class Field
         return number;
     }
 
-    int [] cloneToArray()
+    synchronized int [] cloneToArray()
     {
         return this.cells.clone();
     }
