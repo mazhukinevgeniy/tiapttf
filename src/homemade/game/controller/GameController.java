@@ -1,6 +1,5 @@
 package homemade.game.controller;
 
-import homemade.game.GameState;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
 
@@ -11,7 +10,7 @@ import java.awt.*;
  */
 public class GameController
 {
-    private GameModel model;
+    GameModel model;
     private GameView view;
 
     private SelectionManager selectionManager;
@@ -23,8 +22,6 @@ public class GameController
         this.model = new GameModel();
         this.view = new GameView(this, mainFrame);
     }
-
-    GameState state() { return this.model.copyGameState(); }
 
     public MouseInputHandler mouseInputHandler() { return this.selectionManager; }
 

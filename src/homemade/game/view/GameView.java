@@ -65,6 +65,8 @@ public class GameView
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
 
+                graphics.clearRect(0, 0, GameView.CanvasWidth, GameView.CanvasHeight);
+
                 int cellWidth = GameView.CellWidth + GameView.CellOffset;
 
                 graphics.drawImage(Assets.grid, GameView.GridOffset, GameView.GridOffset, null);
@@ -158,3 +160,4 @@ public class GameView
         }
     }
 }
+//TODO: split this class, it's getting too ugly

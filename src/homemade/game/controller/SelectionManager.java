@@ -32,16 +32,32 @@ class SelectionManager implements MouseInputHandler
         int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
         int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
 
-        if (this.controller.state().getCellValue(cellX, cellY) > 0)
+        int eventCell = cellX + cellY * Game.FIELD_WIDTH;
+
+        if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
         {
             this.selection.removeAllElements();
-            this.selection.add(cellX + cellY * Game.FIELD_WIDTH);
+            this.selection.add(eventCell);
 
             this.updateSelectionState();
         }
+        else if (this.selection.size() == 1) //ie we move single blocks and we can move them by clicking nearby cells
+        {
+            int selectedCell = this.selection.get(0);
+            int distance = Math.abs(eventCell - selectedCell);
+
+            if (distance == 1 || distance == Game.FIELD_WIDTH) //ie cells are adjacent
+            {
+                this.controller.model.blockMoveRequested(selectedCell, eventCell);
+
+                this.selection.removeAllElements();
+                this.selection.add(eventCell);
+
+                this.updateSelectionState();
+            }
+        }
 
         //TODO: could use simple CellCoordinates class for arguments and simple manipulations, comparisons etc
-        //TODO: add ability to move blocks by clicking at empty nearby cells
 
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }

@@ -51,6 +51,14 @@ public class GameModel
         this.timer.purge();
     }
 
+    public void blockMoveRequested(int cellCodeFrom, int cellCodeTo)
+    {
+        if (this.field.tryMoveBlock(cellCodeFrom, cellCodeTo))
+        {
+            this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
+        }
+    }
+
     private class GameTimerTask extends TimerTask
     {
         private GameModel model;
