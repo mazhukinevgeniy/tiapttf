@@ -24,6 +24,8 @@ public class GameView
 
     private Canvas canvas;
 
+    private DigitMetadata digitMetadata = new DigitMetadata();
+
     private BufferStrategy strategy;
     private GameMouseAdapter mouseAdapter;
 
@@ -79,6 +81,7 @@ public class GameView
                         else
                         {
                             Image sprite;
+                            String numberToDraw = "";
 
                             if (value == Game.CELL_MARKED_FOR_SPAWN)
                             {
@@ -90,12 +93,33 @@ public class GameView
                                     sprite = Assets.normalBlockSelected;
                                 else
                                     sprite = Assets.normalBlock;
+
+                                numberToDraw = String.valueOf(value);
                             }
 
-                            graphics.drawImage(sprite,
-                                               GameView.GridOffset + cellWidth * i,
-                                               GameView.GridOffset + cellWidth * j,
-                                               null);
+                            int canvasX = GameView.GridOffset + cellWidth * i;
+                            int canvasY = GameView.GridOffset + cellWidth * j;
+
+                            graphics.drawImage(sprite, canvasX, canvasY, null);
+
+                            int numberLength = numberToDraw.length();
+                            if (numberLength > 0)
+                            {
+                                canvasX += digitMetadata.getOffsetXForNumber(value);
+                                canvasY += digitMetadata.offsetY;
+
+
+                                for (int k = 0; k < numberLength; k++)
+                                {
+                                    int digit = Character.getNumericValue(numberToDraw.charAt(k));
+
+                                    graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
+
+                                    canvasX += 1 + digitMetadata.digitWidth[digit];
+                                }
+                            }
+
+
                         }
 
                     }
