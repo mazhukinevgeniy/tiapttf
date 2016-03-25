@@ -14,6 +14,7 @@ public class Assets
     public static Image normalBlock;
     public static Image normalBlockSelected;
     public static Image smallBlock;
+    public static Image digit[];
 
     public static void loadAssets()
     {
@@ -23,6 +24,8 @@ public class Assets
     private Assets()
     {
         InputStream input;
+
+        Assets.digit = new Image[10];
 
 
         try
@@ -38,6 +41,12 @@ public class Assets
 
             input = getClass().getResourceAsStream("small_block.png");
             Assets.smallBlock = ImageIO.read(input);
+
+            for (int i = 0; i < 10; i++)
+            {
+                input = getClass().getResourceAsStream(i + ".png");
+                Assets.digit[i] = ImageIO.read(input);
+            }
         }
         catch (IOException e)
         {
