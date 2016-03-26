@@ -71,6 +71,8 @@ class ComboDetector
     {
         tmpStorage.clear();
 
+        System.out.println("start = " + start + ", stepX = " + stepX + ", stepY = " + stepY);
+
         int step = stepX + Game.FIELD_WIDTH * stepY;
         int cellsLeft = stepX * Game.FIELD_WIDTH + stepY * Game.FIELD_HEIGHT;
 
@@ -88,20 +90,33 @@ class ComboDetector
 
             nextValue = cellValues[currentCell];
 
+            boolean comboBroken = false;
+
             if (lastValue > 0 && nextValue > lastValue)
             {
                 comboLength++;
             }
             else
             {
+                comboBroken = true;
+            }
+
+            if (comboBroken || cellsLeft == 0)
+            {
                 if (comboLength >= Game.MIN_COMBO)
                 {
-                    //TODO: report combo
+                    //TODO: actually report combo
+
+                    String report = "";
 
                     for (int i = 0; i < comboLength; i++)
                     {
-                        tmpStorage.add(currentCell - (1 + i) * step);
+                        tmpStorage.add(currentCell - i * step);
+
+                        report = " " + (currentCell - i * step) + report;
                     }
+
+                    System.out.println("in terms of cell numbers combo is" + report);
                 }
 
                 comboLength = 1;

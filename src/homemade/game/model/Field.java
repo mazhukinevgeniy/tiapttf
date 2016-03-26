@@ -3,8 +3,8 @@ package homemade.game.model;
 import homemade.game.Game;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
-import java.util.Vector;
 
 /**
  * Created by user3 on 22.03.2016.
@@ -18,9 +18,7 @@ class Field
     private int[] cells;
     private ComboDetector comboDetector;
 
-    private Vector<Integer> usedNumbers, availableNumbers;
-    //TODO: these vectors are probably DEMOLISHING the performance, have to replace them with more suitable collections
-    //the main issue is removing elements; could LinkedList be an upgrade?
+    private LinkedList<Integer> usedNumbers, availableNumbers;
     private HashSet<Integer> changedCells;
 
     //TODO: think if it would be nice if cells were automatically keeping track of changed verticals/horizontals
@@ -41,8 +39,8 @@ class Field
         this.comboDetector = new ComboDetector(cells);
 
 
-        this.usedNumbers = new Vector<Integer>(numberOfCells);
-        this.availableNumbers = new Vector<Integer>(numberOfCells);
+        this.usedNumbers = new LinkedList<Integer>();
+        this.availableNumbers = new LinkedList<Integer>();
 
         for (int i = 0; i < numberOfCells; i++)
         {
@@ -80,7 +78,7 @@ class Field
 
         if (cellsUsed < Game.FIELD_WIDTH * Game.FIELD_HEIGHT)
         {
-            Vector<Integer> freeCells = new Vector<Integer>(Game.FIELD_WIDTH * Game.FIELD_HEIGHT - cellsUsed);
+            LinkedList<Integer> freeCells = new LinkedList<Integer>();
 
             for (int i = 0; i < Game.FIELD_WIDTH; i++)
                 for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -95,7 +93,7 @@ class Field
 
                 this.cells[freeCells.get(position)] = Game.CELL_MARKED_FOR_SPAWN;
 
-                freeCells.removeElementAt(position);
+                freeCells.remove(position);
             }
         }
         else
@@ -131,7 +129,7 @@ class Field
         int number = this.availableNumbers.get(position);
 
         this.usedNumbers.add(number);
-        this.availableNumbers.removeElementAt(position);
+        this.availableNumbers.remove(position);
 
         return number;
     }
@@ -147,7 +145,8 @@ class Field
                 int value = cells[cell];
 
                 cells[cell] = Game.CELL_EMPTY;
-                usedNumbers.removeElementAt(usedNumbers.indexOf(value));
+                usedNumbers.remove(new Integer(value));
+                //because we want to remove by object and not by its position in the list
                 availableNumbers.add(value);
             }
 
