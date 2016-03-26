@@ -3,17 +3,20 @@ package homemade.game.controller;
 import homemade.game.Game;
 import homemade.game.SelectionState;
 
+import java.util.HashSet;
+
 /**
  * Created by user3 on 25.03.2016.
  */
 class SelectionStateProvider implements SelectionState
 {
     private int[] selection;
+    private HashSet<Integer> cellsToMove;
 
-    SelectionStateProvider(int[] selectionData)
+    SelectionStateProvider(int[] selectionData, HashSet<Integer> cellsToMove)
     {
         this.selection = selectionData;
-
+        this.cellsToMove = cellsToMove;
     }
 
     @Override
@@ -35,5 +38,11 @@ class SelectionStateProvider implements SelectionState
         }
 
         return found;
+    }
+
+    @Override
+    public boolean canMoveTo(int cellX, int cellY)
+    {
+        return cellsToMove.contains(cellX + cellY * Game.FIELD_WIDTH);
     }
 }

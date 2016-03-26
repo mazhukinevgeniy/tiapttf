@@ -17,9 +17,10 @@ public class GameController
 
     public GameController(Frame mainFrame)
     {
+        this.model = new GameModel();
+
         this.selectionManager = new SelectionManager(this);
 
-        this.model = new GameModel();
         this.view = new GameView(this, mainFrame);
     }
 

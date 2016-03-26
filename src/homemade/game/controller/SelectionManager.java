@@ -1,25 +1,26 @@
 package homemade.game.controller;
 
 import homemade.game.Game;
+import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.view.GameView;
 
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by user3 on 24.03.2016.
  */
 class SelectionManager implements MouseInputHandler
 {
-    private Vector<Integer> selection;
+    private ArrayList<Integer> selection;
     private GameController controller;
 
     private SelectionState state;
 
     SelectionManager(GameController controller)
     {
-        this.selection = new Vector<Integer>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
+        this.selection = new ArrayList<Integer>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
         this.controller = controller;
 
         this.updateSelectionState();
@@ -36,7 +37,7 @@ class SelectionManager implements MouseInputHandler
 
         if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
         {
-            this.selection.removeAllElements();
+            this.selection.clear();
             this.selection.add(eventCell);
 
             this.updateSelectionState();
@@ -50,8 +51,12 @@ class SelectionManager implements MouseInputHandler
             {
                 this.controller.model.blockMoveRequested(selectedCell, eventCell);
 
-                this.selection.removeAllElements();
-                this.selection.add(eventCell);
+                this.selection.clear();
+
+                if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
+                {
+                    this.selection.add(eventCell);
+                }
 
                 this.updateSelectionState();
             }
@@ -64,15 +69,30 @@ class SelectionManager implements MouseInputHandler
 
     private void updateSelectionState()
     {
-        Iterator<Integer> iterator = this.selection.iterator();
-        int [] copy = new int[this.selection.size()];
+        GameState state = controller.model.copyGameState();
 
-        for (int i = 0; iterator.hasNext(); i++)
+        int selectionSize = selection.size();
+        int [] copy = new int[selectionSize];
+        HashSet<Integer> cellsToMove = new HashSet<Integer>(4 * selectionSize);
+
+        for (int i = 0; i < selectionSize; i++)
         {
-            copy[i] = iterator.next();
+            int cellCode = copy[i] = selection.get(i);
+
+            int x = cellCode % Game.FIELD_WIDTH;
+            int y = cellCode / Game.FIELD_WIDTH;
+
+            if (x > 0 && state.getCellValue(x - 1, y) < 1)
+                cellsToMove.add(cellCode - 1);
+            if (x < Game.FIELD_WIDTH - 1 && state.getCellValue(x + 1, y) < 1)
+                cellsToMove.add(cellCode + 1);
+            if (y > 0 && state.getCellValue(x, y - 1) < 1)
+                cellsToMove.add(cellCode - Game.FIELD_WIDTH);
+            if (y < Game.FIELD_HEIGHT - 1 && state.getCellValue(x, y + 1) < 1)
+                cellsToMove.add(cellCode + Game.FIELD_WIDTH);
         }
 
-        this.state = new SelectionStateProvider(copy);
+        this.state = new SelectionStateProvider(copy, cellsToMove);
     }
 
     SelectionState getSelectionState()
@@ -80,4 +100,3 @@ class SelectionManager implements MouseInputHandler
         return this.state;
     }
 }
-//TODO: make it so that selection is removed if block is

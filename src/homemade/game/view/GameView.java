@@ -48,7 +48,7 @@ public class GameView
 
         this.timer = new Timer();
         long delay = 0; //time before the timertask is executed
-        long period = 1000 / 30; //TODO: move to settings
+        long period = 1000 / 60; //TODO: move to settings
         this.timer.schedule(new ViewTimerTask(controller), delay, period);
     }
 
@@ -69,11 +69,19 @@ public class GameView
 
                 int cellWidth = GameView.CellWidth + GameView.CellOffset;
 
-                graphics.drawImage(Assets.grid, GameView.GridOffset, GameView.GridOffset, null);
+                graphics.drawImage(Assets.field, GameView.GridOffset, GameView.GridOffset, null);
 
                 for (int i = 0; i < Game.FIELD_WIDTH; i++)
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                     {
+                        int canvasX = GameView.GridOffset + cellWidth * i;
+                        int canvasY = GameView.GridOffset + cellWidth * j;
+
+                        if (selection.canMoveTo(i, j))
+                        {
+                            graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
+                        }
+
                         int value = state.getCellValue(i, j);
 
                         if (value == Game.CELL_EMPTY)
@@ -99,8 +107,6 @@ public class GameView
                                 numberToDraw = String.valueOf(value);
                             }
 
-                            int canvasX = GameView.GridOffset + cellWidth * i;
-                            int canvasY = GameView.GridOffset + cellWidth * j;
 
                             graphics.drawImage(sprite, canvasX, canvasY, null);
 
