@@ -77,6 +77,7 @@ class ComboDetector
         int cellsLeft = stepX * Game.FIELD_WIDTH + stepY * Game.FIELD_HEIGHT;
 
         int currentCell = start;
+        int comboStartedAt = start;
         int comboLength = 1;
         cellsLeft--;
 
@@ -111,15 +112,17 @@ class ComboDetector
 
                     for (int i = 0; i < comboLength; i++)
                     {
-                        tmpStorage.add(currentCell - i * step);
+                        tmpStorage.add(comboStartedAt + i * step);
 
-                        report = " " + (currentCell - i * step) + report;
+                        report = " " + (comboStartedAt + i * step) + report;
                     }
 
                     System.out.println("in terms of cell numbers combo is" + report);
                 }
 
                 comboLength = 1;
+                comboStartedAt = currentCell;
+                //isn't true if combo ended because of line end, but it breaks nothing then
 
                 if (cellsLeft + 1 < Game.MIN_COMBO)
                     cellsLeft = 0;
