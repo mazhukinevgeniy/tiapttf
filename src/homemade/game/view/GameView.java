@@ -47,8 +47,8 @@ public class GameView
         this.strategy = canvas.getBufferStrategy();
 
         this.timer = new Timer();
-        long delay = 0; //time before the timertask is executed
-        long period = 1000 / 60; //TODO: move to settings
+        long delay = 0;
+        long period = 1000 / Game.TARGET_FPS;
         this.timer.schedule(new ViewTimerTask(controller), delay, period);
     }
 

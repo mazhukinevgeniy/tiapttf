@@ -21,8 +21,6 @@ class Field
     private LinkedList<Integer> usedNumbers, availableNumbers;
     private HashSet<Integer> changedCells;
 
-    //TODO: think if it would be nice if cells were automatically keeping track of changed verticals/horizontals
-
 
     Field()
     {

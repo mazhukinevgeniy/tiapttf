@@ -62,8 +62,6 @@ class SelectionManager implements MouseInputHandler
             }
         }
 
-        //TODO: could use simple CellCoordinates class for arguments and simple manipulations, comparisons etc
-
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }
 

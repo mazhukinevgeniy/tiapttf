@@ -58,8 +58,6 @@ public class Assets
         }
         catch (IOException e)
         {
-            //TODO: check if I'm supposed to have some code there
-
             e.printStackTrace();
         }
     }

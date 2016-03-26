@@ -134,4 +134,3 @@ class ComboDetector
         set.addAll(tmpStorage);
     }
 }
-//TODO: check if EnumSet will improve performance

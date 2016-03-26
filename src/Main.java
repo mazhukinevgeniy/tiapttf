@@ -18,10 +18,6 @@ public class Main
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         GameController controller = new GameController(frame);
-        //am I really supposed to pass this reference two constructors deep?
-        //TODO: find out
-
-
 
 
         frame.pack();

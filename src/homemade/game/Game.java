@@ -15,6 +15,9 @@ public class Game
     public static final int MIN_COMBO = 5;
 
     public static final int SIMULTANEOUS_SPAWN = 3;
+    public static final int SPAWN_PERIOD = 1000;
+
+    public static final int TARGET_FPS = 60;
 
     //TODO: move to settings everything we could and want
 }
