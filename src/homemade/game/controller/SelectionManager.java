@@ -80,3 +80,4 @@ class SelectionManager implements MouseInputHandler
         return this.state;
     }
 }
+//TODO: make it so that selection is removed if block is

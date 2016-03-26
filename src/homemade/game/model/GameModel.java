@@ -32,10 +32,8 @@ public class GameModel
 
     void handleTimerTask()
     {
-        int attemptsToSpawn = 3; //TODO: move to settings
-
         this.field.spawnBlocks();
-        this.field.markCells(attemptsToSpawn);
+        this.field.markCells(Game.SIMULTANEOUS_SPAWN);
 
         this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
     }

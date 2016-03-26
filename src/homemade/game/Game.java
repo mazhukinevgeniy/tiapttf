@@ -9,5 +9,12 @@ public class Game
     public static final int CELL_MARKED_FOR_SPAWN = -1;
 
     public static final int FIELD_WIDTH = 9;
-    public static final int FIELD_HEIGHT = 9; //TODO: move to settings
+    public static final int FIELD_HEIGHT = 9;
+
+    public static final boolean AUTOCOMPLETION = true;
+    public static final int MIN_COMBO = 5;
+
+    public static final int SIMULTANEOUS_SPAWN = 3;
+
+    //TODO: move to settings everything we could and want
 }

@@ -2,6 +2,8 @@ package homemade.game.model;
 
 import homemade.game.Game;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -14,8 +16,15 @@ class Field
     //has special function if value<0
 
     private int[] cells;
+    private ComboDetector comboDetector;
 
     private Vector<Integer> usedNumbers, availableNumbers;
+    //TODO: these vectors are probably DEMOLISHING the performance, have to replace them with more suitable collections
+    //the main issue is removing elements; could LinkedList be an upgrade?
+    private HashSet<Integer> changedCells;
+
+    //TODO: think if it would be nice if cells were automatically keeping track of changed verticals/horizontals
+
 
     Field()
     {
@@ -29,6 +38,9 @@ class Field
                 this.cells[i + j * Game.FIELD_WIDTH] = Game.CELL_EMPTY;
             }
 
+        this.comboDetector = new ComboDetector(cells);
+
+
         this.usedNumbers = new Vector<Integer>(numberOfCells);
         this.availableNumbers = new Vector<Integer>(numberOfCells);
 
@@ -36,6 +48,9 @@ class Field
         {
             this.availableNumbers.add(i + 1);
         }
+
+        this.changedCells = new HashSet<Integer>(Game.SIMULTANEOUS_SPAWN);
+        //ATM it's what would cause the maximum amount of changes
     }
 
     synchronized void spawnBlocks()
@@ -43,13 +58,19 @@ class Field
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                if (this.cells[i + j * Game.FIELD_WIDTH] == Game.CELL_MARKED_FOR_SPAWN)
+                int cellCode = i + j * Game.FIELD_WIDTH;
+
+                if (this.cells[cellCode] == Game.CELL_MARKED_FOR_SPAWN)
                 {
-                    this.cells[i + j * Game.FIELD_WIDTH] = this.getNumber();
+                    this.cells[cellCode] = this.getNumber();
+
+                    changedCells.add(cellCode);
 
                     System.out.println("block spawned: " + i + ", " + j + " | " + this.cells[i + j * Game.FIELD_WIDTH]);
                 }
             }
+
+        this.checkCombos();
     }
 
     synchronized void markCells(int targetAmount)
@@ -95,6 +116,9 @@ class Field
             cells[cellCodeFrom] = Game.CELL_EMPTY;
 
             success = true;
+
+            changedCells.add(cellCodeTo);
+            checkCombos();
         }
 
         return success;
@@ -110,6 +134,25 @@ class Field
         this.availableNumbers.removeElementAt(position);
 
         return number;
+    }
+
+    private void checkCombos()
+    {
+        if (Game.AUTOCOMPLETION)
+        {
+            Set<Integer> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
+
+            for (int cell : cellsToRemove)
+            {
+                int value = cells[cell];
+
+                cells[cell] = Game.CELL_EMPTY;
+                usedNumbers.removeElementAt(usedNumbers.indexOf(value));
+                availableNumbers.add(value);
+            }
+
+            changedCells.clear();
+        }
     }
 
     synchronized int [] cloneToArray()
