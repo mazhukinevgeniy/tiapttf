@@ -1,6 +1,6 @@
 package homemade.shell;
 
-import homemade.shell.model.Parameter;
+import homemade.shell.model.Settings;
 
 import javax.swing.*;
 
@@ -23,8 +23,13 @@ public class TestShell
 
     private static void parameterTest()
     {
-        Parameter<Integer> parameter = new Parameter<Integer>();
-        parameter.setName("test");
-        System.out.print(parameter.getName());
+        System.out.println(Settings.isRealTime.getValue());
+        System.out.println(Settings.simultaneousSpawn.getValue());
+        System.out.println(Settings.spawnPeriod.getValue());
+
+        Settings.simultaneousSpawn.setValue(0);
+        System.out.println(Settings.simultaneousSpawn.getValue());
+        Settings.simultaneousSpawn.setValue(1);
+        System.out.println(Settings.simultaneousSpawn.getValue());
     }
 }

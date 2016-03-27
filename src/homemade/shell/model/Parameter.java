@@ -9,17 +9,27 @@ public class Parameter<Type>
 
     protected String name;
     protected Type value;
-
-    public Parameter(final String name, final Type value)
-    {
-        this.name = name;
-        this.value = value;
-    }
+    protected Range<Type> range;
 
     public Parameter()
     {
         name = INDEFINITE_NAME;
         value = null;
+        range = null;
+    }
+
+    public Parameter(final String name, final Type value)
+    {
+        this.name = name;
+        this.value = value;
+        this.range = null;
+    }
+
+    public Parameter(final String name, final Type value, final Range<Type> range)
+    {
+        this.name = name;
+        this.value = value;
+        this.range = range;
     }
 
     public boolean isValid()
@@ -49,6 +59,25 @@ public class Parameter<Type>
 
     public void setValue(final Type newValue)
     {
-        value = newValue;
+        if(isCorrect(newValue))
+        {
+            value = newValue;
+        }
+    }
+
+    protected boolean isCorrect(final Type value)
+    {
+        boolean correct = true;
+        if(range != null)
+        {
+            correct = range.isBelong(value);
+        }
+
+        return correct;
+    }
+
+    public void setRange(final Range<Type> range)
+    {
+        this.range = range;
     }
 }
