@@ -7,22 +7,19 @@ public class Parameter<Type>
 {
     public static final String INDEFINITE_NAME = "";
 
-    protected String name;
-    protected Type value;
-    protected Range<Type> range;
+    protected static final int INDEFINITE_INDEX = -1;
 
-    public Parameter()
-    {
-        name = INDEFINITE_NAME;
-        value = null;
-        range = null;
-    }
+    protected String name = INDEFINITE_NAME;
+    protected Type value = null;
+    protected Range<Type> range = null;
+    protected Enum<Type> enumeration = null;
+
+    public Parameter() {}
 
     public Parameter(final String name, final Type value)
     {
         this.name = name;
         this.value = value;
-        this.range = null;
     }
 
     public Parameter(final String name, final Type value, final Range<Type> range)
@@ -30,6 +27,13 @@ public class Parameter<Type>
         this.name = name;
         this.value = value;
         this.range = range;
+    }
+
+    public Parameter(final String name, final Type value, final Enum<Type> enumeration)
+    {
+        this.name = name;
+        this.value = value;
+        this.enumeration = enumeration;
     }
 
     public boolean isValid()
@@ -59,7 +63,7 @@ public class Parameter<Type>
 
     public void setValue(final Type newValue)
     {
-        if(isCorrect(newValue))
+        if (isCorrect(newValue))
         {
             value = newValue;
         }
@@ -68,9 +72,13 @@ public class Parameter<Type>
     protected boolean isCorrect(final Type value)
     {
         boolean correct = true;
-        if(range != null)
+        if (range != null)
         {
             correct = range.isBelong(value);
+        }
+        if (enumeration != null)
+        {
+            correct = enumeration.isBelong(value);
         }
 
         return correct;
@@ -79,5 +87,12 @@ public class Parameter<Type>
     public void setRange(final Range<Type> range)
     {
         this.range = range;
+        this.enumeration = null;
+    }
+
+    public void setEnum(final Enum<Type> enumeration)
+    {
+        this.enumeration = enumeration;
+        this.range = null;
     }
 }

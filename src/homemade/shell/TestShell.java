@@ -31,5 +31,12 @@ public class TestShell
         System.out.println(Settings.simultaneousSpawn.getValue());
         Settings.simultaneousSpawn.setValue(1);
         System.out.println(Settings.simultaneousSpawn.getValue());
+
+        System.out.println();
+        System.out.println(Settings.something.getValue());
+        Settings.something.setValue(4);
+        System.out.println(Settings.something.getValue());
+        Settings.something.setValue(2);
+        System.out.println(Settings.something.getValue());
     }
 }
