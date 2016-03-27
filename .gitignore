@@ -1,7 +1,9 @@
 .idea/workspace.xml
+.idea/uiDesigner.xml
 .idea/dictionaries/
 out/
 .classpath
 .project
 theres-a-pattern-there-to-follow.eml
 theres-a-pattern-there-to-follow.userlibraries
+bin/
