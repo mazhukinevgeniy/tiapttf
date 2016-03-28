@@ -23,20 +23,22 @@ public class TestShell
 
     private static void parameterTest()
     {
-        System.out.println(Settings.isRealTime.getValue());
-        System.out.println(Settings.simultaneousSpawn.getValue());
-        System.out.println(Settings.spawnPeriod.getValue());
+        Settings settings = new Settings();
 
-        Settings.simultaneousSpawn.setValue(0);
-        System.out.println(Settings.simultaneousSpawn.getValue());
-        Settings.simultaneousSpawn.setValue(1);
-        System.out.println(Settings.simultaneousSpawn.getValue());
+        System.out.println(settings.isRealTime.getValue());
+        System.out.println(settings.simultaneousSpawn.getValue());
+        System.out.println(settings.spawnPeriod.getValue());
+
+        settings.simultaneousSpawn.setValue(0);
+        System.out.println(settings.simultaneousSpawn.getValue());
+        settings.simultaneousSpawn.setValue(1);
+        System.out.println(settings.simultaneousSpawn.getValue());
 
         System.out.println();
-        System.out.println(Settings.something.getValue());
-        Settings.something.setValue(4);
-        System.out.println(Settings.something.getValue());
-        Settings.something.setValue(2);
-        System.out.println(Settings.something.getValue());
+        System.out.println(settings.something.getValue());
+        settings.something.setValue(4);
+        System.out.println(settings.something.getValue());
+        settings.something.setValue(2);
+        System.out.println(settings.something.getValue());
     }
 }
