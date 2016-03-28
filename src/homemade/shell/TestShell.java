@@ -1,6 +1,6 @@
 package homemade.shell;
 
-import homemade.shell.model.Settings;
+import homemade.shell.model.settings.Settings;
 
 import javax.swing.*;
 

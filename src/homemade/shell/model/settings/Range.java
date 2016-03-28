@@ -1,4 +1,4 @@
-package homemade.shell.model;
+package homemade.shell.model.settings;
 
 /**
  * Created by Marid on 27.03.2016.

@@ -1,4 +1,6 @@
-package homemade.shell.model;
+package homemade.shell.model.settings;
+
+import java.lang.*;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -7,12 +9,10 @@ public class Parameter<Type>
 {
     public static final String INDEFINITE_NAME = "";
 
-    protected static final int INDEFINITE_INDEX = -1;
-
     protected String name = INDEFINITE_NAME;
     protected Type value = null;
     protected Range<Type> range = null;
-    protected Enum<Type> enumeration = null;
+    protected Enumeration<Type> enumeration = null;
 
     public Parameter() {}
 
@@ -29,7 +29,7 @@ public class Parameter<Type>
         this.range = range;
     }
 
-    public Parameter(final String name, final Type value, final Enum<Type> enumeration)
+    public Parameter(final String name, final Type value, final Enumeration<Type> enumeration)
     {
         this.name = name;
         this.value = value;
@@ -90,7 +90,7 @@ public class Parameter<Type>
         this.enumeration = null;
     }
 
-    public void setEnum(final Enum<Type> enumeration)
+    public void setEnum(final Enumeration<Type> enumeration)
     {
         this.enumeration = enumeration;
         this.range = null;

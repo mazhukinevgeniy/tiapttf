@@ -1,17 +1,17 @@
-package homemade.shell.model;
+package homemade.shell.model.settings;
 
 import java.util.Vector;
 
 /**
  * Created by Marid on 28.03.2016.
  */
-public class Enum<Type>
+public class Enumeration<Type>
 {
     private static final int INDEFINITE_INDEX = -1;
 
     private Vector<Type> elements = null;
 
-    public Enum(final Type... elements)
+    public Enumeration(final Type... elements)
     {
         this.elements = new Vector<>();
         for (Type element : elements)
