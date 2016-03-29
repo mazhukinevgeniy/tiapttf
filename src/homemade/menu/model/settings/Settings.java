@@ -1,4 +1,4 @@
-package homemade.shell.model.settings;
+package homemade.menu.model.settings;
 
 import homemade.game.Game;
 
