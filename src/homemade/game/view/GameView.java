@@ -71,7 +71,7 @@ public class GameView
 
                 graphics.drawImage(Assets.field, GameView.GridOffset, GameView.GridOffset, null);
 
-                for (int i = 0; i < Game.FIELD_WIDTH; i++)
+                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                     {
                         int canvasX = GameView.GridOffset + cellWidth * i;
@@ -91,7 +91,6 @@ public class GameView
                         else
                         {
                             Image sprite;
-                            String numberToDraw = "";
 
                             if (value == Game.CELL_MARKED_FOR_SPAWN)
                             {
@@ -103,37 +102,81 @@ public class GameView
                                     sprite = Assets.normalBlockSelected;
                                 else
                                     sprite = Assets.normalBlock;
-
-                                numberToDraw = String.valueOf(value);
                             }
-
 
                             graphics.drawImage(sprite, canvasX, canvasY, null);
-
-                            int numberLength = numberToDraw.length();
-                            if (numberLength > 0)
-                            {
-                                canvasX += digitMetadata.getOffsetXForNumber(value);
-                                canvasY += digitMetadata.offsetY;
-
-
-                                for (int k = 0; k < numberLength; k++)
-                                {
-                                    int digit = Character.getNumericValue(numberToDraw.charAt(k));
-
-                                    graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
-
-                                    canvasX += 1 + digitMetadata.digitWidth[digit];
-                                }
-                            }
-
-
                         }
-
                     }
 
-                // Render to graphics
-                // ...
+                int vertGlowOffsetX = (GameView.CellWidth - Assets.glowVertical.getWidth(null)) / 2;
+                int vertGlowOffsetY = (GameView.CellWidth * 2 - Assets.glowVertical.getHeight(null)) / 2;
+
+                int horGlowOffsetX = (GameView.CellWidth * 2 - Assets.glowHorizontal.getWidth(null)) / 2;
+                int horGlowOffsetY = (GameView.CellWidth - Assets.glowHorizontal.getHeight(null)) / 2;
+
+                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render glow
+                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
+                    {
+                        int cellCode = i + j * Game.FIELD_WIDTH;
+                        int rightCellCode = cellCode + 1;
+                        int bottomCellCode = cellCode + Game.FIELD_WIDTH;
+                        //we can do it because we recognize 2*fieldSize links
+
+                        boolean rightLink = state.getLinkBetweenCells(cellCode, rightCellCode);
+                        if (rightLink)
+                        {
+                            int canvasX = GameView.GridOffset + cellWidth * i;
+                            int canvasY = GameView.GridOffset + cellWidth * j;
+
+                            canvasX += horGlowOffsetX;
+                            canvasY += horGlowOffsetY;
+
+                            graphics.drawImage(Assets.glowHorizontal, canvasX, canvasY, null);
+                        }
+
+                        boolean bottomLink = state.getLinkBetweenCells(cellCode, bottomCellCode);
+                        if (bottomLink)
+                        {
+                            int canvasX = GameView.GridOffset + cellWidth * i;
+                            int canvasY = GameView.GridOffset + cellWidth * j;
+
+                            canvasX += vertGlowOffsetX;
+                            canvasY += vertGlowOffsetY;
+
+                            graphics.drawImage(Assets.glowVertical, canvasX, canvasY, null);
+                        }
+                    }
+
+                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render numbers
+                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
+                    {
+                        int canvasX = GameView.GridOffset + cellWidth * i;
+                        int canvasY = GameView.GridOffset + cellWidth * j;
+
+                        int value = state.getCellValue(i, j);
+                        if (value > 0)
+                        {
+                            String numberToDraw = String.valueOf(value);
+
+                            int numberLength = numberToDraw.length();
+
+
+                            canvasX += digitMetadata.getOffsetXForNumber(value);
+                            canvasY += digitMetadata.offsetY;
+
+
+                            for (int k = 0; k < numberLength; k++)
+                            {
+                                int digit = Character.getNumericValue(numberToDraw.charAt(k));
+
+                                graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
+
+                                canvasX += 1 + digitMetadata.digitWidth[digit];
+                            }
+                        }
+                    }
+
+                //TODO: here is the great opportunity for splitting classes
 
                 // Dispose the graphics
                 graphics.dispose();
@@ -166,4 +209,3 @@ public class GameView
         }
     }
 }
-//TODO: split this class, it's getting too ugly

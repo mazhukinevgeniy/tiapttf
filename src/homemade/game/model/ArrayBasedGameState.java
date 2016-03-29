@@ -100,7 +100,7 @@ class ArrayBasedGameState implements GameState
     @Override
     public boolean getLinkBetweenCells(int cellCodeA, int cellCodeB)
     {
-        return false;
+        return links[Game.linkNumber(cellCodeA, cellCodeB)];
     }
 
     @Override
