@@ -1,8 +1,9 @@
-package homemade.shell;
+package homemade.menu;
 
-import homemade.shell.model.settings.Settings;
+
+import homemade.menu.model.settings.Settings;
+
 import org.w3c.dom.Document;
-
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

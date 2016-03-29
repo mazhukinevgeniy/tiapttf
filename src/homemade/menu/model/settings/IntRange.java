@@ -1,4 +1,4 @@
-package homemade.shell.model.settings;
+package homemade.menu.model.settings;
 
 /**
  * Created by Marid on 27.03.2016.
