@@ -14,13 +14,22 @@ class Cell
     static final int TOP = 2;
     static final int BOTTOM = 3;
 
+    //static final int OPPOSITE_DIRECTION[] = {1, 0, 3, 2};
+    //ugly and not needed yet
+
+    private int code;
+
+    private static final int [] directionMultiplier = {1, -1, 1, -1};
+    //if direction to the other cell is 0 or 2: linked = thisvalue * 1 > 1 * othervalue
+    //if direction is 1 or 3: linked = thisvalue * - 1 > -1 * othervalue
+
     static ArrayList<Cell> createLinkedCells()
     {
         ArrayList<Cell> cells = new ArrayList<Cell>(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
 
         for (int i = 0; i < Game.FIELD_WIDTH * Game.FIELD_HEIGHT; i++)
         {
-            cells.add(new Cell());
+            cells.add(new Cell(i));
         }
 
         Cell cell;
@@ -50,7 +59,7 @@ class Cell
         //right line
         for (int i = 0; i < Game.FIELD_HEIGHT - 1; i++)
         {
-            addNeighbours(cells, (Game.FIELD_HEIGHT - 1) * Game.FIELD_WIDTH + i, false, true);
+            addNeighbours(cells, Game.FIELD_WIDTH - 1 + i * Game.FIELD_WIDTH, false, true);
         }
 
         //bottom right cell
@@ -113,9 +122,10 @@ class Cell
 
     private int value;
 
-    private Cell()
+    private Cell(int code)
     {
         value = Game.CELL_EMPTY;
+        this.code = code;
     }
 
     Cell neighbour(int directionCode)
@@ -132,11 +142,24 @@ class Cell
     {
         return value;
     }
+    int getCode() { return code; }
 
     void setValue(int newVal)
     {
-        //TODO: make all the fun things
-
         value = newVal;
+
+        for (int i = 0; i < 4; i++) //works if direction codes are 0 1 2 3
+        {
+            if (links[i] != null)
+            {
+                int outerValue = neighbours[i].value;
+                int dirMult = directionMultiplier[i];
+
+                links[i].value =
+                        value > 0 &&
+                        outerValue > 0 &&
+                        dirMult * value > dirMult * outerValue;
+            }
+        }
     }
 }

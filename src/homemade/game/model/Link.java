@@ -5,4 +5,7 @@ package homemade.game.model;
  */
 class Link
 {
+    boolean value = false;
+
+
 }

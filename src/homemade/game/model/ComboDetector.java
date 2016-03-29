@@ -4,6 +4,7 @@ import homemade.game.Game;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,14 +15,14 @@ class ComboDetector
     private ArrayList<Integer> tmpStorage;
     //it's probably better than reallocating every time
 
-    private int[] cellValues;
+    private CellMap cellMap;
 
-    ComboDetector(int[] cellValues)
+    ComboDetector(CellMap cellMap)
     {
         int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
         tmpStorage = new ArrayList<Integer>(maxCellsPerLine);
 
-        this.cellValues = cellValues;
+        this.cellMap = cellMap;
     }
 
     /**
@@ -49,12 +50,12 @@ class ComboDetector
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(cellsToRemove, horizontal * Game.FIELD_WIDTH, 1, 0);
+            iterateThroughTheLine(cellsToRemove, horizontal * Game.FIELD_WIDTH, Cell.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(cellsToRemove, vertical, 0, 1);
+            iterateThroughTheLine(cellsToRemove, vertical, Cell.BOTTOM);
         }
 
         return cellsToRemove;
@@ -64,71 +65,54 @@ class ComboDetector
      *
      * @param set storage for found cells
      * @param start cellCode of the beginning
-     * @param stepX x component of line direction; assuming 1 or 0
-     * @param stepY y component of line direction; assuming 0 or 1
+     * @param direction where to look for the next cell
      */
-    private void iterateThroughTheLine(Set<Integer> set, int start, int stepX, int stepY)
+    private void iterateThroughTheLine(Set<Integer> set, int start, int direction)
     {
         tmpStorage.clear();
 
-        System.out.println("start = " + start + ", stepX = " + stepX + ", stepY = " + stepY);
+        System.out.println("start = " + start + ", direction = " + direction);
 
-        int step = stepX + Game.FIELD_WIDTH * stepY;
-        int cellsLeft = stepX * Game.FIELD_WIDTH + stepY * Game.FIELD_HEIGHT;
+        Cell currentCell = cellMap.cells.get(start);
+        Cell comboStartedAt = currentCell;
 
-        int currentCell = start;
-        int comboStartedAt = start;
         int comboLength = 1;
-        cellsLeft--;
 
-        int lastValue = cellValues[start];
-        int nextValue;
-
-        while (cellsLeft > 0)
+        while (currentCell != null)
         {
-            currentCell += step;
-            cellsLeft--;
+            Link link = currentCell.link(direction);
+            Cell tmpNext = currentCell.neighbour(direction);
 
-            nextValue = cellValues[currentCell];
-
-            boolean comboBroken = false;
-
-            if (lastValue > 0 && nextValue > lastValue)
+            if (link != null && link.value)
             {
                 comboLength++;
             }
             else
             {
-                comboBroken = true;
-            }
 
-            if (comboBroken || cellsLeft == 0)
-            {
                 if (comboLength >= Game.MIN_COMBO)
                 {
                     //TODO: actually report combo
 
                     String report = "";
+                    Cell tmpCell = comboStartedAt;
 
-                    for (int i = 0; i < comboLength; i++)
+                    while (tmpCell != tmpNext)
                     {
-                        tmpStorage.add(comboStartedAt + i * step);
+                        report = " " + tmpCell.getCode() + report;
 
-                        report = " " + (comboStartedAt + i * step) + report;
+                        tmpStorage.add(tmpCell.getCode());
+                        tmpCell = tmpCell.neighbour(direction);
                     }
 
                     System.out.println("in terms of cell numbers combo is" + report);
                 }
 
+                comboStartedAt = tmpNext;
                 comboLength = 1;
-                comboStartedAt = currentCell;
-                //isn't true if combo ended because of line end, but it breaks nothing then
-
-                if (cellsLeft + 1 < Game.MIN_COMBO)
-                    cellsLeft = 0;
             }
 
-            lastValue = nextValue;
+            currentCell = tmpNext;
         }
 
         set.addAll(tmpStorage);
