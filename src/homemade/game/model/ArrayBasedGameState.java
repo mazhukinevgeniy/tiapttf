@@ -3,6 +3,7 @@ package homemade.game.model;
 import homemade.game.Game;
 import homemade.game.GameState;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +49,12 @@ class ArrayBasedGameState implements GameState
     {
         immutableCopy = null;
 
-        int[] shifts = {-1, 1, Game.FIELD_WIDTH, -Game.FIELD_WIDTH};
+        ArrayList<Integer> directions = new ArrayList<Integer>(4);
+        int[] shifts = new int[4];
+        shifts[Cell.BOTTOM] = Game.FIELD_WIDTH;
+        shifts[Cell.TOP] = -Game.FIELD_WIDTH;
+        shifts[Cell.LEFT] = -1;
+        shifts[Cell.RIGHT] = 1;
 
         //for each cell update links as well
 
@@ -60,22 +66,26 @@ class ArrayBasedGameState implements GameState
 
             field[key] = value;
 
-            for (int i = 0; i < 4; i++)
+
+            directions.clear();
+
+            int keyX = key % Game.FIELD_WIDTH;
+            int keyY = key / Game.FIELD_WIDTH;
+
+            if (keyX > 0) directions.add(Cell.LEFT);
+            if (keyX < Game.FIELD_WIDTH - 1) directions.add(Cell.RIGHT);
+            if (keyY > 0) directions.add(Cell.TOP);
+            if (keyY < Game.FIELD_HEIGHT - 1) directions.add(Cell.BOTTOM);
+            //TODO: rewrite if the performance will require it
+
+            for (int direction : directions) //checking links for every direction applicable
             {
-                int adjCellCode = key + shifts[i];
+                int linkNumber = Game.linkNumber(key, key + shifts[direction]);
 
-                if (!(adjCellCode < 0)) //filters out left and top imaginary links
-                {
-                    int linkNumber = Game.linkNumber(key, adjCellCode);
-                    Link link = map.links.get(linkNumber);
+                Link link = map.links.get(linkNumber);
 
-                    if (link != null) //filters out right and bottom imaginary links
-                    {
-                        links[linkNumber] = link.value;
-                    }
-                }
+                links[linkNumber] = link.value;
             }
-
         }
     }
 
