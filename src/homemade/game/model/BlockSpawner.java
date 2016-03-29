@@ -38,8 +38,6 @@ class BlockSpawner
                 }
             }
 
-        //TODO: checkCombos();
-
         return changes;
     }
 
