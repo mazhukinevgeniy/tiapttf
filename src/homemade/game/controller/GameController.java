@@ -1,14 +1,12 @@
 package homemade.game.controller;
 
 import homemade.game.CellCode;
+import homemade.game.Direction;
 import homemade.game.Game;
-import homemade.game.SelectionState;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,29 +48,11 @@ public class GameController
 
     void controllerTimerUpdated()
     {
+        int direction = keyboard.keyCodeToDirection(keyboard.extractKey());
 
-
-        //int keyCode = keyboard.extractKey();
-
-        //if (keyCodeToCellCodeShift.containsKey(keyCode))
-        //    selectionManager.tryToMoveSelectionIn(keyCodeToCellCodeShift.get(keyCode));
+        if (direction != Direction.NO_DIRECTION)
+            selectionManager.tryToMoveSelectionIn(CellCode.getShift(direction));
     }
-    //TODO: this method is literally empty, do something
-
-    void relevantKeyCodeReleased(int keyCode)
-    {
-        HashMap<Integer, Integer> keyCodeToCellCodeShift = new HashMap<Integer, Integer>();
-
-        keyCodeToCellCodeShift.put(KeyEvent.VK_LEFT, -1);
-        keyCodeToCellCodeShift.put(KeyEvent.VK_RIGHT, 1);
-        keyCodeToCellCodeShift.put(KeyEvent.VK_UP, -Game.FIELD_WIDTH);
-        keyCodeToCellCodeShift.put(KeyEvent.VK_DOWN, Game.FIELD_WIDTH);
-
-        if (keyCodeToCellCodeShift.containsKey(keyCode))
-            selectionManager.tryToMoveSelectionIn(keyCodeToCellCodeShift.get(keyCode));
-    }
-    //TODO: this code is a bit out of place isn't it, fix it
-
 
     private class ControllerTimerTask extends TimerTask
     {
@@ -90,5 +70,4 @@ public class GameController
         }
     }
     //TODO: think about this: now everyone has a timer, is it right?
-    //TODO: clean the mess caused by adding keyboard input at 2 AM
 }

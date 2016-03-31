@@ -1,8 +1,11 @@
 package homemade.game.controller;
 
+import homemade.game.Direction;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by user3 on 31.03.2016.
@@ -11,8 +14,21 @@ class GameKeyboard implements KeyboardInputHandler
 {
     private ArrayList<Integer> keyCodesPressed;
 
-    private HashSet<Integer> keyCodesReleased;
+    /**
+     * set of keyCodes we store
+     */
     private HashSet<Integer> pressableKeys;
+
+    /**
+     * set of keyCodes which were actually used as an input
+     * it's supposed to guarantee that every button press results in something if it should
+     */
+    private HashSet<Integer> readKeys;
+
+    /**
+     * set of keyCodes which were released
+     */
+    private HashSet<Integer> releasedKeys;
 
     GameController controller;
 
@@ -27,10 +43,29 @@ class GameKeyboard implements KeyboardInputHandler
         pressableKeys.add(KeyEvent.VK_LEFT);
         pressableKeys.add(KeyEvent.VK_RIGHT);
 
-        keyCodesPressed = new ArrayList<Integer>(pressableKeys.size());
-        keyCodesReleased = new HashSet<>(pressableKeys.size());
+
+        int maxKeys = pressableKeys.size();
+        keyCodesPressed = new ArrayList<Integer>(maxKeys);
+        readKeys = new HashSet<Integer>(maxKeys);
+        releasedKeys = new HashSet<Integer>(maxKeys);
     }
-/*
+
+    int keyCodeToDirection(int keyCode)
+    {
+        int retVal = Direction.NO_DIRECTION;
+
+        if (keyCode == KeyEvent.VK_UP)
+            retVal = Direction.TOP;
+        else if (keyCode == KeyEvent.VK_DOWN)
+            retVal = Direction.BOTTOM;
+        else if (keyCode == KeyEvent.VK_LEFT)
+            retVal = Direction.LEFT;
+        else if (keyCode == KeyEvent.VK_RIGHT)
+            retVal = Direction.RIGHT;
+
+        return retVal;
+    }
+
     synchronized int extractKey()
     {
         int size = keyCodesPressed.size();
@@ -40,14 +75,25 @@ class GameKeyboard implements KeyboardInputHandler
         if (size != 0)
         {
             key = keyCodesPressed.get(size - 1);
-
-            keyCodesPressed.removeAll(keyCodesReleased);
-            keyCodesReleased.clear();
         }
 
+        Iterator<Integer> iterator = keyCodesPressed.iterator();
+
+        while (iterator.hasNext())
+        {
+            int keyCode = iterator.next();
+
+            if (releasedKeys.contains(keyCode))
+            {
+                iterator.remove();
+                releasedKeys.remove(keyCode);
+            }
+        }
+
+        readKeys.addAll(keyCodesPressed); //every remaining keyCode was read at least once anyway
+
         return key;
-    }*/
-    //TODO: try to fix this. meanwhile, why don't we just use controller.relevantKeyCodeReleased
+    }
 
     @Override
     synchronized public void keyPressed(int keyCode)
@@ -57,6 +103,7 @@ class GameKeyboard implements KeyboardInputHandler
             tryToRemoveFromPressed(keyCode);
 
             keyCodesPressed.add(keyCode);
+            readKeys.remove(keyCode);
         }
     }
 
@@ -65,9 +112,13 @@ class GameKeyboard implements KeyboardInputHandler
     {
         if (pressableKeys.contains(keyCode))
         {
-            keyCodesReleased.add(keyCode);
-
-            controller.relevantKeyCodeReleased(keyCode);
+            if (readKeys.contains(keyCode))
+            {
+                tryToRemoveFromPressed(keyCode);
+                readKeys.remove(keyCode);
+            }
+            else
+                releasedKeys.add(keyCode);
         }
     }
 
