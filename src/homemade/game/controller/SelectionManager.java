@@ -91,10 +91,10 @@ class SelectionManager implements MouseInputHandler
             {
                 this.controller.model.blockMoveRequested(selectedCell, eventCell);
 
+                this.selection.clear();
+
                 if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
                 {
-                    this.selection.clear();
-
                     this.selection.add(eventCell);
 
                     //so we move selection either to the moved block, or to the block which blocked the movement
