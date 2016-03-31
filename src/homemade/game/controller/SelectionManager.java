@@ -12,14 +12,14 @@ import java.util.Iterator;
  */
 class SelectionManager implements MouseInputHandler
 {
-    private ArrayList<Integer> selection;
+    private ArrayList<CellCode> selection;
     private GameController controller;
 
     private SelectionState state;
 
     SelectionManager(GameController controller)
     {
-        this.selection = new ArrayList<Integer>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
+        this.selection = new ArrayList<CellCode>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
         this.controller = controller;
 
         this.updateSelectionState();
@@ -37,13 +37,13 @@ class SelectionManager implements MouseInputHandler
         if (this.controller.model.copyGameState().getCellValue(eventCell) > 0)
         {
             this.selection.clear();
-            this.selection.add(eventCell.value());
+            this.selection.add(eventCell);
 
             this.updateSelectionState();
         }
         else if (this.selection.size() == 1) //ie we move single blocks and we can move them by clicking nearby cells
         {
-            CellCode selectedCell = CellCode.getFor(this.selection.get(0));
+            CellCode selectedCell = this.selection.get(0);
             int distance = eventCell.distance(selectedCell);
 
             if (distance == 1)
@@ -59,13 +59,11 @@ class SelectionManager implements MouseInputHandler
     {
         if (this.selection.size() == 1)
         {
-            int selectedCell = this.selection.get(0);
-
-            CellCode cellCode = CellCode.getFor(selectedCell);
+            CellCode cellCode = this.selection.get(0);
 
             if (!cellCode.onBorder(direction))
             {
-                CellCode eventCell = CellCode.getFor(selectedCell + CellCode.getShift(direction));
+                CellCode eventCell = cellCode.neighbour(direction);
 
                 tryMove(cellCode, eventCell, false);
             }
@@ -76,20 +74,26 @@ class SelectionManager implements MouseInputHandler
     {
         if (eventCell != selectedCell)
         {
-            this.controller.model.blockMoveRequested(selectedCell, eventCell);
+            controller.model.blockMoveRequested(selectedCell, eventCell);
 
-            this.selection.clear();
+            selection.clear();
 
-            if (this.controller.model.copyGameState().getCellValue(selectedCell) <= 0)
+            GameState gameState = controller.model.copyGameState();
+
+            boolean selectedCellOccupied = gameState.getCellValue(selectedCell) > 0;
+            boolean eventCellOccupied = gameState.getCellValue(eventCell) > 0;
+
+            if (selectedCellOccupied) //I think that means move failed
             {
-                this.selection.add(eventCell.value());
+                if (moveSelectionOnFail)
+                    selection.add(eventCell);
+                else
+                    selection.add(selectedCell);
             }
-            else
-            {
-                this.selection.add(moveSelectionOnFail ? eventCell.value() : selectedCell.value());
-            }
+            else if (eventCellOccupied)
+                selection.add(eventCell);
 
-            this.updateSelectionState();
+            updateSelectionState();
         }
     }
 
@@ -98,12 +102,13 @@ class SelectionManager implements MouseInputHandler
         GameState state = controller.model.copyGameState();
 
         int selectionSize = selection.size();
-        int [] copy = new int[selectionSize];
-        HashSet<Integer> cellsToMove = new HashSet<Integer>(4 * selectionSize);
+        ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);
+        HashSet<CellCode> cellsToMove = new HashSet<CellCode>(4 * selectionSize);
 
         for (int i = 0; i < selectionSize; i++)
         {
-            CellCode cellCode = CellCode.getFor(copy[i] = selection.get(i));
+            CellCode cellCode = selection.get(i);
+            copy.add(cellCode);
 
             Iterator<Integer> iterator = Direction.getIterator();
 
@@ -114,7 +119,7 @@ class SelectionManager implements MouseInputHandler
                 CellCode neighbour = cellCode.neighbour(direction);
 
                 if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)
-                    cellsToMove.add(neighbour.value());
+                    cellsToMove.add(neighbour);
             }
         }
 
