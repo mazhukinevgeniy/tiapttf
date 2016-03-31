@@ -42,6 +42,10 @@ class GameKeyboard implements KeyboardInputHandler
         pressableKeys.add(KeyEvent.VK_DOWN);
         pressableKeys.add(KeyEvent.VK_LEFT);
         pressableKeys.add(KeyEvent.VK_RIGHT);
+        pressableKeys.add(KeyEvent.VK_W);
+        pressableKeys.add(KeyEvent.VK_A);
+        pressableKeys.add(KeyEvent.VK_S);
+        pressableKeys.add(KeyEvent.VK_D);
 
 
         int maxKeys = pressableKeys.size();
@@ -54,13 +58,13 @@ class GameKeyboard implements KeyboardInputHandler
     {
         int retVal = Direction.NO_DIRECTION;
 
-        if (keyCode == KeyEvent.VK_UP)
+        if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W)
             retVal = Direction.TOP;
-        else if (keyCode == KeyEvent.VK_DOWN)
+        else if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S)
             retVal = Direction.BOTTOM;
-        else if (keyCode == KeyEvent.VK_LEFT)
+        else if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A)
             retVal = Direction.LEFT;
-        else if (keyCode == KeyEvent.VK_RIGHT)
+        else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D)
             retVal = Direction.RIGHT;
 
         return retVal;
