@@ -79,4 +79,9 @@ public class CellCode
     public int y() { return cY; }
 
     public boolean onBorder(int direction) { return isOnBorder[direction]; }
+
+    public int distance(CellCode otherCell)
+    {
+        return Math.abs(cX - otherCell.cX + cY - otherCell.cY);
+    }
 }

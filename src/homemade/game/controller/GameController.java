@@ -51,7 +51,7 @@ public class GameController
         int direction = keyboard.keyCodeToDirection(keyboard.extractKey());
 
         if (direction != Direction.NO_DIRECTION)
-            selectionManager.tryToMoveSelectionIn(CellCode.getShift(direction));
+            selectionManager.tryToMoveSelectionIn(direction);
     }
 
     private class ControllerTimerTask extends TimerTask

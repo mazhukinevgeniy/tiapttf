@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
 
@@ -63,9 +64,9 @@ public class GameModel
         this.timer.purge();
     }
 
-    public void blockMoveRequested(int cellCodeFrom, int cellCodeTo)
+    public void blockMoveRequested(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
-        cellMap.tryCascadeChanges(cellCodeFrom, cellCodeTo);
+        cellMap.tryCascadeChanges(cellCodeFrom.value(), cellCodeTo.value());
     }
 
     private class GameTimerTask extends TimerTask

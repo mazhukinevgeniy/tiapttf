@@ -1,5 +1,6 @@
 package homemade.game.controller;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
@@ -33,78 +34,65 @@ class SelectionManager implements MouseInputHandler
         int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
         int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
 
-        int eventCell = cellX + cellY * Game.FIELD_WIDTH;
+        CellCode eventCell = CellCode.getFor(cellX + cellY * Game.FIELD_WIDTH);
 
         if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
         {
             this.selection.clear();
-            this.selection.add(eventCell);
+            this.selection.add(eventCell.value());
 
             this.updateSelectionState();
         }
         else if (this.selection.size() == 1) //ie we move single blocks and we can move them by clicking nearby cells
         {
-            int selectedCell = this.selection.get(0);
-            int distance = Math.abs(eventCell - selectedCell);
+            CellCode selectedCell = CellCode.getFor(this.selection.get(0));
+            int distance = eventCell.distance(selectedCell);
 
-            if (distance == 1 || distance == Game.FIELD_WIDTH) //ie cells are adjacent
+            if (distance == 1)
             {
-                this.controller.model.blockMoveRequested(selectedCell, eventCell);
-
-                this.selection.clear();
-
-                if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
-                {
-                    this.selection.add(eventCell);
-                }
-
-                this.updateSelectionState();
+                tryMove(selectedCell, eventCell, true);
             }
         }
 
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }
 
-    void tryToMoveSelectionIn(int cellCodeShift)
+    void tryToMoveSelectionIn(int direction)
     {
         if (this.selection.size() == 1)
         {
             int selectedCell = this.selection.get(0);
 
-            int cellX = selectedCell % Game.FIELD_WIDTH;
-            int cellY = selectedCell / Game.FIELD_WIDTH;
+            CellCode cellCode = CellCode.getFor(selectedCell);
 
-            if (cellX > 0 && cellCodeShift == -1)
-                cellX--;
-            else if (cellX < Game.FIELD_WIDTH - 1 && cellCodeShift == 1)
-                cellX++;
-            else if (cellY > 0 && cellCodeShift == -Game.FIELD_WIDTH)
-                cellY--;
-            else if (cellY < Game.FIELD_HEIGHT - 1 && cellCodeShift == Game.FIELD_WIDTH)
-                cellY++;
-            //TODO: find a proper place for these checks
-
-
-            int eventCell = cellX + cellY * Game.FIELD_WIDTH;
-
-            if (eventCell != selectedCell)
+            if (!cellCode.onBorder(direction))
             {
-                this.controller.model.blockMoveRequested(selectedCell, eventCell);
+                CellCode eventCell = CellCode.getFor(selectedCell + CellCode.getShift(direction));
 
-                this.selection.clear();
-
-                if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
-                {
-                    this.selection.add(eventCell);
-
-                    //so we move selection either to the moved block, or to the block which blocked the movement
-                }
-
-                this.updateSelectionState();
+                tryMove(cellCode, eventCell, false);
             }
         }
-        //TODO: it's quite likely this code is seriously out of place
-        //or not, but it shouldn't duplicate the method above then
+    }
+
+    private void tryMove(CellCode selectedCell, CellCode eventCell, boolean moveSelectionOnFail)
+    {
+        if (eventCell != selectedCell)
+        {
+            this.controller.model.blockMoveRequested(selectedCell, eventCell);
+
+            this.selection.clear();
+
+            if (this.controller.model.copyGameState().getCellValue(selectedCell.x(), selectedCell.y()) <= 0)
+            {
+                this.selection.add(eventCell.value());
+            }
+            else
+            {
+                this.selection.add(moveSelectionOnFail ? eventCell.value() : selectedCell.value());
+            }
+
+            this.updateSelectionState();
+        }
     }
 
     private void updateSelectionState()
