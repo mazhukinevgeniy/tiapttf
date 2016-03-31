@@ -84,4 +84,45 @@ public class CellCode
     {
         return Math.abs(cX - otherCell.cX + cY - otherCell.cY);
     }
+
+    public CellCode neighbour(int direction)
+    {
+        return isOnBorder[direction] ? null : CellCode.cellCodes[cCValue + CellCode.shifts[direction]];
+    }
+
+    /**
+     * these methods are not supposed to get incorrect input atm
+     * at least now it looks as ugly as it probably should!
+     */
+    public int linkNumber(int direction)
+    {
+        return linkNumber(cCValue, cCValue + shifts[direction]);
+    }
+
+    public int linkNumber(CellCode otherCell)
+    {
+        return linkNumber(cCValue, otherCell.cCValue);
+    }
+
+
+    /**
+     * There are (2 * width * height - width - height) links total
+     * But many things are easier if we numerate as if there're 2 * width * height of them
+     */
+    private final int linkNumber(int cellCodeA, int cellCodeB)
+    {
+        if (cellCodeB < cellCodeA)
+        {
+            int tmp = cellCodeA;
+            cellCodeA = cellCodeB;
+            cellCodeB = tmp;
+        }
+
+        //now we know A < B, let's assume both are valid (ie not out of bounds and not equal)
+
+        int numberOfLinkInPair = (cellCodeB - cellCodeA == Game.FIELD_WIDTH) ? 0 : 1;
+
+        return cellCodeA * 2 + numberOfLinkInPair;
+    }
+    //TODO: remake it so that at every point of time we treat fake links as fake
 }

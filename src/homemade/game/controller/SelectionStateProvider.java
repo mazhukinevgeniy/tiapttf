@@ -1,5 +1,6 @@
 package homemade.game.controller;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.SelectionState;
 
@@ -20,16 +21,16 @@ class SelectionStateProvider implements SelectionState
     }
 
     @Override
-    public boolean isSelected(int cellX, int cellY)
+    public boolean isSelected(CellCode cellCode)
     {
         boolean found = false;
 
-        int cellCode = cellX + cellY * Game.FIELD_WIDTH; //TODO: create a way to stop copying this code
+        int cellCodeVal = cellCode.value();
         int i = 0, length = this.selection.length;
 
         while (!found && i < length)
         {
-            if (this.selection[i] == cellCode)
+            if (this.selection[i] == cellCodeVal)
             {
                 found = true;
             }
@@ -41,8 +42,8 @@ class SelectionStateProvider implements SelectionState
     }
 
     @Override
-    public boolean canMoveTo(int cellX, int cellY)
+    public boolean canMoveTo(CellCode cellCode)
     {
-        return cellsToMove.contains(cellX + cellY * Game.FIELD_WIDTH);
+        return cellsToMove.contains(cellCode.value());
     }
 }

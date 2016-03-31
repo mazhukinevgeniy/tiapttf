@@ -81,7 +81,7 @@ class ArrayBasedGameState implements GameState
 
             for (int direction : directions) //checking links for every direction applicable
             {
-                int linkNumber = Game.linkNumber(key, key + CellCode.getShift(direction));
+                int linkNumber = cellCode.linkNumber(direction);
 
                 Link link = map.links.get(linkNumber);
 
@@ -92,16 +92,15 @@ class ArrayBasedGameState implements GameState
 
 
     @Override
-    public int getCellValue(int cellX, int cellY)
+    public int getCellValue(CellCode cellCode)
     {
-        //System.out.println("returning cell value from gamestate, " + this.field[cellX + Game.FIELD_WIDTH * cellY]);
-        return this.field[cellX + Game.FIELD_WIDTH * cellY];
+        return this.field[cellCode.value()];
     }
 
     @Override
-    public boolean getLinkBetweenCells(int cellCodeA, int cellCodeB)
+    public boolean getLinkBetweenCells(int linkNumber)
     {
-        return links[Game.linkNumber(cellCodeA, cellCodeB)];
+        return links[linkNumber];
     }
 
     @Override

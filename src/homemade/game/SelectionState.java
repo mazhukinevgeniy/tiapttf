@@ -5,6 +5,6 @@ package homemade.game;
  */
 public interface SelectionState
 {
-    public boolean isSelected(int cellX, int cellY);
-    public boolean canMoveTo(int cellX, int cellY);
+    public boolean isSelected(CellCode cellCode);
+    public boolean canMoveTo(CellCode cellCode);
 }

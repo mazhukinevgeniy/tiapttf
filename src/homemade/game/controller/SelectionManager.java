@@ -1,13 +1,11 @@
 package homemade.game.controller;
 
-import homemade.game.CellCode;
-import homemade.game.Game;
-import homemade.game.GameState;
-import homemade.game.SelectionState;
+import homemade.game.*;
 import homemade.game.view.GameView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by user3 on 24.03.2016.
@@ -34,9 +32,9 @@ class SelectionManager implements MouseInputHandler
         int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
         int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
 
-        CellCode eventCell = CellCode.getFor(cellX + cellY * Game.FIELD_WIDTH);
+        CellCode eventCell = CellCode.getFor(cellX, cellY);
 
-        if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
+        if (this.controller.model.copyGameState().getCellValue(eventCell) > 0)
         {
             this.selection.clear();
             this.selection.add(eventCell.value());
@@ -82,7 +80,7 @@ class SelectionManager implements MouseInputHandler
 
             this.selection.clear();
 
-            if (this.controller.model.copyGameState().getCellValue(selectedCell.x(), selectedCell.y()) <= 0)
+            if (this.controller.model.copyGameState().getCellValue(selectedCell) <= 0)
             {
                 this.selection.add(eventCell.value());
             }
@@ -105,19 +103,19 @@ class SelectionManager implements MouseInputHandler
 
         for (int i = 0; i < selectionSize; i++)
         {
-            int cellCode = copy[i] = selection.get(i);
+            CellCode cellCode = CellCode.getFor(copy[i] = selection.get(i));
 
-            int x = cellCode % Game.FIELD_WIDTH;
-            int y = cellCode / Game.FIELD_WIDTH;
+            Iterator<Integer> iterator = Direction.getIterator();
 
-            if (x > 0 && state.getCellValue(x - 1, y) < 1)
-                cellsToMove.add(cellCode - 1);
-            if (x < Game.FIELD_WIDTH - 1 && state.getCellValue(x + 1, y) < 1)
-                cellsToMove.add(cellCode + 1);
-            if (y > 0 && state.getCellValue(x, y - 1) < 1)
-                cellsToMove.add(cellCode - Game.FIELD_WIDTH);
-            if (y < Game.FIELD_HEIGHT - 1 && state.getCellValue(x, y + 1) < 1)
-                cellsToMove.add(cellCode + Game.FIELD_WIDTH);
+            while (iterator.hasNext())
+            {
+                int direction = iterator.next();
+
+                CellCode neighbour = cellCode.neighbour(direction);
+
+                if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)
+                    cellsToMove.add(neighbour.value());
+            }
         }
 
         this.state = new SelectionStateProvider(copy, cellsToMove);

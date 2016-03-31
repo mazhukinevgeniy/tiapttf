@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ class BlockSpawner
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                int cellCode = i + j * Game.FIELD_WIDTH;
+                int cellCode = CellCode.getFor(i, j).value();
 
                 if (cells.get(cellCode).getValue() == Game.CELL_MARKED_FOR_SPAWN)
                 {
@@ -54,7 +55,8 @@ class BlockSpawner
             for (int i = 0; i < Game.FIELD_WIDTH; i++)
                 for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                 {
-                    int cellCode = i + j * Game.FIELD_WIDTH;
+                    int cellCode = CellCode.getFor(i, j).value();
+
 
                     if (cellMap.cells.get(cellCode).getValue() == Game.CELL_EMPTY)
                         freeCells.add(cellCode);

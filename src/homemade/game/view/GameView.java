@@ -1,8 +1,6 @@
 package homemade.game.view;
 
-import homemade.game.Game;
-import homemade.game.GameState;
-import homemade.game.SelectionState;
+import homemade.game.*;
 import homemade.game.controller.GameController;
 import homemade.resources.Assets;
 
@@ -74,15 +72,17 @@ public class GameView
                 for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                     {
+                        CellCode cellCode = CellCode.getFor(i, j);
+
                         int canvasX = GameView.GridOffset + cellWidth * i;
                         int canvasY = GameView.GridOffset + cellWidth * j;
 
-                        if (selection.canMoveTo(i, j))
+                        if (selection.canMoveTo(cellCode))
                         {
                             graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
                         }
 
-                        int value = state.getCellValue(i, j);
+                        int value = state.getCellValue(cellCode);
 
                         if (value == Game.CELL_EMPTY)
                         {
@@ -98,7 +98,7 @@ public class GameView
                             }
                             else //if (value > 0) //condition is always true if codes stay unchanged
                             {
-                                if (selection.isSelected(i, j))
+                                if (selection.isSelected(cellCode))
                                     sprite = Assets.normalBlockSelected;
                                 else
                                     sprite = Assets.normalBlock;
@@ -117,12 +117,10 @@ public class GameView
                 for (int i = 0; i < Game.FIELD_WIDTH; i++) //render glow
                     for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                     {
-                        int cellCode = i + j * Game.FIELD_WIDTH;
-                        int rightCellCode = cellCode + 1;
-                        int bottomCellCode = cellCode + Game.FIELD_WIDTH;
+                        CellCode cellCode = CellCode.getFor(i, j);
                         //we can do it because we recognize 2*fieldSize links
 
-                        boolean rightLink = state.getLinkBetweenCells(cellCode, rightCellCode);
+                        boolean rightLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.RIGHT));
                         if (rightLink)
                         {
                             int canvasX = GameView.GridOffset + cellWidth * i;
@@ -134,7 +132,7 @@ public class GameView
                             graphics.drawImage(Assets.glowHorizontal, canvasX, canvasY, null);
                         }
 
-                        boolean bottomLink = state.getLinkBetweenCells(cellCode, bottomCellCode);
+                        boolean bottomLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.BOTTOM));
                         if (bottomLink)
                         {
                             int canvasX = GameView.GridOffset + cellWidth * i;
@@ -153,7 +151,7 @@ public class GameView
                         int canvasX = GameView.GridOffset + cellWidth * i;
                         int canvasY = GameView.GridOffset + cellWidth * j;
 
-                        int value = state.getCellValue(i, j);
+                        int value = state.getCellValue(CellCode.getFor(i, j));
                         if (value > 0)
                         {
                             String numberToDraw = String.valueOf(value);
