@@ -1,9 +1,12 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
+import homemade.game.Direction;
 import homemade.game.Game;
 import homemade.game.GameState;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,13 +53,7 @@ class ArrayBasedGameState implements GameState
         immutableCopy = null;
 
         ArrayList<Integer> directions = new ArrayList<Integer>(4);
-        int[] shifts = new int[4];
-        shifts[Cell.BOTTOM] = Game.FIELD_WIDTH;
-        shifts[Cell.TOP] = -Game.FIELD_WIDTH;
-        shifts[Cell.LEFT] = -1;
-        shifts[Cell.RIGHT] = 1;
 
-        //for each cell update links as well
 
         Set<Integer> keys = updates.keySet();
 
@@ -67,20 +64,24 @@ class ArrayBasedGameState implements GameState
             field[key] = value;
 
 
+            //for each cell update links as well
+
             directions.clear();
 
-            int keyX = key % Game.FIELD_WIDTH;
-            int keyY = key / Game.FIELD_WIDTH;
+            CellCode cellCode = CellCode.getFor(key);
+            Iterator<Integer> iterator = Direction.getIterator();
 
-            if (keyX > 0) directions.add(Cell.LEFT);
-            if (keyX < Game.FIELD_WIDTH - 1) directions.add(Cell.RIGHT);
-            if (keyY > 0) directions.add(Cell.TOP);
-            if (keyY < Game.FIELD_HEIGHT - 1) directions.add(Cell.BOTTOM);
-            //TODO: rewrite if the performance will require it
+            while (iterator.hasNext())
+            {
+                int direction = iterator.next();
+
+                if (!cellCode.onBorder(direction))
+                    directions.add(direction);
+            }
 
             for (int direction : directions) //checking links for every direction applicable
             {
-                int linkNumber = Game.linkNumber(key, key + shifts[direction]);
+                int linkNumber = Game.linkNumber(key, key + CellCode.getShift(direction));
 
                 Link link = map.links.get(linkNumber);
 

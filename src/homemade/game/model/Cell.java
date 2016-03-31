@@ -1,5 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
+import homemade.game.Direction;
 import homemade.game.Game;
 
 import java.util.ArrayList;
@@ -9,19 +11,12 @@ import java.util.ArrayList;
  */
 class Cell
 {
-    static final int LEFT = 0;
-    static final int RIGHT = 1;
-    static final int TOP = 2;
-    static final int BOTTOM = 3;
-
-    //static final int OPPOSITE_DIRECTION[] = {1, 0, 3, 2};
-    //ugly and not needed yet
-
     private int code;
 
     private static final int [] directionMultiplier = {1, -1, 1, -1};
     //if direction to the other cell is 0 or 2: linked = thisvalue * 1 > 1 * othervalue
     //if direction is 1 or 3: linked = thisvalue * - 1 > -1 * othervalue
+    //TODO: generate based on named constants
 
     static ArrayList<Cell> createLinkedCells()
     {
@@ -38,81 +33,66 @@ class Cell
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
         {
             cell = cells.get(i);
-            cell.neighbours[Cell.TOP] = null;
-            cell.links[Cell.TOP] = null;
+            cell.neighbours[Direction.TOP] = null;
+            cell.links[Direction.TOP] = null;
         }
 
         //left line
         for (int i = 0; i < Game.FIELD_HEIGHT; i++)
         {
             cell = cells.get(Game.FIELD_WIDTH * i);
-            cell.neighbours[Cell.LEFT] = null;
-            cell.links[Cell.LEFT] = null;
+            cell.neighbours[Direction.LEFT] = null;
+            cell.links[Direction.LEFT] = null;
         }
-
-        //bottom line
-        for (int i = 0; i < Game.FIELD_WIDTH - 1; i++)
-        {
-            addNeighbours(cells, (Game.FIELD_HEIGHT - 1) * Game.FIELD_WIDTH + i, true, false);
-        }
-
-        //right line
-        for (int i = 0; i < Game.FIELD_HEIGHT - 1; i++)
-        {
-            addNeighbours(cells, Game.FIELD_WIDTH - 1 + i * Game.FIELD_WIDTH, false, true);
-        }
-
-        //bottom right cell
-        addNeighbours(cells, Game.FIELD_HEIGHT * Game.FIELD_WIDTH - 1, false, false);
-
 
         //main cycle
-        for (int i = 0; i < Game.FIELD_WIDTH - 1; i++)
-            for (int j = 0; j < Game.FIELD_HEIGHT - 1; j++)
+        for (int i = 0; i < Game.FIELD_WIDTH; i++)
+            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                addNeighbours(cells, i + j * Game.FIELD_WIDTH, true, true);
+                addNeighbours(cells, CellCode.getFor(i, j));
             }
 
 
         return cells;
     }
 
-    private static void addNeighbours(ArrayList<Cell> cells, int cellCode, boolean addRight, boolean addBottom)
+    private static void addNeighbours(ArrayList<Cell> cells, CellCode cellCode)
     {
-        Cell cell = cells.get(cellCode);
+        int cellCodeVal = cellCode.value();
+        Cell cell = cells.get(cellCodeVal);
 
-        if (addRight)
+        if (!cellCode.onBorder(Direction.RIGHT))
         {
-            Cell right = cells.get(cellCode + 1);
+            Cell right = cells.get(cellCodeVal + 1);
             Link link = new Link();
 
-            cell.neighbours[Cell.RIGHT] = right;
-            right.neighbours[Cell.LEFT] = cell;
+            cell.neighbours[Direction.RIGHT] = right;
+            right.neighbours[Direction.LEFT] = cell;
 
-            cell.links[Cell.RIGHT] = link;
-            right.links[Cell.LEFT] = link;
+            cell.links[Direction.RIGHT] = link;
+            right.links[Direction.LEFT] = link;
         }
         else
         {
-            cell.neighbours[Cell.RIGHT] = null;
-            cell.links[Cell.RIGHT] = null;
+            cell.neighbours[Direction.RIGHT] = null;
+            cell.links[Direction.RIGHT] = null;
         }
 
-        if (addBottom)
+        if (!cellCode.onBorder(Direction.BOTTOM))
         {
-            Cell bottom = cells.get(cellCode + Game.FIELD_WIDTH);
+            Cell bottom = cells.get(cellCodeVal + Game.FIELD_WIDTH);
             Link link = new Link();
 
-            cell.neighbours[Cell.BOTTOM] = bottom;
-            bottom.neighbours[Cell.TOP] = cell;
+            cell.neighbours[Direction.BOTTOM] = bottom;
+            bottom.neighbours[Direction.TOP] = cell;
 
-            cell.links[Cell.BOTTOM] = link;
-            bottom.links[Cell.TOP] = link;
+            cell.links[Direction.BOTTOM] = link;
+            bottom.links[Direction.TOP] = link;
         }
         else
         {
-            cell.neighbours[Cell.BOTTOM] = null;
-            cell.links[Cell.BOTTOM] = null;
+            cell.neighbours[Direction.BOTTOM] = null;
+            cell.links[Direction.BOTTOM] = null;
         }
     }
 

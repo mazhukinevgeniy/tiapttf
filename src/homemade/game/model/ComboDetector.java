@@ -1,10 +1,10 @@
 package homemade.game.model;
 
+import homemade.game.Direction;
 import homemade.game.Game;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -50,12 +50,12 @@ class ComboDetector
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(cellsToRemove, horizontal * Game.FIELD_WIDTH, Cell.RIGHT);
+            iterateThroughTheLine(cellsToRemove, horizontal * Game.FIELD_WIDTH, Direction.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(cellsToRemove, vertical, Cell.BOTTOM);
+            iterateThroughTheLine(cellsToRemove, vertical, Direction.BOTTOM);
         }
 
         return cellsToRemove;

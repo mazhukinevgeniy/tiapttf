@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.Direction;
 import homemade.game.Game;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ class CellMap
         {
             Cell cell = cells.get(i);
 
-            links.add(2 * i, cell.link(Cell.BOTTOM));
-            links.add(2 * i + 1, cell.link(Cell.RIGHT));
+            links.add(2 * i, cell.link(Direction.BOTTOM));
+            links.add(2 * i + 1, cell.link(Direction.RIGHT));
         }
     }
 

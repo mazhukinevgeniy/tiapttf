@@ -1,5 +1,6 @@
 package homemade.game.controller;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.SelectionState;
 import homemade.game.model.GameModel;
@@ -24,6 +25,8 @@ public class GameController
 
     public GameController(Frame mainFrame)
     {
+        CellCode.initializeCellCodes();
+
         model = new GameModel();
 
         selectionManager = new SelectionManager(this);
