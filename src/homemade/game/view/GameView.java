@@ -27,7 +27,6 @@ public class GameView
     private DigitMetadata digitMetadata = new DigitMetadata();
 
     private BufferStrategy strategy;
-    private GameMouseAdapter mouseAdapter;
 
     private Timer timer;
 
@@ -38,9 +37,10 @@ public class GameView
         this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
         mainFrame.add(this.canvas);
 
-        this.mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
-        canvas.addMouseListener(this.mouseAdapter);
-        canvas.addMouseMotionListener(this.mouseAdapter);
+        GameMouseAdapter mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
+        canvas.addMouseListener(mouseAdapter);
+        canvas.addMouseMotionListener(mouseAdapter);
+        canvas.addKeyListener(new ControlledKeyListener(controller.keyboardInputHandler()));
 
         canvas.createBufferStrategy(2);
 
@@ -109,9 +109,9 @@ public class GameView
                     }
 
                 int vertGlowOffsetX = (GameView.CellWidth - Assets.glowVertical.getWidth(null)) / 2;
-                int vertGlowOffsetY = (GameView.CellWidth * 2 - Assets.glowVertical.getHeight(null)) / 2;
+                int vertGlowOffsetY = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowVertical.getHeight(null)) / 2;
 
-                int horGlowOffsetX = (GameView.CellWidth * 2 - Assets.glowHorizontal.getWidth(null)) / 2;
+                int horGlowOffsetX = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowHorizontal.getWidth(null)) / 2;
                 int horGlowOffsetY = (GameView.CellWidth - Assets.glowHorizontal.getHeight(null)) / 2;
 
                 for (int i = 0; i < Game.FIELD_WIDTH; i++) //render glow

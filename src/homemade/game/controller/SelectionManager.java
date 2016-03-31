@@ -65,6 +65,48 @@ class SelectionManager implements MouseInputHandler
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }
 
+    void tryToMoveSelectionIn(int cellCodeShift)
+    {
+        if (this.selection.size() == 1)
+        {
+            int selectedCell = this.selection.get(0);
+
+            int cellX = selectedCell % Game.FIELD_WIDTH;
+            int cellY = selectedCell / Game.FIELD_WIDTH;
+
+            if (cellX > 0 && cellCodeShift == -1)
+                cellX--;
+            else if (cellX < Game.FIELD_WIDTH - 1 && cellCodeShift == 1)
+                cellX++;
+            else if (cellY > 0 && cellCodeShift == -Game.FIELD_WIDTH)
+                cellY--;
+            else if (cellY < Game.FIELD_HEIGHT - 1 && cellCodeShift == Game.FIELD_WIDTH)
+                cellY++;
+            //TODO: find a proper place for these checks
+
+
+            int eventCell = cellX + cellY * Game.FIELD_WIDTH;
+
+            if (eventCell != selectedCell)
+            {
+                this.controller.model.blockMoveRequested(selectedCell, eventCell);
+
+                if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
+                {
+                    this.selection.clear();
+
+                    this.selection.add(eventCell);
+
+                    //so we move selection either to the moved block, or to the block which blocked the movement
+                }
+
+                this.updateSelectionState();
+            }
+        }
+        //TODO: it's quite likely this code is seriously out of place
+        //or not, but it shouldn't duplicate the method above then
+    }
+
     private void updateSelectionState()
     {
         GameState state = controller.model.copyGameState();

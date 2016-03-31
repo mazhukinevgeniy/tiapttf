@@ -18,6 +18,7 @@ public class Game
     public static final int SPAWN_PERIOD = 1000;
 
     public static final int TARGET_FPS = 60;
+    public static final int KEY_INPUT_CAP_PER_SECOND = 8;
 
     //TODO: move to settings everything we could and want
 
