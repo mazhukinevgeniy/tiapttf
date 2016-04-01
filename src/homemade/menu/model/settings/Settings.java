@@ -1,7 +1,7 @@
 package homemade.menu.model.settings;
 
 import homemade.game.Game;
-import homemade.shell.model.save.Save;
+import homemade.menu.model.save.Save;
 
 import java.lang.*;
 
@@ -10,29 +10,62 @@ import java.lang.*;
  */
 public class Settings
 {
-    public Parameter<Boolean> isRealTime;
-    public Parameter<Integer> simultaneousSpawn;
-    public Parameter<Integer> spawnPeriod;
-    public Parameter<Integer> something;
+    public Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
+    public Parameter<Integer> simultaneousSpawn = new Parameter("simultaneousSpawn");
+    public Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
+    public Parameter<Integer> something = new Parameter<>("something");
+
+    private Save save = null;
 
     public Settings()
     {
-        setDefaultValue();
+        setDefaultSettings();
     }
 
     public Settings(Save save)
     {
-        setSavedValue(save);
+        setDefaultSettings();
+        this.save = save;
+        setSavedValue();
+    }
+
+    private void setDefaultSettings()
+    {
+        setDefaultRange();
+        setDefaultValue();
+    }
+
+    private void setDefaultRange()
+    {
+        isRealTime.setEnum(new Enumeration<>(true, false));
+        simultaneousSpawn.setRange(new IntRange(1, Game.FIELD_WIDTH * Game.FIELD_HEIGHT));
+        spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
+        something.setEnum(new Enumeration<>(1, 2, 3));
     }
 
     public void setDefaultValue()
     {
-        isRealTime = new Parameter<>("isRealTime", false);
-        simultaneousSpawn = new Parameter<>("simultaneousSpawn", 3,
-                                            new IntRange(1, Game.FIELD_WIDTH * Game.FIELD_HEIGHT));
-        spawnPeriod = new Parameter<>("spawnPeriod", 1000, new IntRange(1000, 1000 * 60 * 60));
-        something = new Parameter<>("something", 3, new Enumeration<>(1, 2, 3));
+        isRealTime.setValue(false);
+        simultaneousSpawn.setValue(3);
+        spawnPeriod.setValue(1000);
+        something.setValue(2);
     }
 
-    private void setSavedValue(Save save) { }
+    private void setSavedValue()
+    {
+        Boolean boolValue;
+        Integer intValue;
+
+        boolValue = save.getBooleanValue(isRealTime.getName());
+        isRealTime.setValue(boolValue);
+
+        intValue = save.getIntegerValue(simultaneousSpawn.getName());
+        simultaneousSpawn.setValue(intValue);
+
+        intValue = save.getIntegerValue(spawnPeriod.getName());
+        spawnPeriod.setValue(intValue);
+
+        intValue = save.getIntegerValue(something.getName());
+        something.setValue(intValue);
+    }
 }

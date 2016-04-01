@@ -1,13 +1,11 @@
 package homemade.menu;
 
 
+import homemade.menu.model.save.Save;
 import homemade.menu.model.settings.Settings;
 
-import org.w3c.dom.Document;
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
+import java.awt.*;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -20,18 +18,17 @@ public class TestShell
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        parameterTest();
 
-        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-        f.setValidating(false);
-        DocumentBuilder builder = f.newDocumentBuilder();
-        Document doc = builder.parse(new File("test.xml"));
+        createGUI();
+
+        Save save = new Save("settings.xml");
+        parameterTest(save);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
 
-    private static void parameterTest()
+    private static void parameterTest(Save save)
     {
         Settings settings = new Settings();
 
@@ -39,16 +36,36 @@ public class TestShell
         System.out.println(settings.simultaneousSpawn.getValue());
         System.out.println(settings.spawnPeriod.getValue());
 
-        settings.simultaneousSpawn.setValue(0);
-        System.out.println(settings.simultaneousSpawn.getValue());
-        settings.simultaneousSpawn.setValue(1);
-        System.out.println(settings.simultaneousSpawn.getValue());
-
+        settings = new Settings(save);
         System.out.println();
-        System.out.println(settings.something.getValue());
-        settings.something.setValue(4);
-        System.out.println(settings.something.getValue());
-        settings.something.setValue(2);
-        System.out.println(settings.something.getValue());
+
+        System.out.println(settings.isRealTime.getValue());
+        System.out.println(settings.simultaneousSpawn.getValue());
+        System.out.println(settings.spawnPeriod.getValue());
+    }
+
+    public static void createGUI() {
+        final JFrame frame = new JFrame("Test frame");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        final Font font = new Font("Verdana", Font.PLAIN, 13);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        final JTextArea textArea = new JTextArea(15, 10);
+        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        textArea.setFont(font);
+
+        JButton parseButton = new JButton("Parse XML");
+        parseButton.setFont(font);
+        panel.add(parseButton, BorderLayout.SOUTH);
+
+        frame.getContentPane().add(panel);
+
+        frame.setPreferredSize(new Dimension(280, 220));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }

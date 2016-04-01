@@ -16,6 +16,11 @@ public class Parameter<Type>
 
     public Parameter() {}
 
+    public Parameter(final String name)
+    {
+        this.name = name;
+    }
+
     public Parameter(final String name, final Type value)
     {
         this.name = name;
