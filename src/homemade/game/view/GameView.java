@@ -4,10 +4,12 @@ import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
+import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,12 +26,11 @@ public class GameView
 
     private Canvas canvas;
 
-    private DigitMetadata digitMetadata = new DigitMetadata();
-
     private BufferStrategy strategy;
-    private GameMouseAdapter mouseAdapter;
 
     private Timer timer;
+
+    private ArrayList<RenderingLayer> layers;
 
 
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
@@ -38,13 +39,16 @@ public class GameView
         this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
         mainFrame.add(this.canvas);
 
-        this.mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
-        canvas.addMouseListener(this.mouseAdapter);
-        canvas.addMouseMotionListener(this.mouseAdapter);
+        GameMouseAdapter mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
+        canvas.addMouseListener(mouseAdapter);
+        canvas.addMouseMotionListener(mouseAdapter);
+        canvas.addKeyListener(new ControlledKeyListener(controller.keyboardInputHandler()));
 
         canvas.createBufferStrategy(2);
 
         this.strategy = canvas.getBufferStrategy();
+
+        layers = RenderingLayer.getRenderingLayers();
 
         this.timer = new Timer();
         long delay = 0;
@@ -67,73 +71,13 @@ public class GameView
 
                 graphics.clearRect(0, 0, GameView.CanvasWidth, GameView.CanvasHeight);
 
-                int cellWidth = GameView.CellWidth + GameView.CellOffset;
-
                 graphics.drawImage(Assets.field, GameView.GridOffset, GameView.GridOffset, null);
 
-                for (int i = 0; i < Game.FIELD_WIDTH; i++)
-                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
-                    {
-                        int canvasX = GameView.GridOffset + cellWidth * i;
-                        int canvasY = GameView.GridOffset + cellWidth * j;
+                for (RenderingLayer layer : layers)
+                {
+                    layer.renderLayer(state, selection, graphics);
+                }
 
-                        if (selection.canMoveTo(i, j))
-                        {
-                            graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
-                        }
-
-                        int value = state.getCellValue(i, j);
-
-                        if (value == Game.CELL_EMPTY)
-                        {
-                            //?
-                        }
-                        else
-                        {
-                            Image sprite;
-                            String numberToDraw = "";
-
-                            if (value == Game.CELL_MARKED_FOR_SPAWN)
-                            {
-                                sprite = Assets.smallBlock;
-                            }
-                            else //if (value > 0) //condition is always true if codes stay unchanged
-                            {
-                                if (selection.isSelected(i, j))
-                                    sprite = Assets.normalBlockSelected;
-                                else
-                                    sprite = Assets.normalBlock;
-
-                                numberToDraw = String.valueOf(value);
-                            }
-
-
-                            graphics.drawImage(sprite, canvasX, canvasY, null);
-
-                            int numberLength = numberToDraw.length();
-                            if (numberLength > 0)
-                            {
-                                canvasX += digitMetadata.getOffsetXForNumber(value);
-                                canvasY += digitMetadata.offsetY;
-
-
-                                for (int k = 0; k < numberLength; k++)
-                                {
-                                    int digit = Character.getNumericValue(numberToDraw.charAt(k));
-
-                                    graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
-
-                                    canvasX += 1 + digitMetadata.digitWidth[digit];
-                                }
-                            }
-
-
-                        }
-
-                    }
-
-                // Render to graphics
-                // ...
 
                 // Dispose the graphics
                 graphics.dispose();
@@ -166,4 +110,3 @@ public class GameView
         }
     }
 }
-//TODO: split this class, it's getting too ugly

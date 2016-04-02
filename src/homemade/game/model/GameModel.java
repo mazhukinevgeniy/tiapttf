@@ -1,8 +1,11 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
+import homemade.game.controller.ScoreHandler;
 
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,15 +14,23 @@ import java.util.TimerTask;
  */
 public class GameModel
 {
-    private ArrayBasedGameState gameStateSnapshot;
+    private GameState gameState;
 
-    private Field field;
+    private CellMap cellMap;
+    private BlockSpawner spawner;
     private Timer timer;
 
-    public GameModel()
+    public GameModel(ScoreHandler scoreHandler)
     {
-        this.field = new Field();
-        this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
+        NumberPool numberPool = new NumberPool(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
+        GameScore gameScore = new GameScore(scoreHandler);
+
+        ArrayBasedGameState gameStateTracker = new ArrayBasedGameState();
+        cellMap = new CellMap(gameStateTracker, numberPool, gameScore);
+        //TODO: think of something, CellMap has no reason to care about gameScore
+        gameState = gameStateTracker;
+
+        spawner = new BlockSpawner(cellMap, numberPool);
 
         this.timer = new Timer();
 
@@ -32,15 +43,16 @@ public class GameModel
 
     void handleTimerTask()
     {
-        this.field.spawnBlocks();
-        this.field.markCells(Game.SIMULTANEOUS_SPAWN);
+        Map<Integer, Integer> changes = spawner.spawnBlocks();
+        changes.putAll(spawner.markCells(Game.SIMULTANEOUS_SPAWN));
+        //can do because first call doesn't interfere with the second
 
-        this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
+        cellMap.applyCascadeChanges(changes);
     }
 
     public GameState copyGameState()
     {
-        return this.gameStateSnapshot;
+        return gameState.getImmutableCopy();
     }
 
     public void gameOver()
@@ -49,12 +61,9 @@ public class GameModel
         this.timer.purge();
     }
 
-    public void blockMoveRequested(int cellCodeFrom, int cellCodeTo)
+    public void blockMoveRequested(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
-        if (this.field.tryMoveBlock(cellCodeFrom, cellCodeTo))
-        {
-            this.gameStateSnapshot = new ArrayBasedGameState(this.field.cloneToArray());
-        }
+        cellMap.tryCascadeChanges(cellCodeFrom.value(), cellCodeTo.value());
     }
 
     private class GameTimerTask extends TimerTask

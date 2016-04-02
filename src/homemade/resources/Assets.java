@@ -2,6 +2,7 @@ package homemade.resources;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,6 +13,8 @@ public class Assets
 {
     public static Image grid;
     public static Image field;
+    public static Image glowVertical;
+    public static Image glowHorizontal;
     public static Image normalBlock;
     public static Image normalBlockSelected;
     public static Image smallBlock;
@@ -38,6 +41,10 @@ public class Assets
             input = getClass().getResourceAsStream("field.png");
             Assets.field = ImageIO.read(input);
 
+            input = getClass().getResourceAsStream("glow.png");
+            Assets.glowVertical = ImageIO.read(input);
+            Assets.glowHorizontal = createRotatedCopy(Assets.glowVertical, Math.PI / 2);
+
             input = getClass().getResourceAsStream("normal_block.png");
             Assets.normalBlock = ImageIO.read(input);
 
@@ -60,5 +67,38 @@ public class Assets
         {
             e.printStackTrace();
         }
+    }
+
+    private Image createRotatedCopy(Image image, double angleInRadians)
+    {
+        int     width = image.getWidth(null),
+                height = image.getHeight(null);
+
+
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D graphics = bufferedImage.createGraphics();
+        graphics.drawImage(image, 0, 0, null);
+        graphics.dispose();
+
+        //buffered image is ready
+
+        double  sin = Math.abs(Math.sin(angleInRadians)),
+                cos = Math.abs(Math.cos(angleInRadians));
+
+
+        int     newW = (int) Math.floor(width * cos + height * sin),
+                newH = (int) Math.floor(height * cos + width * sin);
+
+        BufferedImage rotatedImage = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+        graphics = rotatedImage.createGraphics();
+
+        graphics.translate((newW - width) / 2, (newH - height) / 2);
+        graphics.rotate(angleInRadians, width / 2, height / 2);
+        graphics.drawRenderedImage(bufferedImage, null);
+        graphics.dispose();
+
+        return rotatedImage;
     }
 }

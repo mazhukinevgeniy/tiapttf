@@ -1,8 +1,6 @@
 package homemade.game.controller;
 
-import homemade.game.Game;
-import homemade.game.GameState;
-import homemade.game.SelectionState;
+import homemade.game.*;
 import homemade.game.view.GameView;
 
 import java.util.ArrayList;
@@ -13,14 +11,14 @@ import java.util.HashSet;
  */
 class SelectionManager implements MouseInputHandler
 {
-    private ArrayList<Integer> selection;
+    private ArrayList<CellCode> selection;
     private GameController controller;
 
     private SelectionState state;
 
     SelectionManager(GameController controller)
     {
-        this.selection = new ArrayList<Integer>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
+        this.selection = new ArrayList<CellCode>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
         this.controller = controller;
 
         this.updateSelectionState();
@@ -33,9 +31,9 @@ class SelectionManager implements MouseInputHandler
         int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
         int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
 
-        int eventCell = cellX + cellY * Game.FIELD_WIDTH;
+        CellCode eventCell = CellCode.getFor(cellX, cellY);
 
-        if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
+        if (this.controller.model.copyGameState().getCellValue(eventCell) > 0)
         {
             this.selection.clear();
             this.selection.add(eventCell);
@@ -44,25 +42,58 @@ class SelectionManager implements MouseInputHandler
         }
         else if (this.selection.size() == 1) //ie we move single blocks and we can move them by clicking nearby cells
         {
-            int selectedCell = this.selection.get(0);
-            int distance = Math.abs(eventCell - selectedCell);
+            CellCode selectedCell = this.selection.get(0);
+            int distance = eventCell.distance(selectedCell);
 
-            if (distance == 1 || distance == Game.FIELD_WIDTH) //ie cells are adjacent
+            if (distance == 1)
             {
-                this.controller.model.blockMoveRequested(selectedCell, eventCell);
-
-                this.selection.clear();
-
-                if (this.controller.model.copyGameState().getCellValue(cellX, cellY) > 0)
-                {
-                    this.selection.add(eventCell);
-                }
-
-                this.updateSelectionState();
+                tryMove(selectedCell, eventCell, true);
             }
         }
 
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
+    }
+
+    void tryToMoveSelectionIn(Direction direction)
+    {
+        if (this.selection.size() == 1)
+        {
+            CellCode cellCode = this.selection.get(0);
+
+            if (!cellCode.onBorder(direction))
+            {
+                CellCode eventCell = cellCode.neighbour(direction);
+
+                tryMove(cellCode, eventCell, false);
+            }
+        }
+    }
+
+    private void tryMove(CellCode selectedCell, CellCode eventCell, boolean moveSelectionOnFail)
+    {
+        if (eventCell != selectedCell)
+        {
+            controller.model.blockMoveRequested(selectedCell, eventCell);
+
+            selection.clear();
+
+            GameState gameState = controller.model.copyGameState();
+
+            boolean selectedCellOccupied = gameState.getCellValue(selectedCell) > 0;
+            boolean eventCellOccupied = gameState.getCellValue(eventCell) > 0;
+
+            if (selectedCellOccupied) //I think that means move failed
+            {
+                if (moveSelectionOnFail)
+                    selection.add(eventCell);
+                else
+                    selection.add(selectedCell);
+            }
+            else if (eventCellOccupied)
+                selection.add(eventCell);
+
+            updateSelectionState();
+        }
     }
 
     private void updateSelectionState()
@@ -70,24 +101,21 @@ class SelectionManager implements MouseInputHandler
         GameState state = controller.model.copyGameState();
 
         int selectionSize = selection.size();
-        int [] copy = new int[selectionSize];
-        HashSet<Integer> cellsToMove = new HashSet<Integer>(4 * selectionSize);
+        ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);
+        HashSet<CellCode> cellsToMove = new HashSet<CellCode>(4 * selectionSize);
 
         for (int i = 0; i < selectionSize; i++)
         {
-            int cellCode = copy[i] = selection.get(i);
+            CellCode cellCode = selection.get(i);
+            copy.add(cellCode);
 
-            int x = cellCode % Game.FIELD_WIDTH;
-            int y = cellCode / Game.FIELD_WIDTH;
+            for (Direction direction : Direction.values())
+            {
+                CellCode neighbour = cellCode.neighbour(direction);
 
-            if (x > 0 && state.getCellValue(x - 1, y) < 1)
-                cellsToMove.add(cellCode - 1);
-            if (x < Game.FIELD_WIDTH - 1 && state.getCellValue(x + 1, y) < 1)
-                cellsToMove.add(cellCode + 1);
-            if (y > 0 && state.getCellValue(x, y - 1) < 1)
-                cellsToMove.add(cellCode - Game.FIELD_WIDTH);
-            if (y < Game.FIELD_HEIGHT - 1 && state.getCellValue(x, y + 1) < 1)
-                cellsToMove.add(cellCode + Game.FIELD_WIDTH);
+                if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)
+                    cellsToMove.add(neighbour);
+            }
         }
 
         this.state = new SelectionStateProvider(copy, cellsToMove);

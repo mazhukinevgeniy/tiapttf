@@ -5,5 +5,9 @@ package homemade.game;
  */
 public interface GameState
 {
-    public int getCellValue(int cellX, int cellY);
+    public int getCellValue(CellCode cellCode);
+
+    public boolean getLinkBetweenCells(int linkNumber);
+
+    public GameState getImmutableCopy();
 }

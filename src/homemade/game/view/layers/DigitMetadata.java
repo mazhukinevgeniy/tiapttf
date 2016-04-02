@@ -1,6 +1,7 @@
-package homemade.game.view;
+package homemade.game.view.layers;
 
 import homemade.game.Game;
+import homemade.game.view.GameView;
 import homemade.resources.Assets;
 
 /**

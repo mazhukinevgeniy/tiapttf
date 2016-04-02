@@ -1,8 +1,9 @@
 package homemade.game.controller;
 
-import homemade.game.Game;
+import homemade.game.CellCode;
 import homemade.game.SelectionState;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -10,39 +11,24 @@ import java.util.HashSet;
  */
 class SelectionStateProvider implements SelectionState
 {
-    private int[] selection;
-    private HashSet<Integer> cellsToMove;
+    private ArrayList<CellCode> selection;
+    private HashSet<CellCode> cellsToMove;
 
-    SelectionStateProvider(int[] selectionData, HashSet<Integer> cellsToMove)
+    SelectionStateProvider(ArrayList<CellCode> selectionData, HashSet<CellCode> cellsToMove)
     {
         this.selection = selectionData;
         this.cellsToMove = cellsToMove;
     }
 
     @Override
-    public boolean isSelected(int cellX, int cellY)
+    public boolean isSelected(CellCode cellCode)
     {
-        boolean found = false;
-
-        int cellCode = cellX + cellY * Game.FIELD_WIDTH; //TODO: create a way to stop copying this code
-        int i = 0, length = this.selection.length;
-
-        while (!found && i < length)
-        {
-            if (this.selection[i] == cellCode)
-            {
-                found = true;
-            }
-
-            i++;
-        }
-
-        return found;
+        return selection.contains(cellCode);
     }
 
     @Override
-    public boolean canMoveTo(int cellX, int cellY)
+    public boolean canMoveTo(CellCode cellCode)
     {
-        return cellsToMove.contains(cellX + cellY * Game.FIELD_WIDTH);
+        return cellsToMove.contains(cellCode);
     }
 }
