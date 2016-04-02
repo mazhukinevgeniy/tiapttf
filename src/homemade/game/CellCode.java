@@ -1,7 +1,5 @@
 package homemade.game;
 
-import java.util.ArrayList;
-
 /**
  * Created by user3 on 31.03.2016.
  */
