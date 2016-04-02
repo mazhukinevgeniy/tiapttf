@@ -1,7 +1,8 @@
-import homemade.game.controller.GameController;
+import homemade.menu.controller.MenuManager;
+import homemade.menu.model.save.Save;
+import homemade.menu.model.settings.Settings;
+import homemade.menu.view.Window;
 import homemade.resources.Assets;
-
-import javax.swing.*;
 
 /**
  * Created by user3 on 22.03.2016.
@@ -12,16 +13,34 @@ public class Main
     {
         Assets.loadAssets();
 
-        JFrame frame = new JFrame("there's a pattern there to follow");
-        frame.setVisible(true);
+        Window window = new Window();
+        window.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MenuManager menuManager = new MenuManager(window);
 
-        GameController controller = new GameController(frame);
+        window.finaleInitialize();
+    }
 
+    private static void parameterTest(Save save)
+    {
+        Settings settings = new Settings();
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
 
+        settings = new Settings(save);
+        System.out.println();
+
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
+
+        settings.setIsRealTime(false);
+        settings.setSpawnPeriod(1500);
+
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
     }
 }

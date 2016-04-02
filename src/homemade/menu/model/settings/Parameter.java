@@ -1,7 +1,5 @@
 package homemade.menu.model.settings;
 
-import java.lang.*;
-
 /**
  * Created by Marid on 27.03.2016.
  */

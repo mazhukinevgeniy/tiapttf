@@ -3,8 +3,6 @@ package homemade.menu.model.settings;
 import homemade.game.Game;
 import homemade.menu.model.save.Save;
 
-import java.lang.*;
-
 /**
  * Created by Marid on 27.03.2016.
  */
