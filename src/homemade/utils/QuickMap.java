@@ -18,4 +18,9 @@ public class QuickMap
     {
         return new HashMap<Integer, Boolean>();
     }
+
+    public static final Map<Integer, String> getCleanIntStrMap()
+    {
+        return new HashMap<Integer, String>();
+    }
 }

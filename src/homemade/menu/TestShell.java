@@ -1,22 +1,27 @@
 package homemade.menu;
 
 
+import homemade.menu.controller.MenuManager;
 import homemade.menu.model.save.Save;
 import homemade.menu.model.settings.Settings;
-import homemade.menu.view.MainMenu;
 import homemade.menu.view.Window;
+import homemade.resources.Assets;
 
 /**
  * Created by Marid on 27.03.2016.
  */
 public class TestShell
 {
-    public static void main(String [] args)  throws Exception
+    public static void main(String [] args)
     {
-        createGUI();
+        Assets.loadAssets();
 
-        Save save = new Save("settings.xml");
-        parameterTest(save);
+        Window window = new Window();
+        window.setVisible(true);
+
+        MenuManager menuManager = new MenuManager(window);
+
+        window.finaleInitialize();
     }
 
     private static void parameterTest(Save save)
@@ -40,15 +45,5 @@ public class TestShell
         System.out.println(settings.getIsRealTime());
         System.out.println(settings.getSimultaneousSpawn());
         System.out.println(settings.getSpawnPeriod());
-    }
-
-    public static void createGUI() {
-        Window window = new Window();
-        MainMenu menu = new MainMenu();
-
-        window.add(menu);
-
-        window.finalize();
-        window.setVisible(true);
     }
 }

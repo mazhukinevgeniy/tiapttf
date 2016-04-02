@@ -1,4 +1,6 @@
-package homemade.menu.view;
+package homemade.menu.view.mainMenu;
+
+import homemade.menu.controller.ButtonActionListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,23 +13,27 @@ import java.awt.*;
  */
 public class MainMenuButton extends JButton
 {
-    private static Font font = new Font("Verdana", Font.PLAIN, 13);
-    private static int WIDTH = 200;
-    private static int HEIGHT = 30;
+    private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);
+    private static final int WIDTH = 200;
+    private static final int HEIGHT = 30;
 
-    private static int SIZE_BORDER = 10;
+    private static final int SIZE_BORDER = 10;
 
-    public MainMenuButton(String caption)
+    public MainMenuButton(String caption, ButtonActionListener actionListener)
     {
         super(caption);
 
         setMaximumSize(new Dimension(WIDTH + 2 * SIZE_BORDER, HEIGHT + 2 * SIZE_BORDER));
-        setFont(font);
+        setFont(FONT);
         setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
         Border outsideBorder = new EmptyBorder(10, 10, 10, 10);
         Border insideBorder = getBorder();
         setBorder(new CompoundBorder(outsideBorder, insideBorder));
+
+        addActionListener(actionListener);
     }
+
+
 
 }

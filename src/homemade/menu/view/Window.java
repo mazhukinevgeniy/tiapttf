@@ -26,7 +26,7 @@ public class Window extends JFrame
         return getContentPane().add(component);
     }
 
-    public void finalize()
+    public void finaleInitialize()
     {
         pack();
         setLocationRelativeTo(null);
