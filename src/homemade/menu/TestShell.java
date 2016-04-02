@@ -3,9 +3,8 @@ package homemade.menu;
 
 import homemade.menu.model.save.Save;
 import homemade.menu.model.settings.Settings;
-
-import javax.swing.*;
-import java.awt.*;
+import homemade.menu.view.MainMenu;
+import homemade.menu.view.Window;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -14,18 +13,10 @@ public class TestShell
 {
     public static void main(String [] args)  throws Exception
     {
-        JFrame frame = new JFrame("there's a pattern there to follow");
-        frame.setVisible(true);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         createGUI();
 
         Save save = new Save("settings.xml");
         parameterTest(save);
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);
     }
 
     private static void parameterTest(Save save)
@@ -52,27 +43,12 @@ public class TestShell
     }
 
     public static void createGUI() {
-        final JFrame frame = new JFrame("Test frame");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Window window = new Window();
+        MainMenu menu = new MainMenu();
 
-        final Font font = new Font("Verdana", Font.PLAIN, 13);
+        window.add(menu);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        final JTextArea textArea = new JTextArea(15, 10);
-        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
-        textArea.setFont(font);
-
-        JButton parseButton = new JButton("Parse XML");
-        parseButton.setFont(font);
-        panel.add(parseButton, BorderLayout.SOUTH);
-
-        frame.getContentPane().add(panel);
-
-        frame.setPreferredSize(new Dimension(280, 220));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        window.finalize();
+        window.setVisible(true);
     }
 }
