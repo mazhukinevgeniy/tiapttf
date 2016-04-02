@@ -68,4 +68,12 @@ public class Settings
         intValue = save.getIntegerValue(something.getName());
         something.setValue(intValue);
     }
+
+    public void updateSave()
+    {
+        isRealTime.setValue(true);
+        spawnPeriod.setValue(2000);
+        save.setParameterValue(isRealTime.getName(), isRealTime.getValue());
+        save.setParameterValue(spawnPeriod.getName(), spawnPeriod.getValue());
+    }
 }

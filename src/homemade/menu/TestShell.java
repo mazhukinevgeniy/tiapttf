@@ -42,6 +42,12 @@ public class TestShell
         System.out.println(settings.isRealTime.getValue());
         System.out.println(settings.simultaneousSpawn.getValue());
         System.out.println(settings.spawnPeriod.getValue());
+
+        settings.updateSave();
+
+        System.out.println(settings.isRealTime.getValue());
+        System.out.println(settings.simultaneousSpawn.getValue());
+        System.out.println(settings.spawnPeriod.getValue());
     }
 
     public static void createGUI() {

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<settings>
-    <parameter name = "isRealTime" type = "Boolean" value = "false"/>
-	<parameter name = "simultaneousSpawn" type = "Integer" value = "3"/>
-	<parameter name = "spawnPeriod" type = "Integer" value = "1000"/>
-	<parameter name = "something" type = "Integer" value = "1"/>  
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><settings>
+    <parameter name="isRealTime" type="Boolean" value="true"/>
+	<parameter name="simultaneousSpawn" type="Integer" value="3"/>
+	<parameter name="spawnPeriod" type="Integer" value="2000"/>
+	<parameter name="something" type="Integer" value="1"/>  
 </settings>
