@@ -1,11 +1,15 @@
 package homemade.game.view;
 
-import homemade.game.*;
+import homemade.game.Game;
+import homemade.game.GameState;
+import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
+import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,11 +26,11 @@ public class GameView
 
     private Canvas canvas;
 
-    private DigitMetadata digitMetadata = new DigitMetadata();
-
     private BufferStrategy strategy;
 
     private Timer timer;
+
+    private ArrayList<RenderingLayer> layers;
 
 
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
@@ -43,6 +47,8 @@ public class GameView
         canvas.createBufferStrategy(2);
 
         this.strategy = canvas.getBufferStrategy();
+
+        layers = RenderingLayer.getRenderingLayers();
 
         this.timer = new Timer();
         long delay = 0;
@@ -65,116 +71,13 @@ public class GameView
 
                 graphics.clearRect(0, 0, GameView.CanvasWidth, GameView.CanvasHeight);
 
-                int cellWidth = GameView.CellWidth + GameView.CellOffset;
-
                 graphics.drawImage(Assets.field, GameView.GridOffset, GameView.GridOffset, null);
 
-                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
-                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
-                    {
-                        CellCode cellCode = CellCode.getFor(i, j);
+                for (RenderingLayer layer : layers)
+                {
+                    layer.renderLayer(state, selection, graphics);
+                }
 
-                        int canvasX = GameView.GridOffset + cellWidth * i;
-                        int canvasY = GameView.GridOffset + cellWidth * j;
-
-                        if (selection.canMoveTo(cellCode))
-                        {
-                            graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
-                        }
-
-                        int value = state.getCellValue(cellCode);
-
-                        if (value == Game.CELL_EMPTY)
-                        {
-                            //?
-                        }
-                        else
-                        {
-                            Image sprite;
-
-                            if (value == Game.CELL_MARKED_FOR_SPAWN)
-                            {
-                                sprite = Assets.smallBlock;
-                            }
-                            else //if (value > 0) //condition is always true if codes stay unchanged
-                            {
-                                if (selection.isSelected(cellCode))
-                                    sprite = Assets.normalBlockSelected;
-                                else
-                                    sprite = Assets.normalBlock;
-                            }
-
-                            graphics.drawImage(sprite, canvasX, canvasY, null);
-                        }
-                    }
-
-                int vertGlowOffsetX = (GameView.CellWidth - Assets.glowVertical.getWidth(null)) / 2;
-                int vertGlowOffsetY = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowVertical.getHeight(null)) / 2;
-
-                int horGlowOffsetX = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowHorizontal.getWidth(null)) / 2;
-                int horGlowOffsetY = (GameView.CellWidth - Assets.glowHorizontal.getHeight(null)) / 2;
-
-                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render glow
-                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
-                    {
-                        CellCode cellCode = CellCode.getFor(i, j);
-                        //we can do it because we recognize 2*fieldSize links
-
-                        boolean rightLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.RIGHT));
-                        if (rightLink)
-                        {
-                            int canvasX = GameView.GridOffset + cellWidth * i;
-                            int canvasY = GameView.GridOffset + cellWidth * j;
-
-                            canvasX += horGlowOffsetX;
-                            canvasY += horGlowOffsetY;
-
-                            graphics.drawImage(Assets.glowHorizontal, canvasX, canvasY, null);
-                        }
-
-                        boolean bottomLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.BOTTOM));
-                        if (bottomLink)
-                        {
-                            int canvasX = GameView.GridOffset + cellWidth * i;
-                            int canvasY = GameView.GridOffset + cellWidth * j;
-
-                            canvasX += vertGlowOffsetX;
-                            canvasY += vertGlowOffsetY;
-
-                            graphics.drawImage(Assets.glowVertical, canvasX, canvasY, null);
-                        }
-                    }
-
-                for (int i = 0; i < Game.FIELD_WIDTH; i++) //render numbers
-                    for (int j = 0; j < Game.FIELD_HEIGHT; j++)
-                    {
-                        int canvasX = GameView.GridOffset + cellWidth * i;
-                        int canvasY = GameView.GridOffset + cellWidth * j;
-
-                        int value = state.getCellValue(CellCode.getFor(i, j));
-                        if (value > 0)
-                        {
-                            String numberToDraw = String.valueOf(value);
-
-                            int numberLength = numberToDraw.length();
-
-
-                            canvasX += digitMetadata.getOffsetXForNumber(value);
-                            canvasY += digitMetadata.offsetY;
-
-
-                            for (int k = 0; k < numberLength; k++)
-                            {
-                                int digit = Character.getNumericValue(numberToDraw.charAt(k));
-
-                                graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
-
-                                canvasX += 1 + digitMetadata.digitWidth[digit];
-                            }
-                        }
-                    }
-
-                //TODO: here is the great opportunity for splitting classes
 
                 // Dispose the graphics
                 graphics.dispose();
