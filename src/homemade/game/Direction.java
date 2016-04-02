@@ -1,31 +1,38 @@
 package homemade.game;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.EnumMap;
 
 /**
  * Created by user3 on 31.03.2016.
  */
-public class Direction
+public enum Direction
 {
-    private static final ArrayList<Integer> directionList = new ArrayList<Integer>(4);
+    LEFT(), RIGHT(), TOP(), BOTTOM();
+
+    private static EnumMap<Direction, Direction> opposites = new EnumMap<>(Direction.class);
+    private static EnumMap<Direction, Integer> multipliers = new EnumMap<>(Direction.class);
 
     static
     {
-        for (int i = 0; i < 4; i++)
-        {
-            directionList.add(i);
-        }
+        opposites.put(LEFT, RIGHT);
+        opposites.put(RIGHT, LEFT);
+        opposites.put(BOTTOM, TOP);
+        opposites.put(TOP, BOTTOM);
+
+        multipliers.put(TOP, 1);
+        multipliers.put(BOTTOM, -1);
+        multipliers.put(RIGHT, -1);
+        multipliers.put(LEFT, 1);
     }
 
-    public static final int NO_DIRECTION = -1;
-    public static final int LEFT = 0;
-    public static final int RIGHT = 1;
-    public static final int TOP = 2;
-    public static final int BOTTOM = 3;
-
-    public static final Iterator<Integer> getIterator()
+    public int getMultiplier()
     {
-        return directionList.iterator();
+        return multipliers.get(this);
+    }
+
+
+    public Direction getOpposite()
+    {
+        return opposites.get(this);
     }
 }

@@ -54,9 +54,9 @@ class GameKeyboard implements KeyboardInputHandler
         releasedKeys = new HashSet<Integer>(maxKeys);
     }
 
-    int keyCodeToDirection(int keyCode)
+    Direction keyCodeToDirection(int keyCode)
     {
-        int retVal = Direction.NO_DIRECTION;
+        Direction retVal = null;
 
         if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W)
             retVal = Direction.TOP;

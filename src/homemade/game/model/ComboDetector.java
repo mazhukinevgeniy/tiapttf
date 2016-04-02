@@ -67,7 +67,7 @@ class ComboDetector
      * @param start cellCode of the beginning
      * @param direction where to look for the next cell
      */
-    private void iterateThroughTheLine(Set<Integer> set, int start, int direction)
+    private void iterateThroughTheLine(Set<Integer> set, int start, Direction direction)
     {
         tmpStorage.clear();
 

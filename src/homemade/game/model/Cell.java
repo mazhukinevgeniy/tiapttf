@@ -13,11 +13,6 @@ class Cell
 {
     private int code;
 
-    private static final int [] directionMultiplier = {1, -1, 1, -1};
-    //if direction to the other cell is 0 or 2: linked = thisvalue * 1 > 1 * othervalue
-    //if direction is 1 or 3: linked = thisvalue * - 1 > -1 * othervalue
-    //TODO: generate based on named constants
-
     static ArrayList<Cell> createLinkedCells()
     {
         ArrayList<Cell> cells = new ArrayList<Cell>(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
@@ -33,16 +28,16 @@ class Cell
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
         {
             cell = cells.get(i);
-            cell.neighbours[Direction.TOP] = null;
-            cell.links[Direction.TOP] = null;
+            cell.neighbours[Direction.TOP.ordinal()] = null;
+            cell.links[Direction.TOP.ordinal()] = null;
         }
 
         //left line
         for (int i = 0; i < Game.FIELD_HEIGHT; i++)
         {
             cell = cells.get(Game.FIELD_WIDTH * i);
-            cell.neighbours[Direction.LEFT] = null;
-            cell.links[Direction.LEFT] = null;
+            cell.neighbours[Direction.LEFT.ordinal()] = null;
+            cell.links[Direction.LEFT.ordinal()] = null;
         }
 
         //main cycle
@@ -66,16 +61,16 @@ class Cell
             Cell right = cells.get(cellCodeVal + 1);
             Link link = new Link(cellCode.linkNumber(Direction.RIGHT));
 
-            cell.neighbours[Direction.RIGHT] = right;
-            right.neighbours[Direction.LEFT] = cell;
+            cell.neighbours[Direction.RIGHT.ordinal()] = right;
+            right.neighbours[Direction.LEFT.ordinal()] = cell;
 
-            cell.links[Direction.RIGHT] = link;
-            right.links[Direction.LEFT] = link;
+            cell.links[Direction.RIGHT.ordinal()] = link;
+            right.links[Direction.LEFT.ordinal()] = link;
         }
         else
         {
-            cell.neighbours[Direction.RIGHT] = null;
-            cell.links[Direction.RIGHT] = null;
+            cell.neighbours[Direction.RIGHT.ordinal()] = null;
+            cell.links[Direction.RIGHT.ordinal()] = null;
         }
 
         if (!cellCode.onBorder(Direction.BOTTOM))
@@ -83,16 +78,16 @@ class Cell
             Cell bottom = cells.get(cellCodeVal + Game.FIELD_WIDTH);
             Link link = new Link(cellCode.linkNumber(Direction.BOTTOM));
 
-            cell.neighbours[Direction.BOTTOM] = bottom;
-            bottom.neighbours[Direction.TOP] = cell;
+            cell.neighbours[Direction.BOTTOM.ordinal()] = bottom;
+            bottom.neighbours[Direction.TOP.ordinal()] = cell;
 
-            cell.links[Direction.BOTTOM] = link;
-            bottom.links[Direction.TOP] = link;
+            cell.links[Direction.BOTTOM.ordinal()] = link;
+            bottom.links[Direction.TOP.ordinal()] = link;
         }
         else
         {
-            cell.neighbours[Direction.BOTTOM] = null;
-            cell.links[Direction.BOTTOM] = null;
+            cell.neighbours[Direction.BOTTOM.ordinal()] = null;
+            cell.links[Direction.BOTTOM.ordinal()] = null;
         }
     }
 
@@ -108,14 +103,14 @@ class Cell
         this.code = code;
     }
 
-    Cell neighbour(int directionCode)
+    Cell neighbour(Direction direction)
     {
-        return neighbours[directionCode];
+        return neighbours[direction.ordinal()];
     }
 
-    Link link(int directionCode)
+    Link link(Direction direction)
     {
-        return links[directionCode];
+        return links[direction.ordinal()];
     }
 
     int getValue()
@@ -128,17 +123,17 @@ class Cell
     {
         value = newVal;
 
-        for (int i = 0; i < 4; i++) //works if direction codes are 0 1 2 3
+        for (Direction direction : Direction.values())
         {
-            if (links[i] != null)
+            if (link(direction) != null)
             {
-                int outerValue = neighbours[i].value;
-                int dirMult = directionMultiplier[i];
+                int outerValue = neighbour(direction).value;
+                int multiplier = direction.getMultiplier();
 
-                links[i].value =
+                links[direction.ordinal()].value =
                         value > 0 &&
                         outerValue > 0 &&
-                        dirMult * value > dirMult * outerValue;
+                        multiplier * value > multiplier * outerValue;
             }
         }
     }

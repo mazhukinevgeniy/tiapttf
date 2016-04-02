@@ -48,9 +48,9 @@ public class GameController
 
     void controllerTimerUpdated()
     {
-        int direction = keyboard.keyCodeToDirection(keyboard.extractKey());
+        Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
 
-        if (direction != Direction.NO_DIRECTION)
+        if (direction != null)
             selectionManager.tryToMoveSelectionIn(direction);
     }
 

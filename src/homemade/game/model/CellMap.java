@@ -5,7 +5,6 @@ import homemade.game.Game;
 import homemade.utils.QuickMap;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -93,22 +92,14 @@ class CellMap
 
         Map<Integer, Boolean> updatedLinks = QuickMap.getCleanIntBoolMap();
 
-        ArrayList<Integer> directions = new ArrayList<Integer>(4);
-
         keys = updatedCells.keySet();
 
         for (int key: keys)
         {
-            directions.clear();
-
             Cell cell = cells.get(key);
 
-            Iterator<Integer> iterator = Direction.getIterator();
-
-            while (iterator.hasNext())
+            for (Direction direction : Direction.values())
             {
-                int direction = iterator.next();
-
                 Link link = cell.link(direction);
 
                 if (link != null)

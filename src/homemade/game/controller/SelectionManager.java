@@ -5,7 +5,6 @@ import homemade.game.view.GameView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * Created by user3 on 24.03.2016.
@@ -55,7 +54,7 @@ class SelectionManager implements MouseInputHandler
         System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
     }
 
-    void tryToMoveSelectionIn(int direction)
+    void tryToMoveSelectionIn(Direction direction)
     {
         if (this.selection.size() == 1)
         {
@@ -110,12 +109,8 @@ class SelectionManager implements MouseInputHandler
             CellCode cellCode = selection.get(i);
             copy.add(cellCode);
 
-            Iterator<Integer> iterator = Direction.getIterator();
-
-            while (iterator.hasNext())
+            for (Direction direction : Direction.values())
             {
-                int direction = iterator.next();
-
                 CellCode neighbour = cellCode.neighbour(direction);
 
                 if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)

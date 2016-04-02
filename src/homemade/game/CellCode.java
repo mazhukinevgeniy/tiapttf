@@ -22,15 +22,10 @@ public class CellCode
             }
 
         CellCode.shifts = new int[4];
-        shifts[Direction.BOTTOM] = Game.FIELD_WIDTH;
-        shifts[Direction.TOP] = -Game.FIELD_WIDTH;
-        shifts[Direction.LEFT] = -1;
-        shifts[Direction.RIGHT] = 1;
-    }
-
-    public static int getShift(int direction)
-    {
-        return CellCode.shifts[direction];
+        shifts[Direction.BOTTOM.ordinal()] = Game.FIELD_WIDTH;
+        shifts[Direction.TOP.ordinal()] = -Game.FIELD_WIDTH;
+        shifts[Direction.LEFT.ordinal()] = -1;
+        shifts[Direction.RIGHT.ordinal()] = 1;
     }
 
     public static CellCode getFor(int cellCodeValue)
@@ -62,39 +57,41 @@ public class CellCode
             isOnBorder[i] = false;
 
         if (x == 0)
-            isOnBorder[Direction.LEFT] = true;
+            isOnBorder[Direction.LEFT.ordinal()] = true;
         else if (x == Game.FIELD_WIDTH - 1)
-            isOnBorder[Direction.RIGHT] = true;
+            isOnBorder[Direction.RIGHT.ordinal()] = true;
 
         if (y == 0)
-            isOnBorder[Direction.TOP] = true;
+            isOnBorder[Direction.TOP.ordinal()] = true;
         else if (y == Game.FIELD_HEIGHT - 1)
-            isOnBorder[Direction.BOTTOM] = true;
+            isOnBorder[Direction.BOTTOM.ordinal()] = true;
     }
 
     public int value() { return cCValue; }
     public int x() {return cX; }
     public int y() { return cY; }
 
-    public boolean onBorder(int direction) { return isOnBorder[direction]; }
+    public boolean onBorder(Direction direction) { return isOnBorder[direction.ordinal()]; }
 
     public int distance(CellCode otherCell)
     {
         return Math.abs(cX - otherCell.cX + cY - otherCell.cY);
     }
 
-    public CellCode neighbour(int direction)
+    public CellCode neighbour(Direction direction)
     {
-        return isOnBorder[direction] ? null : CellCode.cellCodes[cCValue + CellCode.shifts[direction]];
+        return isOnBorder[direction.ordinal()] ?
+                null :
+                CellCode.cellCodes[cCValue + CellCode.shifts[direction.ordinal()]];
     }
 
     /**
      * these methods are not supposed to get incorrect input atm
      * at least now it looks as ugly as it probably should!
      */
-    public int linkNumber(int direction)
+    public int linkNumber(Direction direction)
     {
-        return linkNumber(cCValue, cCValue + shifts[direction]);
+        return linkNumber(cCValue, cCValue + shifts[direction.ordinal()]);
     }
 
     public int linkNumber(CellCode otherCell)
