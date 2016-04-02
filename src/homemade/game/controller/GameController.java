@@ -13,8 +13,10 @@ import java.util.TimerTask;
 /**
  * Created by user3 on 23.03.2016.
  */
-public class GameController
+public class GameController implements ScoreHandler
 {
+    private Frame frame;
+
     GameModel model;
     private GameView view;
 
@@ -23,9 +25,11 @@ public class GameController
 
     public GameController(Frame mainFrame)
     {
+        frame = mainFrame;
+
         CellCode.initializeCellCodes();
 
-        model = new GameModel();
+        model = new GameModel(this);
 
         selectionManager = new SelectionManager(this);
         keyboard = new GameKeyboard(this);
@@ -40,6 +44,12 @@ public class GameController
 
     public MouseInputHandler mouseInputHandler() { return selectionManager; }
     public KeyboardInputHandler keyboardInputHandler() { return keyboard; }
+
+    @Override
+    public void scoreUpdated(int score)
+    {
+        frame.setTitle("score: " + String.valueOf(score));
+    }
 
     public void viewTimerUpdated()
     {

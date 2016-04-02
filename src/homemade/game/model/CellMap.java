@@ -20,11 +20,15 @@ class CellMap
     private ArrayBasedGameState updatableState;
     private NumberPool numberPool;
 
+    private ComboDetector comboDetector;
 
-    CellMap(ArrayBasedGameState updatableState, NumberPool numberPool)
+
+    CellMap(ArrayBasedGameState updatableState, NumberPool numberPool, GameScore gameScore)
     {
         this.updatableState = updatableState;
         this.numberPool = numberPool;
+
+        comboDetector = new ComboDetector(this, gameScore);
 
         cells = Cell.createLinkedCells();
 
@@ -114,7 +118,7 @@ class CellMap
 
     private void checkCombos(Map<Integer, Integer> updatedChanges)
     {
-        Set<Integer> cellsToRemove = new ComboDetector(this).findCellsToRemove(updatedChanges.keySet());
+        Set<Integer> cellsToRemove = comboDetector.findCellsToRemove(updatedChanges.keySet());
 
         for (int cellCode : cellsToRemove)
         {

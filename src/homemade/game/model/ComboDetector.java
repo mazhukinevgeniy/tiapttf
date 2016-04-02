@@ -16,13 +16,15 @@ class ComboDetector
     //it's probably better than reallocating every time
 
     private CellMap cellMap;
+    private GameScore gameScore;
 
-    ComboDetector(CellMap cellMap)
+    ComboDetector(CellMap cellMap, GameScore gameScore)
     {
         int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
         tmpStorage = new ArrayList<Integer>(maxCellsPerLine);
 
         this.cellMap = cellMap;
+        this.gameScore = gameScore;
     }
 
     /**
@@ -92,7 +94,7 @@ class ComboDetector
 
                 if (comboLength >= Game.MIN_COMBO)
                 {
-                    //TODO: actually report combo
+                    gameScore.handleCombo(comboLength);
 
                     String report = "";
                     Cell tmpCell = comboStartedAt;
