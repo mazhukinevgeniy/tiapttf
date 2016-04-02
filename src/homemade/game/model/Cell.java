@@ -64,7 +64,7 @@ class Cell
         if (!cellCode.onBorder(Direction.RIGHT))
         {
             Cell right = cells.get(cellCodeVal + 1);
-            Link link = new Link();
+            Link link = new Link(cellCode.linkNumber(Direction.RIGHT));
 
             cell.neighbours[Direction.RIGHT] = right;
             right.neighbours[Direction.LEFT] = cell;
@@ -81,7 +81,7 @@ class Cell
         if (!cellCode.onBorder(Direction.BOTTOM))
         {
             Cell bottom = cells.get(cellCodeVal + Game.FIELD_WIDTH);
-            Link link = new Link();
+            Link link = new Link(cellCode.linkNumber(Direction.BOTTOM));
 
             cell.neighbours[Direction.BOTTOM] = bottom;
             bottom.neighbours[Direction.TOP] = cell;

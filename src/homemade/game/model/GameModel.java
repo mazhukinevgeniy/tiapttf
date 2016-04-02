@@ -4,7 +4,6 @@ import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,11 +13,6 @@ import java.util.TimerTask;
  */
 public class GameModel
 {
-    static Map<Integer, Integer> getCleanIntIntMap()
-    {
-        return new HashMap<Integer, Integer>();
-    }
-
     private GameState gameState;
 
     private CellMap cellMap;

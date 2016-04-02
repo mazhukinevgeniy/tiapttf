@@ -7,5 +7,15 @@ class Link
 {
     boolean value = false;
 
+    private int number;
 
+    Link(int number)
+    {
+        this.number = number;
+    }
+
+    int getNumber()
+    {
+        return number;
+    }
 }

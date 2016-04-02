@@ -2,8 +2,10 @@ package homemade.game.model;
 
 import homemade.game.Direction;
 import homemade.game.Game;
+import homemade.utils.QuickMap;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,7 +60,7 @@ class CellMap
 
         if (cellToValue <= 0 && cellFromValue > 0)
         {
-            Map<Integer, Integer> tmpMap = GameModel.getCleanIntIntMap();
+            Map<Integer, Integer> tmpMap = QuickMap.getCleanIntIntMap();
             tmpMap.put(moveFromCell, Game.CELL_EMPTY);
             tmpMap.put(moveToCell, cellFromValue);
 
@@ -81,15 +83,42 @@ class CellMap
             cells.get(key).setValue(value);
         }
 
-        Map<Integer, Integer> updatedChanges = GameModel.getCleanIntIntMap();
-        updatedChanges.putAll(changes);
+        Map<Integer, Integer> updatedCells = QuickMap.getCleanIntIntMap();
+        updatedCells.putAll(changes);
 
         if (Game.AUTOCOMPLETION)
         {
-            checkCombos(updatedChanges);
+            checkCombos(updatedCells);
         }
 
-        updatableState.updateFieldSnapshot(updatedChanges, this);
+        Map<Integer, Boolean> updatedLinks = QuickMap.getCleanIntBoolMap();
+
+        ArrayList<Integer> directions = new ArrayList<Integer>(4);
+
+        keys = updatedCells.keySet();
+
+        for (int key: keys)
+        {
+            directions.clear();
+
+            Cell cell = cells.get(key);
+
+            Iterator<Integer> iterator = Direction.getIterator();
+
+            while (iterator.hasNext())
+            {
+                int direction = iterator.next();
+
+                Link link = cell.link(direction);
+
+                if (link != null)
+                {
+                    updatedLinks.put(link.getNumber(), link.value);
+                }
+            }
+        }
+
+        updatableState.updateFieldSnapshot(updatedCells, updatedLinks);
     }
 
     private void checkCombos(Map<Integer, Integer> updatedChanges)

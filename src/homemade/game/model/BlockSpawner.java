@@ -2,6 +2,7 @@ package homemade.game.model;
 
 import homemade.game.CellCode;
 import homemade.game.Game;
+import homemade.utils.QuickMap;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +25,7 @@ class BlockSpawner
     synchronized Map<Integer, Integer> spawnBlocks()
     {
         ArrayList<Cell> cells = cellMap.cells;
-        Map<Integer, Integer> changes = GameModel.getCleanIntIntMap();
+        Map<Integer, Integer> changes = QuickMap.getCleanIntIntMap();
 
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -44,7 +45,7 @@ class BlockSpawner
 
     synchronized Map<Integer, Integer> markCells(int targetAmount)
     {
-        Map<Integer, Integer> changes = GameModel.getCleanIntIntMap();
+        Map<Integer, Integer> changes = QuickMap.getCleanIntIntMap();
 
         int canMark = numberPool.numbersAvailable();
 

@@ -1,12 +1,9 @@
 package homemade.game.model;
 
 import homemade.game.CellCode;
-import homemade.game.Direction;
 import homemade.game.Game;
 import homemade.game.GameState;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,45 +45,25 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    synchronized void updateFieldSnapshot(Map<Integer, Integer> updates, CellMap map)
+    synchronized void updateFieldSnapshot(Map<Integer, Integer> cellUpdates, Map<Integer, Boolean> linkUpdates)
     {
         immutableCopy = null;
 
-        ArrayList<Integer> directions = new ArrayList<Integer>(4);
 
-
-        Set<Integer> keys = updates.keySet();
+        Set<Integer> keys = cellUpdates.keySet();
 
         for (int key : keys)
         {
-            int value = updates.get(key);
+            int value = cellUpdates.get(key);
 
             field[key] = value;
+        }
 
+        keys = linkUpdates.keySet();
 
-            //for each cell update links as well
-
-            directions.clear();
-
-            CellCode cellCode = CellCode.getFor(key);
-            Iterator<Integer> iterator = Direction.getIterator();
-
-            while (iterator.hasNext())
-            {
-                int direction = iterator.next();
-
-                if (!cellCode.onBorder(direction))
-                    directions.add(direction);
-            }
-
-            for (int direction : directions) //checking links for every direction applicable
-            {
-                int linkNumber = cellCode.linkNumber(direction);
-
-                Link link = map.links.get(linkNumber);
-
-                links[linkNumber] = link.value;
-            }
+        for (int key : keys)
+        {
+            links[key] = linkUpdates.get(key);
         }
     }
 
