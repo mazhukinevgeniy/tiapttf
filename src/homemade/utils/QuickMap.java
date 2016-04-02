@@ -25,4 +25,9 @@ public class QuickMap
     {
         return new HashMap<CellCode, Integer>();
     }
+
+    public static final Map<Integer, String> getCleanIntStrMap()
+    {
+        return new HashMap<Integer, String>();
+    }
 }

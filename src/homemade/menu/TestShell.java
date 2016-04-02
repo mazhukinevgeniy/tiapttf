@@ -1,54 +1,49 @@
 package homemade.menu;
 
 
+import homemade.menu.controller.MenuManager;
+import homemade.menu.model.save.Save;
 import homemade.menu.model.settings.Settings;
-
-import org.w3c.dom.Document;
-import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
+import homemade.menu.view.Window;
+import homemade.resources.Assets;
 
 /**
  * Created by Marid on 27.03.2016.
  */
 public class TestShell
 {
-    public static void main(String [] args)  throws Exception
+    public static void main(String [] args)
     {
-        JFrame frame = new JFrame("there's a pattern there to follow");
-        frame.setVisible(true);
+        Assets.loadAssets();
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        parameterTest();
+        Window window = new Window();
+        window.setVisible(true);
 
-        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-        f.setValidating(false);
-        DocumentBuilder builder = f.newDocumentBuilder();
-        Document doc = builder.parse(new File("test.xml"));
+        MenuManager menuManager = new MenuManager(window);
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
+        window.finaleInitialize();
     }
 
-    private static void parameterTest()
+    private static void parameterTest(Save save)
     {
         Settings settings = new Settings();
 
-        System.out.println(settings.isRealTime.getValue());
-        System.out.println(settings.simultaneousSpawn.getValue());
-        System.out.println(settings.spawnPeriod.getValue());
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
 
-        settings.simultaneousSpawn.setValue(0);
-        System.out.println(settings.simultaneousSpawn.getValue());
-        settings.simultaneousSpawn.setValue(1);
-        System.out.println(settings.simultaneousSpawn.getValue());
-
+        settings = new Settings(save);
         System.out.println();
-        System.out.println(settings.something.getValue());
-        settings.something.setValue(4);
-        System.out.println(settings.something.getValue());
-        settings.something.setValue(2);
-        System.out.println(settings.something.getValue());
+
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
+
+        settings.setIsRealTime(false);
+        settings.setSpawnPeriod(1500);
+
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
     }
 }
