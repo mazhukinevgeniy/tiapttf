@@ -2,6 +2,7 @@ package homemade.game.view.layers;
 
 import homemade.game.CellCode;
 import homemade.game.Game;
+import homemade.game.view.EffectManager;
 import homemade.resources.Assets;
 
 import java.awt.*;
@@ -11,9 +12,15 @@ import java.awt.*;
  */
 class BlockLayer extends RenderingLayer
 {
-    BlockLayer()
+    private EffectRenderer effects;
+    private EffectManager effectManager;
+
+    BlockLayer(EffectManager effectManager)
     {
         super();
+
+        this.effectManager = effectManager;
+        effects = new EffectRenderer();
     }
 
     @Override
@@ -30,7 +37,10 @@ class BlockLayer extends RenderingLayer
 
         if (value == Game.CELL_EMPTY)
         {
-            //?
+            int time = effectManager.getFadeTimeRemaining(cellCode);
+
+            if (time > 0)
+                effects.renderFadingBlock(canvasX, canvasY, time, graphics);
         }
         else
         {

@@ -20,6 +20,7 @@ public class Assets
     public static Image smallBlock;
     public static Image placeToMove;
     public static Image digit[];
+    public static Image disappear[];
 
     public static void loadAssets()
     {
@@ -31,6 +32,7 @@ public class Assets
         InputStream input;
 
         Assets.digit = new Image[10];
+        Assets.disappear = new Image[3];
 
 
         try
@@ -61,6 +63,12 @@ public class Assets
             {
                 input = getClass().getResourceAsStream(i + ".png");
                 Assets.digit[i] = ImageIO.read(input);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                input = getClass().getResourceAsStream("dis_" + (i + 1) + ".png");
+                Assets.disappear[2 - i] = ImageIO.read(input);
             }
         }
         catch (IOException e)

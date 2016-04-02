@@ -2,6 +2,7 @@ package homemade.game.model;
 
 import homemade.game.Direction;
 import homemade.game.Game;
+import homemade.game.controller.BlockRemovalHandler;
 import homemade.utils.QuickMap;
 
 import java.util.ArrayList;
@@ -23,12 +24,15 @@ class CellMap
     private ComboDetector comboDetector;
 
 
-    CellMap(ArrayBasedGameState updatableState, NumberPool numberPool, GameScore gameScore)
+    CellMap(ArrayBasedGameState updatableState,
+            BlockRemovalHandler blockRemovalHandler,
+            NumberPool numberPool,
+            GameScore gameScore)
     {
         this.updatableState = updatableState;
         this.numberPool = numberPool;
 
-        comboDetector = new ComboDetector(this, gameScore);
+        comboDetector = new ComboDetector(this, blockRemovalHandler, gameScore);
 
         cells = Cell.createLinkedCells();
 

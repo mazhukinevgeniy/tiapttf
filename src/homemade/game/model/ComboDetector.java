@@ -1,7 +1,9 @@
 package homemade.game.model;
 
+import homemade.game.CellCode;
 import homemade.game.Direction;
 import homemade.game.Game;
+import homemade.game.controller.BlockRemovalHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,14 +19,16 @@ class ComboDetector
 
     private CellMap cellMap;
     private GameScore gameScore;
+    private BlockRemovalHandler blockRemovalHandler;
 
-    ComboDetector(CellMap cellMap, GameScore gameScore)
+    ComboDetector(CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
         int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
         tmpStorage = new ArrayList<Integer>(maxCellsPerLine);
 
         this.cellMap = cellMap;
         this.gameScore = gameScore;
+        this.blockRemovalHandler = blockRemovalHandler;
     }
 
     /**
@@ -103,6 +107,7 @@ class ComboDetector
                     {
                         report = " " + tmpCell.getCode() + report;
 
+                        blockRemovalHandler.blockRemoved(CellCode.getFor(tmpCell.getCode()));
                         tmpStorage.add(tmpCell.getCode());
                         tmpCell = tmpCell.neighbour(direction);
                     }

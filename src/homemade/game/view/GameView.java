@@ -27,6 +27,7 @@ public class GameView
     private Canvas canvas;
 
     private BufferStrategy strategy;
+    private EffectManager effectManager;
 
     private Timer timer;
 
@@ -48,12 +49,19 @@ public class GameView
 
         this.strategy = canvas.getBufferStrategy();
 
-        layers = RenderingLayer.getRenderingLayers();
+        effectManager = new EffectManager();
+
+        layers = RenderingLayer.getRenderingLayers(effectManager);
 
         this.timer = new Timer();
         long delay = 0;
         long period = 1000 / Game.TARGET_FPS;
-        this.timer.schedule(new ViewTimerTask(controller), delay, period);
+        this.timer.schedule(new ViewTimerTask(controller, effectManager), delay, period);
+    }
+
+    public EffectManager getEffectManager()
+    {
+        return effectManager;
     }
 
     public void renderNextFrame(GameState state, SelectionState selection)
@@ -96,15 +104,18 @@ public class GameView
     private class ViewTimerTask extends TimerTask
     {
         private GameController controller;
+        private EffectManager effectManager;
 
-        ViewTimerTask(GameController controller)
+        ViewTimerTask(GameController controller, EffectManager effectManager)
         {
             this.controller = controller;
+            this.effectManager = effectManager;
         }
 
         @Override
         public void run()
         {
+            this.effectManager.measureTimePassed();
             this.controller.viewTimerUpdated();
             //System.out.println("game view timer task executed");
         }

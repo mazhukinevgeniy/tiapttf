@@ -3,6 +3,7 @@ package homemade.game.view.layers;
 import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
+import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
 
 import java.awt.*;
@@ -13,21 +14,18 @@ import java.util.ArrayList;
  */
 abstract public class RenderingLayer
 {
-    public static final ArrayList<RenderingLayer> getRenderingLayers()
+    private static final int fullCellWidth = GameView.CellWidth + GameView.CellOffset;
+
+    public static final ArrayList<RenderingLayer> getRenderingLayers(EffectManager effectManager)
     {
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
-        list.add(new BlockLayer());
+        list.add(new BlockLayer(effectManager));
         list.add(new LinkLayer());
         list.add(new NumberLayer());
 
         return list;
     }
-
-
-
-
-
 
     protected GameState state;
     protected SelectionState selectionState;
@@ -35,11 +33,9 @@ abstract public class RenderingLayer
     protected int canvasX;
     protected int canvasY;
 
-    private static final int fullCellWidth = GameView.CellWidth + GameView.CellOffset;
-
     RenderingLayer()
     {
-
+        super();
     }
 
     final public void renderLayer(GameState state, SelectionState selection, Graphics graphics)
@@ -53,8 +49,7 @@ abstract public class RenderingLayer
         for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                canvasX = GameView.GridOffset + fullCellWidth * i;
-                canvasY = GameView.GridOffset + fullCellWidth * j;
+                setCanvasCoordinates(i, j);
 
                 renderForCell(i, j);
             }
@@ -65,4 +60,12 @@ abstract public class RenderingLayer
     }
 
     abstract void renderForCell(int i, int j);
+
+    final protected void setCanvasCoordinates(int i, int j)
+    {
+        canvasX = GameView.GridOffset + fullCellWidth * i;
+        canvasY = GameView.GridOffset + fullCellWidth * j;
+    }
+
+
 }

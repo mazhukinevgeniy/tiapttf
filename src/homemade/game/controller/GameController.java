@@ -2,6 +2,7 @@ package homemade.game.controller;
 
 import homemade.game.CellCode;
 import homemade.game.Direction;
+import homemade.game.Effect;
 import homemade.game.Game;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
@@ -13,7 +14,7 @@ import java.util.TimerTask;
 /**
  * Created by user3 on 23.03.2016.
  */
-public class GameController implements ScoreHandler
+public class GameController implements ScoreHandler, BlockRemovalHandler
 {
     private Frame frame;
 
@@ -49,6 +50,13 @@ public class GameController implements ScoreHandler
     public void scoreUpdated(int score)
     {
         frame.setTitle("score: " + String.valueOf(score));
+    }
+
+    public void blockRemoved(CellCode atCell)
+    {
+        Effect effect = Effect.FADING_BLOCK;
+
+        view.getEffectManager().displayEffect(effect, atCell, effect.getFullDuration());
     }
 
     public void viewTimerUpdated()

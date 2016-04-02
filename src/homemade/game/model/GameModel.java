@@ -3,7 +3,7 @@ package homemade.game.model;
 import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
-import homemade.game.controller.ScoreHandler;
+import homemade.game.controller.GameController;
 
 import java.util.Map;
 import java.util.Timer;
@@ -20,13 +20,13 @@ public class GameModel
     private BlockSpawner spawner;
     private Timer timer;
 
-    public GameModel(ScoreHandler scoreHandler)
+    public GameModel(GameController gameController)
     {
         NumberPool numberPool = new NumberPool(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
-        GameScore gameScore = new GameScore(scoreHandler);
+        GameScore gameScore = new GameScore(gameController);
 
         ArrayBasedGameState gameStateTracker = new ArrayBasedGameState();
-        cellMap = new CellMap(gameStateTracker, numberPool, gameScore);
+        cellMap = new CellMap(gameStateTracker, gameController, numberPool, gameScore);
         //TODO: think of something, CellMap has no reason to care about gameScore
         gameState = gameStateTracker;
 
