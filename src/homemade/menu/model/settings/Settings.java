@@ -10,10 +10,10 @@ import java.lang.*;
  */
 public class Settings
 {
-    public Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
-    public Parameter<Integer> simultaneousSpawn = new Parameter("simultaneousSpawn");
-    public Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
-    public Parameter<Integer> something = new Parameter<>("something");
+    private Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
+    private Parameter<Integer> simultaneousSpawn = new Parameter("simultaneousSpawn");
+    private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
+    private Parameter<Integer> something = new Parameter<>("something");
 
     private Save save = null;
 
@@ -69,11 +69,52 @@ public class Settings
         something.setValue(intValue);
     }
 
-    public void updateSave()
+    public boolean getIsRealTime()
     {
-        isRealTime.setValue(true);
-        spawnPeriod.setValue(2000);
-        save.setParameterValue(isRealTime.getName(), isRealTime.getValue());
-        save.setParameterValue(spawnPeriod.getName(), spawnPeriod.getValue());
+        return isRealTime.getValue();
+    }
+
+    public void setIsRealTime(boolean newValue)
+    {
+        isRealTime.setValue(newValue);
+        updateParameterInSave(isRealTime);
+    }
+
+    public int getSimultaneousSpawn()
+    {
+        return simultaneousSpawn.getValue();
+    }
+
+    public void setSimultaneousSpawn(int newValue)
+    {
+        simultaneousSpawn.setValue(newValue);
+        updateParameterInSave(simultaneousSpawn);
+    }
+
+    public int getSpawnPeriod()
+    {
+        return spawnPeriod.getValue();
+    }
+
+    public void setSpawnPeriod(int newValue)
+    {
+        spawnPeriod.setValue(newValue);
+        updateParameterInSave(spawnPeriod);
+    }
+
+    public int getSomething()
+    {
+        return something.getValue();
+    }
+
+    public void setSomething(int newValue)
+    {
+        something.setValue(newValue);
+        updateParameterInSave(something);
+    }
+
+    private void updateParameterInSave(Parameter<?> parameter)
+    {
+        save.setParameterValue(parameter.getName(), parameter.getValue());
     }
 }

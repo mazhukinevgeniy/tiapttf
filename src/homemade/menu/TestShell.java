@@ -32,22 +32,23 @@ public class TestShell
     {
         Settings settings = new Settings();
 
-        System.out.println(settings.isRealTime.getValue());
-        System.out.println(settings.simultaneousSpawn.getValue());
-        System.out.println(settings.spawnPeriod.getValue());
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
 
         settings = new Settings(save);
         System.out.println();
 
-        System.out.println(settings.isRealTime.getValue());
-        System.out.println(settings.simultaneousSpawn.getValue());
-        System.out.println(settings.spawnPeriod.getValue());
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
 
-        settings.updateSave();
+        settings.setIsRealTime(false);
+        settings.setSpawnPeriod(1500);
 
-        System.out.println(settings.isRealTime.getValue());
-        System.out.println(settings.simultaneousSpawn.getValue());
-        System.out.println(settings.spawnPeriod.getValue());
+        System.out.println(settings.getIsRealTime());
+        System.out.println(settings.getSimultaneousSpawn());
+        System.out.println(settings.getSpawnPeriod());
     }
 
     public static void createGUI() {
