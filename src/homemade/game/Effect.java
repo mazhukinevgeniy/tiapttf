@@ -9,6 +9,6 @@ public enum Effect
 
     public int getFullDuration()
     {
-        return 1000;
+        return 400;
     }
 }
