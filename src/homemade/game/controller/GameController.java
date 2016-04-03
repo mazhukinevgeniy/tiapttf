@@ -56,7 +56,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     {
         Effect effect = Effect.FADING_BLOCK;
 
-        view.getEffectManager().displayEffect(effect, atCell, effect.getFullDuration());
+        view.getEffectManager().displayEffect(effect, atCell);
     }
 
     public void viewTimerUpdated()

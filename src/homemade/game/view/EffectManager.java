@@ -24,9 +24,9 @@ public class EffectManager
         fadingBlocks = QuickMap.getCleanCellCodeIntMap();
     }
 
-    public void displayEffect(Effect effect, CellCode cell, int fadeTime)
+    public void displayEffect(Effect effect, CellCode cell)
     {
-        fadeTime = Math.min(fadeTime, Effect.FADING_BLOCK.getFullDuration());
+        int fadeTime = effect.getFullDuration();
 
         if (effect == Effect.FADING_BLOCK)
         {
