@@ -64,6 +64,11 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         this.view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
     }
 
+    public void requestPauseToggle()
+    {
+        model.requestPauseToggle();
+    }
+
     void controllerTimerUpdated()
     {
         Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());

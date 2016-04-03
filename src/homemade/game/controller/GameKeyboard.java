@@ -124,6 +124,10 @@ class GameKeyboard implements KeyboardInputHandler
             else
                 releasedKeys.add(keyCode);
         }
+        else if (keyCode == KeyEvent.VK_SPACE)
+        {
+            controller.requestPauseToggle();
+        }
     }
 
     private void tryToRemoveFromPressed(int keyCode)

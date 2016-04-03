@@ -20,6 +20,8 @@ public class GameModel
     private BlockSpawner spawner;
     private Timer timer;
 
+    private boolean paused = false;
+
     public GameModel(GameController gameController)
     {
         NumberPool numberPool = new NumberPool(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
@@ -43,16 +45,24 @@ public class GameModel
 
     void handleTimerTask()
     {
-        Map<Integer, Integer> changes = spawner.spawnBlocks();
-        changes.putAll(spawner.markCells(Game.SIMULTANEOUS_SPAWN));
-        //can do because first call doesn't interfere with the second
+        if (!paused)
+        {
+            Map<Integer, Integer> changes = spawner.spawnBlocks();
+            changes.putAll(spawner.markCells(Game.SIMULTANEOUS_SPAWN));
+            //can do because first call doesn't interfere with the second
 
-        cellMap.applyCascadeChanges(changes);
+            cellMap.applyCascadeChanges(changes);
+        }
     }
 
     public GameState copyGameState()
     {
         return gameState.getImmutableCopy();
+    }
+
+    public void requestPauseToggle()
+    {
+        paused = !paused;
     }
 
     public void gameOver()
