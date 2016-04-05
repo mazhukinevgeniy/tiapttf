@@ -45,23 +45,23 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    synchronized void updateFieldSnapshot(Map<Integer, Integer> cellUpdates, Map<Integer, Boolean> linkUpdates)
+    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<Integer, Boolean> linkUpdates)
     {
         immutableCopy = null;
 
 
-        Set<Integer> keys = cellUpdates.keySet();
+        Set<CellCode> keys = cellUpdates.keySet();
 
-        for (int key : keys)
+        for (CellCode key : keys)
         {
             int value = cellUpdates.get(key);
 
-            field[key] = value;
+            field[key.value()] = value;
         }
 
-        keys = linkUpdates.keySet();
+        Set<Integer> linkKeys = linkUpdates.keySet();
 
-        for (int key : keys)
+        for (int key : linkKeys)
         {
             links[key] = linkUpdates.get(key);
         }

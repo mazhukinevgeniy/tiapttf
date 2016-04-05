@@ -1,4 +1,4 @@
-package homemade.game.model;
+package homemade.game.model.cellmap;
 
 import homemade.game.CellCode;
 import homemade.game.Direction;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by user3 on 27.03.2016.
  */
-class Cell
+public class Cell
 {
     private int code;
 
@@ -103,21 +103,21 @@ class Cell
         this.code = code;
     }
 
-    Cell neighbour(Direction direction)
+    public Cell neighbour(Direction direction)
     {
         return neighbours[direction.ordinal()];
     }
 
-    Link link(Direction direction)
+    public Link link(Direction direction)
     {
         return links[direction.ordinal()];
     }
 
-    int getValue()
+    public int getValue()
     {
         return value;
     }
-    int getCode() { return code; }
+    public CellCode getCode() { return CellCode.getFor(code); }
 
     void setValue(int newVal)
     {

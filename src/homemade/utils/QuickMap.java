@@ -11,11 +11,6 @@ import java.util.Map;
 public class QuickMap
 {
 
-    public static final Map<Integer, Integer> getCleanIntIntMap()
-    {
-        return new HashMap<Integer, Integer>();
-    }
-
     public static final Map<Integer, Boolean> getCleanIntBoolMap()
     {
         return new HashMap<Integer, Boolean>();

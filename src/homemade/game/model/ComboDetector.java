@@ -4,6 +4,9 @@ import homemade.game.CellCode;
 import homemade.game.Direction;
 import homemade.game.Game;
 import homemade.game.controller.BlockRemovalHandler;
+import homemade.game.model.cellmap.Cell;
+import homemade.game.model.cellmap.CellMap;
+import homemade.game.model.cellmap.Link;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,7 +17,7 @@ import java.util.Set;
  */
 class ComboDetector
 {
-    private ArrayList<Integer> tmpStorage;
+    private ArrayList<CellCode> tmpStorage;
     //it's probably better than reallocating every time
 
     private CellMap cellMap;
@@ -24,7 +27,7 @@ class ComboDetector
     ComboDetector(CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
         int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
-        tmpStorage = new ArrayList<Integer>(maxCellsPerLine);
+        tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
 
         this.cellMap = cellMap;
         this.gameScore = gameScore;
@@ -34,17 +37,17 @@ class ComboDetector
     /**
      * @return Set of cellCodes in which blocks are bound to be removed because they were part of a combo
      */
-    Set<Integer> findCellsToRemove(Set<Integer> starts)
+    Set<CellCode> findCellsToRemove(Set<CellCode> starts)
     {
         int numberOfStarts = starts.size();
 
         Set<Integer> horizontals = new HashSet<Integer>(numberOfStarts);
         Set<Integer> verticals = new HashSet<Integer>(numberOfStarts);
 
-        for (int cellCode : starts)
+        for (CellCode cellCode : starts)
         {
-            horizontals.add(cellCode / Game.FIELD_WIDTH);
-            verticals.add(cellCode % Game.FIELD_WIDTH);
+            horizontals.add(cellCode.y());
+            verticals.add(cellCode.x());
         }
 
         int hSize = horizontals.size();
@@ -52,16 +55,16 @@ class ComboDetector
 
         int maxCellsToRemove = hSize * Game.FIELD_WIDTH + vSize * Game.FIELD_HEIGHT - hSize * vSize;
 
-        HashSet<Integer> cellsToRemove = new HashSet<Integer>(maxCellsToRemove);
+        HashSet<CellCode> cellsToRemove = new HashSet<CellCode>(maxCellsToRemove);
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(cellsToRemove, horizontal * Game.FIELD_WIDTH, Direction.RIGHT);
+            iterateThroughTheLine(cellsToRemove, CellCode.getFor(0, horizontal), Direction.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(cellsToRemove, vertical, Direction.BOTTOM);
+            iterateThroughTheLine(cellsToRemove, CellCode.getFor(vertical, 0), Direction.BOTTOM);
         }
 
         return cellsToRemove;
@@ -73,13 +76,13 @@ class ComboDetector
      * @param start cellCode of the beginning
      * @param direction where to look for the next cell
      */
-    private void iterateThroughTheLine(Set<Integer> set, int start, Direction direction)
+    private void iterateThroughTheLine(Set<CellCode> set, CellCode start, Direction direction)
     {
         tmpStorage.clear();
 
-        System.out.println("start = " + start + ", direction = " + direction);
+        //System.out.println("start = " + start + ", direction = " + direction);
 
-        Cell currentCell = cellMap.cells.get(start);
+        Cell currentCell = cellMap.getCell(start);
         Cell comboStartedAt = currentCell;
 
         int comboLength = 1;
@@ -89,7 +92,7 @@ class ComboDetector
             Link link = currentCell.link(direction);
             Cell tmpNext = currentCell.neighbour(direction);
 
-            if (link != null && link.value)
+            if (link != null && link.getValue())
             {
                 comboLength++;
             }
@@ -105,10 +108,12 @@ class ComboDetector
 
                     while (tmpCell != tmpNext)
                     {
-                        report = " " + tmpCell.getCode() + report;
+                        CellCode cellCode = tmpCell.getCode();
 
-                        blockRemovalHandler.blockRemoved(CellCode.getFor(tmpCell.getCode()));
-                        tmpStorage.add(tmpCell.getCode());
+                        report = " " + cellCode.value() + report;
+
+                        blockRemovalHandler.blockRemoved(cellCode);
+                        tmpStorage.add(cellCode);
                         tmpCell = tmpCell.neighbour(direction);
                     }
 

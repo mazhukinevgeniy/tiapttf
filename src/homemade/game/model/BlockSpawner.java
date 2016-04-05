@@ -2,9 +2,9 @@ package homemade.game.model;
 
 import homemade.game.CellCode;
 import homemade.game.Game;
+import homemade.game.model.cellmap.CellMap;
 import homemade.utils.QuickMap;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -22,44 +22,43 @@ class BlockSpawner
         this.numberPool = numberPool;
     }
 
-    synchronized Map<Integer, Integer> spawnBlocks()
+    synchronized Map<CellCode, Integer> spawnBlocks()
     {
-        ArrayList<Cell> cells = cellMap.cells;
-        Map<Integer, Integer> changes = QuickMap.getCleanIntIntMap();
+        Map<CellCode, Integer> changes = QuickMap.getCleanCellCodeIntMap();
 
         for (int i = 0; i < Game.FIELD_WIDTH; i++)
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
             {
-                int cellCode = CellCode.getFor(i, j).value();
+                CellCode cellCode = CellCode.getFor(i, j);
 
-                if (cells.get(cellCode).getValue() == Game.CELL_MARKED_FOR_SPAWN)
+                if (cellMap.getCell(cellCode).getValue() == Game.CELL_MARKED_FOR_SPAWN)
                 {
                     changes.put(cellCode, numberPool.takeNumber());
 
-                    System.out.println("block spawned: " + i + ", " + j + " | " + changes.get(cellCode));
+                    System.out.println("block spawned: " + i + ", " + j + " | " + changes.get(cellCode.value()));
                 }
             }
 
         return changes;
     }
 
-    synchronized Map<Integer, Integer> markCells(int targetAmount)
+    synchronized Map<CellCode, Integer> markCells(int targetAmount)
     {
-        Map<Integer, Integer> changes = QuickMap.getCleanIntIntMap();
+        Map<CellCode, Integer> changes = QuickMap.getCleanCellCodeIntMap();
 
         int canMark = numberPool.numbersAvailable();
 
         if (canMark > 0)
         {
-            LinkedList<Integer> freeCells = new LinkedList<Integer>();
+            LinkedList<CellCode> freeCells = new LinkedList<CellCode>();
 
             for (int i = 0; i < Game.FIELD_WIDTH; i++)
                 for (int j = 0; j < Game.FIELD_HEIGHT; j++)
                 {
-                    int cellCode = CellCode.getFor(i, j).value();
+                    CellCode cellCode = CellCode.getFor(i, j);
 
 
-                    if (cellMap.cells.get(cellCode).getValue() == Game.CELL_EMPTY)
+                    if (cellMap.getCell(cellCode).getValue() == Game.CELL_EMPTY)
                         freeCells.add(cellCode);
                 }
 

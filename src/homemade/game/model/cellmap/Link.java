@@ -1,9 +1,9 @@
-package homemade.game.model;
+package homemade.game.model.cellmap;
 
 /**
  * Created by user3 on 27.03.2016.
  */
-class Link
+public class Link
 {
     boolean value = false;
 
@@ -14,8 +14,13 @@ class Link
         this.number = number;
     }
 
-    int getNumber()
+    public int getNumber()
     {
         return number;
+    }
+
+    public boolean getValue()
+    {
+        return value;
     }
 }
