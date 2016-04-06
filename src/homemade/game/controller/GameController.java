@@ -6,10 +6,10 @@ import homemade.game.Effect;
 import homemade.game.Game;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
+import homemade.utils.timer.QuickTimer;
+import homemade.utils.timer.TimerTaskPerformer;
 
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by user3 on 23.03.2016.
@@ -24,6 +24,8 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     private SelectionManager selectionManager;
     private GameKeyboard keyboard;
 
+    private QuickTimer timer;
+
     public GameController(Frame mainFrame)
     {
         frame = mainFrame;
@@ -37,10 +39,8 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
         view = new GameView(this, mainFrame);
 
-        Timer timer = new Timer();
-        long delay = 0;
         long period = 1000 / Game.KEY_INPUT_CAP_PER_SECOND;
-        timer.schedule(new ControllerTimerTask(this), delay, period);
+        timer = new QuickTimer(new TimedKeyboardInput(selectionManager, keyboard), period);
     }
 
     public MouseInputHandler mouseInputHandler() { return selectionManager; }
@@ -69,28 +69,24 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         model.requestPauseToggle();
     }
 
-    void controllerTimerUpdated()
+    private static class TimedKeyboardInput implements TimerTaskPerformer
     {
-        Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
+        private SelectionManager selectionManager;
+        private GameKeyboard keyboard;
 
-        if (direction != null)
-            selectionManager.tryToMoveSelectionIn(direction);
-    }
-
-    private class ControllerTimerTask extends TimerTask
-    {
-        private GameController controller;
-
-        ControllerTimerTask(GameController controller)
+        TimedKeyboardInput(SelectionManager selectionManager, GameKeyboard keyboard)
         {
-            this.controller = controller;
+            this.selectionManager = selectionManager;
+            this.keyboard = keyboard;
         }
 
         @Override
-        public void run()
+        public void handleTimerTask()
         {
-            this.controller.controllerTimerUpdated();
+            Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
+
+            if (direction != null)
+                selectionManager.tryToMoveSelectionIn(direction);
         }
     }
-    //TODO: think about this: now everyone has a timer, is it right?
 }

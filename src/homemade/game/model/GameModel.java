@@ -9,16 +9,16 @@ import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
 import homemade.utils.QuickMap;
+import homemade.utils.timer.QuickTimer;
+import homemade.utils.timer.TimerTaskPerformer;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by user3 on 22.03.2016.
  */
-public class GameModel
+public class GameModel implements TimerTaskPerformer
 {
     private GameState gameState;
 
@@ -27,7 +27,8 @@ public class GameModel
 
     private ComboDetector comboDetector;
     private BlockSpawner spawner;
-    private Timer timer;
+
+    private QuickTimer timer;
 
     ArrayBasedGameState gameStateTracker;
 
@@ -46,16 +47,12 @@ public class GameModel
 
         spawner = new BlockSpawner(cellMap, numberPool);
 
-        this.timer = new Timer();
-
-        long delay = 0;
-        long period = Game.SPAWN_PERIOD;
-        this.timer.schedule(new GameTimerTask(this), delay, period);
+        timer = new QuickTimer(this, Game.SPAWN_PERIOD);
         //TODO: measure and show the actual period
 
     }
 
-    void handleTimerTask()
+    public void handleTimerTask()
     {
         if (!paused)
         {
@@ -80,14 +77,14 @@ public class GameModel
 
     public void gameOver()
     {
-        this.timer.cancel();
-        this.timer.purge();
+        timer.stop();
     }
 
     public void blockMoveRequested(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
         Set<CellCode> changes = cellMap.tryCascadeChanges(cellCodeFrom, cellCodeTo);
-        actOnChangedCells(changes);
+        if (changes != null)
+            actOnChangedCells(changes);
     }
 
     private void actOnChangedCells(Set<CellCode> changedCells)
@@ -141,20 +138,5 @@ public class GameModel
     }
 
 
-    private class GameTimerTask extends TimerTask
-    {
-        private GameModel model;
 
-        GameTimerTask(GameModel model)
-        {
-            this.model = model;
-        }
-
-        @Override
-        public void run()
-        {
-            this.model.handleTimerTask();
-            //I guess it's ok to have no logic here because we might want to replace timer
-        }
-    }
 }

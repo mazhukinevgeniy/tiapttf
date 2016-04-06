@@ -6,12 +6,12 @@ import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
+import homemade.utils.timer.QuickTimer;
+import homemade.utils.timer.TimerTaskPerformer;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by user3 on 23.03.2016.
@@ -29,7 +29,7 @@ public class GameView
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
-    private Timer timer;
+    private QuickTimer timer;
 
     private ArrayList<RenderingLayer> layers;
 
@@ -53,10 +53,8 @@ public class GameView
 
         layers = RenderingLayer.getRenderingLayers(effectManager);
 
-        this.timer = new Timer();
-        long delay = 0;
-        long period = 1000 / Game.TARGET_FPS;
-        this.timer.schedule(new ViewTimerTask(controller, effectManager), delay, period);
+        ViewTimerTaskPerformer performer = new ViewTimerTaskPerformer(controller, effectManager);
+        timer = new QuickTimer(performer, 1000 / Game.TARGET_FPS);
     }
 
     public EffectManager getEffectManager()
@@ -101,23 +99,22 @@ public class GameView
         } while (strategy.contentsLost());
     }
 
-    private class ViewTimerTask extends TimerTask
+    private static class ViewTimerTaskPerformer implements TimerTaskPerformer
     {
         private GameController controller;
         private EffectManager effectManager;
 
-        ViewTimerTask(GameController controller, EffectManager effectManager)
+        ViewTimerTaskPerformer(GameController controller, EffectManager effectManager)
         {
             this.controller = controller;
             this.effectManager = effectManager;
         }
 
         @Override
-        public void run()
+        public void handleTimerTask()
         {
-            this.effectManager.measureTimePassed();
-            this.controller.viewTimerUpdated();
-            //System.out.println("game view timer task executed");
+            effectManager.measureTimePassed();
+            controller.viewTimerUpdated();
         }
     }
 }
