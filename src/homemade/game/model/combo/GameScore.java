@@ -1,4 +1,4 @@
-package homemade.game.model;
+package homemade.game.model.combo;
 
 import homemade.game.Game;
 import homemade.game.controller.ScoreHandler;

@@ -1,7 +1,8 @@
-package homemade.game.model;
+package homemade.game.model.spawn;
 
 import homemade.game.CellCode;
 import homemade.game.Game;
+import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMap;
 import homemade.utils.QuickMap;
 

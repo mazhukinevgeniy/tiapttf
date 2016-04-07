@@ -1,6 +1,8 @@
 package homemade.game.controller;
 
 import homemade.game.*;
+import homemade.game.model.GameModel;
+import homemade.game.model.GameModelLinker;
 import homemade.game.view.GameView;
 
 import java.util.ArrayList;
@@ -12,14 +14,17 @@ import java.util.HashSet;
 class SelectionManager implements MouseInputHandler
 {
     private ArrayList<CellCode> selection;
-    private GameController controller;
+    private GameModel model;
+    private GameModelLinker blockMoveRequestHandler;
 
     private SelectionState state;
 
     SelectionManager(GameController controller)
     {
         this.selection = new ArrayList<CellCode>(Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT));
-        this.controller = controller;
+
+        model = controller.model;
+        blockMoveRequestHandler = model.getMoveRequestHandler();
 
         this.updateSelectionState();
     }
@@ -33,7 +38,7 @@ class SelectionManager implements MouseInputHandler
 
         CellCode eventCell = CellCode.getFor(cellX, cellY);
 
-        if (this.controller.model.copyGameState().getCellValue(eventCell) > 0)
+        if (model.copyGameState().getCellValue(eventCell) > 0)
         {
             this.selection.clear();
             this.selection.add(eventCell);
@@ -73,11 +78,11 @@ class SelectionManager implements MouseInputHandler
     {
         if (eventCell != selectedCell)
         {
-            controller.model.blockMoveRequested(selectedCell, eventCell);
+            blockMoveRequestHandler.requestBlockMove(selectedCell, eventCell);
 
             selection.clear();
 
-            GameState gameState = controller.model.copyGameState();
+            GameState gameState = model.copyGameState();
 
             boolean selectedCellOccupied = gameState.getCellValue(selectedCell) > 0;
             boolean eventCellOccupied = gameState.getCellValue(eventCell) > 0;
@@ -98,7 +103,7 @@ class SelectionManager implements MouseInputHandler
 
     private void updateSelectionState()
     {
-        GameState state = controller.model.copyGameState();
+        GameState state = model.copyGameState();
 
         int selectionSize = selection.size();
         ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);

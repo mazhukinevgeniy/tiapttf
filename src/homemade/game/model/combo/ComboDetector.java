@@ -1,9 +1,10 @@
-package homemade.game.model;
+package homemade.game.model.combo;
 
 import homemade.game.CellCode;
 import homemade.game.Direction;
 import homemade.game.Game;
 import homemade.game.controller.BlockRemovalHandler;
+import homemade.game.controller.GameController;
 import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
@@ -15,8 +16,16 @@ import java.util.Set;
 /**
  * Created by user3 on 26.03.2016.
  */
-class ComboDetector
+public class ComboDetector
 {
+    public static ComboDetector initializeComboDetection(CellMap cellMap, GameController controller)
+    {
+        GameScore gameScore = new GameScore(controller);
+
+        return new ComboDetector(cellMap, controller, gameScore);
+    }
+
+
     private ArrayList<CellCode> tmpStorage;
     //it's probably better than reallocating every time
 
@@ -24,7 +33,7 @@ class ComboDetector
     private GameScore gameScore;
     private BlockRemovalHandler blockRemovalHandler;
 
-    ComboDetector(CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
+    private ComboDetector(CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
         int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
         tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
@@ -37,7 +46,7 @@ class ComboDetector
     /**
      * @return Set of cellCodes in which blocks are bound to be removed because they were part of a combo
      */
-    Set<CellCode> findCellsToRemove(Set<CellCode> starts)
+    public Set<CellCode> findCellsToRemove(Set<CellCode> starts)
     {
         int numberOfStarts = starts.size();
 

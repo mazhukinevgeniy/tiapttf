@@ -5,9 +5,8 @@ import java.util.LinkedList;
 /**
  * Created by user3 on 29.03.2016.
  */
-class NumberPool
+public class NumberPool
 {
-
     private LinkedList<Integer> usedNumbers, availableNumbers;
 
     NumberPool(int max)
@@ -21,7 +20,7 @@ class NumberPool
         }
     }
 
-    int takeNumber()
+    public int takeNumber()
     {
         int length = availableNumbers.size();
         int position = (int)(Math.random() * (double)length);
@@ -33,19 +32,19 @@ class NumberPool
         return number;
     }
 
-    void freeNumber(int value)
+    public void freeNumber(int value)
     {
         usedNumbers.remove(new Integer(value));
         //because we want to remove by object and not by its position in the list
         availableNumbers.add(value);
     }
 
-    int numbersAvailable()
+    public int numbersAvailable()
     {
         return availableNumbers.size();
     }
 
-    boolean isEmpty()
+    public boolean isEmpty()
     {
         return availableNumbers.isEmpty();
     }

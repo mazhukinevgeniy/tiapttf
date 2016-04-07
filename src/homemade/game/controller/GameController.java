@@ -5,6 +5,7 @@ import homemade.game.Direction;
 import homemade.game.Effect;
 import homemade.game.Game;
 import homemade.game.model.GameModel;
+import homemade.game.model.spawn.SpawnManager;
 import homemade.game.view.GameView;
 import homemade.utils.timer.QuickTimer;
 import homemade.utils.timer.TimerTaskPerformer;
@@ -26,6 +27,8 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     private QuickTimer timer;
 
+    private SpawnManager pauseToggler;//TODO: probably should use interface
+
     public GameController(Frame mainFrame)
     {
         frame = mainFrame;
@@ -33,6 +36,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         CellCode.initializeCellCodes();
 
         model = new GameModel(this);
+        pauseToggler = model.getPauseToggler();
 
         selectionManager = new SelectionManager(this);
         keyboard = new GameKeyboard(this);
@@ -40,7 +44,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         view = new GameView(this, mainFrame);
 
         long period = 1000 / Game.KEY_INPUT_CAP_PER_SECOND;
-        timer = new QuickTimer(new TimedKeyboardInput(selectionManager, keyboard), period);
+        timer = new QuickTimer(new TimedKeyboardInput(), period);
     }
 
     public MouseInputHandler mouseInputHandler() { return selectionManager; }
@@ -66,20 +70,12 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     public void requestPauseToggle()
     {
-        model.requestPauseToggle();
+        pauseToggler.toggleSpawnPause();
     }
+    //TODO: figure if delegation is fine here
 
-    private static class TimedKeyboardInput implements TimerTaskPerformer
+    private class TimedKeyboardInput implements TimerTaskPerformer
     {
-        private SelectionManager selectionManager;
-        private GameKeyboard keyboard;
-
-        TimedKeyboardInput(SelectionManager selectionManager, GameKeyboard keyboard)
-        {
-            this.selectionManager = selectionManager;
-            this.keyboard = keyboard;
-        }
-
         @Override
         public void handleTimerTask()
         {
