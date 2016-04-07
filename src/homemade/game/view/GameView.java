@@ -29,6 +29,8 @@ public class GameView
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
+    private GameController controller;
+
     private QuickTimer timer;
 
     private ArrayList<RenderingLayer> layers;
@@ -36,6 +38,8 @@ public class GameView
 
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
     {
+        this.controller = controller;
+
         this.canvas = new Canvas();
         this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
         mainFrame.add(this.canvas);
@@ -53,8 +57,7 @@ public class GameView
 
         layers = RenderingLayer.getRenderingLayers(effectManager);
 
-        ViewTimerTaskPerformer performer = new ViewTimerTaskPerformer(controller, effectManager);
-        timer = new QuickTimer(performer, 1000 / Game.TARGET_FPS);
+        timer = new QuickTimer(new ViewTimerTaskPerformer(), 1000 / Game.TARGET_FPS);
     }
 
     public EffectManager getEffectManager()
@@ -99,17 +102,8 @@ public class GameView
         } while (strategy.contentsLost());
     }
 
-    private static class ViewTimerTaskPerformer implements TimerTaskPerformer
+    private class ViewTimerTaskPerformer implements TimerTaskPerformer
     {
-        private GameController controller;
-        private EffectManager effectManager;
-
-        ViewTimerTaskPerformer(GameController controller, EffectManager effectManager)
-        {
-            this.controller = controller;
-            this.effectManager = effectManager;
-        }
-
         @Override
         public void handleTimerTask()
         {

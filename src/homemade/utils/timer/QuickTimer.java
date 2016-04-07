@@ -24,7 +24,7 @@ public class QuickTimer
 
 
         timer = new Timer();
-        timer.schedule(new SmartTimerTask(performer, this), delay, period);
+        timer.schedule(new SmartTimerTask(), delay, period);
     }
 
     public void stop()
@@ -42,21 +42,12 @@ public class QuickTimer
         }
     }
 
-    private static class SmartTimerTask extends TimerTask
+    private class SmartTimerTask extends TimerTask
     {
-        private TimerTaskPerformer performer;
-        private QuickTimer quickTimer;
-
-        SmartTimerTask(TimerTaskPerformer performer, QuickTimer quickTimer)
-        {
-            this.performer = performer;
-            this.quickTimer = quickTimer;
-        }
-
         @Override
         public void run()
         {
-            quickTimer.reschedule();
+            reschedule();
             performer.handleTimerTask();
         }
     }
