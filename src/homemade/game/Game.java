@@ -11,6 +11,8 @@ public class Game
     public static final int FIELD_WIDTH = 9;
     public static final int FIELD_HEIGHT = 9;
 
+    public static final int FIELD_SIZE = FIELD_WIDTH * FIELD_HEIGHT;
+
     public static final boolean AUTOCOMPLETION = true;
     public static final int MIN_COMBO = 5;
 

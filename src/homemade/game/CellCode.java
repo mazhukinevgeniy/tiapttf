@@ -10,7 +10,7 @@ public class CellCode
 
     public static void initializeCellCodes()
     {
-        int cellCodeCap = Game.FIELD_WIDTH * Game.FIELD_HEIGHT;
+        int cellCodeCap = Game.FIELD_SIZE;
         CellCode.cellCodes = new CellCode[cellCodeCap];
 
         for (int i = 0; i < Game.FIELD_WIDTH; i++)

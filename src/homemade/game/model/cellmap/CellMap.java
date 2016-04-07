@@ -24,7 +24,7 @@ public class CellMap
     {
         cells = Cell.createLinkedCells();
 
-        int maxCellCode = Game.FIELD_WIDTH * Game.FIELD_HEIGHT;
+        int maxCellCode = Game.FIELD_SIZE;
         int maxLinkCode = maxCellCode * 2;
 
 

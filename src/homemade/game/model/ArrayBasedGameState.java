@@ -18,18 +18,16 @@ class ArrayBasedGameState implements GameState
 
     ArrayBasedGameState()
     {
-        int fieldSize = Game.FIELD_WIDTH * Game.FIELD_HEIGHT;
+        field = new int[Game.FIELD_SIZE];
 
-        field = new int[fieldSize];
-
-        for (int i = 0; i < fieldSize; i++)
+        for (int i = 0; i < Game.FIELD_SIZE; i++)
         {
             field[i] = Game.CELL_EMPTY;
         }
 
-        links = new boolean[fieldSize * 2]; //based on Game.linkNumber
+        links = new boolean[Game.FIELD_SIZE * 2];
 
-        for (int i = 0; i < fieldSize * 2; i++)
+        for (int i = 0; i < Game.FIELD_SIZE * 2; i++)
         {
             links[i] = false;
         }

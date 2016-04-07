@@ -12,7 +12,7 @@ class DigitMetadata
     int digitWidth[] = new int[10];
     int digitHeight = 22; //true while all assets share this quality
 
-    private int offsetX[] = new int[Game.FIELD_WIDTH * Game.FIELD_HEIGHT];
+    private int offsetX[] = new int[Game.FIELD_SIZE];
     int offsetY = (GameView.CellWidth - digitHeight) / 2;
 
     DigitMetadata()

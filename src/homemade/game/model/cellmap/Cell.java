@@ -15,9 +15,9 @@ public class Cell
 
     static ArrayList<Cell> createLinkedCells()
     {
-        ArrayList<Cell> cells = new ArrayList<Cell>(Game.FIELD_WIDTH * Game.FIELD_HEIGHT);
+        ArrayList<Cell> cells = new ArrayList<Cell>(Game.FIELD_SIZE);
 
-        for (int i = 0; i < Game.FIELD_WIDTH * Game.FIELD_HEIGHT; i++)
+        for (int i = 0; i < Game.FIELD_SIZE; i++)
         {
             cells.add(new Cell(i));
         }

@@ -36,7 +36,7 @@ public class Settings
     private void setDefaultRange()
     {
         isRealTime.setEnum(new Enumeration<>(true, false));
-        simultaneousSpawn.setRange(new IntRange(1, Game.FIELD_WIDTH * Game.FIELD_HEIGHT));
+        simultaneousSpawn.setRange(new IntRange(1, Game.FIELD_SIZE));
         spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
         something.setEnum(new Enumeration<>(1, 2, 3));
     }
