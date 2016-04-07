@@ -36,7 +36,7 @@ class BlockSpawner
                 {
                     changes.put(cellCode, numberPool.takeNumber());
 
-                    System.out.println("block spawned: " + i + ", " + j + " | " + changes.get(cellCode.value()));
+                    System.out.println("block spawned: " + i + ", " + j + " | " + changes.get(cellCode));
                 }
             }
 
