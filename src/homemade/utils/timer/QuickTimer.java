@@ -30,15 +30,20 @@ public class QuickTimer
     public void stop()
     {
         timer.cancel();
-        timer = new Timer();
     }
 
-
-    private void reschedule()
+    /**
+     * Care: this will cancel all tasks if period is actually changed.
+     */
+    public void setPeriod(long newPeriod)
     {
-        if (false) //TODO: add period modification
+        if (newPeriod != period)
         {
+            period = newPeriod;
 
+            timer.cancel();
+            timer = new Timer();
+            timer.schedule(new SmartTimerTask(), period, period);
         }
     }
 
@@ -47,7 +52,6 @@ public class QuickTimer
         @Override
         public void run()
         {
-            reschedule();
             performer.handleTimerTask();
         }
     }

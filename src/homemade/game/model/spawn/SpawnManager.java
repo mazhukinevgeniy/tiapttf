@@ -18,6 +18,8 @@ public class SpawnManager
     private boolean paused = false;
 
     private QuickTimer timer;
+
+    private SpawnPeriod period;
     private BlockSpawner spawner;
 
     private GameModelLinker linker;
@@ -27,6 +29,7 @@ public class SpawnManager
         this.linker = linker;
 
         spawner = new BlockSpawner(cellMap, numberPool);
+        period = new SpawnPeriod();
 
         timer = new QuickTimer(new SpawnTimerTaskPerformer(), Game.SPAWN_PERIOD);
         //TODO: measure and show the actual period
@@ -46,6 +49,8 @@ public class SpawnManager
         {
             if (!paused)
             {
+                timer.setPeriod(period.getSpawnPeriod());
+
                 Map<CellCode, Integer> changes = spawner.spawnBlocks();
                 changes.putAll(spawner.markCells(Game.SIMULTANEOUS_SPAWN));
                 //can do because first call doesn't interfere with the second
