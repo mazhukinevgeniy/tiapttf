@@ -28,13 +28,13 @@ public class GameModelLinker
     }
 
 
-    public void requestSpawn(Map<CellCode, Integer> changes)
+    synchronized public void requestSpawn(Map<CellCode, Integer> changes)
     {
         Set<CellCode> appliedChanges = cellMap.applyCascadeChanges(changes);
         actOnChangedCells(appliedChanges);
     }
 
-    public void requestBlockMove(CellCode cellCodeFrom, CellCode cellCodeTo)
+    synchronized public void requestBlockMove(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
         Set<CellCode> changes = cellMap.tryCascadeChanges(cellCodeFrom, cellCodeTo);
         if (changes != null)
