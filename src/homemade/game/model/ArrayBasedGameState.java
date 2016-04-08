@@ -16,6 +16,9 @@ class ArrayBasedGameState implements GameState
     private boolean[] links;
     private GameState immutableCopy;
 
+    private int cellsOccupied;
+    private int spawnsDenied;
+
     ArrayBasedGameState()
     {
         field = new int[Game.FIELD_SIZE];
@@ -31,15 +34,37 @@ class ArrayBasedGameState implements GameState
         {
             links[i] = false;
         }
+
+        cellsOccupied = 0;
+        spawnsDenied = 0;
     }
 
-    ArrayBasedGameState(int[] fieldData, boolean[] linkData)
+    private ArrayBasedGameState(int[] fieldData, boolean[] linkData, int spawnsDenied)
     {
         field = fieldData;
         links = linkData;
 
         if (fieldData == null || linkData == null)
             throw new Error("corrupted game state copy has been created");
+        else
+        {
+            int counter = 0;
+
+            for (int value : fieldData)
+            {
+                if (value > 0)
+                    counter++;
+            }
+
+            cellsOccupied = counter;
+        }
+
+        this.spawnsDenied = spawnsDenied;
+    }
+
+    synchronized void incrementDenyCounter()
+    {
+        spawnsDenied++;
     }
 
 
@@ -65,6 +90,17 @@ class ArrayBasedGameState implements GameState
         }
     }
 
+    @Override
+    public int getSpawnsDenied()
+    {
+        return spawnsDenied;
+    }
+
+    @Override
+    public int getCellsOccupied()
+    {
+        return cellsOccupied;
+    }
 
     @Override
     public int getCellValue(CellCode cellCode)
@@ -82,7 +118,7 @@ class ArrayBasedGameState implements GameState
     synchronized public GameState getImmutableCopy()
     {
         if (immutableCopy == null)
-            immutableCopy = new ArrayBasedGameState(field, links);
+            immutableCopy = new ArrayBasedGameState(field, links, spawnsDenied);
 
         return immutableCopy;
     }

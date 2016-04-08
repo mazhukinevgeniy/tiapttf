@@ -5,6 +5,9 @@ package homemade.game;
  */
 public interface GameState
 {
+    public int getCellsOccupied();
+    public int getSpawnsDenied();
+
     public int getCellValue(CellCode cellCode);
 
     public boolean getLinkBetweenCells(int linkNumber);

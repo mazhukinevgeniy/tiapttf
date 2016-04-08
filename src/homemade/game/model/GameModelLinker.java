@@ -3,6 +3,7 @@ package homemade.game.model;
 import homemade.game.CellCode;
 import homemade.game.Direction;
 import homemade.game.Game;
+import homemade.game.GameState;
 import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
@@ -36,9 +37,24 @@ public class GameModelLinker
 
     synchronized public void requestBlockMove(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
+        boolean riskOfSpawnDenial = false;
+
+        if (cellMap.getCell(cellCodeTo).getValue() == Game.CELL_MARKED_FOR_SPAWN)
+            riskOfSpawnDenial = true;
+
         Set<CellCode> changes = cellMap.tryCascadeChanges(cellCodeFrom, cellCodeTo);
         if (changes != null)
+        {
             actOnChangedCells(changes);
+
+            if (riskOfSpawnDenial)
+                state.incrementDenyCounter();
+        }
+    }
+
+    public GameState copyGameState()
+    {
+        return state.getImmutableCopy();
     }
 
     private void actOnChangedCells(Set<CellCode> changedCells)

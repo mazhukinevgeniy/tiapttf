@@ -26,14 +26,12 @@ public class GameModel
 
         ComboDetector comboDetector = ComboDetector.initializeComboDetection(cellMap, gameController);
 
-        GameStats stats = new GameStats();
-
 
         gameState = gameStateTracker;
 
         linker = new GameModelLinker(cellMap, comboDetector, numberPool, gameStateTracker);
 
-        spawner = new SpawnManager(linker, cellMap, numberPool, stats);
+        spawner = new SpawnManager(linker, cellMap, numberPool);
 
 
     }

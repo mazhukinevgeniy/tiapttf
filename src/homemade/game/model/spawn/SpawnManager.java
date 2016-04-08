@@ -3,7 +3,6 @@ package homemade.game.model.spawn;
 import homemade.game.CellCode;
 import homemade.game.Game;
 import homemade.game.model.GameModelLinker;
-import homemade.game.model.GameStats;
 import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMap;
 import homemade.utils.timer.QuickTimer;
@@ -25,16 +24,15 @@ public class SpawnManager
 
     private GameModelLinker linker;
 
-    public SpawnManager(GameModelLinker linker, CellMap cellMap, NumberPool numberPool, GameStats stats)
+    public SpawnManager(GameModelLinker linker, CellMap cellMap, NumberPool numberPool)
     {
         this.linker = linker;
 
         spawner = new BlockSpawner(cellMap, numberPool);
-        period = new SpawnPeriod(stats);
+        period = new SpawnPeriod(linker);
 
         timer = new QuickTimer(new SpawnTimerTaskPerformer(), Game.SPAWN_PERIOD);
         //TODO: measure and show the actual period
-        //TODO: manipulate period
         //TODO: call timer.stop() when game is over
     }
 
