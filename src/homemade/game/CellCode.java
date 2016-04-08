@@ -75,7 +75,7 @@ public class CellCode
 
     public int distance(CellCode otherCell)
     {
-        return Math.abs(cX - otherCell.cX + cY - otherCell.cY);
+        return Math.abs(cX - otherCell.cX) + Math.abs(cY - otherCell.cY);
     }
 
     public CellCode neighbour(Direction direction)
