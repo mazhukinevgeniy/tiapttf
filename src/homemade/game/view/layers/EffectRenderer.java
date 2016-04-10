@@ -24,7 +24,8 @@ class EffectRenderer
 
             int numberOfFrames = Assets.disappear.length;
 
-            int frame = (numberOfFrames * timeRemaining) / Effect.FADING_BLOCK.getFullDuration();
+            int frame = Math.min(numberOfFrames - 1,
+                    (numberOfFrames * timeRemaining) / Effect.FADING_BLOCK.getFullDuration());
             System.out.println("frame " + frame);
 
             Image sprite = Assets.disappear[frame];

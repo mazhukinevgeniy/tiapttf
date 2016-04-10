@@ -82,3 +82,5 @@ public class EffectManager
         return time;
     }
 }
+
+//TODO: investigate how is this class synchronized
