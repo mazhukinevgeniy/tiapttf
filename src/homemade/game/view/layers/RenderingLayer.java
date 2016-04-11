@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 abstract public class RenderingLayer
 {
-    private static final int fullCellWidth = GameView.CellWidth + GameView.CellOffset;
+    private static final int fullCellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
     public static final ArrayList<RenderingLayer> getRenderingLayers(EffectManager effectManager)
     {
@@ -44,7 +44,7 @@ abstract public class RenderingLayer
         this.selectionState = selection;
         this.graphics = graphics;
 
-        int cellWidth = GameView.CellWidth + GameView.CellOffset;
+        int cellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
         for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
             for (int j = 0; j < Game.FIELD_HEIGHT; j++)
@@ -63,8 +63,8 @@ abstract public class RenderingLayer
 
     final protected void setCanvasCoordinates(int i, int j)
     {
-        canvasX = GameView.GridOffset + fullCellWidth * i;
-        canvasY = GameView.GridOffset + fullCellWidth * j;
+        canvasX = GameView.GRID_OFFSET + fullCellWidth * i;
+        canvasY = GameView.GRID_OFFSET + fullCellWidth * j;
     }
 
 

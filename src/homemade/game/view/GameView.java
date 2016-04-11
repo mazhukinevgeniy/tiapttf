@@ -1,6 +1,5 @@
 package homemade.game.view;
 
-import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
@@ -18,11 +17,13 @@ import java.util.ArrayList;
  */
 public class GameView
 {
-    public static final int CellWidth = 50;
-    public static final int CellOffset = 1;
-    public static final int GridOffset = 1;
-    public static final int CanvasWidth = 460;
-    public static final int CanvasHeight = 460;
+    private static final int TARGET_FPS = 60;
+
+    public static final int CELL_WIDTH = 50;
+    public static final int CELL_OFFSET = 1;
+    public static final int GRID_OFFSET = 1;
+    public static final int CANVAS_WIDTH = 460;
+    public static final int CANVAS_HEIGHT = 460;
 
     private Canvas canvas;
 
@@ -41,7 +42,7 @@ public class GameView
         this.controller = controller;
 
         this.canvas = new Canvas();
-        this.canvas.setPreferredSize(new Dimension(GameView.CanvasWidth, GameView.CanvasHeight));
+        this.canvas.setPreferredSize(new Dimension(GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT));
         mainFrame.add(this.canvas);
 
         GameMouseAdapter mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
@@ -57,7 +58,7 @@ public class GameView
 
         layers = RenderingLayer.getRenderingLayers(effectManager);
 
-        timer = new QuickTimer(new ViewTimerTaskPerformer(), 1000 / Game.TARGET_FPS);
+        timer = new QuickTimer(new ViewTimerTaskPerformer(), 1000 / TARGET_FPS);
     }
 
     public EffectManager getEffectManager()
@@ -78,9 +79,9 @@ public class GameView
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
 
-                graphics.clearRect(0, 0, GameView.CanvasWidth, GameView.CanvasHeight);
+                graphics.clearRect(0, 0, GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT);
 
-                graphics.drawImage(Assets.field, GameView.GridOffset, GameView.GridOffset, null);
+                graphics.drawImage(Assets.field, GameView.GRID_OFFSET, GameView.GRID_OFFSET, null);
 
                 for (RenderingLayer layer : layers)
                 {

@@ -10,11 +10,11 @@ import homemade.resources.Assets;
  */
 class LinkLayer extends RenderingLayer
 {
-    private int vertGlowOffsetX = (GameView.CellWidth - Assets.glowVertical.getWidth(null)) / 2;
-    private int vertGlowOffsetY = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowVertical.getHeight(null)) / 2;
+    private int vertGlowOffsetX = (GameView.CELL_WIDTH - Assets.glowVertical.getWidth(null)) / 2;
+    private int vertGlowOffsetY = (GameView.CELL_WIDTH * 2 + GameView.CELL_OFFSET - Assets.glowVertical.getHeight(null)) / 2;
 
-    private int horGlowOffsetX = (GameView.CellWidth * 2 + GameView.CellOffset - Assets.glowHorizontal.getWidth(null)) / 2;
-    private int horGlowOffsetY = (GameView.CellWidth - Assets.glowHorizontal.getHeight(null)) / 2;
+    private int horGlowOffsetX = (GameView.CELL_WIDTH * 2 + GameView.CELL_OFFSET - Assets.glowHorizontal.getWidth(null)) / 2;
+    private int horGlowOffsetY = (GameView.CELL_WIDTH - Assets.glowHorizontal.getHeight(null)) / 2;
 
 
     LinkLayer()

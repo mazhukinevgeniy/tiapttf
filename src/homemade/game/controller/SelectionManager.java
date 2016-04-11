@@ -33,8 +33,8 @@ class SelectionManager implements MouseInputHandler
 
     public synchronized void handleMouseRelease(int canvasX, int canvasY)
     {
-        int cellX = (canvasX - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
-        int cellY = (canvasY - GameView.GridOffset) / (GameView.CellWidth + GameView.CellOffset);
+        int cellX = (canvasX - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+        int cellY = (canvasY - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
 
         CellCode eventCell = CellCode.getFor(cellX, cellY);
 

@@ -15,6 +15,9 @@ import java.util.Set;
 
 public class GameModelLinker
 {
+    private static final boolean AUTOCOMPLETION = true;
+
+
     private CellMap cellMap;
     private ComboDetector comboDetector;
     private NumberPool numberPool;
@@ -61,7 +64,7 @@ public class GameModelLinker
     {
         if (changedCells.size() > 0)
         {
-            if (Game.AUTOCOMPLETION)
+            if (AUTOCOMPLETION)
             {
                 Map<CellCode, Integer> removedCells = QuickMap.getCleanCellCodeIntMap();
 

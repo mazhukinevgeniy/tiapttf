@@ -3,7 +3,6 @@ package homemade.game.controller;
 import homemade.game.CellCode;
 import homemade.game.Direction;
 import homemade.game.Effect;
-import homemade.game.Game;
 import homemade.game.model.GameModel;
 import homemade.game.model.spawn.SpawnManager;
 import homemade.game.view.GameView;
@@ -17,6 +16,8 @@ import java.awt.*;
  */
 public class GameController implements ScoreHandler, BlockRemovalHandler
 {
+    private static final int KEY_INPUT_CAP_PER_SECOND = 8;
+
     private Frame frame;
 
     GameModel model;
@@ -43,7 +44,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
         view = new GameView(this, mainFrame);
 
-        long period = 1000 / Game.KEY_INPUT_CAP_PER_SECOND;
+        long period = 1000 / KEY_INPUT_CAP_PER_SECOND;
         timer = new QuickTimer(new TimedKeyboardInput(), period);
     }
 

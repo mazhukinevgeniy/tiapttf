@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class ComboDetector
 {
+
     public static ComboDetector initializeComboDetection(CellMap cellMap, GameController controller)
     {
         GameScore gameScore = new GameScore(controller);

@@ -13,7 +13,7 @@ class DigitMetadata
     int digitHeight = 22; //true while all assets share this quality
 
     private int offsetX[] = new int[Game.FIELD_SIZE];
-    int offsetY = (GameView.CellWidth - digitHeight) / 2;
+    int offsetY = (GameView.CELL_WIDTH - digitHeight) / 2;
 
     DigitMetadata()
     {
@@ -29,14 +29,14 @@ class DigitMetadata
 
         for (int i = 1; i < 10; i++)
         {
-            this.offsetX[i - 1] = (GameView.CellWidth - digitWidth[i]) / 2;
+            this.offsetX[i - 1] = (GameView.CELL_WIDTH - digitWidth[i]) / 2;
         }
 
         for (int i = 10; i < Game.FIELD_WIDTH * Game.FIELD_HEIGHT + 1; i++)
         {
             int numberWidth = digitWidth[i / 10] + 1 + digitWidth[i % 10];
 
-            this.offsetX[i - 1] = (GameView.CellWidth - numberWidth) / 2;
+            this.offsetX[i - 1] = (GameView.CELL_WIDTH - numberWidth) / 2;
         }
     }
 

@@ -46,8 +46,8 @@ class SpawnPeriod
         separators.add(oversaturationPoint);
 
 
-        int spawnsToFillFromOversaturation = 1 + (Game.FIELD_SIZE - oversaturationPoint) / Game.SIMULTANEOUS_SPAWN;
-        int finalPeriod = timeToFill / spawnsToFillFromOversaturation;
+        int spawnsToFill = Math.max(1, (Game.FIELD_SIZE - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
+        int finalPeriod = timeToFill / spawnsToFill;
 
         ArrayList<Integer> periods = new ArrayList<Integer>(5);
         periods.add(Math.round(0.2f * finalPeriod));

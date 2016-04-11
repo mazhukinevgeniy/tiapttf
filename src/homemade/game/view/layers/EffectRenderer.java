@@ -30,8 +30,8 @@ class EffectRenderer
 
             Image sprite = Assets.disappear[frame];
 
-            int offsetX = (GameView.CellWidth - sprite.getWidth(null)) / 2;
-            int offsetY = (GameView.CellWidth - sprite.getHeight(null)) / 2;
+            int offsetX = (GameView.CELL_WIDTH - sprite.getWidth(null)) / 2;
+            int offsetY = (GameView.CELL_WIDTH - sprite.getHeight(null)) / 2;
 
             graphics.drawImage(sprite, canvasX + offsetX, canvasY + offsetY, null);
         }
