@@ -1,7 +1,7 @@
 package homemade.game.model.cellmap;
 
-import homemade.game.CellCode;
-import homemade.game.Direction;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.Game;
 import homemade.utils.QuickMap;
 

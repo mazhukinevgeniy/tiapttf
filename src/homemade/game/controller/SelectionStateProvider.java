@@ -1,6 +1,6 @@
 package homemade.game.controller;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.SelectionState;
 
 import java.util.ArrayList;

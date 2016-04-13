@@ -1,6 +1,6 @@
 package homemade.game.view;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.Effect;
 import homemade.utils.QuickMap;
 

@@ -1,6 +1,6 @@
 package homemade.game.controller;
 
-import homemade.game.Direction;
+import homemade.game.fieldstructure.Direction;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;

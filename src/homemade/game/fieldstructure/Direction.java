@@ -1,4 +1,4 @@
-package homemade.game;
+package homemade.game.fieldstructure;
 
 import java.util.EnumMap;
 

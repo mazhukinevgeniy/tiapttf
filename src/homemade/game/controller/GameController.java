@@ -1,7 +1,7 @@
 package homemade.game.controller;
 
-import homemade.game.CellCode;
-import homemade.game.Direction;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.Effect;
 import homemade.game.model.GameModel;
 import homemade.game.model.spawn.SpawnManager;

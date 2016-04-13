@@ -1,6 +1,6 @@
 package homemade.game.model;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
 

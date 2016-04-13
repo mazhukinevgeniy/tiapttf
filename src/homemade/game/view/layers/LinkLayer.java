@@ -1,7 +1,7 @@
 package homemade.game.view.layers;
 
-import homemade.game.CellCode;
-import homemade.game.Direction;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
 

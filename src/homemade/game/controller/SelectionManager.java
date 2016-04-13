@@ -1,6 +1,8 @@
 package homemade.game.controller;
 
 import homemade.game.*;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.model.GameModel;
 import homemade.game.model.GameModelLinker;
 import homemade.game.view.GameView;

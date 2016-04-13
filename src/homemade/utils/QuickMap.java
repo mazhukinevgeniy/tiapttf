@@ -1,6 +1,6 @@
 package homemade.utils;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 
 import java.util.HashMap;
 import java.util.Map;

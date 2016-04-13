@@ -1,6 +1,6 @@
 package homemade.game.view.layers;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.Game;
 import homemade.game.view.EffectManager;
 import homemade.resources.Assets;

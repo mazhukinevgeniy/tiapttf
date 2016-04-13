@@ -1,4 +1,6 @@
-package homemade.game;
+package homemade.game.fieldstructure;
+
+import homemade.game.Game;
 
 /**
  * Created by user3 on 31.03.2016.

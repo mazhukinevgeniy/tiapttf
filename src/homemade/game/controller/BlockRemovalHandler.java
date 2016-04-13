@@ -1,6 +1,6 @@
 package homemade.game.controller;
 
-import homemade.game.CellCode;
+import homemade.game.fieldstructure.CellCode;
 
 /**
  * Created by user3 on 02.04.2016.
