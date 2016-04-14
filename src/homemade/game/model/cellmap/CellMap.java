@@ -81,11 +81,31 @@ public class CellMap
 
         for (CellCode key : keys)
         {
-            int value = changes.get(key);
-
-            cells.get(key.value()).setValue(value);
+            setCellValue(key, changes.get(key));
         }
 
         return changedCells;
+    }
+
+    private void setCellValue(CellCode cell, int newValue)
+    {
+        Cell changedCell = cells.get(cell.value());
+        changedCell.value = newValue;
+
+        for (Direction direction : Direction.values())
+        {
+            CellCode neighbour = cell.neighbour(direction);
+
+            if (neighbour != null)
+            {
+                int outerValue = cells.get(neighbour.value()).value;
+                int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
+
+                changedCell.links[direction.ordinal()].value =
+                        newValue > 0 &&
+                        outerValue > 0 &&
+                        multiplier * newValue > multiplier * outerValue;
+            }
+        }
     }
 }

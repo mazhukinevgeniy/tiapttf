@@ -10,7 +10,6 @@ import java.util.ArrayList;
 //TODO: this class is not supposed to store fieldstructure components in future
 public class Cell
 {
-    private CellCode cellCode;
 
     static ArrayList<Cell> createLinkedCells(FieldStructure structure)
     {
@@ -23,7 +22,7 @@ public class Cell
         for (int j = 0; j < height; j++)
             for (int i = 0; i < width; i++)
             {
-                cells.add(new Cell(structure.getCellCode(i, j)));
+                cells.add(new Cell());
             }
 
         Cell cell;
@@ -32,7 +31,6 @@ public class Cell
         for (int i = 0; i < width; i++)
         {
             cell = cells.get(i);
-            cell.neighbours[Direction.TOP.ordinal()] = null;
             cell.links[Direction.TOP.ordinal()] = null;
         }
 
@@ -40,7 +38,6 @@ public class Cell
         for (int i = 0; i < height; i++)
         {
             cell = cells.get(width * i);
-            cell.neighbours[Direction.LEFT.ordinal()] = null;
             cell.links[Direction.LEFT.ordinal()] = null;
         }
 
@@ -63,82 +60,46 @@ public class Cell
         if (!cellCode.onBorder(Direction.RIGHT))
         {
             Cell right = cells.get(cellCodeVal + 1);
-            Link link = new Link(cellCode.linkNumber(structure.getCellCode(cellCode, Direction.RIGHT)));
-
-            cell.neighbours[Direction.RIGHT.ordinal()] = right;
-            right.neighbours[Direction.LEFT.ordinal()] = cell;
+            Link link = new Link(cellCode.linkNumber(cellCode.neighbour(Direction.RIGHT)));
 
             cell.links[Direction.RIGHT.ordinal()] = link;
             right.links[Direction.LEFT.ordinal()] = link;
         }
         else
         {
-            cell.neighbours[Direction.RIGHT.ordinal()] = null;
             cell.links[Direction.RIGHT.ordinal()] = null;
         }
 
         if (!cellCode.onBorder(Direction.BOTTOM))
         {
             Cell bottom = cells.get(cellCodeVal + structure.getWidth());
-            Link link = new Link(cellCode.linkNumber(structure.getCellCode(cellCode, Direction.BOTTOM)));
-
-            cell.neighbours[Direction.BOTTOM.ordinal()] = bottom;
-            bottom.neighbours[Direction.TOP.ordinal()] = cell;
+            Link link = new Link(cellCode.linkNumber(cellCode.neighbour(Direction.BOTTOM)));
 
             cell.links[Direction.BOTTOM.ordinal()] = link;
             bottom.links[Direction.TOP.ordinal()] = link;
         }
         else
         {
-            cell.neighbours[Direction.BOTTOM.ordinal()] = null;
             cell.links[Direction.BOTTOM.ordinal()] = null;
         }
     }
 
+    int value;
+    Link[] links = new Link[4];
 
-    private Cell[] neighbours = new Cell[4];
-    private Link[] links = new Link[4];
-
-    private int value;
-
-    private Cell(CellCode cellCode)
+    private Cell()
     {
         value = Game.CELL_EMPTY;
-        this.cellCode = cellCode;
-    }
-
-    public Cell neighbour(Direction direction)
-    {
-        return neighbours[direction.ordinal()];
     }
 
     public Link link(Direction direction)
     {
         return links[direction.ordinal()];
-    }
+    }//TODO: don't store it there
 
     public int getValue()
     {
         return value;
     }
-    public CellCode getCode() { return cellCode; }
 
-    void setValue(int newVal)
-    {
-        value = newVal;
-
-        for (Direction direction : Direction.values())
-        {
-            if (link(direction) != null)
-            {
-                int outerValue = neighbour(direction).value;
-                int multiplier = direction.getMultiplier();
-
-                links[direction.ordinal()].value =
-                        value > 0 &&
-                        outerValue > 0 &&
-                        multiplier * value > multiplier * outerValue;
-            }
-        }
-    }
 }

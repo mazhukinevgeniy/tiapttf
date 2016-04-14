@@ -6,7 +6,6 @@ import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
 
@@ -95,15 +94,15 @@ public class ComboDetector
 
         //System.out.println("start = " + start + ", direction = " + direction);
 
-        Cell currentCell = cellMap.getCell(start);
-        Cell comboStartedAt = currentCell;
+        CellCode currentCell = start;
+        CellCode comboStartedAt = currentCell;
 
         int comboLength = 1;
 
         while (currentCell != null)
         {
-            Link link = currentCell.link(direction);
-            Cell tmpNext = currentCell.neighbour(direction);
+            Link link = cellMap.getCell(currentCell).link(direction);
+            CellCode tmpNext = currentCell.neighbour(direction);
 
             if (link != null && link.getValue())
             {
@@ -117,16 +116,14 @@ public class ComboDetector
                     gameScore.handleCombo(comboLength);
 
                     String report = "";
-                    Cell tmpCell = comboStartedAt;
+                    CellCode tmpCell = comboStartedAt;
 
                     while (tmpCell != tmpNext)
                     {
-                        CellCode cellCode = tmpCell.getCode();
+                        report = " " + tmpCell.value() + report;
 
-                        report = " " + cellCode.value() + report;
-
-                        blockRemovalHandler.blockRemoved(cellCode);
-                        tmpStorage.add(cellCode);
+                        blockRemovalHandler.blockRemoved(tmpCell);
+                        tmpStorage.add(tmpCell);
                         tmpCell = tmpCell.neighbour(direction);
                     }
 

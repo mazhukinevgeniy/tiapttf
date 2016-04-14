@@ -1,12 +1,14 @@
 package homemade.game.fieldstructure;
 
+import java.util.EnumMap;
+
 /**
  * Created by user3 on 31.03.2016.
  */
 public class CellCode
 {
 
-    static CellCode[] createCellCodes(int width, int height)
+    static CellCode[] createCellCodes(int width, int height, EnumMap<Direction, Integer> shifts)
     {
         int cellCodeCap = width * height;
         CellCode[] cellCodes = new CellCode[cellCodeCap];
@@ -19,6 +21,17 @@ public class CellCode
                 cellCodes[newCellCode] = new CellCode(i, j, width, height, newCellCode);
             }
 
+        for (int i = 0; i < cellCodeCap; i++)
+        {
+            CellCode cellCode = cellCodes[i];
+
+            for (Direction direction : Direction.values())
+            {
+                if (!cellCode.onBorder(direction))
+                    cellCode.neighbours.put(direction, cellCodes[cellCode.cCValue + shifts.get(direction)]);
+            }
+        }
+
         return cellCodes;
     }
 
@@ -27,6 +40,9 @@ public class CellCode
     private int cX, cY;
 
     private boolean[] isOnBorder;
+    private EnumMap<Direction, CellCode> neighbours;
+
+    private EnumMap<Direction, Integer> shifts;
 
     private CellCode(int x, int y, int width, int height, int value)
     {
@@ -48,6 +64,8 @@ public class CellCode
             isOnBorder[Direction.TOP.ordinal()] = true;
         else if (y == height - 1)
             isOnBorder[Direction.BOTTOM.ordinal()] = true;
+
+        neighbours = new EnumMap<Direction, CellCode>(Direction.class);
     }
 
     public int value() { return cCValue; }
@@ -55,6 +73,15 @@ public class CellCode
     public int y() { return cY; }
 
     public boolean onBorder(Direction direction) { return isOnBorder[direction.ordinal()]; }
+
+    /**
+     *
+     * @return null if there's no such neighbour
+     */
+    public CellCode neighbour(Direction direction)
+    {
+        return neighbours.get(direction);
+    }
 
     public int distance(CellCode otherCell)
     {
@@ -70,15 +97,15 @@ public class CellCode
 
     public int linkNumber(Direction direction)
     {
-        int otherCell = cCValue;
+        int toReturn;
 
-        if (direction == Direction.RIGHT)
-            otherCell += 1;
-        else if (direction == Direction.BOTTOM)
-            otherCell += 9; //TODO: get rid of this bandaid ASAP
-        else throw new Error("temporary code is temporary, right?");
+        if (!onBorder(direction))
+            toReturn = linkNumber(cCValue, neighbours.get(direction).cCValue);
+        else
+            throw new Error("imaginary link number requested");
 
-        return linkNumber(cCValue, otherCell);
+
+        return toReturn;
     }
 
 

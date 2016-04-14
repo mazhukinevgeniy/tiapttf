@@ -75,7 +75,7 @@ class SelectionManager implements MouseInputHandler
 
             if (!cellCode.onBorder(direction))
             {
-                CellCode eventCell = structure.getCellCode(cellCode, direction);
+                CellCode eventCell = cellCode.neighbour(direction);
 
                 tryMove(cellCode, eventCell, false);
             }
@@ -124,7 +124,7 @@ class SelectionManager implements MouseInputHandler
 
             for (Direction direction : Direction.values())
             {
-                CellCode neighbour = structure.getCellCode(cellCode, direction);
+                CellCode neighbour = cellCode.neighbour(direction);
 
                 if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)
                     cellsToMove.add(neighbour);

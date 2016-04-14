@@ -38,7 +38,7 @@ public class FieldStructure
         shifts.put(Direction.LEFT, -1);
         shifts.put(Direction.RIGHT, 1);
 
-        cellCodes = CellCode.createCellCodes(width, height);
+        cellCodes = CellCode.createCellCodes(width, height, shifts);
         linkCodes = LinkCode.createLinkCodes(width, height, numberOfLinks);
     }
 
@@ -65,15 +65,6 @@ public class FieldStructure
         }
 
         return toReturn;
-    }
-
-
-    /**
-     * @return might be null
-     */
-    public CellCode getCellCode(CellCode start, Direction direction)
-    {
-        return start.onBorder(direction) ? null : cellCodes[start.value() + shifts.get(direction)];
     }
 
     public Iterator<CellCode> getCellCodeIterator()
