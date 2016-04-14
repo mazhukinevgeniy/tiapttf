@@ -12,6 +12,8 @@ public class FieldStructure
     private static final int FIELD_HEIGHT = 9;
 
     private CellCode[] cellCodes;
+    private LinkCode[] linkCodes;
+
     private EnumMap<Direction, Integer> shifts;
 
     private int width, height;
@@ -37,6 +39,7 @@ public class FieldStructure
         shifts.put(Direction.RIGHT, 1);
 
         cellCodes = CellCode.createCellCodes(width, height);
+        linkCodes = LinkCode.createLinkCodes(width, height, numberOfLinks);
     }
 
 
@@ -51,6 +54,20 @@ public class FieldStructure
         //fun fact: can be calculated as x * rightshift + y * downshift
     }
 
+    public LinkCode getLinkCode(CellCode cellA, CellCode cellB)
+    {
+        LinkCode toReturn = null;
+
+        //TODO: implement
+        if (cellA.distance(cellB) == 1)
+        {
+
+        }
+
+        return toReturn;
+    }
+
+
     /**
      * @return might be null
      */
@@ -62,6 +79,11 @@ public class FieldStructure
     public Iterator<CellCode> getCellCodeIterator()
     {
         return SafeIterator.getForImmutableArray(cellCodes);
+    }
+
+    public Iterator<LinkCode> getLinkCodeIterator()
+    {
+        return SafeIterator.getForImmutableArray(linkCodes);
     }
 
     public int getWidth()
