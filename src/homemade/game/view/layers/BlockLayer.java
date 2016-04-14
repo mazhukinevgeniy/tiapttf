@@ -1,7 +1,7 @@
 package homemade.game.view.layers;
 
-import homemade.game.fieldstructure.CellCode;
 import homemade.game.Game;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.view.EffectManager;
 import homemade.resources.Assets;
 
@@ -24,10 +24,8 @@ class BlockLayer extends RenderingLayer
     }
 
     @Override
-    void renderForCell(int i, int j)
+    void renderForCell(CellCode cellCode)
     {
-        CellCode cellCode = CellCode.getFor(i, j);
-
         if (selectionState.canMoveTo(cellCode))
         {
             graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);

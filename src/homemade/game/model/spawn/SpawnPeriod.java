@@ -23,7 +23,6 @@ import java.util.ArrayList;
 class SpawnPeriod
 {
     private static final int SATURATION_POINT = Game.MIN_COMBO * 3;
-    private static final int OVERSATURATION_POINT = Game.FIELD_SIZE - Game.MIN_COMBO;
     private static final int TIME_TO_FILL = 6 * 1000;
 
     private static final int MIN_PERIOD = 100;
@@ -34,7 +33,7 @@ class SpawnPeriod
 
     SpawnPeriod(GameModelLinker linker)
     {
-        this(linker, SATURATION_POINT, OVERSATURATION_POINT, TIME_TO_FILL);
+        this(linker, SATURATION_POINT, linker.getStructure().getFieldSize() - Game.MIN_COMBO, TIME_TO_FILL);
     }
 
     SpawnPeriod(GameModelLinker linker, int saturationPoint, int oversaturationPoint, int timeToFill)
@@ -45,8 +44,10 @@ class SpawnPeriod
         separators.add((oversaturationPoint + saturationPoint) / 2);
         separators.add(oversaturationPoint);
 
+        int size = linker.getStructure().getFieldSize();
 
-        int spawnsToFill = Math.max(1, (Game.FIELD_SIZE - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
+
+        int spawnsToFill = Math.max(1, (size - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
         int finalPeriod = timeToFill / spawnsToFill;
 
         ArrayList<Integer> periods = new ArrayList<Integer>(5);
@@ -60,7 +61,7 @@ class SpawnPeriod
 
         this.linker = linker;
 
-        if (saturationPoint >= oversaturationPoint || oversaturationPoint >= Game.FIELD_SIZE)
+        if (saturationPoint >= oversaturationPoint || oversaturationPoint >= size)
             throw new Error("SpawnPeriod initialized incorrectly");
     }
 

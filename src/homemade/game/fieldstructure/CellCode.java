@@ -1,45 +1,26 @@
 package homemade.game.fieldstructure;
 
-import homemade.game.Game;
-
 /**
  * Created by user3 on 31.03.2016.
  */
 public class CellCode
 {
-    private static CellCode[] cellCodes;
-    private static int[] shifts;
 
-    public static void initializeCellCodes()
+    static CellCode[] createCellCodes(int width, int height)
     {
-        int cellCodeCap = Game.FIELD_SIZE;
-        CellCode.cellCodes = new CellCode[cellCodeCap];
+        int cellCodeCap = width * height;
+        CellCode[] cellCodes = new CellCode[cellCodeCap];
 
-        for (int i = 0; i < Game.FIELD_WIDTH; i++)
-            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
             {
-                int newCellCode = i + j * Game.FIELD_WIDTH;
+                int newCellCode = i + j * width;
 
-                CellCode.cellCodes[newCellCode] = new CellCode(i, j);
+                cellCodes[newCellCode] = new CellCode(i, j, width, height, newCellCode);
             }
 
-        CellCode.shifts = new int[4];
-        shifts[Direction.BOTTOM.ordinal()] = Game.FIELD_WIDTH;
-        shifts[Direction.TOP.ordinal()] = -Game.FIELD_WIDTH;
-        shifts[Direction.LEFT.ordinal()] = -1;
-        shifts[Direction.RIGHT.ordinal()] = 1;
+        return cellCodes;
     }
-
-    public static CellCode getFor(int cellCodeValue)
-    {
-        return CellCode.cellCodes[cellCodeValue];
-    }
-
-    public static CellCode getFor(int cellX, int cellY)
-    {
-        return CellCode.cellCodes[cellX + cellY * Game.FIELD_WIDTH];
-    }
-
 
     private int cCValue;
 
@@ -47,9 +28,9 @@ public class CellCode
 
     private boolean[] isOnBorder;
 
-    private CellCode(int x, int y)
+    private CellCode(int x, int y, int width, int height, int value)
     {
-        cCValue = x + y * Game.FIELD_WIDTH;
+        cCValue = value;
         cX = x;
         cY = y;
 
@@ -60,12 +41,12 @@ public class CellCode
 
         if (x == 0)
             isOnBorder[Direction.LEFT.ordinal()] = true;
-        else if (x == Game.FIELD_WIDTH - 1)
+        else if (x == width - 1)
             isOnBorder[Direction.RIGHT.ordinal()] = true;
 
         if (y == 0)
             isOnBorder[Direction.TOP.ordinal()] = true;
-        else if (y == Game.FIELD_HEIGHT - 1)
+        else if (y == height - 1)
             isOnBorder[Direction.BOTTOM.ordinal()] = true;
     }
 
@@ -80,25 +61,24 @@ public class CellCode
         return Math.abs(cX - otherCell.cX) + Math.abs(cY - otherCell.cY);
     }
 
-    public CellCode neighbour(Direction direction)
-    {
-        return isOnBorder[direction.ordinal()] ?
-                null :
-                CellCode.cellCodes[cCValue + CellCode.shifts[direction.ordinal()]];
-    }
 
-    /**
-     * these methods are not supposed to get incorrect input atm
-     * at least now it looks as ugly as it probably should!
-     */
-    public int linkNumber(Direction direction)
-    {
-        return linkNumber(cCValue, cCValue + shifts[direction.ordinal()]);
-    }
-
+    //TODO: remove link-related methods below
     public int linkNumber(CellCode otherCell)
     {
         return linkNumber(cCValue, otherCell.cCValue);
+    }
+
+    public int linkNumber(Direction direction)
+    {
+        int otherCell = cCValue;
+
+        if (direction == Direction.RIGHT)
+            otherCell += 1;
+        else if (direction == Direction.BOTTOM)
+            otherCell += 9; //TODO: get rid of this bandaid ASAP
+        else throw new Error("temporary code is temporary, right?");
+
+        return linkNumber(cCValue, otherCell);
     }
 
 
@@ -117,9 +97,10 @@ public class CellCode
 
         //now we know A < B, let's assume both are valid (ie not out of bounds and not equal)
 
-        int numberOfLinkInPair = (cellCodeB - cellCodeA == Game.FIELD_WIDTH) ? 0 : 1;
+        int numberOfLinkInPair = (cellCodeB - cellCodeA == 1) ? 1 : 0;
 
         return cellCodeA * 2 + numberOfLinkInPair;
     }
     //TODO: remake it so that at every point of time we treat fake links as fake
+    
 }

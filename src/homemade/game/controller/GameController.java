@@ -1,8 +1,9 @@
 package homemade.game.controller;
 
+import homemade.game.Effect;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
-import homemade.game.Effect;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModel;
 import homemade.game.model.spawn.SpawnManager;
 import homemade.game.view.GameView;
@@ -26,6 +27,8 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     private SelectionManager selectionManager;
     private GameKeyboard keyboard;
 
+    private FieldStructure structure;
+
     private QuickTimer timer;
 
     private SpawnManager pauseToggler;//TODO: probably should use interface
@@ -34,7 +37,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     {
         frame = mainFrame;
 
-        CellCode.initializeCellCodes();
+        structure = new FieldStructure();
 
         model = new GameModel(this);
         pauseToggler = model.getPauseToggler();
@@ -50,6 +53,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     public MouseInputHandler mouseInputHandler() { return selectionManager; }
     public KeyboardInputHandler keyboardInputHandler() { return keyboard; }
+    public FieldStructure fieldStructure() { return structure; }
 
     @Override
     public void scoreUpdated(int score)

@@ -1,8 +1,8 @@
 package homemade.game.model;
 
-import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.controller.GameController;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.spawn.SpawnManager;
@@ -19,17 +19,19 @@ public class GameModel
 
     public GameModel(GameController gameController)
     {
-        NumberPool numberPool = new NumberPool(Game.FIELD_SIZE);
+        FieldStructure structure = gameController.fieldStructure();
 
-        ArrayBasedGameState gameStateTracker = new ArrayBasedGameState();
-        CellMap cellMap = new CellMap();
+        NumberPool numberPool = new NumberPool(structure.getFieldSize());
 
-        ComboDetector comboDetector = ComboDetector.initializeComboDetection(cellMap, gameController);
+        ArrayBasedGameState gameStateTracker = new ArrayBasedGameState(structure);
+        CellMap cellMap = new CellMap(structure);
+
+        ComboDetector comboDetector = ComboDetector.initializeComboDetection(structure, cellMap, gameController);
 
 
         gameState = gameStateTracker;
 
-        linker = new GameModelLinker(cellMap, comboDetector, numberPool, gameStateTracker);
+        linker = new GameModelLinker(structure, cellMap, comboDetector, numberPool, gameStateTracker);
 
         spawner = new SpawnManager(linker, cellMap, numberPool);
 

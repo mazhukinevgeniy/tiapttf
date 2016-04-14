@@ -3,6 +3,7 @@ package homemade.game.view;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 import homemade.utils.timer.QuickTimer;
@@ -25,6 +26,8 @@ public class GameView
     public static final int CANVAS_WIDTH = 460;
     public static final int CANVAS_HEIGHT = 460;
 
+    private FieldStructure structure;
+
     private Canvas canvas;
 
     private BufferStrategy strategy;
@@ -40,10 +43,11 @@ public class GameView
     public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
     {
         this.controller = controller;
+        structure = controller.fieldStructure();
 
-        this.canvas = new Canvas();
-        this.canvas.setPreferredSize(new Dimension(GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT));
-        mainFrame.add(this.canvas);
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT));
+        mainFrame.add(canvas);
 
         GameMouseAdapter mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
         canvas.addMouseListener(mouseAdapter);
@@ -52,11 +56,11 @@ public class GameView
 
         canvas.createBufferStrategy(2);
 
-        this.strategy = canvas.getBufferStrategy();
+        strategy = canvas.getBufferStrategy();
 
         effectManager = new EffectManager();
 
-        layers = RenderingLayer.getRenderingLayers(effectManager);
+        layers = RenderingLayer.getRenderingLayers(structure, effectManager);
 
         timer = new QuickTimer(new ViewTimerTaskPerformer(), 1000 / TARGET_FPS);
     }
@@ -85,7 +89,7 @@ public class GameView
 
                 for (RenderingLayer layer : layers)
                 {
-                    layer.renderLayer(state, selection, graphics);
+                    layer.renderLayer(structure.getCellCodeIterator(), state, selection, graphics);
                 }
 
 

@@ -1,31 +1,35 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.Game;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
-import homemade.game.Game;
+import homemade.game.fieldstructure.FieldStructure;
 
 import java.util.ArrayList;
 
-/**
- * Created by user3 on 27.03.2016.
- */
+//TODO: this class is not supposed to store fieldstructure components in future
 public class Cell
 {
-    private int code;
+    private CellCode cellCode;
 
-    static ArrayList<Cell> createLinkedCells()
+    static ArrayList<Cell> createLinkedCells(FieldStructure structure)
     {
-        ArrayList<Cell> cells = new ArrayList<Cell>(Game.FIELD_SIZE);
+        int size = structure.getFieldSize();
+        int width = structure.getWidth();
+        int height = structure.getHeight();
+        
+        ArrayList<Cell> cells = new ArrayList<Cell>(size);
 
-        for (int i = 0; i < Game.FIELD_SIZE; i++)
-        {
-            cells.add(new Cell(i));
-        }
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++)
+            {
+                cells.add(new Cell(structure.getCellCode(i, j)));
+            }
 
         Cell cell;
 
         //top line
-        for (int i = 0; i < Game.FIELD_WIDTH; i++)
+        for (int i = 0; i < width; i++)
         {
             cell = cells.get(i);
             cell.neighbours[Direction.TOP.ordinal()] = null;
@@ -33,25 +37,25 @@ public class Cell
         }
 
         //left line
-        for (int i = 0; i < Game.FIELD_HEIGHT; i++)
+        for (int i = 0; i < height; i++)
         {
-            cell = cells.get(Game.FIELD_WIDTH * i);
+            cell = cells.get(width * i);
             cell.neighbours[Direction.LEFT.ordinal()] = null;
             cell.links[Direction.LEFT.ordinal()] = null;
         }
 
         //main cycle
-        for (int i = 0; i < Game.FIELD_WIDTH; i++)
-            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
             {
-                addNeighbours(cells, CellCode.getFor(i, j));
+                addNeighbours(structure, cells, structure.getCellCode(i, j));
             }
 
 
         return cells;
     }
 
-    private static void addNeighbours(ArrayList<Cell> cells, CellCode cellCode)
+    private static void addNeighbours(FieldStructure structure, ArrayList<Cell> cells, CellCode cellCode)
     {
         int cellCodeVal = cellCode.value();
         Cell cell = cells.get(cellCodeVal);
@@ -59,7 +63,7 @@ public class Cell
         if (!cellCode.onBorder(Direction.RIGHT))
         {
             Cell right = cells.get(cellCodeVal + 1);
-            Link link = new Link(cellCode.linkNumber(Direction.RIGHT));
+            Link link = new Link(cellCode.linkNumber(structure.getCellCode(cellCode, Direction.RIGHT)));
 
             cell.neighbours[Direction.RIGHT.ordinal()] = right;
             right.neighbours[Direction.LEFT.ordinal()] = cell;
@@ -75,8 +79,8 @@ public class Cell
 
         if (!cellCode.onBorder(Direction.BOTTOM))
         {
-            Cell bottom = cells.get(cellCodeVal + Game.FIELD_WIDTH);
-            Link link = new Link(cellCode.linkNumber(Direction.BOTTOM));
+            Cell bottom = cells.get(cellCodeVal + structure.getWidth());
+            Link link = new Link(cellCode.linkNumber(structure.getCellCode(cellCode, Direction.BOTTOM)));
 
             cell.neighbours[Direction.BOTTOM.ordinal()] = bottom;
             bottom.neighbours[Direction.TOP.ordinal()] = cell;
@@ -97,10 +101,10 @@ public class Cell
 
     private int value;
 
-    private Cell(int code)
+    private Cell(CellCode cellCode)
     {
         value = Game.CELL_EMPTY;
-        this.code = code;
+        this.cellCode = cellCode;
     }
 
     public Cell neighbour(Direction direction)
@@ -117,7 +121,7 @@ public class Cell
     {
         return value;
     }
-    public CellCode getCode() { return CellCode.getFor(code); }
+    public CellCode getCode() { return cellCode; }
 
     void setValue(int newVal)
     {

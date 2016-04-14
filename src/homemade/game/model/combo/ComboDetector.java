@@ -1,10 +1,11 @@
 package homemade.game.model.combo;
 
-import homemade.game.fieldstructure.CellCode;
-import homemade.game.fieldstructure.Direction;
 import homemade.game.Game;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.controller.GameController;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
@@ -19,26 +20,28 @@ import java.util.Set;
 public class ComboDetector
 {
 
-    public static ComboDetector initializeComboDetection(CellMap cellMap, GameController controller)
+    public static ComboDetector initializeComboDetection(FieldStructure structure, CellMap cellMap, GameController controller)
     {
-        GameScore gameScore = new GameScore(controller);
+        GameScore gameScore = new GameScore(structure, controller);
 
-        return new ComboDetector(cellMap, controller, gameScore);
+        return new ComboDetector(structure, cellMap, controller, gameScore);
     }
 
 
     private ArrayList<CellCode> tmpStorage;
     //it's probably better than reallocating every time
 
+    private FieldStructure structure;
     private CellMap cellMap;
     private GameScore gameScore;
     private BlockRemovalHandler blockRemovalHandler;
 
-    private ComboDetector(CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
+    private ComboDetector(FieldStructure structure, CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
-        int maxCellsPerLine = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT);
+        int maxCellsPerLine = structure.getMaxDimension();
         tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
 
+        this.structure = structure;
         this.cellMap = cellMap;
         this.gameScore = gameScore;
         this.blockRemovalHandler = blockRemovalHandler;
@@ -63,18 +66,18 @@ public class ComboDetector
         int hSize = horizontals.size();
         int vSize = verticals.size();
 
-        int maxCellsToRemove = hSize * Game.FIELD_WIDTH + vSize * Game.FIELD_HEIGHT - hSize * vSize;
+        int maxCellsToRemove = hSize * structure.getWidth() + vSize * structure.getHeight() - hSize * vSize;
 
         HashSet<CellCode> cellsToRemove = new HashSet<CellCode>(maxCellsToRemove);
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(cellsToRemove, CellCode.getFor(0, horizontal), Direction.RIGHT);
+            iterateThroughTheLine(cellsToRemove, structure.getCellCode(0, horizontal), Direction.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(cellsToRemove, CellCode.getFor(vertical, 0), Direction.BOTTOM);
+            iterateThroughTheLine(cellsToRemove, structure.getCellCode(vertical, 0), Direction.BOTTOM);
         }
 
         return cellsToRemove;

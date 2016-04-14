@@ -2,6 +2,7 @@ package homemade.game.model.combo;
 
 import homemade.game.Game;
 import homemade.game.controller.ScoreHandler;
+import homemade.game.fieldstructure.FieldStructure;
 
 /**
  * Created by user3 on 02.04.2016.
@@ -13,11 +14,11 @@ class GameScore
 
     private ScoreHandler scoreHandler;
 
-    GameScore(ScoreHandler scoreHandler)
+    GameScore(FieldStructure structure, ScoreHandler scoreHandler)
     {
         this.scoreHandler = scoreHandler;
 
-        int lengthsPossible = Math.max(Game.FIELD_WIDTH, Game.FIELD_HEIGHT) - Game.MIN_COMBO + 1;
+        int lengthsPossible = structure.getMaxDimension() - Game.MIN_COMBO + 1;
         int baseScore = 100;
 
         scores = new int[lengthsPossible];

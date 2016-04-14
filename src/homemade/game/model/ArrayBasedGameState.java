@@ -1,8 +1,9 @@
 package homemade.game.model;
 
-import homemade.game.fieldstructure.CellCode;
 import homemade.game.Game;
 import homemade.game.GameState;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.FieldStructure;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,18 +20,20 @@ class ArrayBasedGameState implements GameState
     private int cellsOccupied;
     private int spawnsDenied;
 
-    ArrayBasedGameState()
+    ArrayBasedGameState(FieldStructure structure)
     {
-        field = new int[Game.FIELD_SIZE];
+        int size = structure.getFieldSize();
 
-        for (int i = 0; i < Game.FIELD_SIZE; i++)
+        field = new int[size];
+
+        for (int i = 0; i < size; i++)
         {
             field[i] = Game.CELL_EMPTY;
         }
 
-        links = new boolean[Game.FIELD_SIZE * 2];
+        links = new boolean[size * 2];
 
-        for (int i = 0; i < Game.FIELD_SIZE * 2; i++)
+        for (int i = 0; i < size * 2; i++)
         {
             links[i] = false;
         }

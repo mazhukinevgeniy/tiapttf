@@ -1,13 +1,15 @@
 package homemade.game.view.layers;
 
-import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This class is meant to be extended.
@@ -16,13 +18,13 @@ abstract public class RenderingLayer
 {
     private static final int fullCellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
-    public static final ArrayList<RenderingLayer> getRenderingLayers(EffectManager effectManager)
+    public static final ArrayList<RenderingLayer> getRenderingLayers(FieldStructure structure, EffectManager effectManager)
     {
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
         list.add(new BlockLayer(effectManager));
         list.add(new LinkLayer());
-        list.add(new NumberLayer());
+        list.add(new NumberLayer(structure));
 
         return list;
     }
@@ -38,28 +40,29 @@ abstract public class RenderingLayer
         super();
     }
 
-    final public void renderLayer(GameState state, SelectionState selection, Graphics graphics)
+    final public void renderLayer(Iterator<CellCode> cellCodeIterator, GameState state, SelectionState selection, Graphics graphics)
     {
         this.state = state;
         this.selectionState = selection;
         this.graphics = graphics;
 
-        int cellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
+        while (cellCodeIterator.hasNext())
+        {
+            CellCode next = cellCodeIterator.next();
 
-        for (int i = 0; i < Game.FIELD_WIDTH; i++) //render blocks
-            for (int j = 0; j < Game.FIELD_HEIGHT; j++)
-            {
-                setCanvasCoordinates(i, j);
+            int x = next.x();
+            int y = next.y();
 
-                renderForCell(i, j);
-            }
+            setCanvasCoordinates(x, y);
+            renderForCell(next);
+        }
 
         this.state = null;
         this.selectionState = null;
         this.graphics = null;
     }
 
-    abstract void renderForCell(int i, int j);
+    abstract void renderForCell(CellCode cellCode);
 
     final protected void setCanvasCoordinates(int i, int j)
     {

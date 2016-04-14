@@ -23,9 +23,8 @@ class LinkLayer extends RenderingLayer
     }
 
     @Override
-    void renderForCell(int i, int j)
+    void renderForCell(CellCode cellCode)
     {
-        CellCode cellCode = CellCode.getFor(i, j);
         //we can do it because we recognize 2*fieldSize links
 
         boolean rightLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.RIGHT));

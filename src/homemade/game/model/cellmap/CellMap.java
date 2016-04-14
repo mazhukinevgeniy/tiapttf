@@ -1,8 +1,9 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.Game;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
-import homemade.game.Game;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.utils.QuickMap;
 
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public class CellMap
     //TODO: figure if it's safe and needed to replace these with arrays
 
 
-    public CellMap()
+    public CellMap(FieldStructure structure)
     {
-        cells = Cell.createLinkedCells();
+        cells = Cell.createLinkedCells(structure);
 
-        int maxCellCode = Game.FIELD_SIZE;
+        int maxCellCode = structure.getFieldSize();
         int maxLinkCode = maxCellCode * 2;
 
 
@@ -32,6 +33,7 @@ public class CellMap
 
         //size and cycle below are both based on how Game.linkNumber works
         //theoretical minimum for size is width * height * 2 - width - height
+        //TODO: remove dependency //odds are, cellmap is going out anyway
 
         for (int i = 0; i < maxCellCode; i++)
         {

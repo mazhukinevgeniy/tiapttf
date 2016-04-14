@@ -1,7 +1,7 @@
 package homemade.game.controller;
 
-import homemade.game.fieldstructure.CellCode;
 import homemade.game.SelectionState;
+import homemade.game.fieldstructure.CellCode;
 
 import java.util.ArrayList;
 import java.util.HashSet;

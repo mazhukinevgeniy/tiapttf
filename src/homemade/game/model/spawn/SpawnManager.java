@@ -1,6 +1,7 @@
 package homemade.game.model.spawn;
 
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMap;
@@ -52,10 +53,10 @@ public class SpawnManager
             {
                 timer.setPeriod(period.getSpawnPeriod());
 
-                Map<CellCode, Integer> changes = spawner.spawnBlocks();
-                changes.putAll(spawner.markCells(SIMULTANEOUS_SPAWN));
-                //can do because first call doesn't interfere with the second
-                //TODO: make it a single call to spawner to reduce map creation
+                FieldStructure structure = linker.getStructure();
+
+                Map<CellCode, Integer> changes = spawner.spawnBlocks(structure.getCellCodeIterator());
+                changes.putAll(spawner.markCells(structure.getCellCodeIterator(), SIMULTANEOUS_SPAWN));
 
                 linker.requestSpawn(changes);
             }

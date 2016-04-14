@@ -1,7 +1,7 @@
 package homemade.game.view;
 
-import homemade.game.fieldstructure.CellCode;
 import homemade.game.Effect;
+import homemade.game.fieldstructure.CellCode;
 import homemade.utils.QuickMap;
 
 import java.util.Iterator;

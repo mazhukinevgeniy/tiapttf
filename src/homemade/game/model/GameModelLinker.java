@@ -1,9 +1,10 @@
 package homemade.game.model;
 
-import homemade.game.fieldstructure.CellCode;
-import homemade.game.fieldstructure.Direction;
 import homemade.game.Game;
 import homemade.game.GameState;
+import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
@@ -17,19 +18,23 @@ public class GameModelLinker
 {
     private static final boolean AUTOCOMPLETION = true;
 
+    private FieldStructure structure;
 
     private CellMap cellMap;
     private ComboDetector comboDetector;
     private NumberPool numberPool;
     private ArrayBasedGameState state;
 
-    GameModelLinker(CellMap cellMap, ComboDetector comboDetector, NumberPool numberPool, ArrayBasedGameState state)
+    GameModelLinker(FieldStructure structure, CellMap cellMap, ComboDetector comboDetector, NumberPool numberPool, ArrayBasedGameState state)
     {
+        this.structure = structure;
         this.cellMap = cellMap;
         this.comboDetector = comboDetector;
         this.numberPool = numberPool;
         this.state = state;
     }
+
+    public FieldStructure getStructure() { return structure; }
 
 
     synchronized public void requestSpawn(Map<CellCode, Integer> changes)

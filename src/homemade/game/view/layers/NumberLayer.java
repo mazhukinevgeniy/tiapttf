@@ -1,6 +1,7 @@
 package homemade.game.view.layers;
 
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.resources.Assets;
 
 /**
@@ -8,18 +9,20 @@ import homemade.resources.Assets;
  */
 class NumberLayer extends RenderingLayer
 {
-    private DigitMetadata digitMetadata = new DigitMetadata();
+    private DigitMetadata digitMetadata;
 
 
-    NumberLayer()
+    NumberLayer(FieldStructure structure)
     {
         super();
+
+        digitMetadata = new DigitMetadata(structure);
     }
 
     @Override
-    void renderForCell(int i, int j)
+    void renderForCell(CellCode cellCode)
     {
-        int value = state.getCellValue(CellCode.getFor(i, j));
+        int value = state.getCellValue(cellCode);
         if (value > 0)
         {
             String numberToDraw = String.valueOf(value);

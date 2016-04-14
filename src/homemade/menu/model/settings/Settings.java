@@ -1,6 +1,5 @@
 package homemade.menu.model.settings;
 
-import homemade.game.Game;
 import homemade.menu.model.save.Save;
 
 /**
@@ -9,7 +8,7 @@ import homemade.menu.model.save.Save;
 public class Settings
 {
     private Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
-    private Parameter<Integer> simultaneousSpawn = new Parameter("simultaneousSpawn");
+    private Parameter<Integer> simultaneousSpawn = new Parameter<>("simultaneousSpawn");
     private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
     private Parameter<Integer> something = new Parameter<>("something");
 
@@ -36,7 +35,7 @@ public class Settings
     private void setDefaultRange()
     {
         isRealTime.setEnum(new Enumeration<>(true, false));
-        simultaneousSpawn.setRange(new IntRange(1, Game.FIELD_SIZE));
+        simultaneousSpawn.setRange(new IntRange(1, 10));//just a prank//TODO: remove joke comments
         spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
         something.setEnum(new Enumeration<>(1, 2, 3));
     }
