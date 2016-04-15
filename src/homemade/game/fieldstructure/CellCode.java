@@ -79,7 +79,7 @@ public class CellCode
         neighbours = new EnumMap<Direction, CellCode>(Direction.class);
     }
 
-    public int value() { return cCValue; }//TODO: why don't we rename it to intCode
+    public int intCode() { return cCValue; }
     public int x() {return cX; }
     public int y() { return cY; }
 

@@ -85,7 +85,7 @@ class ArrayBasedGameState implements GameState
         {
             int value = cellUpdates.get(key);
 
-            field[key.value()] = value;
+            field[key.intCode()] = value;
         }
 
         Set<LinkCode> linkKeys = linkUpdates.keySet();
@@ -111,7 +111,7 @@ class ArrayBasedGameState implements GameState
     @Override
     public int getCellValue(CellCode cellCode)
     {
-        return this.field[cellCode.value()];
+        return this.field[cellCode.intCode()];
     }
 
     @Override

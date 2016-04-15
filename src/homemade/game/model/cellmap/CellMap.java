@@ -41,7 +41,7 @@ public class CellMap
 
     public int getCellValue(CellCode cellCode)
     {
-        return cells[cellCode.value()].value;
+        return cells[cellCode.intCode()].value;
     }
 
     public boolean getLinkValue(LinkCode linkCode)
@@ -57,8 +57,8 @@ public class CellMap
      */
     synchronized public Set<CellCode> tryCascadeChanges(CellCode moveFromCell, CellCode moveToCell)
     {
-        int cellFromValue = cells[moveFromCell.value()].value;
-        int cellToValue = cells[moveToCell.value()].value;
+        int cellFromValue = cells[moveFromCell.intCode()].value;
+        int cellToValue = cells[moveToCell.intCode()].value;
 
         Set<CellCode> changedCells = null;
 
@@ -89,7 +89,7 @@ public class CellMap
 
     private void setCellValue(CellCode cell, int newValue)
     {
-        Cell changedCell = cells[cell.value()];
+        Cell changedCell = cells[cell.intCode()];
         changedCell.value = newValue;
 
         for (Direction direction : Direction.values())
@@ -98,7 +98,7 @@ public class CellMap
 
             if (neighbour != null)
             {
-                int outerValue = cells[neighbour.value()].value;
+                int outerValue = cells[neighbour.intCode()].value;
                 int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
 
                 links[structure.getLinkCode(cell, neighbour).intCode()].value =

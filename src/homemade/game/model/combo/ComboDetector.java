@@ -124,7 +124,7 @@ public class ComboDetector
 
                     while (tmpCell != tmpNext)
                     {
-                        report = " " + tmpCell.value() + report;
+                        report = " " + tmpCell.intCode() + report;
 
                         blockRemovalHandler.blockRemoved(tmpCell);
                         tmpStorage.add(tmpCell);
