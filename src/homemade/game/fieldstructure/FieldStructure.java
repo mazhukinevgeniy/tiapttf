@@ -101,9 +101,32 @@ public class FieldStructure
      * Package-internal data on the method of enumeration
      */
 
+    /**
+     * See, if we enumerate vertical links, it's easily done.
+     *
+     * The idea of this enumeration is to numerate vertical links first,
+     * and then horizontal, as if they were vertical.
+     */
     int linkCodeAsInt(CellCode lower, CellCode higher)
     {
-        return 0;//TODO:
+        assert lower.value() < higher.value();
+
+        int toReturn;
+
+        if (lower.neighbour(Direction.RIGHT) == higher)
+        {
+            int numberOfVerticalLinks = width * (height - 1);
+
+            toReturn = numberOfVerticalLinks + lower.rotatedCellCode;
+        }
+        else if (lower.neighbour(Direction.BOTTOM) == higher)
+        {
+            toReturn = lower.value();
+        }
+        else
+            throw new Error("unresolvable linkCodeAsInt call");
+
+        return toReturn;
     }
 
     int cellCodeAsInt(int x, int y)

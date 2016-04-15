@@ -79,7 +79,7 @@ public class CellCode
         neighbours = new EnumMap<Direction, CellCode>(Direction.class);
     }
 
-    public int value() { return cCValue; }
+    public int value() { return cCValue; }//TODO: why don't we rename it to intCode
     public int x() {return cX; }
     public int y() { return cY; }
 
@@ -98,47 +98,4 @@ public class CellCode
     {
         return Math.abs(cX - otherCell.cX) + Math.abs(cY - otherCell.cY);
     }
-
-
-    //TODO: remove link-related methods below
-    public int linkNumber(CellCode otherCell)
-    {
-        return linkNumber(cCValue, otherCell.cCValue);
-    }
-
-    public int linkNumber(Direction direction)
-    {
-        int toReturn;
-
-        if (!onBorder(direction))
-            toReturn = linkNumber(cCValue, neighbours.get(direction).cCValue);
-        else
-            throw new Error("imaginary link number requested");
-
-
-        return toReturn;
-    }
-
-
-    /**
-     * There are (2 * width * height - width - height) links total
-     * But many things are easier if we numerate as if there're 2 * width * height of them
-     */
-    private final int linkNumber(int cellCodeA, int cellCodeB)
-    {
-        if (cellCodeB < cellCodeA)
-        {
-            int tmp = cellCodeA;
-            cellCodeA = cellCodeB;
-            cellCodeB = tmp;
-        }
-
-        //now we know A < B, let's assume both are valid (ie not out of bounds and not equal)
-
-        int numberOfLinkInPair = (cellCodeB - cellCodeA == 1) ? 1 : 0;
-
-        return cellCodeA * 2 + numberOfLinkInPair;
-    }
-    //TODO: remake it so that at every point of time we treat fake links as fake
-    
 }

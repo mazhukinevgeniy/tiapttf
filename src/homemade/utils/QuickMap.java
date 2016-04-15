@@ -1,6 +1,7 @@
 package homemade.utils;
 
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.LinkCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +12,9 @@ import java.util.Map;
 public class QuickMap
 {
 
-    public static final Map<Integer, Boolean> getCleanIntBoolMap()
+    public static final Map<LinkCode, Boolean> getCleanLinkCodeBoolMap()
     {
-        return new HashMap<Integer, Boolean>();
+        return new HashMap<LinkCode, Boolean>();
     }
 
     public static final Map<CellCode, Integer> getCleanCellCodeIntMap()

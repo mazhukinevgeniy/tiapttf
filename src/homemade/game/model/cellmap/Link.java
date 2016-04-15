@@ -1,5 +1,7 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.fieldstructure.LinkCode;
+
 /**
  * Created by user3 on 27.03.2016.
  */
@@ -7,16 +9,18 @@ public class Link
 {
     boolean value = false;
 
-    private int number;
+    private LinkCode code;
 
-    Link(int number)
+    Link(LinkCode code)
     {
-        this.number = number;
+        this.code = code;
     }
 
-    public int getNumber()
+    //TODO: check if we even need this class
+
+    public LinkCode getCode()
     {
-        return number;
+        return code;
     }
 
     public boolean getValue()

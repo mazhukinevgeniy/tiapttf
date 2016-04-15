@@ -60,7 +60,7 @@ public class Cell
         if (!cellCode.onBorder(Direction.RIGHT))
         {
             Cell right = cells.get(cellCodeVal + 1);
-            Link link = new Link(cellCode.linkNumber(cellCode.neighbour(Direction.RIGHT)));
+            Link link = new Link(structure.getLinkCode(cellCode, cellCode.neighbour(Direction.RIGHT)));
 
             cell.links[Direction.RIGHT.ordinal()] = link;
             right.links[Direction.LEFT.ordinal()] = link;
@@ -73,7 +73,7 @@ public class Cell
         if (!cellCode.onBorder(Direction.BOTTOM))
         {
             Cell bottom = cells.get(cellCodeVal + structure.getWidth());
-            Link link = new Link(cellCode.linkNumber(cellCode.neighbour(Direction.BOTTOM)));
+            Link link = new Link(structure.getLinkCode(cellCode, cellCode.neighbour(Direction.BOTTOM)));
 
             cell.links[Direction.BOTTOM.ordinal()] = link;
             bottom.links[Direction.TOP.ordinal()] = link;

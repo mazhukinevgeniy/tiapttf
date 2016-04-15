@@ -2,41 +2,79 @@ package homemade.game.view.layers;
 
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
+import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
+
+import java.awt.*;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
 /**
  * As of 2.04.2016, this layer will not work properly if we don't call renderForCell for each cell
  */
 class LinkLayer extends RenderingLayer
 {
-    private int vertGlowOffsetX = (GameView.CELL_WIDTH - Assets.glowVertical.getWidth(null)) / 2;
-    private int vertGlowOffsetY = (GameView.CELL_WIDTH * 2 + GameView.CELL_OFFSET - Assets.glowVertical.getHeight(null)) / 2;
+    private EnumSet<Direction> drawingDirections = EnumSet.of(Direction.BOTTOM, Direction.RIGHT);
+    private EnumMap<Direction, Image> assets;
 
-    private int horGlowOffsetX = (GameView.CELL_WIDTH * 2 + GameView.CELL_OFFSET - Assets.glowHorizontal.getWidth(null)) / 2;
-    private int horGlowOffsetY = (GameView.CELL_WIDTH - Assets.glowHorizontal.getHeight(null)) / 2;
+    private EnumMap<Direction, Offset> offsets;
 
+    private FieldStructure structure;
 
-    LinkLayer()
+    LinkLayer(FieldStructure structure)
     {
         super();
+
+        this.structure = structure;
+
+        assets = new EnumMap<Direction, Image>(Direction.class);
+        assets.put(Direction.RIGHT, Assets.glowHorizontal);
+        assets.put(Direction.BOTTOM, Assets.glowVertical);
+
+        offsets = new EnumMap<Direction, Offset>(Direction.class);
+        offsets.put(Direction.RIGHT, new Offset(Assets.glowHorizontal, 2, 1));
+        offsets.put(Direction.BOTTOM, new Offset(Assets.glowVertical, 1, 2));
+
+
     }
 
     @Override
     void renderForCell(CellCode cellCode)
     {
-        //we can do it because we recognize 2*fieldSize links
-
-        boolean rightLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.RIGHT));
-        if (rightLink)
+        for (Direction direction : drawingDirections)
         {
-            graphics.drawImage(Assets.glowHorizontal, canvasX + horGlowOffsetX, canvasY + horGlowOffsetY, null);
-        }
+            CellCode neighbour = cellCode.neighbour(direction);
 
-        boolean bottomLink = state.getLinkBetweenCells(cellCode.linkNumber(Direction.BOTTOM));
-        if (bottomLink)
-        {
-            graphics.drawImage(Assets.glowVertical, canvasX + vertGlowOffsetX, canvasY + vertGlowOffsetY, null);
+            if (neighbour != null)
+            {
+                LinkCode link = structure.getLinkCode(cellCode, neighbour);
+
+                if (state.getLinkBetweenCells(link))
+                {
+                    Image sprite = assets.get(direction);
+                    Offset offset = offsets.get(direction);
+
+                    graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);
+                }
+            }
         }
     }
+
+    private static final class Offset
+    {
+        int x, y;
+
+        private Offset(Image image, int horizontalCells, int verticalCells)
+        {
+            x = (   GameView.CELL_WIDTH * horizontalCells +
+                    GameView.CELL_OFFSET * (horizontalCells - 1) -
+                    image.getWidth(null)) / 2;
+            y = (   GameView.CELL_WIDTH * verticalCells +
+                    GameView.CELL_OFFSET * (verticalCells - 1) -
+                    image.getHeight(null)) / 2;
+        }
+    }
+    //TODO: check if this class is useful elsewhere
 }

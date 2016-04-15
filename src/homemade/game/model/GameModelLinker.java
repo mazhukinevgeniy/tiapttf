@@ -5,6 +5,7 @@ import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.Link;
@@ -88,7 +89,7 @@ public class GameModelLinker
             }
 
             Map<CellCode, Integer> updatedCells = QuickMap.getCleanCellCodeIntMap();
-            Map<Integer, Boolean> updatedLinks = QuickMap.getCleanIntBoolMap();
+            Map<LinkCode, Boolean> updatedLinks = QuickMap.getCleanLinkCodeBoolMap();
 
             for (CellCode cellCode : changedCells)
             {
@@ -102,7 +103,7 @@ public class GameModelLinker
 
                     if (link != null)
                     {
-                        updatedLinks.put(link.getNumber(), link.getValue());
+                        updatedLinks.put(link.getCode(), link.getValue());
                     }
                 }
             }

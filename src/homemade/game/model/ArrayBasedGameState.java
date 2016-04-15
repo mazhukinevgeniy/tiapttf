@@ -4,6 +4,7 @@ import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 
 import java.util.Map;
 import java.util.Set;
@@ -22,18 +23,20 @@ class ArrayBasedGameState implements GameState
 
     ArrayBasedGameState(FieldStructure structure)
     {
-        int size = structure.getFieldSize();
+        int fieldSize = structure.getFieldSize();
 
-        field = new int[size];
+        field = new int[fieldSize];
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < fieldSize; i++)
         {
             field[i] = Game.CELL_EMPTY;
         }
 
-        links = new boolean[size * 2];
+        int numberOfLinks = structure.getNumberOfLinks();
 
-        for (int i = 0; i < size * 2; i++)
+        links = new boolean[numberOfLinks];
+
+        for (int i = 0; i < numberOfLinks; i++)
         {
             links[i] = false;
         }
@@ -71,7 +74,7 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<Integer, Boolean> linkUpdates)
+    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<LinkCode, Boolean> linkUpdates)
     {
         immutableCopy = null;
 
@@ -85,11 +88,11 @@ class ArrayBasedGameState implements GameState
             field[key.value()] = value;
         }
 
-        Set<Integer> linkKeys = linkUpdates.keySet();
+        Set<LinkCode> linkKeys = linkUpdates.keySet();
 
-        for (int key : linkKeys)
+        for (LinkCode key : linkKeys)
         {
-            links[key] = linkUpdates.get(key);
+            links[key.intCode()] = linkUpdates.get(key);
         }
     }
 
@@ -112,9 +115,9 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    public boolean getLinkBetweenCells(int linkNumber)
+    public boolean getLinkBetweenCells(LinkCode linkCode)
     {
-        return links[linkNumber];
+        return links[linkCode.intCode()];
     }
 
     @Override
