@@ -4,10 +4,11 @@ import homemade.game.Game;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 import homemade.utils.QuickMap;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,37 +17,36 @@ import java.util.Set;
  */
 public class CellMap
 {
-    ArrayList<Cell> cells;
-    ArrayList<Link> links;
-    //TODO: figure if it's safe and needed to replace these with arrays
+    Cell cells[];
+    Link links[];
 
+    FieldStructure structure;
 
     public CellMap(FieldStructure structure)
     {
-        cells = Cell.createLinkedCells(structure);
-
-        int maxCellCode = structure.getFieldSize();
-        int maxLinkCode = maxCellCode * 2;
+        this.structure = structure;
 
 
-        links = new ArrayList<Link>(maxLinkCode);
+        cells = Cell.createCells(structure);
 
-        //size and cycle below are both based on how Game.linkNumber works
-        //theoretical minimum for size is width * height * 2 - width - height
-        //TODO: remove dependency //odds are, cellmap is going out anyway
+        int maxLinkCode = structure.getNumberOfLinks();
+        links = new Link[maxLinkCode];
 
-        for (int i = 0; i < maxCellCode; i++)
+        for (Iterator<LinkCode> iterator = structure.getLinkCodeIterator(); iterator.hasNext();)
         {
-            Cell cell = cells.get(i);
-
-            links.add(2 * i, cell.link(Direction.BOTTOM));
-            links.add(2 * i + 1, cell.link(Direction.RIGHT));
+            LinkCode link = iterator.next();
+            links[link.intCode()] = new Link(link);
         }
     }
 
-    public Cell getCell(CellCode cellCode)
+    public int getCellValue(CellCode cellCode)
     {
-        return cells.get(cellCode.value());
+        return cells[cellCode.value()].value;
+    }
+
+    public boolean getLinkValue(LinkCode linkCode)
+    {
+        return links[linkCode.intCode()].value;
     }
 
     /**
@@ -57,8 +57,8 @@ public class CellMap
      */
     synchronized public Set<CellCode> tryCascadeChanges(CellCode moveFromCell, CellCode moveToCell)
     {
-        int cellFromValue = cells.get(moveFromCell.value()).getValue();
-        int cellToValue = cells.get(moveToCell.value()).getValue();
+        int cellFromValue = cells[moveFromCell.value()].value;
+        int cellToValue = cells[moveToCell.value()].value;
 
         Set<CellCode> changedCells = null;
 
@@ -89,7 +89,7 @@ public class CellMap
 
     private void setCellValue(CellCode cell, int newValue)
     {
-        Cell changedCell = cells.get(cell.value());
+        Cell changedCell = cells[cell.value()];
         changedCell.value = newValue;
 
         for (Direction direction : Direction.values())
@@ -98,10 +98,10 @@ public class CellMap
 
             if (neighbour != null)
             {
-                int outerValue = cells.get(neighbour.value()).value;
+                int outerValue = cells[neighbour.value()].value;
                 int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
 
-                changedCell.links[direction.ordinal()].value =
+                links[structure.getLinkCode(cell, neighbour).intCode()].value =
                         newValue > 0 &&
                         outerValue > 0 &&
                         multiplier * newValue > multiplier * outerValue;

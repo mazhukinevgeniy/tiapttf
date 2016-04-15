@@ -6,9 +6,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.cellmap.Cell;
 import homemade.game.model.cellmap.CellMap;
-import homemade.game.model.cellmap.Link;
 import homemade.game.model.combo.ComboDetector;
 import homemade.utils.QuickMap;
 
@@ -48,7 +46,7 @@ public class GameModelLinker
     {
         boolean riskOfSpawnDenial = false;
 
-        if (cellMap.getCell(cellCodeTo).getValue() == Game.CELL_MARKED_FOR_SPAWN)
+        if (cellMap.getCellValue(cellCodeTo) == Game.CELL_MARKED_FOR_SPAWN)
             riskOfSpawnDenial = true;
 
         Set<CellCode> changes = cellMap.tryCascadeChanges(cellCodeFrom, cellCodeTo);
@@ -78,7 +76,7 @@ public class GameModelLinker
 
                 for (CellCode cellCode : cellsToRemove)
                 {
-                    numberPool.freeNumber(cellMap.getCell(cellCode).getValue());
+                    numberPool.freeNumber(cellMap.getCellValue(cellCode));
 
                     removedCells.put(cellCode, Game.CELL_EMPTY);
                 }
@@ -93,17 +91,16 @@ public class GameModelLinker
 
             for (CellCode cellCode : changedCells)
             {
-                Cell cell = cellMap.getCell(cellCode);
-
-                updatedCells.put(cellCode, cell.getValue());
+                updatedCells.put(cellCode, cellMap.getCellValue(cellCode));
 
                 for (Direction direction : Direction.values())
                 {
-                    Link link = cell.link(direction);
+                    CellCode neighbour = cellCode.neighbour(direction);
 
-                    if (link != null)
+                    if (neighbour != null)
                     {
-                        updatedLinks.put(link.getCode(), link.getValue());
+                        LinkCode link = structure.getLinkCode(cellCode, neighbour);
+                        updatedLinks.put(link, cellMap.getLinkValue(link));
                     }
                 }
             }

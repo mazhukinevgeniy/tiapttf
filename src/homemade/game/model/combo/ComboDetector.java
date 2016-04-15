@@ -6,8 +6,8 @@ import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMap;
-import homemade.game.model.cellmap.Link;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -101,16 +101,20 @@ public class ComboDetector
 
         while (currentCell != null)
         {
-            Link link = cellMap.getCell(currentCell).link(direction);
             CellCode tmpNext = currentCell.neighbour(direction);
+            LinkCode link = null;
 
-            if (link != null && link.getValue())
+            if (tmpNext != null)
+            {
+                link = structure.getLinkCode(currentCell, tmpNext);
+            }
+
+            if (tmpNext != null && cellMap.getLinkValue(link))
             {
                 comboLength++;
             }
             else
             {
-
                 if (comboLength >= Game.MIN_COMBO)
                 {
                     gameScore.handleCombo(comboLength);

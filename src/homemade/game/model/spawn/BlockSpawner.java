@@ -32,7 +32,7 @@ class BlockSpawner
         {
             CellCode cellCode = iterator.next();
 
-            if (cellMap.getCell(cellCode).getValue() == Game.CELL_MARKED_FOR_SPAWN)
+            if (cellMap.getCellValue(cellCode) == Game.CELL_MARKED_FOR_SPAWN)
             {
                 changes.put(cellCode, numberPool.takeNumber());
 
@@ -57,7 +57,7 @@ class BlockSpawner
             {
                 CellCode cellCode = iterator.next();
 
-                if (cellMap.getCell(cellCode).getValue() == Game.CELL_EMPTY)
+                if (cellMap.getCellValue(cellCode) == Game.CELL_EMPTY)
                     freeCells.add(cellCode);
             }
 

@@ -57,7 +57,6 @@ public class FieldStructure
     public LinkCode getLinkCode(CellCode cellA, CellCode cellB)
     {
         assert cellA.distance(cellB) == 1;
-        assert cellA.value() < cellB.value();
 
         return linkCodes[linkCodeAsInt(cellA, cellB)];
     }
@@ -109,7 +108,12 @@ public class FieldStructure
      */
     int linkCodeAsInt(CellCode lower, CellCode higher)
     {
-        assert lower.value() < higher.value();
+        if (lower.value() > higher.value())
+        {
+            CellCode tmp = lower;
+            lower = higher;
+            higher = tmp;
+        }
 
         int toReturn;
 
