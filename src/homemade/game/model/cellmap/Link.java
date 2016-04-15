@@ -1,5 +1,6 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
 
 /**
@@ -7,11 +8,13 @@ import homemade.game.fieldstructure.LinkCode;
  */
 class Link
 {
-    boolean value = false;
+    Direction direction;
     LinkCode code;
 
     Link(LinkCode code)
     {
         this.code = code;
+
+        direction = null;
     }
 }

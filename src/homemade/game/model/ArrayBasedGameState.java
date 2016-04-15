@@ -3,6 +3,7 @@ package homemade.game.model;
 import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 class ArrayBasedGameState implements GameState
 {
     private int[] field;
-    private boolean[] links;
+    private Direction[] links;
     private GameState immutableCopy;
 
     private int cellsOccupied;
@@ -34,18 +35,18 @@ class ArrayBasedGameState implements GameState
 
         int numberOfLinks = structure.getNumberOfLinks();
 
-        links = new boolean[numberOfLinks];
+        links = new Direction[numberOfLinks];
 
         for (int i = 0; i < numberOfLinks; i++)
         {
-            links[i] = false;
+            links[i] = null;
         }
 
         cellsOccupied = 0;
         spawnsDenied = 0;
     }
 
-    private ArrayBasedGameState(int[] fieldData, boolean[] linkData, int spawnsDenied)
+    private ArrayBasedGameState(int[] fieldData, Direction[] linkData, int spawnsDenied)
     {
         field = fieldData;
         links = linkData;
@@ -74,7 +75,7 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<LinkCode, Boolean> linkUpdates)
+    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<LinkCode, Direction> linkUpdates)
     {
         immutableCopy = null;
 
@@ -115,7 +116,7 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    public boolean getLinkBetweenCells(LinkCode linkCode)
+    public Direction getLinkBetweenCells(LinkCode linkCode)
     {
         return links[linkCode.intCode()];
     }

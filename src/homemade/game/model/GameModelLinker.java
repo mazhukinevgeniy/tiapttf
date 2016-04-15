@@ -87,7 +87,7 @@ public class GameModelLinker
             }
 
             Map<CellCode, Integer> updatedCells = QuickMap.getCleanCellCodeIntMap();
-            Map<LinkCode, Boolean> updatedLinks = QuickMap.getCleanLinkCodeBoolMap();
+            Map<LinkCode, Direction> updatedLinks = QuickMap.getCleanLinkCodeDirectionMap();
 
             for (CellCode cellCode : changedCells)
             {
@@ -100,7 +100,7 @@ public class GameModelLinker
                     if (neighbour != null)
                     {
                         LinkCode link = structure.getLinkCode(cellCode, neighbour);
-                        updatedLinks.put(link, cellMap.getLinkValue(link));
+                        updatedLinks.put(link, cellMap.getLinkDirection(link));
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package homemade.game;
 
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
 
 /**
@@ -13,7 +14,7 @@ public interface GameState
 
     public int getCellValue(CellCode cellCode);
 
-    public boolean getLinkBetweenCells(LinkCode linkCode);
+    public Direction getLinkBetweenCells(LinkCode linkCode);
 
     public GameState getImmutableCopy();
 }

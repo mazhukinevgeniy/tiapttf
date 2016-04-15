@@ -7,10 +7,7 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.utils.QuickMap;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by user3 on 27.03.2016.
@@ -44,9 +41,9 @@ public class CellMap
         return cells[cellCode.intCode()].value;
     }
 
-    public boolean getLinkValue(LinkCode linkCode)
+    public Direction getLinkDirection(LinkCode linkCode)
     {
-        return links[linkCode.intCode()].value;
+        return links[linkCode.intCode()].direction;
     }
 
     /**
@@ -89,6 +86,8 @@ public class CellMap
 
     private void setCellValue(CellCode cell, int newValue)
     {
+        EnumSet<Direction> verticalDirectionSet = EnumSet.of(Direction.BOTTOM, Direction.TOP);
+
         Cell changedCell = cells[cell.intCode()];
         changedCell.value = newValue;
 
@@ -101,10 +100,14 @@ public class CellMap
                 int outerValue = cells[neighbour.intCode()].value;
                 int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
 
-                links[structure.getLinkCode(cell, neighbour).intCode()].value =
+
+                Direction linkDirection = verticalDirectionSet.contains(direction) ? Direction.BOTTOM : Direction.RIGHT;
+                //TODO: this code wants to be temporary, so go ahead, remove it
+
+                links[structure.getLinkCode(cell, neighbour).intCode()].direction =
                         newValue > 0 &&
                         outerValue > 0 &&
-                        multiplier * newValue > multiplier * outerValue;
+                        multiplier * newValue > multiplier * outerValue ? linkDirection : null;
             }
         }
     }
