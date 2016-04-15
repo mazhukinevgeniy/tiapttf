@@ -38,8 +38,8 @@ public class FieldStructure
         shifts.put(Direction.LEFT, -1);
         shifts.put(Direction.RIGHT, 1);
 
-        cellCodes = CellCode.createCellCodes(width, height, shifts);
-        linkCodes = LinkCode.createLinkCodes(width, height, numberOfLinks);
+        cellCodes = CellCode.createCellCodes(this);
+        linkCodes = LinkCode.createLinkCodes(this);
     }
 
 
@@ -50,21 +50,16 @@ public class FieldStructure
         assert y > 0;
         assert y < height;
 
-        return cellCodes[x + y * width];
+        return cellCodes[cellCodeAsInt(x, y)];
         //fun fact: can be calculated as x * rightshift + y * downshift
     }
 
     public LinkCode getLinkCode(CellCode cellA, CellCode cellB)
     {
-        LinkCode toReturn = null;
+        assert cellA.distance(cellB) == 1;
+        assert cellA.value() < cellB.value();
 
-        //TODO: implement
-        if (cellA.distance(cellB) == 1)
-        {
-
-        }
-
-        return toReturn;
+        return linkCodes[linkCodeAsInt(cellA, cellB)];
     }
 
     public Iterator<CellCode> getCellCodeIterator()
@@ -100,5 +95,24 @@ public class FieldStructure
     public int getNumberOfLinks()
     {
         return numberOfLinks;
+    }
+
+    /**
+     * Package-internal data on the method of enumeration
+     */
+
+    int linkCodeAsInt(CellCode lower, CellCode higher)
+    {
+        return 0;//TODO:
+    }
+
+    int cellCodeAsInt(int x, int y)
+    {
+        return x + y * width;
+    }
+
+    int cellCodeAsInt(CellCode cell, Direction direction)
+    {
+        return cell.value() + shifts.get(direction);
     }
 }

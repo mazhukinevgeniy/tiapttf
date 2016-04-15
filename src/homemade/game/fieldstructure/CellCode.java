@@ -8,27 +8,29 @@ import java.util.EnumMap;
 public class CellCode
 {
 
-    static CellCode[] createCellCodes(int width, int height, EnumMap<Direction, Integer> shifts)
+    static CellCode[] createCellCodes(FieldStructure structure)
     {
-        int cellCodeCap = width * height;
-        CellCode[] cellCodes = new CellCode[cellCodeCap];
+        int width = structure.getWidth();
+        int height = structure.getHeight();
+
+        CellCode[] cellCodes = new CellCode[structure.getFieldSize()];
 
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
             {
-                int newCellCode = i + j * width;
+                int newCellCode = structure.cellCodeAsInt(i, j);
 
                 cellCodes[newCellCode] = new CellCode(i, j, width, height, newCellCode);
             }
 
-        for (int i = 0; i < cellCodeCap; i++)
+        for (int i = 0, size = structure.getFieldSize(); i < size; i++)
         {
             CellCode cellCode = cellCodes[i];
 
             for (Direction direction : Direction.values())
             {
                 if (!cellCode.onBorder(direction))
-                    cellCode.neighbours.put(direction, cellCodes[cellCode.cCValue + shifts.get(direction)]);
+                    cellCode.neighbours.put(direction, cellCodes[structure.cellCodeAsInt(cellCode, direction)]);
             }
         }
 
@@ -42,13 +44,22 @@ public class CellCode
     private boolean[] isOnBorder;
     private EnumMap<Direction, CellCode> neighbours;
 
-    private EnumMap<Direction, Integer> shifts;
+    /**
+     * Calculated as if the field was rotated at -PI/2;
+     * width is oldheight
+     * height is oldwidth
+     * x is oldheight - 1 - oldy
+     * y is oldx
+     */
+    int rotatedCellCode;
 
     private CellCode(int x, int y, int width, int height, int value)
     {
         cCValue = value;
         cX = x;
         cY = y;
+
+        rotatedCellCode = height - (y + 1) + height * x;
 
         isOnBorder = new boolean[4];
 
