@@ -1,6 +1,6 @@
 package homemade.menu.model.settings;
 
-import homemade.menu.model.save.ISettingsSave;
+import homemade.menu.model.save.SettingsSave;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -30,7 +30,7 @@ public class Settings
     private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
     private Parameter<Integer> something = new Parameter<>("something");
 
-    private ISettingsSave save = null;
+    private SettingsSave save = null;
 
     public Settings()
     {
@@ -38,7 +38,7 @@ public class Settings
         setDefaultSettings();
     }
 
-    public Settings(ISettingsSave save)
+    public Settings(SettingsSave save)
     {
         //mapInitialize();
         setDefaultSettings();
@@ -66,19 +66,19 @@ public class Settings
 
     private void setDefaultRange()
     {
-        //parameters.get(Name.isRealTime).setEnum(new Enumeration<>(true, false));
-        isRealTime.setEnum(new Enumeration<>(true, false));
-        simultaneousSpawn.setRange(new IntRange(1, 9));
-        spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
-        something.setEnum(new Enumeration<>(1, 2, 3));
+        //parameters.get(Name.isRealTime).setEnum(new InSetChecker<>(true, false));
+        isRealTime.setValueChecker(new InSetChecker(true, false));
+        simultaneousSpawn.setValueChecker(new RangeChecker(1, 9));
+        spawnPeriod.setValueChecker(new RangeChecker(1000, 1000 * 60 * 60));
+        something.setValueChecker(new InSetChecker(1, 2, 3));
     }
 
     public void setDefaultValue()
     {
         isRealTime.setValue(false);
-        simultaneousSpawn.setValue(3);
-        spawnPeriod.setValue(1000);
-        something.setValue(2);
+        simultaneousSpawn.setNearestValidValue(3);
+        spawnPeriod.setNearestValidValue(1000);
+        something.setNearestValidValue(2);
     }
 
     private void setSavedValue()

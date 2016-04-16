@@ -3,7 +3,7 @@ package homemade.menu.model.save;
 /**
  * Created by Marid on 16.04.2016.
  */
-public class LocalSaveManager implements ISettingsSave
+public class LocalSaveManager implements SettingsSave
 {
     private static final String WRONG_PARAMETER = "Wrong parameter: ";
 

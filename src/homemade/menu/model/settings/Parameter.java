@@ -9,8 +9,7 @@ public class Parameter<Type>
 
     protected String name = INDEFINITE_NAME;
     protected Type value = null;
-    protected Range<Type> range = null;
-    protected Enumeration<Type> enumeration = null;
+    protected ValueChecker<Type> valueChecker = null;
 
     public Parameter() {}
 
@@ -25,18 +24,11 @@ public class Parameter<Type>
         this.value = value;
     }
 
-    public Parameter(final String name, final Type value, final Range<Type> range)
+    public Parameter(final String name, final Type value, final ValueChecker<Type> valueChecker)
     {
         this.name = name;
         this.value = value;
-        this.range = range;
-    }
-
-    public Parameter(final String name, final Type value, final Enumeration<Type> enumeration)
-    {
-        this.name = name;
-        this.value = value;
-        this.enumeration = enumeration;
+        this.valueChecker = valueChecker;
     }
 
     public boolean isValid()
@@ -66,36 +58,19 @@ public class Parameter<Type>
 
     public void setValue(final Type newValue)
     {
-        if (isCorrect(newValue))
+        if (valueChecker.isValidValue(newValue))
         {
             value = newValue;
         }
     }
 
-    protected boolean isCorrect(final Type value)
+    public void setNearestValidValue(final Type newValue)
     {
-        boolean correct = true;
-        if (range != null)
-        {
-            correct = range.isBelong(value);
-        }
-        if (enumeration != null)
-        {
-            correct = enumeration.isBelong(value);
-        }
-
-        return correct;
+        value = valueChecker.getValidValue(newValue);
     }
 
-    public void setRange(final Range<Type> range)
+    public void setValueChecker(final ValueChecker<Type> valueChecker)
     {
-        this.range = range;
-        this.enumeration = null;
-    }
-
-    public void setEnum(final Enumeration<Type> enumeration)
-    {
-        this.enumeration = enumeration;
-        this.range = null;
+        this.valueChecker = valueChecker;
     }
 }
