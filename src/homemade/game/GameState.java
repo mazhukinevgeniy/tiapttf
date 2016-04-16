@@ -15,6 +15,7 @@ public interface GameState
     public int getCellValue(CellCode cellCode);
 
     public Direction getLinkBetweenCells(LinkCode linkCode);
+    public int getChainLength(LinkCode linkCode);
 
     public GameState getImmutableCopy();
 }

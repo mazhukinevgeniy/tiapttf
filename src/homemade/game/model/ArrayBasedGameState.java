@@ -17,6 +17,8 @@ class ArrayBasedGameState implements GameState
 {
     private int[] field;
     private Direction[] links;
+    private int[] chainLengths;
+
     private GameState immutableCopy;
 
     private int cellsOccupied;
@@ -42,29 +44,36 @@ class ArrayBasedGameState implements GameState
             links[i] = null;
         }
 
+        chainLengths = new int[numberOfLinks];
+
+        for (int i = 0; i < numberOfLinks; i++)
+        {
+            chainLengths[i] = 0;
+        }
+
         cellsOccupied = 0;
         spawnsDenied = 0;
     }
 
-    private ArrayBasedGameState(int[] fieldData, Direction[] linkData, int spawnsDenied)
+    private ArrayBasedGameState(int[] fieldData, Direction[] linkData, int[] chainData, int spawnsDenied)
     {
-        field = fieldData;
-        links = linkData;
-
-        if (fieldData == null || linkData == null)
+        if (fieldData == null || linkData == null || chainData == null)
             throw new Error("corrupted game state copy has been created");
-        else
+
+        field = fieldData.clone();
+        links = linkData.clone();
+        chainLengths = chainData.clone();
+
+
+        int counter = 0;
+
+        for (int value : fieldData)
         {
-            int counter = 0;
-
-            for (int value : fieldData)
-            {
-                if (value > 0)
-                    counter++;
-            }
-
-            cellsOccupied = counter;
+            if (value > 0)
+                counter++;
         }
+
+        cellsOccupied = counter;
 
         this.spawnsDenied = spawnsDenied;
     }
@@ -75,25 +84,28 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates, Map<LinkCode, Direction> linkUpdates)
+    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates,
+                                          Map<LinkCode, Direction> linkUpdates,
+                                          Map<LinkCode, Integer> chainUpdates)
     {
         immutableCopy = null;
 
 
-        Set<CellCode> keys = cellUpdates.keySet();
-
-        for (CellCode key : keys)
+        for (CellCode key : cellUpdates.keySet())
         {
             int value = cellUpdates.get(key);
 
             field[key.intCode()] = value;
         }
 
-        Set<LinkCode> linkKeys = linkUpdates.keySet();
-
-        for (LinkCode key : linkKeys)
+        for (LinkCode key : linkUpdates.keySet())
         {
             links[key.intCode()] = linkUpdates.get(key);
+        }
+
+        for (LinkCode key : chainUpdates.keySet())
+        {
+            chainLengths[key.intCode()] = chainUpdates.get(key);
         }
     }
 
@@ -122,10 +134,16 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
+    public int getChainLength(LinkCode linkCode)
+    {
+        return chainLengths[linkCode.intCode()];
+    }
+
+    @Override
     synchronized public GameState getImmutableCopy()
     {
         if (immutableCopy == null)
-            immutableCopy = new ArrayBasedGameState(field, links, spawnsDenied);
+            immutableCopy = new ArrayBasedGameState(field, links, chainLengths, spawnsDenied);
 
         return immutableCopy;
     }

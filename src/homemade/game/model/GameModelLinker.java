@@ -10,6 +10,7 @@ import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.combo.ComboDetector;
 import homemade.utils.QuickMap;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,6 +89,7 @@ public class GameModelLinker
 
             Map<CellCode, Integer> updatedCells = QuickMap.getCleanCellCodeIntMap();
             Map<LinkCode, Direction> updatedLinks = QuickMap.getCleanLinkCodeDirectionMap();
+            Map<LinkCode, Integer> updatedChains = new HashMap<>();
 
             for (CellCode cellCode : changedCells)
             {
@@ -102,10 +104,21 @@ public class GameModelLinker
                         LinkCode link = structure.getLinkCode(cellCode, neighbour);
                         updatedLinks.put(link, cellMap.getLinkDirection(link));
                     }
+
+                    CellCode previousCell = cellCode;
+                    while (neighbour != null)
+                    {
+                        LinkCode linkCode = structure.getLinkCode(previousCell, neighbour);
+
+                        updatedChains.put(linkCode, cellMap.getChainLength(linkCode));
+
+                        previousCell = neighbour;
+                        neighbour = previousCell.neighbour(direction);
+                    }
                 }
             }
 
-            state.updateFieldSnapshot(updatedCells, updatedLinks);
+            state.updateFieldSnapshot(updatedCells, updatedLinks, updatedChains);
         }
     }
 }
