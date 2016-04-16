@@ -7,7 +7,38 @@ import java.util.EnumMap;
  */
 public enum Direction
 {
-    LEFT(), RIGHT(), TOP(), BOTTOM();
+    LEFT()
+    {
+        @Override
+        public boolean isHorizontal()
+        {
+            return true;
+        }
+    },
+    RIGHT()
+    {
+        @Override
+        public boolean isHorizontal()
+        {
+            return true;
+        }
+    },
+    TOP()
+    {
+        @Override
+        public boolean isHorizontal()
+        {
+            return false;
+        }
+    },
+    BOTTOM()
+    {
+        @Override
+        public boolean isHorizontal()
+        {
+            return false;
+        }
+    };
 
     private static EnumMap<Direction, Direction> opposites = new EnumMap<>(Direction.class);
     private static EnumMap<Direction, Integer> multipliers = new EnumMap<>(Direction.class);
@@ -35,4 +66,6 @@ public enum Direction
     {
         return opposites.get(this);
     }
+
+    abstract public boolean isHorizontal();
 }
