@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><data>
+1000
+<settings>
+    <parameter name="isRealTime" value="false"/>
+	<parameter name="simultaneousSpawn" value="9"/>
+	<parameter name="spawnPeriod" value="1513"/>
+	<parameter name="something" value="1"/>
+</settings>
+<record>
+</record>
+<test/><test/><test>parameter</test><test>parameter</test><test><parameter/></test><test><parameter/></test><test><parameter/></test><test><parameter/></test><test><parameter name="" value=""/></test><test><parameter name="" value=""/></test></data>
