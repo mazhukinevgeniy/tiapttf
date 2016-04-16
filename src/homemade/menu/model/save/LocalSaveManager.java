@@ -37,6 +37,12 @@ public class LocalSaveManager implements ISettingsSave
         save.setParameterValue(Block.SETTINGS, parameterName, stringValue);
     }
 
+    public void setValue(String blockName, String parameterName, Object value)
+    {
+        String stringValue = value.toString();
+        save.setParameterValue(blockName, parameterName, stringValue);
+    }
+
     //TODO refactoring
     private Integer getIntValue(String blockName, String parameterName)
     {

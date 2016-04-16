@@ -1,5 +1,6 @@
 package homemade.menu.model.save;
 
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,6 +26,7 @@ public class Save
     public Save(String path)
     {
         pathToFile = path;
+        pathToFile = "test.test";
         xmlDocument = getXMLDocument();
     }
 
@@ -37,12 +39,23 @@ public class Save
             factory.setValidating(false);
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            document = builder.parse(new File(pathToFile));
-        } catch (Exception exception) {
-            System.err.print("XML parsing error!");
+            File file = new File(pathToFile);
+            document = builder.parse(file);
+        }
+        catch (Exception exception)
+        {
+            document = new DocumentImpl();
+            createRootNode(document);
+            saveDocument();
         }
 
         return document;
+    }
+
+    private void createRootNode(Document document)
+    {
+        Element newBlock = document.createElement(SaveNode.ROOT_NODE);
+        document.appendChild(newBlock);
     }
 
     public boolean isValid()
@@ -53,11 +66,14 @@ public class Save
     public String getParameterValue(String blockName, String parameterName)
     {
         Node block = findBlock(blockName);
-        Node node = findNode(block, parameterName);
         String value = null;
-        if(node != null)
+        if(block != null)
         {
-            value = getAttributeValue(node, Attribute.VALUE);
+            Node node = findNode(block, parameterName);
+            if (node != null)
+            {
+                value = getAttributeValue(node, Attribute.VALUE);
+            }
         }
         return value;
     }
@@ -65,16 +81,20 @@ public class Save
     public void setParameterValue(String blockName, String parameterName, String newValue)
     {
         Node block = findBlock(blockName);
-        Node node = findNode(block, parameterName);
-
-        if (node != null)
+        if (block == null)
         {
-            Node attribute = getAttribute(node, Attribute.VALUE);
-            attribute.setNodeValue(newValue);
-
-            saveDocument();
+            block = addBlock(blockName);
         }
-        addBlock("test");
+
+        Node node = findNode(block, parameterName);
+        if (node == null)
+        {
+            node = addParameterNode(block, parameterName);
+        }
+        Node attribute = getAttribute(node, Attribute.VALUE);
+        attribute.setNodeValue(newValue);
+
+        saveDocument();
     }
 
     private Node findBlock(String blockName)
@@ -88,7 +108,7 @@ public class Save
         {
             Node currentBlock = children.item(i);
             String currentBlockName = currentBlock.getNodeName();
-            if(currentBlockName.equals(blockName))
+            if (currentBlockName.equals(blockName))
             {
                 sought = currentBlock;
                 break;
@@ -133,7 +153,6 @@ public class Save
         {
             value = attribute.getNodeValue();
         }
-
         return value;
     }
 
@@ -145,7 +164,6 @@ public class Save
         {
             attribute = attributes.getNamedItem(attributeName);
         }
-
         return attribute;
     }
 
@@ -154,21 +172,20 @@ public class Save
         Element root = xmlDocument.getDocumentElement();
         Element newBlock = xmlDocument.createElement(blockName);
         root.appendChild(newBlock);
-        addParameterNode(newBlock);
 
         return newBlock;
     }
 
-    private Node addParameterNode(Node parentNode)
+    private Node addParameterNode(Node parentNode, String parameterName)
     {
-        Node parameter = xmlDocument.createElement("parameter");
+        Node parameter = xmlDocument.createElement(SaveNode.PARAMETER);
         Node name = xmlDocument.createAttribute(Attribute.NAME);
+        name.setNodeValue(parameterName);
         Node value = xmlDocument.createAttribute(Attribute.VALUE);
         NamedNodeMap attributes = parameter.getAttributes();
+
         attributes.setNamedItem(name);
         attributes.setNamedItem(value);
-        //parameter.appendChild(attributeName);
-        //parameter.appendChild(attributeValue);
         parentNode.appendChild(parameter);
 
         return parameter;
@@ -190,10 +207,16 @@ public class Save
         }
     }
 
-    public final class Attribute
+    private final class Attribute
     {
         public static final String NAME = "name";
         public static final String TYPE = "type";
         public static final String VALUE = "value";
+    }
+
+    private final class SaveNode
+    {
+        public static final String PARAMETER = "parameter";
+        public static final String ROOT_NODE = "data";
     }
 }

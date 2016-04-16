@@ -27,6 +27,8 @@ public class Main
 
     private static void parameterTest(LocalSaveManager save)
     {
+        save.setValue("testBlock", "testParameter", 1000000);
+
         Settings settings = new Settings();
 
         System.out.println(settings.getIsRealTime());
