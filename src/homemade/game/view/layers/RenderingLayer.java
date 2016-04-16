@@ -23,8 +23,8 @@ abstract public class RenderingLayer
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
         list.add(new BlockLayer(effectManager));
-        list.add(new LinkLayer(structure));
         list.add(new NumberLayer(structure));
+        list.add(new LinkLayer(structure));
 
         return list;
     }
