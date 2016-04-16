@@ -86,59 +86,61 @@ public class ComboDetector
      *
      * @param set storage for found cells
      * @param start cellCode of the beginning
-     * @param direction where to look for the next cell
+     * @param mainDirection where to look for the next cell
      */
-    private void iterateThroughTheLine(Set<CellCode> set, CellCode start, Direction direction)
+    private void iterateThroughTheLine(Set<CellCode> set, CellCode start, Direction mainDirection)
     {
         tmpStorage.clear();
 
         //System.out.println("start = " + start + ", direction = " + direction);
 
         CellCode currentCell = start;
-        CellCode comboStartedAt = currentCell;
-
-        int comboLength = 1;
 
         while (currentCell != null)
         {
-            CellCode tmpNext = currentCell.neighbour(direction);
-            LinkCode link = null;
+            CellCode nextCell = currentCell.neighbour(mainDirection);
+            LinkCode nextLink = null;
 
-            if (tmpNext != null)
+            if (nextCell != null)
             {
-                link = structure.getLinkCode(currentCell, tmpNext);
-            }
+                nextLink = structure.getLinkCode(currentCell, nextCell);
 
-            if (tmpNext != null && cellMap.getLinkDirection(link) == direction.getOpposite())
-            {
-                comboLength++;
-            }
-            else
-            {
+                int comboLength = cellMap.getChainLength(nextLink);
+
                 if (comboLength >= Game.MIN_COMBO)
                 {
                     gameScore.handleCombo(comboLength);
 
                     String report = "";
-                    CellCode tmpCell = comboStartedAt;
 
-                    while (tmpCell != tmpNext)
+                    tmpStorage.add(currentCell);
+                    blockRemovalHandler.blockRemoved(currentCell);
+                    report = " " + cellMap.getCellValue(currentCell) + report;
+                    //TODO: overcome code duplication
+
+                    Direction comboDirection = cellMap.getLinkDirection(nextLink);
+
+                    while (nextCell != null && cellMap.getLinkDirection(currentCell, nextCell) == comboDirection)
                     {
-                        report = " " + tmpCell.intCode() + report;
+                        tmpStorage.add(nextCell);
+                        blockRemovalHandler.blockRemoved(nextCell);
+                        report = " " + cellMap.getCellValue(nextCell) + report;
 
-                        blockRemovalHandler.blockRemoved(tmpCell);
-                        tmpStorage.add(tmpCell);
-                        tmpCell = tmpCell.neighbour(direction);
+                        currentCell = nextCell;
+                        nextCell = currentCell.neighbour(mainDirection);
                     }
 
-                    System.out.println("in terms of cell numbers combo is" + report);
+                    System.out.println("combo is" + report);
                 }
-
-                comboStartedAt = tmpNext;
-                comboLength = 1;
+                else
+                {
+                    currentCell = nextCell;
+                }
             }
-
-            currentCell = tmpNext;
+            else
+            {
+                currentCell = nextCell;
+            }
         }
 
         set.addAll(tmpStorage);

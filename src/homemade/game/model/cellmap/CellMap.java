@@ -7,10 +7,7 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.utils.QuickMap;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by user3 on 27.03.2016.
@@ -44,9 +41,19 @@ public class CellMap
         return cells[cellCode.intCode()].value;
     }
 
+    public Direction getLinkDirection(CellCode cellA, CellCode cellB)
+    {
+        return getLinkDirection(structure.getLinkCode(cellA, cellB));
+    }
+
     public Direction getLinkDirection(LinkCode linkCode)
     {
         return links[linkCode.intCode()].direction;
+    }
+
+    public int getChainLength(LinkCode linkCode)
+    {
+        return links[linkCode.intCode()].chainLength;
     }
 
     /**
@@ -79,9 +86,26 @@ public class CellMap
         Set<CellCode> keys = changes.keySet();
         Set<CellCode> changedCells = new HashSet<CellCode>(keys);
 
+        Set<LinkCode> linksToUpdate = new HashSet<>(keys.size() * 4);
+
         for (CellCode key : keys)
         {
             setCellValue(key, changes.get(key));
+
+            for (Direction direction : Direction.values())
+            {
+                CellCode neighbour = key.neighbour(direction);
+
+                if (neighbour != null)
+                {
+                    linksToUpdate.add(structure.getLinkCode(key, neighbour));
+                }
+            }
+        }
+
+        for (LinkCode linkCode : linksToUpdate)
+        {
+            updateLinkValue(linkCode);
         }
 
         return changedCells;
@@ -91,21 +115,84 @@ public class CellMap
     {
         Cell changedCell = cells[cell.intCode()];
         changedCell.value = newValue;
+    }
 
-        for (Direction direction : Direction.values())
+    private void updateLinkValue(LinkCode linkCode)
+    {
+        CellCode cell = linkCode.getLower();
+        CellCode nextCell = linkCode.getHigher();
+
+        Direction lowerToHigher = linkCode.getLowerToHigherDirection();
+
+        Link link = links[linkCode.intCode()];
+
+        int valueA = cells[cell.intCode()].value;
+        int valueB = cells[nextCell.intCode()].value;
+
+        boolean bothAreOccupied = valueA > 0 && valueB > 0;
+
+        Direction oldDirection = link.direction;
+        Direction newDirection = bothAreOccupied ?
+                    (valueA > valueB ? lowerToHigher : lowerToHigher.getOpposite()) :
+                    null;
+
+        if (oldDirection != newDirection)
         {
-            CellCode neighbour = cell.neighbour(direction);
+            link.direction = newDirection;
 
-            if (neighbour != null)
+            Set<Link> alignedLinks = new HashSet<>(structure.getMaxDimension());
+
+            for (Direction direction : EnumSet.of(lowerToHigher, lowerToHigher.getOpposite()))
             {
-                int outerValue = cells[neighbour.intCode()].value;
+                Set<Link> brokenChainLinks = new HashSet<>(structure.getMaxDimension());
 
-                boolean bothAreOccupied = newValue > 0 && outerValue > 0;
-                boolean thisIsBigger = newValue > outerValue;
+                CellCode checkA = cell;
+                CellCode checkB = nextCell;
 
-                links[structure.getLinkCode(cell, neighbour).intCode()].direction =
-                        bothAreOccupied ? (thisIsBigger ? direction : direction.getOpposite()) : null;
+                Link checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+
+                while (checkA != null && checkB != null && checkLink.direction == newDirection)
+                {
+                    alignedLinks.add(checkLink);
+
+                    checkA = checkA.neighbour(direction);
+                    checkB = checkB.neighbour(direction);
+
+                    if (checkA != null && checkB != null)
+                    {
+                        checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+                    }
+                }
+
+                if (checkA == cell.neighbour(direction) && checkB == nextCell.neighbour(direction))
+                {
+                    while (checkA != null && checkB != null && checkLink.direction == oldDirection)
+                    {
+                        brokenChainLinks.add(checkLink);
+
+                        checkA = checkA.neighbour(direction);
+                        checkB = checkB.neighbour(direction);
+
+                        if (checkA != null && checkB != null)
+                        {
+                            checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+                        }
+                    }
+                }
+
+                int brokenChainLength = oldDirection == null ? 0 : brokenChainLinks.size() + 1;
+                for (Link brokenLink : brokenChainLinks)
+                {
+                    brokenLink.chainLength = brokenChainLength;
+                }
+            }
+
+            int newChainLength = newDirection == null ? 0 : alignedLinks.size() + 1;
+            for (Link alignedLink : alignedLinks)
+            {
+                alignedLink.chainLength = newChainLength;
             }
         }
+        //TODO: seems like there must be an opportunity to reduce code duplication
     }
 }

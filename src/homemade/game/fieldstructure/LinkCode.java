@@ -16,32 +16,35 @@ public class LinkCode
         for (int j = 0; j < height - 1; j++)
             for (int i = 0; i < width; i++)
             {
-                CellCode lower = structure.getCellCode(i, j);
-                CellCode higher = lower.neighbour(Direction.BOTTOM);
-                int code = structure.linkCodeAsInt(lower, higher);
-
-                codes[code] = new LinkCode(lower, higher, code);
+                createLinkCode(structure, structure.getCellCode(i, j), Direction.BOTTOM, codes);
             }
 
         for (int i = 0; i < width - 1; i++)
             for (int j = 0; j < height; j++)
             {
-                CellCode lower = structure.getCellCode(i, j);
-                CellCode higher = lower.neighbour(Direction.RIGHT);
-                int code = structure.linkCodeAsInt(lower, higher);
-
-                codes[code] = new LinkCode(lower, higher, code);
+                createLinkCode(structure, structure.getCellCode(i, j), Direction.RIGHT, codes);
             }
 
         return codes;
     }
 
+    private static void createLinkCode(FieldStructure structure, CellCode lower, Direction direction, LinkCode codes[])
+    {
+        CellCode higher = lower.neighbour(direction);
+        int code = structure.linkCodeAsInt(lower, higher);
+
+        codes[code] = new LinkCode(direction, lower, higher, code);
+    }
+
     private CellCode higher, lower;
+    private Direction direction;
 
     private int code;
 
-    private LinkCode(CellCode lower, CellCode higher, int code)
+    private LinkCode(Direction direction, CellCode lower, CellCode higher, int code)
     {
+        this.direction = direction;
+
         this.lower = lower;
         this.higher = higher;
 
@@ -53,4 +56,18 @@ public class LinkCode
         return code;
     }
 
+    public CellCode getLower()
+    {
+        return lower;
+    }
+
+    public CellCode getHigher()
+    {
+        return higher;
+    }
+
+    public Direction getLowerToHigherDirection()
+    {
+        return direction;
+    }
 }

@@ -11,10 +11,13 @@ class Link
     Direction direction;
     LinkCode code;
 
+    int chainLength;
+
     Link(LinkCode code)
     {
         this.code = code;
 
         direction = null;
+        chainLength = 0;
     }
 }
