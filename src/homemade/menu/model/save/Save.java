@@ -26,7 +26,6 @@ public class Save
     public Save(String path)
     {
         pathToFile = path;
-        pathToFile = "test.test";
         xmlDocument = getXMLDocument();
     }
 

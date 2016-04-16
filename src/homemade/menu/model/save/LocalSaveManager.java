@@ -53,10 +53,7 @@ public class LocalSaveManager implements ISettingsSave
         {
             parameterValue = Integer.valueOf(value);
         }
-        else
-        {
-            throw new Error(WRONG_PARAMETER + parameterName);
-        }
+
         return parameterValue;
     }
 
@@ -69,10 +66,7 @@ public class LocalSaveManager implements ISettingsSave
         {
             parameterValue = Boolean.valueOf(value);
         }
-        else
-        {
-            throw new Error(WRONG_PARAMETER + parameterName);
-        }
+
         return parameterValue;
     }
 
