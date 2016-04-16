@@ -15,8 +15,8 @@ public class ButtonActionListener implements ActionListener
         this.manager = manager;
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         manager.processClickButton(Integer.valueOf(e.getActionCommand()));
     }
-
 }
