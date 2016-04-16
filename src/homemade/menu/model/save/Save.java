@@ -1,9 +1,6 @@
 package homemade.menu.model.save;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,7 +20,7 @@ public class Save
     private String pathToFile;
     private Document xmlDocument;
 
-    public Save() {}
+    private Save() {}
 
     public Save(String path)
     {
@@ -50,72 +47,66 @@ public class Save
 
     public boolean isValid()
     {
-        boolean valid = true;
-        if (xmlDocument == null)
-        {
-            valid = false;
-        }
-        return valid;
+        return xmlDocument != null;
     }
 
-    //TODO refactoring
-    public Integer getIntegerValue(String parameterName)
+    public String getParameterValue(String blockName, String parameterName)
     {
-        Node node = findNode(parameterName);
-        Integer parameterValue = null;
-
+        Node block = findBlock(blockName);
+        Node node = findNode(block, parameterName);
+        String value = null;
         if(node != null)
         {
-            String type = getAttributeValue(node, Attribute.TYPE);
-
-            if (type.equals(ParameterType.INTEGER))
-            {
-                String value = getAttributeValue(node, Attribute.VALUE);
-                parameterValue = Integer.valueOf(value);
-            }
+            value = getAttributeValue(node, Attribute.VALUE);
         }
-
-        return parameterValue;
+        return value;
     }
 
-    public Boolean getBooleanValue(String parameterName)
+    public void setParameterValue(String blockName, String parameterName, String newValue)
     {
-        Node node = findNode(parameterName);
-        Boolean parameterValue = null;
+        Node block = findBlock(blockName);
+        Node node = findNode(block, parameterName);
 
         if (node != null)
         {
-            String type = getAttributeValue(node, Attribute.TYPE);
-
-            if (type.equals(ParameterType.BOOLEAN))
-            {
-                String value = getAttributeValue(node, Attribute.VALUE);
-                parameterValue = Boolean.valueOf(value);
-            }
-        }
-        return parameterValue;
-    }
-
-    public void setParameterValue(String parameterName, Object newValue)
-    {
-        Node node = findNode(parameterName);
-
-        if (node != null)
-        {
-            String stringValue = newValue.toString();
             Node attribute = getAttribute(node, Attribute.VALUE);
-            attribute.setNodeValue(stringValue);
+            attribute.setNodeValue(newValue);
 
             saveDocument();
         }
+        addBlock("test");
     }
 
-    private Node findNode(String parameterName)
+    private Node findBlock(String blockName)
     {
-        Node mainNode = xmlDocument.getChildNodes().item(0);
+        Node mainNode = getMainNode();
         Node sought = null;
 
         NodeList children = mainNode.getChildNodes();
+        int numberOfChild = children.getLength();
+        for (int i = 0; i < numberOfChild; ++i)
+        {
+            Node currentBlock = children.item(i);
+            String currentBlockName = currentBlock.getNodeName();
+            if(currentBlockName.equals(blockName))
+            {
+                sought = currentBlock;
+                break;
+            }
+        }
+        return sought;
+    }
+
+    private Node getMainNode()
+    {
+        return xmlDocument.getChildNodes().item(0);
+    }
+
+    private Node findNode(Node block, String parameterName)
+    {
+        Node sought = null;
+
+        NodeList children = block.getChildNodes();
         int numberOfChild = children.getLength();
         for (int i = 0; i < numberOfChild; ++i) {
             Node node = children.item(i);
@@ -131,7 +122,6 @@ public class Save
                 }
             }
         }
-
         return sought;
     }
 
@@ -159,6 +149,31 @@ public class Save
         return attribute;
     }
 
+    private Node addBlock(String blockName)
+    {
+        Element root = xmlDocument.getDocumentElement();
+        Element newBlock = xmlDocument.createElement(blockName);
+        root.appendChild(newBlock);
+        addParameterNode(newBlock);
+
+        return newBlock;
+    }
+
+    private Node addParameterNode(Node parentNode)
+    {
+        Node parameter = xmlDocument.createElement("parameter");
+        Node name = xmlDocument.createAttribute(Attribute.NAME);
+        Node value = xmlDocument.createAttribute(Attribute.VALUE);
+        NamedNodeMap attributes = parameter.getAttributes();
+        attributes.setNamedItem(name);
+        attributes.setNamedItem(value);
+        //parameter.appendChild(attributeName);
+        //parameter.appendChild(attributeValue);
+        parentNode.appendChild(parameter);
+
+        return parameter;
+    }
+
     private void saveDocument()
     {
         try
@@ -173,14 +188,6 @@ public class Save
         {
             System.err.print("XML save error!");
         }
-    }
-
-    public final class ParameterType
-    {
-        public static final String INTEGER = "Integer";
-        public static final String BOOLEAN = "Boolean";
-        public static final String STRING = "String";
-        public static final String DOUBLE = "Double";
     }
 
     public final class Attribute

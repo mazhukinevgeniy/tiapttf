@@ -1,6 +1,6 @@
 package homemade.menu.model.settings;
 
-import homemade.menu.model.save.Save;
+import homemade.menu.model.save.ISettingsSave;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -12,14 +12,14 @@ public class Settings
     private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
     private Parameter<Integer> something = new Parameter<>("something");
 
-    private Save save = null;
+    private ISettingsSave save = null;
 
     public Settings()
     {
         setDefaultSettings();
     }
 
-    public Settings(Save save)
+    public Settings(ISettingsSave save)
     {
         setDefaultSettings();
         this.save = save;
@@ -35,7 +35,7 @@ public class Settings
     private void setDefaultRange()
     {
         isRealTime.setEnum(new Enumeration<>(true, false));
-        simultaneousSpawn.setRange(new IntRange(1, 10));//just a prank//TODO: remove joke comments
+        simultaneousSpawn.setRange(new IntRange(1, 9));
         spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
         something.setEnum(new Enumeration<>(1, 2, 3));
     }
@@ -53,16 +53,16 @@ public class Settings
         Boolean boolValue;
         Integer intValue;
 
-        boolValue = save.getBooleanValue(isRealTime.getName());
+        boolValue = save.getBoolSettingsValue(isRealTime.getName());
         isRealTime.setValue(boolValue);
 
-        intValue = save.getIntegerValue(simultaneousSpawn.getName());
+        intValue = save.getIntSettingsValue(simultaneousSpawn.getName());
         simultaneousSpawn.setValue(intValue);
 
-        intValue = save.getIntegerValue(spawnPeriod.getName());
+        intValue = save.getIntSettingsValue(spawnPeriod.getName());
         spawnPeriod.setValue(intValue);
 
-        intValue = save.getIntegerValue(something.getName());
+        intValue = save.getIntSettingsValue(something.getName());
         something.setValue(intValue);
     }
 
@@ -112,6 +112,6 @@ public class Settings
 
     private void updateParameterInSave(Parameter<?> parameter)
     {
-        save.setParameterValue(parameter.getName(), parameter.getValue());
+        save.setSettingsValue(parameter.getName(), parameter.getValue());
     }
 }

@@ -1,0 +1,11 @@
+package homemade.menu.model.save;
+
+/**
+ * Created by Marid on 16.04.2016.
+ */
+public interface ISettingsSave
+{
+    Integer getIntSettingsValue(String parameterName);
+    Boolean getBoolSettingsValue(String parameterName);
+    void setSettingsValue(String parameterName, Object value);
+}
