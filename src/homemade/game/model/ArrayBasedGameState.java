@@ -8,7 +8,6 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by user3 on 24.03.2016.
