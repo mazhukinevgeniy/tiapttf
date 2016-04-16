@@ -43,9 +43,9 @@ public class Assets
             input = getClass().getResourceAsStream("field.png");
             Assets.field = ImageIO.read(input);
 
-            input = getClass().getResourceAsStream("glow.png");
+            input = getClass().getResourceAsStream("arrow_red.png");
             Assets.glowVertical = ImageIO.read(input);
-            Assets.glowHorizontal = createRotatedCopy(Assets.glowVertical, Math.PI / 2);
+            Assets.glowHorizontal = createRotatedCopy(Assets.glowVertical, 3 * Math.PI / 2);
 
             input = getClass().getResourceAsStream("normal_block.png");
             Assets.normalBlock = ImageIO.read(input);
