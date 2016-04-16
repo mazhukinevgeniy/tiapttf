@@ -1,15 +1,17 @@
 package homemade.game.view.layers;
 
+import homemade.game.Game;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
+import homemade.utils.PiecewiseConstantFunction;
 
 import java.awt.*;
-import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.*;
+import java.util.List;
 
 /**
  * As of 2.04.2016, this layer will not work properly if we don't call renderForCell for each cell
@@ -17,9 +19,11 @@ import java.util.EnumSet;
 class LinkLayer extends RenderingLayer
 {
     private EnumSet<Direction> drawingDirections = EnumSet.of(Direction.BOTTOM, Direction.RIGHT);
-    private EnumMap<Direction, Image> assets;
+    private List<Map<Direction, Image>> assets;
+    //TODO: check if we can design safe asset storage
 
     private EnumMap<Direction, Offset> offsets;
+    private PiecewiseConstantFunction<Double, Integer> chainLengthToSpriteTier;
 
     private FieldStructure structure;
 
@@ -29,20 +33,30 @@ class LinkLayer extends RenderingLayer
 
         this.structure = structure;
 
-        assets = new EnumMap<Direction, Image>(Assets.arrows.get(0));
-        //TODO: support all the colors
+        assets = Assets.arrows;
 
         offsets = new EnumMap<Direction, Offset>(Direction.class);
 
-        for (Direction direction : assets.keySet())
+        for (Direction direction : assets.get(0).keySet())
         {
-            Image img = assets.get(direction);
+            Image img = assets.get(0).get(direction);
 
             int width = direction.isHorizontal() ? 2 : 1;
             int height = direction.isHorizontal() ? 1 : 2;
 
             offsets.put(direction, new Offset(img, width, height));
         }
+
+        ArrayList<Double> separators = new ArrayList<Double>(2);
+        separators.add((double)Game.MIN_COMBO - 2.5);
+        separators.add((double)Game.MIN_COMBO - 1.5);
+
+        ArrayList<Integer> spriteTier = new ArrayList<Integer>(3);
+        spriteTier.add(2);
+        spriteTier.add(1);
+        spriteTier.add(0);
+
+        chainLengthToSpriteTier = new PiecewiseConstantFunction<Double, Integer>(separators, spriteTier);
     }
 
     @Override
@@ -59,7 +73,10 @@ class LinkLayer extends RenderingLayer
 
                 if (linkDirection != null)
                 {
-                    Image sprite = assets.get(linkDirection);
+                    Double comboLength = (double) state.getChainLength(link);
+                    int spriteTier = chainLengthToSpriteTier.getValueAt(comboLength);
+
+                    Image sprite = assets.get(spriteTier).get(linkDirection);
                     Offset offset = offsets.get(linkDirection);
 
                     graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);
