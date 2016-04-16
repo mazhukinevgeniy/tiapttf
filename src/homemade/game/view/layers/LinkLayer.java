@@ -55,11 +55,12 @@ class LinkLayer extends RenderingLayer
             if (neighbour != null)
             {
                 LinkCode link = structure.getLinkCode(cellCode, neighbour);
+                Direction linkDirection = state.getLinkBetweenCells(link);
 
-                if (state.getLinkBetweenCells(link) != null)
+                if (linkDirection != null)
                 {
-                    Image sprite = assets.get(direction);
-                    Offset offset = offsets.get(direction);
+                    Image sprite = assets.get(linkDirection);
+                    Offset offset = offsets.get(linkDirection);
 
                     graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);
                 }

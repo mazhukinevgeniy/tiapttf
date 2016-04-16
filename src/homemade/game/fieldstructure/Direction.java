@@ -41,7 +41,6 @@ public enum Direction
     };
 
     private static EnumMap<Direction, Direction> opposites = new EnumMap<>(Direction.class);
-    private static EnumMap<Direction, Integer> multipliers = new EnumMap<>(Direction.class);
 
     static
     {
@@ -49,16 +48,6 @@ public enum Direction
         opposites.put(RIGHT, LEFT);
         opposites.put(BOTTOM, TOP);
         opposites.put(TOP, BOTTOM);
-
-        multipliers.put(TOP, 1);
-        multipliers.put(BOTTOM, -1);
-        multipliers.put(RIGHT, -1);
-        multipliers.put(LEFT, 1);
-    }
-
-    public int getMultiplier()
-    {
-        return multipliers.get(this);
     }
 
 

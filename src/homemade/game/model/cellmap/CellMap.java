@@ -99,16 +99,12 @@ public class CellMap
             if (neighbour != null)
             {
                 int outerValue = cells[neighbour.intCode()].value;
-                int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
 
-
-                Direction linkDirection = direction.isHorizontal() ? Direction.LEFT : Direction.TOP;
-                //TODO: this code wants to be temporary, so go ahead, remove it
+                boolean bothAreOccupied = newValue > 0 && outerValue > 0;
+                boolean thisIsBigger = newValue > outerValue;
 
                 links[structure.getLinkCode(cell, neighbour).intCode()].direction =
-                        newValue > 0 &&
-                        outerValue > 0 &&
-                        multiplier * newValue > multiplier * outerValue ? linkDirection : null;
+                        bothAreOccupied ? (thisIsBigger ? direction : direction.getOpposite()) : null;
             }
         }
     }

@@ -90,10 +90,10 @@ public class Assets
         List<Map<Direction, Image>> listOfMaps = new ArrayList<>(3);
 
         Map<Direction, Double> angles = new EnumMap<>(Direction.class);
-        angles.put(Direction.TOP, 0.0);
-        angles.put(Direction.LEFT, 3 * Math.PI / 2);
-        angles.put(Direction.BOTTOM, Math.PI);
-        angles.put(Direction.RIGHT, Math.PI / 2);
+        angles.put(Direction.BOTTOM, 0.0);
+        angles.put(Direction.LEFT, Math.PI / 2);
+        angles.put(Direction.TOP, Math.PI);
+        angles.put(Direction.RIGHT, 3 * Math.PI / 2);
 
         for (String imageName : images)
         {
