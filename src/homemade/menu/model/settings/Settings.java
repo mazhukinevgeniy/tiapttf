@@ -7,25 +7,7 @@ import homemade.menu.model.save.ISettingsSave;
  */
 public class Settings
 {
-    /*private Map<String, Parameter> parameters = QuickMap.getCleanStrParameterMap();
-
-    private final class Name
-    {
-        public static final String isRealTime = "isRealTime";
-        public static final String simultaneousSpawn = "simultaneousSpawn";
-        public static final String spawnPeriod = "spawnPeriod";
-        public static final String something = "something";
-    }
-
-    private final class DefaultValue
-    {
-        public static final Boolean isRealTime = "isRealTime";
-        public static final Integer simultaneousSpawn = "simultaneousSpawn";
-        public static final Integer spawnPeriod = "spawnPeriod";
-        public static final Integer something = "something";
-    }*/
-
-    private Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");//ParameterName.isRealTime);
+    private Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
     private Parameter<Integer> simultaneousSpawn = new Parameter<>("simultaneousSpawn");
     private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
     private Parameter<Integer> something = new Parameter<>("something");
@@ -34,29 +16,15 @@ public class Settings
 
     public Settings()
     {
-        //mapInitialize();
         setDefaultSettings();
     }
 
     public Settings(ISettingsSave save)
     {
-        //mapInitialize();
         setDefaultSettings();
         this.save = save;
         setSavedValue();
     }
-
-    /*private void mapInitialize()
-    {
-        List<String> nameList = Arrays.asList(Name.isRealTime, Name.simultaneousSpawn,
-                                                    Name.spawnPeriod, Name.something);
-
-        for (String name : nameList)
-        {
-            Parameter<?> parameter = new Parameter<>(name);
-            parameters.put(Name.isRealTime, parameter);
-        }
-    }*/
 
     private void setDefaultSettings()
     {

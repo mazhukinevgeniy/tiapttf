@@ -14,8 +14,6 @@ public class Main
         Assets.loadAssets();
 
         LocalSaveManager save = new LocalSaveManager("save.xml");
-        //save.getIntegerValue("test");
-        parameterTest(save);
 
         Window window = new Window();
         window.setVisible(true);
