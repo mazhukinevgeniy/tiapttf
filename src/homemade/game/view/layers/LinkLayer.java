@@ -29,15 +29,20 @@ class LinkLayer extends RenderingLayer
 
         this.structure = structure;
 
-        assets = new EnumMap<Direction, Image>(Direction.class);
-        assets.put(Direction.RIGHT, Assets.glowHorizontal);
-        assets.put(Direction.BOTTOM, Assets.glowVertical);
+        assets = new EnumMap<Direction, Image>(Assets.arrows.get(0));
+        //TODO: support all the colors
 
         offsets = new EnumMap<Direction, Offset>(Direction.class);
-        offsets.put(Direction.RIGHT, new Offset(Assets.glowHorizontal, 2, 1));
-        offsets.put(Direction.BOTTOM, new Offset(Assets.glowVertical, 1, 2));
 
+        for (Direction direction : assets.keySet())
+        {
+            Image img = assets.get(direction);
 
+            int width = direction.isHorizontal() ? 2 : 1;
+            int height = direction.isHorizontal() ? 1 : 2;
+
+            offsets.put(direction, new Offset(img, width, height));
+        }
     }
 
     @Override

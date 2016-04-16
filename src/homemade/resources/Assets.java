@@ -1,10 +1,16 @@
 package homemade.resources;
 
+import homemade.game.fieldstructure.Direction;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user3 on 23.03.2016.
@@ -13,14 +19,13 @@ public class Assets
 {
     public static Image grid;
     public static Image field;
-    public static Image glowVertical;
-    public static Image glowHorizontal;
     public static Image normalBlock;
     public static Image normalBlockSelected;
     public static Image smallBlock;
     public static Image placeToMove;
     public static Image digit[];
     public static Image disappear[];
+    public static List<Map<Direction, Image>> arrows;
 
     public static void loadAssets()
     {
@@ -37,15 +42,13 @@ public class Assets
 
         try
         {
+            initializeArrowImages();
+
             input = getClass().getResourceAsStream("grid.png");
             Assets.grid = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("field.png");
             Assets.field = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("arrow_red.png");
-            Assets.glowVertical = ImageIO.read(input);
-            Assets.glowHorizontal = createRotatedCopy(Assets.glowVertical, 3 * Math.PI / 2);
 
             input = getClass().getResourceAsStream("normal_block.png");
             Assets.normalBlock = ImageIO.read(input);
@@ -75,6 +78,47 @@ public class Assets
         {
             e.printStackTrace();
         }
+    }
+
+    private void initializeArrowImages()
+    {
+        List<String> images = new ArrayList<String>(3);
+        images.add("arrow_red.png");
+        images.add("arrow_orange.png");
+        images.add("arrow_green.png");
+
+        List<Map<Direction, Image>> listOfMaps = new ArrayList<>(3);
+
+        Map<Direction, Double> angles = new EnumMap<>(Direction.class);
+        angles.put(Direction.TOP, 0.0);
+        angles.put(Direction.LEFT, 3 * Math.PI / 2);
+        angles.put(Direction.BOTTOM, Math.PI);
+        angles.put(Direction.RIGHT, Math.PI / 2);
+
+        for (String imageName : images)
+        {
+            Map<Direction, Image> arrows = new EnumMap<>(Direction.class);
+            listOfMaps.add(arrows);
+
+            InputStream inputStream = getClass().getResourceAsStream(imageName);
+            Image baseImage;
+
+            try
+            {
+                baseImage = ImageIO.read(inputStream);
+
+                for (Direction direction : angles.keySet())
+                {
+                    arrows.put(direction, createRotatedCopy(baseImage, angles.get(direction)));
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        Assets.arrows = listOfMaps;
     }
 
     private Image createRotatedCopy(Image image, double angleInRadians)

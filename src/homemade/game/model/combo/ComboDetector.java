@@ -109,7 +109,7 @@ public class ComboDetector
                 link = structure.getLinkCode(currentCell, tmpNext);
             }
 
-            if (tmpNext != null && cellMap.getLinkDirection(link) == direction)
+            if (tmpNext != null && cellMap.getLinkDirection(link) == direction.getOpposite())
             {
                 comboLength++;
             }

@@ -7,7 +7,10 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.utils.QuickMap;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by user3 on 27.03.2016.
@@ -86,8 +89,6 @@ public class CellMap
 
     private void setCellValue(CellCode cell, int newValue)
     {
-        EnumSet<Direction> verticalDirectionSet = EnumSet.of(Direction.BOTTOM, Direction.TOP);
-
         Cell changedCell = cells[cell.intCode()];
         changedCell.value = newValue;
 
@@ -101,7 +102,7 @@ public class CellMap
                 int multiplier = direction.getMultiplier();//TODO: probably should define direction multiplier on cellmap level
 
 
-                Direction linkDirection = verticalDirectionSet.contains(direction) ? Direction.BOTTOM : Direction.RIGHT;
+                Direction linkDirection = direction.isHorizontal() ? Direction.LEFT : Direction.TOP;
                 //TODO: this code wants to be temporary, so go ahead, remove it
 
                 links[structure.getLinkCode(cell, neighbour).intCode()].direction =
