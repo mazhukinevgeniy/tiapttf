@@ -6,7 +6,6 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModel;
-import homemade.game.model.spawn.SpawnManager;
 import homemade.game.view.GameView;
 import homemade.utils.timer.QuickTimer;
 import homemade.utils.timer.TimerTaskPerformer;
@@ -28,6 +27,8 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     private SelectionManager selectionManager;
     private GameKeyboard keyboard;
 
+    private ViewListener viewListener;
+
     private FieldStructure structure;
 
     private QuickTimer timer;
@@ -43,14 +44,19 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         selectionManager = new SelectionManager(this);
         keyboard = new GameKeyboard(this);
 
-        view = new GameView(this, mainFrame);
+        viewListener = new ViewListener(this, selectionManager, keyboard);
+
+        view = new GameView(structure, viewListener, mainFrame);
 
         long period = 1000 / KEY_INPUT_CAP_PER_SECOND;
         timer = new QuickTimer(new TimedKeyboardInput(), period);
     }
 
-    public MouseInputHandler mouseInputHandler() { return selectionManager; }
-    public KeyboardInputHandler keyboardInputHandler() { return keyboard; }
+    void sendDataToRender()
+    {
+        view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
+    }
+
     public FieldStructure fieldStructure() { return structure; }
 
     @Override
@@ -66,12 +72,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         view.getEffectManager().displayEffect(effect, atCell);
     }
 
-    public void viewTimerUpdated()
-    {
-        this.view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
-    }
-
-    public void requestPauseToggle()
+    void requestPauseToggle()
     {
         model.getPauseToggler().toggleSpawnPause();
     }

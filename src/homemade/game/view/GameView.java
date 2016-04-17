@@ -2,7 +2,7 @@ package homemade.game.view;
 
 import homemade.game.GameState;
 import homemade.game.SelectionState;
-import homemade.game.controller.GameController;
+import homemade.game.controller.ViewListener;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
@@ -33,26 +33,26 @@ public class GameView
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
-    private GameController controller;
+    private ViewListener viewListener;
 
     private QuickTimer timer;
 
     private ArrayList<RenderingLayer> layers;
 
 
-    public GameView(GameController controller, Frame mainFrame) //TODO: probably should reference interface instead
+    public GameView(FieldStructure structure, ViewListener viewListener, Frame mainFrame)
     {
-        this.controller = controller;
-        structure = controller.fieldStructure();
+        this.viewListener = viewListener;
+        this.structure = structure;
 
         canvas = new Canvas();
         canvas.setPreferredSize(new Dimension(GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT));
         mainFrame.add(canvas);
 
-        GameMouseAdapter mouseAdapter = new GameMouseAdapter(controller.mouseInputHandler());
+        GameMouseAdapter mouseAdapter = new GameMouseAdapter(viewListener.mouseInputHandler());
         canvas.addMouseListener(mouseAdapter);
         canvas.addMouseMotionListener(mouseAdapter);
-        canvas.addKeyListener(new ControlledKeyListener(controller.keyboardInputHandler()));
+        canvas.addKeyListener(new ControlledKeyListener(viewListener.keyboardInputHandler()));
 
         canvas.createBufferStrategy(2);
 
@@ -113,7 +113,7 @@ public class GameView
         public void handleTimerTask()
         {
             effectManager.measureTimePassed();
-            controller.viewTimerUpdated();
+            viewListener.viewTimerUpdated();
         }
     }
 }
