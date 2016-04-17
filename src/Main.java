@@ -1,5 +1,5 @@
 import homemade.menu.controller.MenuManager;
-import homemade.menu.model.save.Save;
+import homemade.menu.model.save.LocalSaveManager;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.Window;
 import homemade.resources.Assets;
@@ -13,6 +13,8 @@ public class Main
     {
         Assets.loadAssets();
 
+        LocalSaveManager save = new LocalSaveManager("save.xml");
+
         Window window = new Window();
         window.setVisible(true);
 
@@ -21,8 +23,10 @@ public class Main
         window.finaleInitialize();
     }
 
-    private static void parameterTest(Save save)
+    private static void parameterTest(LocalSaveManager save)
     {
+        save.setValue("testBlock", "testParameter", 1000000);
+
         Settings settings = new Settings();
 
         System.out.println(settings.getIsRealTime());
@@ -32,12 +36,16 @@ public class Main
         settings = new Settings(save);
         System.out.println();
 
-        System.out.println(settings.getIsRealTime());
-        System.out.println(settings.getSimultaneousSpawn());
-        System.out.println(settings.getSpawnPeriod());
+        boolean isRealTime = settings.getIsRealTime();
+        int simultaneousSpawn = settings.getSimultaneousSpawn();
+        int spawnPeriod = settings.getSpawnPeriod();
+        System.out.println(isRealTime);
+        System.out.println(simultaneousSpawn);
+        System.out.println(spawnPeriod);
 
-        settings.setIsRealTime(false);
-        settings.setSpawnPeriod(1500);
+        settings.setIsRealTime(!isRealTime);
+        settings.setSimultaneousSpawn(++simultaneousSpawn);
+        settings.setSpawnPeriod(++spawnPeriod);
 
         System.out.println(settings.getIsRealTime());
         System.out.println(settings.getSimultaneousSpawn());
