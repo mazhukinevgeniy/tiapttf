@@ -9,7 +9,7 @@ import homemade.game.fieldstructure.FieldStructure;
  */
 class GameScore
 {
-    private int score = 0;
+    private int score;
     private int scores[];
 
     private ScoreHandler scoreHandler;
@@ -17,6 +17,7 @@ class GameScore
     GameScore(FieldStructure structure, ScoreHandler scoreHandler)
     {
         this.scoreHandler = scoreHandler;
+        scoreHandler.scoreUpdated(score = 0);
 
         int lengthsPossible = structure.getMaxDimension() - Game.MIN_COMBO + 1;
         int baseScore = 100;
