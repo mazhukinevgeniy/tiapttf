@@ -1,130 +1,178 @@
 package homemade.menu.model.settings;
 
-import homemade.menu.model.save.ISettingsSave;
+import homemade.menu.model.save.SettingsSave;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Created by Marid on 27.03.2016.
  */
 public class Settings
 {
-    private Parameter<Boolean> isRealTime = new Parameter<>("isRealTime");
-    private Parameter<Integer> simultaneousSpawn = new Parameter<>("simultaneousSpawn");
-    private Parameter<Integer> spawnPeriod = new Parameter<>("spawnPeriod");
-    private Parameter<Integer> something = new Parameter<>("something");
+    //1) add name new parameter
+    public final class Name
+    {
+        public static final String isRealTime = "isRealTime";
+        public static final String simultaneousSpawn = "simultaneousSpawn";
+        public static final String spawnPeriod = "spawnPeriod";
+        public static final String something = "something";
+    }
 
-    private ISettingsSave save = null;
+    //2) add parameter to eligible list with names
+    private List<String> nameListBool = Arrays.asList(Name.isRealTime);
+
+    private List<String> nameListInt = Arrays.asList(Name.simultaneousSpawn,
+                                                     Name.spawnPeriod,
+                                                     Name.something);
+
+    //3) state default value and Range/Enum valid values
+    public static class Default
+    {
+        public static Map<String, ValueChecker<?>> checkers = new HashMap<>();
+
+        public static void initialize()
+        {
+            checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
+            checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
+            checkers.put(Name.spawnPeriod, new RangeChecker<>(1000, 1000, 1000 * 60 * 60));
+            checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
+        }
+    }
+    //4) everything should work (=
+
+    private Map<String, Parameter<Boolean>> boolParameters = new HashMap<>();
+    private Map<String, Parameter<Integer>> intParameters = new HashMap<>();
+
+    private SettingsSave save = null;
 
     public Settings()
     {
+        primaryInitialization();
+    }
+
+    public Settings(SettingsSave save)
+    {
+        primaryInitialization();
+        this.save = save;
+        setSavedValues();
+    }
+
+    private void primaryInitialization()
+    {
+        Default.initialize();
+        initializeMaps();
         setDefaultSettings();
     }
 
-    public Settings(ISettingsSave save)
+    private void initializeMaps()
     {
-        setDefaultSettings();
-        this.save = save;
-        setSavedValue();
+        initializeMap(nameListBool, boolParameters);
+        initializeMap(nameListInt, intParameters);
+    }
+
+    private <Type> void initializeMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
+    {
+        for (String name : nameList)
+        {
+            Parameter<Type> parameter = new Parameter<>(name);
+            parameters.put(name, parameter);
+        }
     }
 
     private void setDefaultSettings()
     {
-        setDefaultRange();
-        setDefaultValue();
+        setDefaultSettingsToMap(nameListBool, boolParameters);
+        setDefaultSettingsToMap(nameListInt, intParameters);
     }
 
-    private void setDefaultRange()
+    private <Type> void setDefaultSettingsToMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
     {
-        //parameters.get(Name.isRealTime).setEnum(new Enumeration<>(true, false));
-        isRealTime.setEnum(new Enumeration<>(true, false));
-        simultaneousSpawn.setRange(new IntRange(1, 9));
-        spawnPeriod.setRange(new IntRange(1000, 1000 * 60 * 60));
-        something.setEnum(new Enumeration<>(1, 2, 3));
-    }
-
-    public void setDefaultValue()
-    {
-        isRealTime.setValue(false);
-        simultaneousSpawn.setValue(3);
-        spawnPeriod.setValue(1000);
-        something.setValue(2);
-    }
-
-    private void setSavedValue()
-    {
-        Boolean boolValue;
-        Integer intValue;
-
-        boolValue = save.getBoolSettingsValue(isRealTime.getName());
-        if (boolValue == null)
+        for (String name : nameList)
         {
-            boolValue = false;
+            Parameter<Type> parameter = parameters.get(name);
+            ValueChecker<Type> checker = (ValueChecker<Type>)Default.checkers.get(name);
+            parameter.setValueChecker(checker);
+            parameter.setDefaultValue();
         }
-        isRealTime.setValue(boolValue);
+    }
 
-        intValue = save.getIntSettingsValue(simultaneousSpawn.getName());
-        if (intValue == null)
+    private void setSavedValues()
+    {
+        Function<String, Boolean> boolSettingsValue = name -> save.getBoolSettingsValue(name);
+        Function<String, Integer> intSettingsValue = name -> save.getIntSettingsValue(name);
+
+        setSavedValuesToMap(nameListBool, boolParameters, boolSettingsValue);
+        setSavedValuesToMap(nameListInt, intParameters, intSettingsValue);
+    }
+
+    private <Type> void setSavedValuesToMap(List<String> nameList, Map<String, Parameter<Type>> parameters,
+                                            Function<String, Type> saveGetSettingsValue)
+    {
+        for(String name : nameList)
         {
-            intValue = 3;
+            Type value = saveGetSettingsValue.apply(name);
+            Parameter<Type> parameter = parameters.get(name);
+            if (value == null)
+            {
+                parameter.setDefaultValue();
+            }
+            else
+            {
+                parameter.setValue(value);
+            }
         }
-        simultaneousSpawn.setValue(intValue);
+    }
 
-        intValue = save.getIntSettingsValue(spawnPeriod.getName());
-        if (intValue == null)
+    //parameterName take from Settings.Name
+    public <Type> void set(String parameterName, Type value)
+    {
+        Parameter<Type> parameter = null;
+        if (boolParameters.containsKey(parameterName))
         {
-            intValue = 1000;
+            parameter = (Parameter<Type>)boolParameters.get(parameterName);
         }
-        spawnPeriod.setValue(intValue);
-
-        intValue = save.getIntSettingsValue(something.getName());
-        if (intValue == null)
+        else if (intParameters.containsKey(parameterName))
         {
-            intValue = 2;
+            parameter = (Parameter<Type>)intParameters.get(parameterName);
         }
-        something.setValue(intValue);
+
+        if (parameter != null)
+        {
+            parameter.setValue(value);
+            updateParameterInSave(parameter);
+        }
     }
 
-    public boolean getIsRealTime()
+    //parameterName take from Settings.Name
+    public <Type> Type get(String parameterName)
     {
-        return isRealTime.getValue();
+        Parameter<Type> parameter = null;
+        if (boolParameters.containsKey(parameterName))
+        {
+            parameter = (Parameter<Type>)boolParameters.get(parameterName);
+        }
+        else if (intParameters.containsKey(parameterName))
+        {
+            parameter = (Parameter<Type>)intParameters.get(parameterName);
+        }
+
+        Type value = null;
+        if(parameter != null)
+        {
+            value = parameter.getValue();
+        }
+
+        return value;
     }
 
-    public void setIsRealTime(boolean newValue)
+    //parameterName take from Settings.Name
+    public <Type> void get(String parameterName, Type out)
     {
-        isRealTime.setValue(newValue);
-        updateParameterInSave(isRealTime);
-    }
-
-    public int getSimultaneousSpawn()
-    {
-        return simultaneousSpawn.getValue();
-    }
-
-    public void setSimultaneousSpawn(int newValue)
-    {
-        simultaneousSpawn.setValue(newValue);
-        updateParameterInSave(simultaneousSpawn);
-    }
-
-    public int getSpawnPeriod()
-    {
-        return spawnPeriod.getValue();
-    }
-
-    public void setSpawnPeriod(int newValue)
-    {
-        spawnPeriod.setValue(newValue);
-        updateParameterInSave(spawnPeriod);
-    }
-
-    public int getSomething()
-    {
-        return something.getValue();
-    }
-
-    public void setSomething(int newValue)
-    {
-        something.setValue(newValue);
-        updateParameterInSave(something);
+        out = get(parameterName);
     }
 
     private void updateParameterInSave(Parameter<?> parameter)
