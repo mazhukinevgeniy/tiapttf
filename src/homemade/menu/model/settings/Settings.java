@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Created by Marid on 27.03.2016.
@@ -41,6 +42,7 @@ public class Settings
             checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
         }
     }
+    //4) everything should work (=
 
     private Map<String, Parameter<Boolean>> boolParameters = new HashMap<>();
     private Map<String, Parameter<Integer>> intParameters = new HashMap<>();
@@ -98,52 +100,45 @@ public class Settings
 
     private void setSavedValues()
     {
-        Boolean boolValue;
-        for(String name : nameListBool)
-        {
-            boolValue = save.getBoolSettingsValue(name);
-            Parameter<Boolean> parameter = boolParameters.get(name);
-            if (boolValue == null)
-            {
-                parameter.setDefaultValue();
-            }
-            else
-            {
-                parameter.setValue(boolValue);
-            }
-        }
+        Function<String, Boolean> boolSettingsValue = name -> save.getBoolSettingsValue(name);
+        Function<String, Integer> intSettingsValue = name -> save.getIntSettingsValue(name);
 
-        Integer intValue;
-        for(String name : nameListInt)
+        setSavedValuesToMap(nameListBool, boolParameters, boolSettingsValue);
+        setSavedValuesToMap(nameListInt, intParameters, intSettingsValue);
+    }
+
+    private <Type> void setSavedValuesToMap(List<String> nameList, Map<String, Parameter<Type>> parameters,
+                                            Function<String, Type> saveGetSettingsValue)
+    {
+        for(String name : nameList)
         {
-            intValue = save.getIntSettingsValue(name);
-            Parameter<Integer> parameter = intParameters.get(name);
-            if (intValue == null)
+            Type value = saveGetSettingsValue.apply(name);
+            Parameter<Type> parameter = parameters.get(name);
+            if (value == null)
             {
                 parameter.setDefaultValue();
             }
             else
             {
-                parameter.setValue(intValue);
+                parameter.setValue(value);
             }
         }
     }
 
-    public void set(String parameterName, Boolean value)
+    public <Type> void set(String parameterName, Type value)
     {
+        Parameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName))
         {
-            Parameter<Boolean> parameter = boolParameters.get(parameterName);
-            parameter.setValue(value);
-            updateParameterInSave(parameter);
+            parameter = (Parameter<Type>)boolParameters.get(parameterName);
         }
-    }
-
-    public void set(String parameterName, Integer value)
-    {
-        if (intParameters.containsKey(parameterName))
+        else if (intParameters.containsKey(parameterName))
         {
-            Parameter<Integer> parameter = intParameters.get(parameterName);
+            parameter = (Parameter<Type>)intParameters.get(parameterName);
+        }
+
+        if (parameter != null)
+        {
             parameter.setValue(value);
             updateParameterInSave(parameter);
         }
@@ -151,23 +146,28 @@ public class Settings
 
     public <Type> Type get(String parameterName)
     {
-        Parameter<?> parameter = null;
+        Parameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName))
         {
-            parameter = boolParameters.get(parameterName);
+            parameter = (Parameter<Type>)boolParameters.get(parameterName);
         }
         else if (intParameters.containsKey(parameterName))
         {
-            parameter = intParameters.get(parameterName);
+            parameter = (Parameter<Type>)intParameters.get(parameterName);
         }
 
         Type value = null;
         if(parameter != null)
         {
-            value = (Type)parameter.getValue();
+            value = parameter.getValue();
         }
 
         return value;
+    }
+
+    public <Type> void get(String parameterName, Type out)
+    {
+        out = get(parameterName);
     }
 
     private void updateParameterInSave(Parameter<?> parameter)

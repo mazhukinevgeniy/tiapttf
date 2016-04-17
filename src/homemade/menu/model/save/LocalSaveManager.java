@@ -1,5 +1,7 @@
 package homemade.menu.model.save;
 
+import java.lang.reflect.Type;
+
 /**
  * Created by Marid on 16.04.2016.
  */
@@ -23,12 +25,17 @@ public class LocalSaveManager implements SettingsSave
 
     public Integer getIntSettingsValue(String parameterName)
     {
-        return getIntValue(Block.SETTINGS, parameterName);
+        return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
     }
 
     public Boolean getBoolSettingsValue(String parameterName)
     {
-        return getBoolValue(Block.SETTINGS, parameterName);
+        return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
+    }
+
+    public <T> T getSettingsValue(String parameterName, Type type)
+    {
+        return getValue(Block.SETTINGS, parameterName, type);
     }
 
     public void setSettingsValue(String parameterName, Object value)
@@ -43,31 +50,29 @@ public class LocalSaveManager implements SettingsSave
         save.setParameterValue(blockName, parameterName, stringValue);
     }
 
-    //TODO refactoring
-    private Integer getIntValue(String blockName, String parameterName)
+    private <T> T getValue(String blockName, String parameterName, Type type)
     {
-        Integer parameterValue = null;
         String value = save.getParameterValue(blockName, parameterName);
-
-        if(value != null)
-        {
-            parameterValue = Integer.valueOf(value);
-        }
+        T parameterValue = convertStrValue(value, type);
 
         return parameterValue;
     }
 
-    private Boolean getBoolValue(String blockName, String parameterName)
+    private <T> T convertStrValue(String value, Type type)
     {
-        Boolean parameterValue = null;
-        String value = save.getParameterValue(blockName, parameterName);
-
+        T convertedValue = null;
         if(value != null)
         {
-            parameterValue = Boolean.valueOf(value);
+            if (type.getTypeName().equals(Boolean.TYPE.getTypeName()))
+            {
+                convertedValue = (T)Boolean.valueOf(value);
+            }
+            else if (type.getTypeName().equals(Integer.TYPE.getTypeName()))
+            {
+                convertedValue = (T)Integer.valueOf(value);
+            }
         }
-
-        return parameterValue;
+        return convertedValue;
     }
 
     public final class Block
