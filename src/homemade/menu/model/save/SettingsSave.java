@@ -7,7 +7,6 @@ public interface SettingsSave
 {
     Integer getIntSettingsValue(String parameterName);
     Boolean getBoolSettingsValue(String parameterName);
-    void setSettingsValue(String parameterName, Object value);
 
-    void setValue(String blockName, String parameterName, Object value);
+    void setSettingsValue(String parameterName, Object value);
 }

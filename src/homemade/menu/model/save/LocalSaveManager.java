@@ -7,8 +7,6 @@ import java.lang.reflect.Type;
  */
 public class LocalSaveManager implements SettingsSave
 {
-    private static final String WRONG_PARAMETER = "Wrong parameter: ";
-
     private Save save = null;
 
     private LocalSaveManager () {}
@@ -33,21 +31,10 @@ public class LocalSaveManager implements SettingsSave
         return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
     }
 
-    public <T> T getSettingsValue(String parameterName, Type type)
-    {
-        return getValue(Block.SETTINGS, parameterName, type);
-    }
-
     public void setSettingsValue(String parameterName, Object value)
     {
         String stringValue = value.toString();
         save.setParameterValue(Block.SETTINGS, parameterName, stringValue);
-    }
-
-    public void setValue(String blockName, String parameterName, Object value)
-    {
-        String stringValue = value.toString();
-        save.setParameterValue(blockName, parameterName, stringValue);
     }
 
     private <T> T getValue(String blockName, String parameterName, Type type)
@@ -75,6 +62,7 @@ public class LocalSaveManager implements SettingsSave
         return convertedValue;
     }
 
+    //there you may add new name blocks to save
     public final class Block
     {
         public static final String SETTINGS = "settings";

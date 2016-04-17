@@ -14,8 +14,6 @@ public class Main
         Assets.loadAssets();
 
         LocalSaveManager save = new LocalSaveManager("save.xml");
-        //save.getIntegerValue("test");
-        parameterTest(save);
 
         Window window = new Window();
         window.setVisible(true);
@@ -27,8 +25,6 @@ public class Main
 
     private static void parameterTest(LocalSaveManager save)
     {
-        save.setValue("testBlock", "testParameter", 1000000);
-
         Settings settings = new Settings();
 
         Boolean isRealTime1 = true;

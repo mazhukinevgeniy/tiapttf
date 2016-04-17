@@ -51,19 +51,21 @@ public class Settings
 
     public Settings()
     {
-        Default.initialize();
-        initializeMaps();
-        setDefaultSettings();
+        primaryInitialization();
     }
 
     public Settings(SettingsSave save)
     {
+        primaryInitialization();
+        this.save = save;
+        setSavedValues();
+    }
+
+    private void primaryInitialization()
+    {
         Default.initialize();
         initializeMaps();
         setDefaultSettings();
-
-        this.save = save;
-        setSavedValues();
     }
 
     private void initializeMaps()
@@ -83,11 +85,11 @@ public class Settings
 
     private void setDefaultSettings()
     {
-        setDefaultSettingToMap(nameListBool, boolParameters);
-        setDefaultSettingToMap(nameListInt, intParameters);
+        setDefaultSettingsToMap(nameListBool, boolParameters);
+        setDefaultSettingsToMap(nameListInt, intParameters);
     }
 
-    private <Type> void setDefaultSettingToMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
+    private <Type> void setDefaultSettingsToMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
     {
         for (String name : nameList)
         {
