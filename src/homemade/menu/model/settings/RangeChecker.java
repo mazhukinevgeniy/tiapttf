@@ -5,43 +5,54 @@ package homemade.menu.model.settings;
  */
 public class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
 {
-    protected Type begin;
-    protected Type end;
+    private Type defaultValue = null;
+    private Type begin = null;
+    private Type end = null;
 
-    public RangeChecker(Type begin, Type end)
+    private RangeChecker() {}
+
+    public RangeChecker(final Type defaultValue, final Type begin, final Type end)
     {
         this.begin = begin;
         this.end = end;
+        setDefaultValue(defaultValue);
     }
 
-    public RangeChecker()
+    private void setDefaultValue(Type defaultValue)
     {
-        this.begin = null;
-        this.end = null;
-    }
-
-    public boolean isValid()
-    {
-        return begin != null && end != null;
+        this.defaultValue = defaultValue;
+        if (!isValidValue(defaultValue))
+        {
+            if (defaultValue.compareTo(begin) < 0)
+            {
+                this.defaultValue = begin;
+            }
+            else if (defaultValue.compareTo(end) > 0)
+            {
+                this.defaultValue = end;
+            }
+        }
     }
 
     @Override
-    public Type getValidValue(Type uncheckedValue)
+    public Type getDefaultValue()
+    {
+        return defaultValue;
+    }
+
+    @Override
+    public Type getValidValue(final Type uncheckedValue)
     {
         Type checkedValue = uncheckedValue;
-        if (uncheckedValue.compareTo(begin) < 0)
+        if (!isValidValue(uncheckedValue))
         {
-            checkedValue = begin;
-        }
-        else if (uncheckedValue.compareTo(end) > 0)
-        {
-            checkedValue = end;
+            checkedValue = defaultValue;
         }
         return checkedValue;
     }
 
     @Override
-    public boolean isValidValue(Type value)
+    public boolean isValidValue(final Type value)
     {
         return begin.compareTo(value) <= 0 && value.compareTo(end) <= 0;
     }

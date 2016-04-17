@@ -5,6 +5,7 @@ package homemade.menu.model.settings;
  */
 public interface ValueChecker<Type>
 {
-    Type getValidValue(Type uncheckedValue);
-    boolean isValidValue(Type value);
+    Type getDefaultValue();
+    Type getValidValue(final Type uncheckedValue);
+    boolean isValidValue(final Type value);
 }

@@ -10,36 +10,57 @@ public class InSetChecker<Type extends Comparable<Type>> implements ValueChecker
 {
     private static final int INDEFINITE_INDEX = -1;
 
+    private Type defaultValue = null;
     private Set<Type> elements = null;
 
-    public InSetChecker(final Type... elements)
+    private  InSetChecker() {}
+
+    public InSetChecker(final Type defaultValue, final Type... elements)
     {
         this.elements = new HashSet<>();
         for (Type element : elements)
         {
             this.elements.add(element);
         }
+        sedDefaultValue(defaultValue);
     }
 
-    public boolean isValid()
+    private void sedDefaultValue(final Type defaultValue)
     {
-        return elements != null;
+        this.defaultValue = defaultValue;
+        if(!isValidValue(defaultValue))
+        {
+            if (this.elements.size() > 0)
+            {
+                this.defaultValue = (Type) this.elements.toArray()[0];
+            }
+            else
+            {
+                this.defaultValue = null;
+            }
+        }
     }
 
     @Override
-    public Type getValidValue(Type uncheckedValue)
+    public Type getDefaultValue()
+    {
+        return defaultValue;
+    }
+
+    @Override
+    public Type getValidValue(final Type uncheckedValue)
     {
         Type checkedValue = uncheckedValue;
         if (!isValidValue(uncheckedValue))
         {
-            checkedValue = (Type)elements.toArray()[0];
+            checkedValue = defaultValue;
         }
 
         return checkedValue;
     }
 
     @Override
-    public boolean isValidValue(Type value)
+    public boolean isValidValue(final Type value)
     {
         return elements.contains(value);
     }
