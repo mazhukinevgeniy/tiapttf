@@ -31,26 +31,26 @@ public class Main
 
         Settings settings = new Settings();
 
-        System.out.println(settings.getIsRealTime());
-        System.out.println(settings.getSimultaneousSpawn());
-        System.out.println(settings.getSpawnPeriod());
+        System.out.println((Boolean) settings.get(Settings.Name.isRealTime));
+        System.out.println((Integer) settings.get(Settings.Name.simultaneousSpawn));
+        System.out.println((Integer) settings.get(Settings.Name.spawnPeriod));
 
         settings = new Settings(save);
         System.out.println();
 
-        boolean isRealTime = settings.getIsRealTime();
-        int simultaneousSpawn = settings.getSimultaneousSpawn();
-        int spawnPeriod = settings.getSpawnPeriod();
+        boolean isRealTime = settings.get(Settings.Name.isRealTime);
+        int simultaneousSpawn = settings.get(Settings.Name.simultaneousSpawn);
+        int spawnPeriod = settings.get(Settings.Name.spawnPeriod);
         System.out.println(isRealTime);
         System.out.println(simultaneousSpawn);
         System.out.println(spawnPeriod);
 
-        settings.setIsRealTime(!isRealTime);
-        settings.setSimultaneousSpawn(++simultaneousSpawn);
-        settings.setSpawnPeriod(++spawnPeriod);
+        settings.set(Settings.Name.isRealTime, !isRealTime);
+        settings.set(Settings.Name.simultaneousSpawn, ++simultaneousSpawn);
+        settings.set(Settings.Name.spawnPeriod, ++spawnPeriod);
 
-        System.out.println(settings.getIsRealTime());
-        System.out.println(settings.getSimultaneousSpawn());
-        System.out.println(settings.getSpawnPeriod());
+        System.out.println((Boolean) settings.get(Settings.Name.isRealTime));
+        System.out.println((Integer) settings.get(Settings.Name.simultaneousSpawn));
+        System.out.println((Integer) settings.get(Settings.Name.spawnPeriod));
     }
 }

@@ -64,7 +64,12 @@ public class Parameter<Type>
         }
     }
 
-    public void setNearestValidValue(final Type newValue)
+    public void setDefaultValue()
+    {
+        value = valueChecker.getDefaultValue();
+    }
+
+    public void setValidValue(final Type newValue)
     {
         value = valueChecker.getValidValue(newValue);
     }
