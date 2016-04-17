@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * Created by Marid on 28.03.2016.
  */
-public class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
+class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
 {
     private static final int INDEFINITE_INDEX = -1;
 

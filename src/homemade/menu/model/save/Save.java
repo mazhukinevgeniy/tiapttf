@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Created by Marid on 28.03.2016.
  */
-public class Save
+class Save
 {
     private String pathToFile;
     private Document xmlDocument;

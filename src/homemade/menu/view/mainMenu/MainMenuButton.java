@@ -11,7 +11,7 @@ import java.awt.*;
 /**
  * Created by Marid on 02.04.2016.
  */
-public class MainMenuButton extends JButton
+class MainMenuButton extends JButton
 {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);
     private static final int WIDTH = 200;

@@ -3,7 +3,7 @@ package homemade.menu.model.settings;
 /**
  * Created by Marid on 27.03.2016.
  */
-public class Parameter<Type>
+class Parameter<Type>
 {
     public static final String INDEFINITE_NAME = "";
 
