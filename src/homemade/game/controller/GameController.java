@@ -1,6 +1,7 @@
 package homemade.game.controller;
 
 import homemade.game.Effect;
+import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -21,7 +22,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     private Frame frame;
 
-    GameModel model;
+    private GameModel model;
     private GameView view;
 
     private SelectionManager selectionManager;
@@ -31,8 +32,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     private QuickTimer timer;
 
-    private SpawnManager pauseToggler;//TODO: probably should use interface
-
     public GameController(Frame mainFrame)
     {
         frame = mainFrame;
@@ -40,7 +39,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         structure = new FieldStructure();
 
         model = new GameModel(this);
-        pauseToggler = model.getPauseToggler();
 
         selectionManager = new SelectionManager(this);
         keyboard = new GameKeyboard(this);
@@ -75,9 +73,26 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     public void requestPauseToggle()
     {
-        pauseToggler.toggleSpawnPause();
+        model.getPauseToggler().toggleSpawnPause();
     }
-    //TODO: figure if delegation is fine here
+
+    GameState copyGameState()
+    {
+        return model.copyGameState();
+    }
+
+    void requestBlockMove(CellCode from, CellCode to)
+    {
+        model.getMoveRequestHandler().requestBlockMove(from, to);
+    }
+    //TODO: shall we move such methods out of GameController? make a class for doing simple things with current model
+
+    public void gameOver()
+    {
+        timer.setPeriod(1000);
+
+        //TODO: render randomly destroyed field, then restart
+    }
 
     private class TimedKeyboardInput implements TimerTaskPerformer
     {

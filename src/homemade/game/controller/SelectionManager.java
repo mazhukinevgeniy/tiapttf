@@ -5,8 +5,6 @@ import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.GameModel;
-import homemade.game.model.GameModelLinker;
 import homemade.game.view.GameView;
 
 import java.util.ArrayList;
@@ -20,19 +18,17 @@ class SelectionManager implements MouseInputHandler
     private FieldStructure structure;
 
     private ArrayList<CellCode> selection;
-    private GameModel model;
-    private GameModelLinker blockMoveRequestHandler;
+    private GameController controller;
 
     private SelectionState state;
 
     SelectionManager(GameController controller)
     {
+        this.controller = controller;
+
         structure = controller.fieldStructure();
 
-        selection = new ArrayList<CellCode>(structure.getMaxDimension());
-
-        model = controller.model;
-        blockMoveRequestHandler = model.getMoveRequestHandler();
+        selection = new ArrayList<>(structure.getMaxDimension());
 
         updateSelectionState();
     }
@@ -46,7 +42,7 @@ class SelectionManager implements MouseInputHandler
 
         CellCode eventCell = structure.getCellCode(cellX, cellY);
 
-        if (model.copyGameState().getCellValue(eventCell) > 0)
+        if (controller.copyGameState().getCellValue(eventCell) > 0)
         {
             this.selection.clear();
             this.selection.add(eventCell);
@@ -86,11 +82,11 @@ class SelectionManager implements MouseInputHandler
     {
         if (eventCell != selectedCell)
         {
-            blockMoveRequestHandler.requestBlockMove(selectedCell, eventCell);
+            controller.requestBlockMove(selectedCell, eventCell);
 
             selection.clear();
 
-            GameState gameState = model.copyGameState();
+            GameState gameState = controller.copyGameState();
 
             boolean selectedCellOccupied = gameState.getCellValue(selectedCell) > 0;
             boolean eventCellOccupied = gameState.getCellValue(eventCell) > 0;
@@ -111,7 +107,7 @@ class SelectionManager implements MouseInputHandler
 
     private void updateSelectionState()
     {
-        GameState state = model.copyGameState();
+        GameState state = controller.copyGameState();
 
         int selectionSize = selection.size();
         ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);
