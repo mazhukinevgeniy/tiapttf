@@ -8,7 +8,6 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.combo.ComboDetector;
-import homemade.utils.QuickMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +70,7 @@ public class GameModelLinker
         {
             if (AUTOCOMPLETION)
             {
-                Map<CellCode, Integer> removedCells = QuickMap.getCleanCellCodeIntMap();
+                Map<CellCode, Integer> removedCells = new HashMap<>();
 
                 Set<CellCode> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
 
@@ -87,8 +86,8 @@ public class GameModelLinker
                 changedCells.addAll(removedCells.keySet());
             }
 
-            Map<CellCode, Integer> updatedCells = QuickMap.getCleanCellCodeIntMap();
-            Map<LinkCode, Direction> updatedLinks = QuickMap.getCleanLinkCodeDirectionMap();
+            Map<CellCode, Integer> updatedCells = new HashMap<>();
+            Map<LinkCode, Direction> updatedLinks = new HashMap<>();
             Map<LinkCode, Integer> updatedChains = new HashMap<>();
 
             for (CellCode cellCode : changedCells)

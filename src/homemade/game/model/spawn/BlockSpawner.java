@@ -4,8 +4,8 @@ import homemade.game.Game;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMap;
-import homemade.utils.QuickMap;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -26,7 +26,7 @@ class BlockSpawner
 
     synchronized Map<CellCode, Integer> spawnBlocks(Iterator<CellCode> iterator)
     {
-        Map<CellCode, Integer> changes = QuickMap.getCleanCellCodeIntMap();
+        Map<CellCode, Integer> changes = new HashMap<>();
 
         while (iterator.hasNext())
         {
@@ -45,7 +45,7 @@ class BlockSpawner
 
     synchronized Map<CellCode, Integer> markCells(Iterator<CellCode> iterator, int targetAmount)
     {
-        Map<CellCode, Integer> changes = QuickMap.getCleanCellCodeIntMap();
+        Map<CellCode, Integer> changes = new HashMap<>();
 
         int canMark = numberPool.numbersAvailable();
 

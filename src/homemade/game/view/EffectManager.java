@@ -2,8 +2,8 @@ package homemade.game.view;
 
 import homemade.game.Effect;
 import homemade.game.fieldstructure.CellCode;
-import homemade.utils.QuickMap;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +21,7 @@ public class EffectManager
     {
         oldTime = System.nanoTime();
 
-        fadingBlocks = QuickMap.getCleanCellCodeIntMap();
+        fadingBlocks = new HashMap<>();
     }
 
     public void displayEffect(Effect effect, CellCode cell)

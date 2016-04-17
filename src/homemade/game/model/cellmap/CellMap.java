@@ -5,7 +5,6 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.utils.QuickMap;
 
 import java.util.*;
 
@@ -71,7 +70,7 @@ public class CellMap
 
         if (cellToValue <= 0 && cellFromValue > 0)
         {
-            Map<CellCode, Integer> tmpMap = QuickMap.getCleanCellCodeIntMap();
+            Map<CellCode, Integer> tmpMap = new HashMap<>();
             tmpMap.put(moveFromCell, Game.CELL_EMPTY);
             tmpMap.put(moveToCell, cellFromValue);
 

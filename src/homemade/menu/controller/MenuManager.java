@@ -4,8 +4,8 @@ import homemade.game.controller.GameController;
 import homemade.menu.view.Menu;
 import homemade.menu.view.Window;
 import homemade.menu.view.mainMenu.MainMenu;
-import homemade.utils.QuickMap;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +38,7 @@ public class MenuManager
         this.window = window;
         this.actionListener = new ButtonActionListener(this);
 
-        Map<Integer, String> map = QuickMap.getCleanIntStrMap();
+        Map<Integer, String> map = new HashMap<>();
         map.put(CodeSubWindow.GAME, NameSubWindow.GAME);
         map.put(CodeSubWindow.MAIN_MENU, NameSubWindow.MAIN_MENU);
 
