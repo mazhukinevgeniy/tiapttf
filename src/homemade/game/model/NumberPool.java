@@ -1,6 +1,7 @@
 package homemade.game.model;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Created by user3 on 29.03.2016.
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 public class NumberPool
 {
     private LinkedList<Integer> usedNumbers, availableNumbers;
+    private Random random;
 
     NumberPool(int max)
     {
@@ -18,12 +20,14 @@ public class NumberPool
         {
             availableNumbers.add(i + 1);
         }
+
+        random = new Random();
     }
 
     public int takeNumber()
     {
         int length = availableNumbers.size();
-        int position = (int)(Math.random() * (double)length);
+        int position = random.nextInt(length);
         int number = availableNumbers.get(position);
 
         usedNumbers.add(number);
@@ -34,7 +38,7 @@ public class NumberPool
 
     public void freeNumber(int value)
     {
-        usedNumbers.remove(new Integer(value));
+        usedNumbers.remove(Integer.valueOf(value));
         //because we want to remove by object and not by its position in the list
         availableNumbers.add(value);
     }
