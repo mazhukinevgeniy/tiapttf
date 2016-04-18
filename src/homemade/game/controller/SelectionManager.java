@@ -22,11 +22,11 @@ class SelectionManager implements MouseInputHandler
 
     private SelectionState state;
 
-    SelectionManager(GameController controller)
+    SelectionManager(GameController controller, FieldStructure fieldStructure)
     {
         this.controller = controller;
 
-        structure = controller.fieldStructure();
+        structure = fieldStructure;
 
         selection = new ArrayList<>(structure.getMaxDimension());
 

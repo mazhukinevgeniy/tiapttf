@@ -17,10 +17,8 @@ public class GameModel
     private SpawnManager spawner;
     private GameModelLinker linker;
 
-    public GameModel(GameController gameController)
+    public GameModel(GameController gameController, FieldStructure structure)
     {
-        FieldStructure structure = gameController.fieldStructure();
-
         NumberPool numberPool = new NumberPool(structure.getFieldSize());
 
         ArrayBasedGameState gameStateTracker = new ArrayBasedGameState(structure);

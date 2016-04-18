@@ -30,24 +30,20 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     private SelectionManager selectionManager;
     private GameKeyboard keyboard;
 
-    private ViewListener viewListener;
-
-    private FieldStructure structure;
-
     private QuickTimer timer;
 
     public GameController(Frame mainFrame)
     {
         frame = mainFrame;
 
-        structure = new FieldStructure();
+        FieldStructure structure = new FieldStructure();
 
-        model = new GameModel(this);
+        model = new GameModel(this, structure);
 
-        selectionManager = new SelectionManager(this);
+        selectionManager = new SelectionManager(this, structure);
         keyboard = new GameKeyboard(this);
 
-        viewListener = new ViewListener(selectionManager, keyboard);
+        ViewListener viewListener = new ViewListener(selectionManager, keyboard);
 
         view = new GameView(structure, viewListener, mainFrame);
 
@@ -55,8 +51,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         frameCounter = 0;
         timer = new QuickTimer(new ControllerTimerTask(), period);
     }
-
-    public FieldStructure fieldStructure() { return structure; }
 
     @Override
     public void scoreUpdated(int score)
