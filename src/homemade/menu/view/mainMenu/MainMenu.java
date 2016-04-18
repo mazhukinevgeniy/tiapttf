@@ -13,26 +13,22 @@ import java.util.Set;
  */
 public class MainMenu extends Menu
 {
-    private MenuManager manager;
+    private MainMenu() {}
 
-    public MainMenu(MenuManager manager, Window window, Map<Integer, String> map)
+    public MainMenu(MenuManager manager, Window window, Map<Integer, String> menus)
     {
-        super();
-        this.manager = manager;
+        super(manager, window);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        Set<Integer> keys = map.keySet();
+        Set<Integer> keys = menus.keySet();
 
         for (int key : keys)
         {
-            String nameButton = map.get(key);
+            String nameButton = menus.get(key);
             JButton button = MainMenuButtonFactory.createButton(nameButton, manager.getActionListener());
             button.setActionCommand(String.valueOf(key));
             add(button);
         }
-
-        setVisible(false);
-        window.add(this);
     }
 }
