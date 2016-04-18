@@ -28,11 +28,15 @@ class SelectionManager implements MouseInputHandler
 
         structure = fieldStructure;
 
+        createClearSelection();
+    }
+
+    void createClearSelection()
+    {
         selection = new ArrayList<>(structure.getMaxDimension());
 
         updateSelectionState();
     }
-
 
 
     public synchronized void handleMouseRelease(int canvasX, int canvasY)

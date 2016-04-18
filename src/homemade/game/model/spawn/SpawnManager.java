@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class SpawnManager
 {
-    private static final int SPAWN_PERIOD = 1000;
     static final int SIMULTANEOUS_SPAWN = 3;
 
     private boolean paused = false;
@@ -31,12 +30,11 @@ public class SpawnManager
     {
         this.linker = linker;
 
-        spawner = new BlockSpawner(cellMap, numberPool);
+        spawner = new BlockSpawner(this, cellMap, numberPool);
         period = new SpawnPeriod(linker);
 
-        timer = new QuickTimer(new SpawnTimerTaskPerformer(), SPAWN_PERIOD);
+        timer = new QuickTimer(new SpawnTimerTaskPerformer(), period.getSpawnPeriod());
         //TODO: measure and show the actual period
-        //TODO: call timer.stop() when game is over
     }
 
     public void toggleSpawnPause()
@@ -44,11 +42,21 @@ public class SpawnManager
         paused = !paused;
     }
 
+    void spawnImpossible()
+    {
+        timer.stop();
+        paused = true;
+
+        linker.stopAllFacilities();
+    }
+
     private class SpawnTimerTaskPerformer implements TimerTaskPerformer
     {
         @Override
         public void handleTimerTask()
         {
+            System.out.println("spawn timer task " + this.toString());
+
             if (!paused)
             {
                 timer.setPeriod(period.getSpawnPeriod());

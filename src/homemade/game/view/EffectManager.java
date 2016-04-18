@@ -23,7 +23,7 @@ public class EffectManager
         fadingBlocks = new HashMap<>();
     }
 
-    public void displayEffect(Effect effect, CellCode cell)
+    synchronized public void displayEffect(Effect effect, CellCode cell)
     {
         int fadeTime = effect.getFullDuration();
 
@@ -32,6 +32,11 @@ public class EffectManager
             fadingBlocks.put(cell, fadeTime);
         }
         else throw new Error("unknown effect at EffectManager.displayEffect(...)");
+    }
+
+    synchronized public void clearEffects()
+    {
+        fadingBlocks = new HashMap<>();
     }
 
     void measureTimePassed()
@@ -69,7 +74,7 @@ public class EffectManager
         }
     }
 
-    public int getFadeTimeRemaining(CellCode cell)
+    synchronized public int getFadeTimeRemaining(CellCode cell)
     {
         int time = 0;
 
@@ -79,5 +84,3 @@ public class EffectManager
         return time;
     }
 }
-
-//TODO: investigate how is this class synchronized

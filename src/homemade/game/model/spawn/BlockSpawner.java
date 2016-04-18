@@ -18,10 +18,14 @@ class BlockSpawner
     private CellMap cellMap;
     private NumberPool numberPool;
 
-    BlockSpawner(CellMap cellMap, NumberPool numberPool)
+    private SpawnManager manager;
+
+    BlockSpawner(SpawnManager manager, CellMap cellMap, NumberPool numberPool)
     {
         this.cellMap = cellMap;
         this.numberPool = numberPool;
+
+        this.manager = manager;
     }
 
     synchronized Map<CellCode, Integer> spawnBlocks(Iterator<CellCode> iterator)
@@ -74,7 +78,7 @@ class BlockSpawner
         }
         else
         {
-            //TODO: game over (:
+            manager.spawnImpossible();
         }
 
         return changes;
