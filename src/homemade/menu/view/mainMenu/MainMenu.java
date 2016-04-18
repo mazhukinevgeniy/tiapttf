@@ -1,6 +1,6 @@
 package homemade.menu.view.mainMenu;
 
-import homemade.menu.controller.MenuManager;
+import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.view.Menu;
 
 import javax.swing.*;
@@ -14,9 +14,9 @@ public class MainMenu extends Menu
 {
     private MainMenu() {}
 
-    public MainMenu(MenuManager manager, Map<Integer, String> menus)
+    public MainMenu(Map<Integer, String> menus, ButtonActionListener actionListener)
     {
-        super(manager);
+        super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -25,7 +25,7 @@ public class MainMenu extends Menu
         for (int key : keys)
         {
             String nameButton = menus.get(key);
-            JButton button = MainMenuButtonFactory.createButton(nameButton, manager.getActionListener());
+            JButton button = MainMenuButtonFactory.createButton(nameButton, actionListener);
             button.setActionCommand(String.valueOf(key));
             add(button);
         }

@@ -1,8 +1,7 @@
 package homemade.menu.view.settings;
 
-import homemade.menu.controller.MenuManager;
-import homemade.menu.model.settings.Settings;
 import homemade.menu.view.Menu;
+import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,51 +14,47 @@ import java.util.Set;
  */
 public class SettingsMenu extends Menu
 {
-    private Settings settings;
+    Map<String, Pair<Type, ?>> parameters;
 
     private SettingsMenu() {}
 
-    public SettingsMenu(MenuManager manager, Settings settings)
+    public SettingsMenu(Map<String, Pair<Type, ?>> parameters)
     {
-        super(manager);
+        super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        this.settings = settings;
+        this.parameters = parameters;
 
         initializeParametersUI();
         initializeButtonPanel();
     }
 
     private void initializeParametersUI()
-    {
-        Map<String, Type> parameterNamesMap = settings.getParemeterNamesMap();
-        Set<String> parameterNames = parameterNamesMap.keySet();
+    {;
+        Set<String> parameterNames = parameters.keySet();
 
         for(String name : parameterNames)
         {
-            Type type = parameterNamesMap.get(name);
-            if (type == Boolean.TYPE)
+            Pair<Type, ?> pair = parameters.get(name);
+            if (pair.getKey() == Boolean.TYPE)
             {
-                createBoolSetting(name);
+                createBoolSetting(name, (Boolean) pair.getValue());
             }
-            else if (type == Integer.TYPE)
+            else if (pair.getKey() == Integer.TYPE)
             {
-                createNumberSetting(name);
+                createNumberSetting(name, (Integer) pair.getValue());
             }
         }
     }
 
-    private void createBoolSetting(String parameterName)
+    private void createBoolSetting(String parameterName, Boolean value)
     {
-        Boolean value = settings.get(parameterName);
         JCheckBox checkBox = BoolParameterFactory.createCheckBox(parameterName, value);
         add(checkBox);
     }
 
-    private void createNumberSetting(String parameterName)
+    private void createNumberSetting(String parameterName, Integer value)
     {
-        Integer value = settings.get(parameterName);
         JPanel panel = NumberParameterFactory.createParameterPanel(parameterName, String.valueOf(value));
         add(panel);
     }

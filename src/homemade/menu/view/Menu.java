@@ -1,7 +1,5 @@
 package homemade.menu.view;
 
-import homemade.menu.controller.MenuManager;
-
 import javax.swing.*;
 
 /**
@@ -9,14 +7,9 @@ import javax.swing.*;
  */
 public class Menu extends JPanel
 {
-    protected MenuManager manager;
-
-    public Menu() {}
-
-    public Menu(MenuManager manager)
+    public Menu()
     {
         super();
-        this.manager = manager;
 
         setVisible(true);
     }

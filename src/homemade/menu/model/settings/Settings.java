@@ -1,6 +1,7 @@
 package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
+import javafx.util.Pair;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -17,10 +18,10 @@ public class Settings
     //1) add name new parameter
     public final class Name
     {
-        public static final String isRealTime = "isRealTime";
-        public static final String simultaneousSpawn = "simultaneousSpawn";
-        public static final String spawnPeriod = "spawnPeriod";
-        public static final String something = "something";
+        public static final String isRealTime = "Real time";
+        public static final String simultaneousSpawn = "Simultaneous spawn";
+        public static final String spawnPeriod = "Spawn period";
+        public static final String something = "Something";
     }
 
     //2) add parameter to eligible list with names
@@ -84,7 +85,7 @@ public class Settings
         }
     }
 
-    private void setDefaultSettings()
+    public void setDefaultSettings()
     {
         setDefaultSettingsToMap(nameListBool, boolParameters);
         setDefaultSettingsToMap(nameListInt, intParameters);
@@ -192,7 +193,7 @@ public class Settings
         return type;
     }
 
-    public Map<String, Type> getParemeterNamesMap()
+    public Map<String, Type> getParameterNamesMap()
     {
         Map<String, Type> namesMap = new HashMap<>();
         for (String name : nameListBool)
@@ -205,6 +206,23 @@ public class Settings
         }
 
         return namesMap;
+    }
+
+    public Map<String, Pair<Type, ?>> getAllParameters()
+    {
+        Map<String, Pair<Type, ?>> parameters = new HashMap<>();
+        for (String name : nameListBool)
+        {
+            Boolean value = boolParameters.get(name).getValue();
+            parameters.put(name, new Pair<>(Boolean.TYPE, value));
+        }
+        for (String name : nameListInt)
+        {
+            Integer value = intParameters.get(name).getValue();
+            parameters.put(name, new Pair<>(Integer.TYPE, value));
+        }
+
+        return parameters;
     }
 
     private void updateParameterInSave(Parameter<?> parameter)

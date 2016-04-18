@@ -1,11 +1,11 @@
 package homemade.menu.controller;
 
 import homemade.game.controller.GameController;
+import homemade.menu.controller.settings.SettingsManager;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.Menu;
 import homemade.menu.view.Window;
 import homemade.menu.view.mainMenu.MainMenu;
-import homemade.menu.view.settings.SettingsMenu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,9 +47,10 @@ public class MenuManager
         menuNames.put(CodeMenu.SETTINGS, NameMenu.SETTINGS);
         menuNames.put(CodeMenu.MAIN_MENU, NameMenu.MAIN_MENU);
 
+        Menu mainMenu = new MainMenu(menuNames, actionListener);
 
-        Menu mainMenu = new MainMenu(this, menuNames);
-        Menu settingsMenu = new SettingsMenu(this, settings);
+        SettingsManager settingsManager = new SettingsManager(settings);
+        Menu settingsMenu = settingsManager.getSettingsMenu();
 
         menus.put(CodeMenu.MAIN_MENU, mainMenu);
         menus.put(CodeMenu.SETTINGS, settingsMenu);
