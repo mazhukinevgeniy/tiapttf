@@ -6,7 +6,6 @@ import homemade.game.fieldstructure.CellCode;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by user3 on 02.04.2016.

@@ -8,19 +8,10 @@ public final class ViewListener
     private MouseInputHandler mouse;
     private KeyboardInputHandler keyboard;
 
-    private GameController controller;
-
-    ViewListener(GameController controller, MouseInputHandler mouseInputHandler, KeyboardInputHandler keyboardInputHandler)
+    ViewListener(MouseInputHandler mouseInputHandler, KeyboardInputHandler keyboardInputHandler)
     {
-        this.controller = controller;
-
         mouse = mouseInputHandler;
         keyboard = keyboardInputHandler;
-    }
-
-    public void viewTimerUpdated()
-    {
-        controller.sendDataToRender();
     }
 
     public MouseInputHandler mouseInputHandler() { return mouse; }

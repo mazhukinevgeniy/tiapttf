@@ -6,8 +6,6 @@ import homemade.game.controller.ViewListener;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
-import homemade.utils.timer.QuickTimer;
-import homemade.utils.timer.TimerTaskPerformer;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -18,7 +16,6 @@ import java.util.ArrayList;
  */
 public class GameView
 {
-    private static final int TARGET_FPS = 60;
 
     public static final int CELL_WIDTH = 50;
     public static final int CELL_OFFSET = 1;
@@ -33,16 +30,11 @@ public class GameView
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
-    private ViewListener viewListener;
-
-    private QuickTimer timer;
-
     private ArrayList<RenderingLayer> layers;
 
 
     public GameView(FieldStructure structure, ViewListener viewListener, Frame mainFrame)
     {
-        this.viewListener = viewListener;
         this.structure = structure;
 
         canvas = new Canvas();
@@ -61,8 +53,6 @@ public class GameView
         effectManager = new EffectManager();
 
         layers = RenderingLayer.getRenderingLayers(structure, effectManager);
-
-        timer = new QuickTimer(new ViewTimerTaskPerformer(), 1000 / TARGET_FPS);
     }
 
     public EffectManager getEffectManager()
@@ -72,6 +62,8 @@ public class GameView
 
     public void renderNextFrame(GameState state, SelectionState selection)
     {
+        effectManager.measureTimePassed();
+
         // Render single frame
         do
         {
@@ -107,13 +99,4 @@ public class GameView
         } while (strategy.contentsLost());
     }
 
-    private class ViewTimerTaskPerformer implements TimerTaskPerformer
-    {
-        @Override
-        public void handleTimerTask()
-        {
-            effectManager.measureTimePassed();
-            viewListener.viewTimerUpdated();
-        }
-    }
 }

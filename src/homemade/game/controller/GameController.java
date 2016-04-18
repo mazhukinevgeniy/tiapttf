@@ -17,7 +17,10 @@ import java.awt.*;
  */
 public class GameController implements ScoreHandler, BlockRemovalHandler
 {
-    private static final int KEY_INPUT_CAP_PER_SECOND = 8;
+    private static final int TARGET_FPS = 60;
+    private static final int FRAMES_BEFORE_KEY_INPUT = 6;
+
+    private int frameCounter;
 
     private Frame frame;
 
@@ -44,17 +47,13 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         selectionManager = new SelectionManager(this);
         keyboard = new GameKeyboard(this);
 
-        viewListener = new ViewListener(this, selectionManager, keyboard);
+        viewListener = new ViewListener(selectionManager, keyboard);
 
         view = new GameView(structure, viewListener, mainFrame);
 
-        long period = 1000 / KEY_INPUT_CAP_PER_SECOND;
-        timer = new QuickTimer(new TimedKeyboardInput(), period);
-    }
-
-    void sendDataToRender()
-    {
-        view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
+        long period = 1000 / TARGET_FPS;
+        frameCounter = 0;
+        timer = new QuickTimer(new ControllerTimerTask(), period);
     }
 
     public FieldStructure fieldStructure() { return structure; }
@@ -95,15 +94,23 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         //TODO: render randomly destroyed field, then restart
     }
 
-    private class TimedKeyboardInput implements TimerTaskPerformer
+    private class ControllerTimerTask implements TimerTaskPerformer
     {
         @Override
         public void handleTimerTask()
         {
-            Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
+            if (frameCounter == FRAMES_BEFORE_KEY_INPUT)
+            {
+                frameCounter = 0;
+                Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
 
-            if (direction != null)
-                selectionManager.tryToMoveSelectionIn(direction);
+                if (direction != null)
+                    selectionManager.tryToMoveSelectionIn(direction);
+            }
+            else
+                frameCounter++;
+
+            view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
         }
     }
 }
