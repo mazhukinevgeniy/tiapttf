@@ -22,6 +22,7 @@ public class QuickTimer
         this.performer = performer;
         this.period = period;
 
+        performer.setTimer(this);
 
         timer = new Timer();
         timer.schedule(new SmartTimerTask(), delay, period);
