@@ -1,12 +1,12 @@
 package homemade.menu.model.save;
 
+import java.lang.reflect.Type;
+
 /**
  * Created by Marid on 16.04.2016.
  */
-public class LocalSaveManager implements ISettingsSave
+public class LocalSaveManager implements SettingsSave
 {
-    private static final String WRONG_PARAMETER = "Wrong parameter: ";
-
     private Save save = null;
 
     private LocalSaveManager () {}
@@ -23,12 +23,12 @@ public class LocalSaveManager implements ISettingsSave
 
     public Integer getIntSettingsValue(String parameterName)
     {
-        return getIntValue(Block.SETTINGS, parameterName);
+        return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
     }
 
     public Boolean getBoolSettingsValue(String parameterName)
     {
-        return getBoolValue(Block.SETTINGS, parameterName);
+        return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
     }
 
     public void setSettingsValue(String parameterName, Object value)
@@ -37,39 +37,32 @@ public class LocalSaveManager implements ISettingsSave
         save.setParameterValue(Block.SETTINGS, parameterName, stringValue);
     }
 
-    public void setValue(String blockName, String parameterName, Object value)
+    private <T> T getValue(String blockName, String parameterName, Type type)
     {
-        String stringValue = value.toString();
-        save.setParameterValue(blockName, parameterName, stringValue);
-    }
-
-    //TODO refactoring
-    private Integer getIntValue(String blockName, String parameterName)
-    {
-        Integer parameterValue = null;
         String value = save.getParameterValue(blockName, parameterName);
-
-        if(value != null)
-        {
-            parameterValue = Integer.valueOf(value);
-        }
+        T parameterValue = convertStrValue(value, type);
 
         return parameterValue;
     }
 
-    private Boolean getBoolValue(String blockName, String parameterName)
+    private <T> T convertStrValue(String value, Type type)
     {
-        Boolean parameterValue = null;
-        String value = save.getParameterValue(blockName, parameterName);
-
+        T convertedValue = null;
         if(value != null)
         {
-            parameterValue = Boolean.valueOf(value);
+            if (type.getTypeName().equals(Boolean.TYPE.getTypeName()))
+            {
+                convertedValue = (T)Boolean.valueOf(value);
+            }
+            else if (type.getTypeName().equals(Integer.TYPE.getTypeName()))
+            {
+                convertedValue = (T)Integer.valueOf(value);
+            }
         }
-
-        return parameterValue;
+        return convertedValue;
     }
 
+    //there you may add new name blocks to save
     public final class Block
     {
         public static final String SETTINGS = "settings";
