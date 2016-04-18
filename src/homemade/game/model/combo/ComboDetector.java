@@ -139,7 +139,7 @@ public class ComboDetector
             }
             else
             {
-                currentCell = nextCell;
+                currentCell = null;
             }
         }
 
