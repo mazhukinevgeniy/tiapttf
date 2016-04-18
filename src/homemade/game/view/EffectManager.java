@@ -50,15 +50,13 @@ public class EffectManager
     private synchronized void updateEffects(int differenceMS)
     {
 
-
-        Set<CellCode> keys = fadingBlocks.keySet();
-        Iterator<CellCode> iterator = keys.iterator();
+        Iterator<Map.Entry<CellCode, Integer>> iterator = fadingBlocks.entrySet().iterator();
 
         while (iterator.hasNext())
         {
-            CellCode key = iterator.next();
+            Map.Entry<CellCode, Integer> entry = iterator.next();
 
-            int oldTime = fadingBlocks.get(key);
+            int oldTime = entry.getValue();
             int newTime = oldTime - differenceMS;
 
             if (newTime < 0)
@@ -67,7 +65,7 @@ public class EffectManager
             }
             else
             {
-                fadingBlocks.replace(key, oldTime, newTime);
+                fadingBlocks.replace(entry.getKey(), oldTime, newTime);
             }
         }
     }

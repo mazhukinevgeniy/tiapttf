@@ -26,6 +26,7 @@ public class Assets
     public static Image digit[];
     public static Image disappear[];
     public static List<Map<Direction, Image>> arrows;
+    //TODO: change access so that no class can corrupt loaded assets
 
     public static void loadAssets()
     {
@@ -107,9 +108,9 @@ public class Assets
             {
                 baseImage = ImageIO.read(inputStream);
 
-                for (Direction direction : angles.keySet())
+                for (Map.Entry<Direction, Double> entry : angles.entrySet())
                 {
-                    arrows.put(direction, createRotatedCopy(baseImage, angles.get(direction)));
+                    arrows.put(entry.getKey(), createRotatedCopy(baseImage, entry.getValue()));
                 }
             }
             catch (IOException e)

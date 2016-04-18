@@ -90,21 +90,19 @@ class ArrayBasedGameState implements GameState
         immutableCopy = null;
 
 
-        for (CellCode key : cellUpdates.keySet())
+        for (Map.Entry<CellCode, Integer> entry : cellUpdates.entrySet())
         {
-            int value = cellUpdates.get(key);
-
-            field[key.intCode()] = value;
+            field[entry.getKey().intCode()] = entry.getValue();
         }
 
-        for (LinkCode key : linkUpdates.keySet())
+        for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet())
         {
-            links[key.intCode()] = linkUpdates.get(key);
+            links[entry.getKey().intCode()] = entry.getValue();
         }
 
-        for (LinkCode key : chainUpdates.keySet())
+        for (Map.Entry<LinkCode, Integer> entry : chainUpdates.entrySet())
         {
-            chainLengths[key.intCode()] = chainUpdates.get(key);
+            chainLengths[entry.getKey().intCode()] = entry.getValue();
         }
     }
 
