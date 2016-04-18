@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Marid on 02.04.2016.
  */
-public class MenuManager
+public class MenuManager implements HandlerButtons
 {
     private final class NameMenu
     {
@@ -40,13 +40,9 @@ public class MenuManager
     public MenuManager(Window window, Settings settings)
     {
         this.window = window;
-        this.actionListener = new ButtonActionListener(this);
+        this.actionListener = new ButtonActionListener<>(this);
 
-        Map<Integer, String> menuNames = new HashMap<>();
-        menuNames.put(CodeMenu.GAME, NameMenu.GAME);
-        menuNames.put(CodeMenu.SETTINGS, NameMenu.SETTINGS);
-        menuNames.put(CodeMenu.MAIN_MENU, NameMenu.MAIN_MENU);
-
+        Map<Integer, String> menuNames = createMenuNamesMap();
         Menu mainMenu = new MainMenu(menuNames, actionListener);
 
         SettingsManager settingsManager = new SettingsManager(settings);
@@ -59,23 +55,34 @@ public class MenuManager
         window.add(currentMenu);
     }
 
+    private Map<Integer, String> createMenuNamesMap()
+    {
+        Map<Integer, String> menuNames = new HashMap<>();
+        menuNames.put(CodeMenu.GAME, NameMenu.GAME);
+        menuNames.put(CodeMenu.SETTINGS, NameMenu.SETTINGS);
+        menuNames.put(CodeMenu.MAIN_MENU, NameMenu.MAIN_MENU);
+
+        return menuNames;
+    }
+
     private void setCurrentMenu(int codeMenu)
     {
         currentMenu = menus.get(codeMenu);
     }
 
-    public ButtonActionListener getActionListener()
+    public ButtonActionListener<MenuManager> getActionListener()
     {
         return actionListener;
     }
 
-    public void processClickButton(int keyButton)
+    @Override
+    public void handleButtonClick(int codeButton)
     {
-        if (keyButton == CodeMenu.GAME)
+        if (codeButton == CodeMenu.GAME)
         {
             startGame();
         }
-        else if (keyButton == CodeMenu.SETTINGS)
+        else if (codeButton == CodeMenu.SETTINGS)
         {
             toggleToMenu(CodeMenu.SETTINGS);
         }

@@ -31,7 +31,7 @@ public class Main
         Boolean isRealTime1 = true;
         settings.get(Settings.Name.isRealTime, isRealTime1);
 
-        System.out.println(isRealTime1);//settings.get(Settings.Name.isRealTime, Boolean.TYPE));
+        System.out.println(isRealTime1);
         System.out.println((Integer) settings.get(Settings.Name.simultaneousSpawn));
         System.out.println((Integer) settings.get(Settings.Name.spawnPeriod));
 

@@ -1,13 +1,16 @@
 package homemade.menu.view.settings;
 
+import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.view.Menu;
 import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * Created by Marid on 18.04.2016.
@@ -16,9 +19,13 @@ public class SettingsMenu extends Menu
 {
     Map<String, Pair<Type, ?>> parameters;
 
+    Vector<JCheckBox> checkBoxes = new Vector<>();
+    Vector<JPanel> parameterPanels = new Vector<>();
+
     private SettingsMenu() {}
 
-    public SettingsMenu(Map<String, Pair<Type, ?>> parameters)
+    public SettingsMenu(Map<String, Pair<Type, ?>> parameters, Map<Integer, String> buttons,
+                        ButtonActionListener actionListener)
     {
         super();
 
@@ -26,11 +33,12 @@ public class SettingsMenu extends Menu
         this.parameters = parameters;
 
         initializeParametersUI();
-        initializeButtonPanel();
+        drawParametersUI();
+        initializeButtonPanel(buttons, actionListener);
     }
 
     private void initializeParametersUI()
-    {;
+    {
         Set<String> parameterNames = parameters.keySet();
 
         for(String name : parameterNames)
@@ -50,22 +58,61 @@ public class SettingsMenu extends Menu
     private void createBoolSetting(String parameterName, Boolean value)
     {
         JCheckBox checkBox = BoolParameterFactory.createCheckBox(parameterName, value);
-        add(checkBox);
+        checkBoxes.add(checkBox);
     }
 
     private void createNumberSetting(String parameterName, Integer value)
     {
         JPanel panel = NumberParameterFactory.createParameterPanel(parameterName, String.valueOf(value));
-        add(panel);
+        parameterPanels.add(panel);
     }
 
-    private void initializeButtonPanel()
+    private void drawParametersUI()
+    {
+        for (JCheckBox checkBox : checkBoxes)
+        {
+            add(checkBox);
+        }
+        for (JPanel panel : parameterPanels)
+        {
+            add(panel);
+        }
+    }
+
+    private void initializeButtonPanel(Map<Integer, String> buttons, ButtonActionListener actionListener)
     {
         JPanel panel = new JPanel(new FlowLayout());
 
-        JButton defaultSettings = SettingsButtonFactory.createButton("Reset settings", null);
-        panel.add(defaultSettings);
-
+        Set<Integer> keys = buttons.keySet();
+        for (int key : keys)
+        {
+            String nameButton = buttons.get(key);
+            JButton button = SettingsButtonFactory.createButton(nameButton, actionListener);
+            button.setActionCommand(String.valueOf(key));
+            panel.add(button);
+        }
         add(panel);
+    }
+
+    public Map<String, Pair<Type, ?>> getParameters()
+    {
+        Map<String, Pair<Type, ?>> newParameters = new HashMap<>();
+        for (JCheckBox checkBox : checkBoxes)
+        {
+            String parameterName = checkBox.getText();
+            Pair<Type, ?> pair = parameters.get(parameterName);
+            pair = new Pair<>(pair.getKey(), checkBox.isSelected());
+            newParameters.put(parameterName, pair);
+        }
+        for (JPanel panel : parameterPanels)
+        {
+            String parameterName = ((JLabel)panel.getComponent(0)).getText();
+            Pair<Type, ?> pair = parameters.get(parameterName);
+            pair = new Pair<>(pair.getKey(), Integer.valueOf(((JTextField) panel.getComponent(1)).getText()));
+            newParameters.put(parameterName, pair);
+        }
+        parameters = newParameters;
+
+        return parameters;
     }
 }

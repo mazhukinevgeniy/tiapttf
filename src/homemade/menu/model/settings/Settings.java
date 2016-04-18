@@ -85,7 +85,7 @@ public class Settings
         }
     }
 
-    public void setDefaultSettings()
+    private void setDefaultSettings()
     {
         setDefaultSettingsToMap(nameListBool, boolParameters);
         setDefaultSettingsToMap(nameListInt, intParameters);
@@ -223,6 +223,26 @@ public class Settings
         }
 
         return parameters;
+    }
+
+    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    {
+        for (String name : nameListBool)
+        {
+            if(parameters.containsKey(name))
+            {
+                Boolean value = (Boolean) parameters.get(name).getValue();
+                set(name, value);
+            }
+        }
+        for (String name : nameListInt)
+        {
+            if (parameters.containsKey(name))
+            {
+                Integer value = (Integer) parameters.get(name).getValue();
+                set(name, value);
+            }
+        }
     }
 
     private void updateParameterInSave(Parameter<?> parameter)
