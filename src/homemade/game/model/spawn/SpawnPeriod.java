@@ -23,7 +23,7 @@ import java.util.ArrayList;
 class SpawnPeriod
 {
     private static final int SATURATION_POINT = Game.MIN_COMBO * 3;
-    private static final int TIME_TO_FILL = 6 * 1000;
+    private static final int TIME_TO_FILL = 4 * 1000;
 
     private static final int MIN_PERIOD = 100;
 
