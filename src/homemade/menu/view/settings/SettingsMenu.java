@@ -5,6 +5,7 @@ import homemade.menu.model.settings.Settings;
 import homemade.menu.view.Menu;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,12 @@ public class SettingsMenu extends Menu
 
         this.settings = settings;
 
+        initializeParametersUI();
+        initializeButtonPanel();
+    }
+
+    private void initializeParametersUI()
+    {
         Map<String, Type> parameterNamesMap = settings.getParemeterNamesMap();
         Set<String> parameterNames = parameterNamesMap.keySet();
 
@@ -43,17 +50,27 @@ public class SettingsMenu extends Menu
         }
     }
 
-    private void createBoolSetting(String nameSetting)
+    private void createBoolSetting(String parameterName)
     {
-        JCheckBox checkBox = new JCheckBox(nameSetting);
+        Boolean value = settings.get(parameterName);
+        JCheckBox checkBox = BoolParameterFactory.createCheckBox(parameterName, value);
         add(checkBox);
     }
 
-    private void createNumberSetting(String nameSetting)
+    private void createNumberSetting(String parameterName)
     {
-        JLabel label = new JLabel(nameSetting);
-        JTextField textField = new JTextField(nameSetting);
-        add(label);
-        add(textField);
+        Integer value = settings.get(parameterName);
+        JPanel panel = NumberParameterFactory.createParameterPanel(parameterName, String.valueOf(value));
+        add(panel);
+    }
+
+    private void initializeButtonPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout());
+
+        JButton defaultSettings = SettingsButtonFactory.createButton("Reset settings", null);
+        panel.add(defaultSettings);
+
+        add(panel);
     }
 }

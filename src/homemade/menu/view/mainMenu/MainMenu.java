@@ -29,8 +29,5 @@ public class MainMenu extends Menu
             button.setActionCommand(String.valueOf(key));
             add(button);
         }
-
-        JCheckBox checkBox = new JCheckBox("test");
-        add(checkBox);
     }
 }
