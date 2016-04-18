@@ -14,6 +14,7 @@ public class Main
         Assets.loadAssets();
 
         LocalSaveManager save = new LocalSaveManager("save.xml");
+        parameterTest(save);
 
         Window window = new Window();
         window.setVisible(true);
@@ -37,6 +38,7 @@ public class Main
         settings = new Settings(save);
         System.out.println();
 
+
         boolean isRealTime = settings.get(Settings.Name.isRealTime);
         int simultaneousSpawn = settings.get(Settings.Name.simultaneousSpawn);
         int spawnPeriod = settings.get(Settings.Name.spawnPeriod);
@@ -51,5 +53,7 @@ public class Main
         System.out.println((Boolean) settings.get(Settings.Name.isRealTime));
         System.out.println((Integer) settings.get(Settings.Name.simultaneousSpawn));
         System.out.println((Integer) settings.get(Settings.Name.spawnPeriod));
+
+        System.out.println(settings.getType(Settings.Name.isRealTime).getTypeName());
     }
 }

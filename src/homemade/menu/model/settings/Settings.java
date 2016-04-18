@@ -2,6 +2,7 @@ package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -173,6 +174,22 @@ public class Settings
     public <Type> void get(String parameterName, Type out)
     {
         out = get(parameterName);
+    }
+
+    //parameterName take from Settings.Name
+    public Type getType(String parameterName)
+    {
+        Type type = null;
+        if (boolParameters.containsKey(parameterName))
+        {
+            type = Boolean.TYPE;
+        }
+        else if (intParameters.containsKey(parameterName))
+        {
+            type = Integer.TYPE;
+        }
+
+        return type;
     }
 
     private void updateParameterInSave(Parameter<?> parameter)
