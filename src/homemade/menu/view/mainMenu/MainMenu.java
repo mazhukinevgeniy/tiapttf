@@ -27,7 +27,7 @@ public class MainMenu extends Menu
         for (int key : keys)
         {
             String nameButton = map.get(key);
-            MainMenuButton button = new MainMenuButton(nameButton, manager.getActionListener());
+            JButton button = MainMenuButtonFactory.createButton(nameButton, manager.getActionListener());
             button.setActionCommand(String.valueOf(key));
             add(button);
         }
