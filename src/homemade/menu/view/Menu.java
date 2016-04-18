@@ -13,12 +13,11 @@ public class Menu extends JPanel
 
     public Menu() {}
 
-    public Menu(MenuManager manager, Window window)
+    public Menu(MenuManager manager)
     {
         super();
         this.manager = manager;
 
-        setVisible(false);
-        window.add(this);
+        setVisible(true);
     }
 }

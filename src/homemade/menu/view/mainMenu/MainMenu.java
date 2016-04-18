@@ -2,7 +2,6 @@ package homemade.menu.view.mainMenu;
 
 import homemade.menu.controller.MenuManager;
 import homemade.menu.view.Menu;
-import homemade.menu.view.Window;
 
 import javax.swing.*;
 import java.util.Map;
@@ -15,9 +14,9 @@ public class MainMenu extends Menu
 {
     private MainMenu() {}
 
-    public MainMenu(MenuManager manager, Window window, Map<Integer, String> menus)
+    public MainMenu(MenuManager manager, Map<Integer, String> menus)
     {
-        super(manager, window);
+        super(manager);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -30,5 +29,8 @@ public class MainMenu extends Menu
             button.setActionCommand(String.valueOf(key));
             add(button);
         }
+
+        JCheckBox checkBox = new JCheckBox("test");
+        add(checkBox);
     }
 }

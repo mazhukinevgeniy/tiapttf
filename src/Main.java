@@ -14,12 +14,12 @@ public class Main
         Assets.loadAssets();
 
         LocalSaveManager save = new LocalSaveManager("save.xml");
-        parameterTest(save);
+        Settings settings = new Settings(save);
 
         Window window = new Window();
         window.setVisible(true);
 
-        MenuManager menuManager = new MenuManager(window);
+        MenuManager menuManager = new MenuManager(window, settings);
 
         window.finaleInitialize();
     }

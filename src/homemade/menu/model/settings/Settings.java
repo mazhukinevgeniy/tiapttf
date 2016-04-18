@@ -192,6 +192,21 @@ public class Settings
         return type;
     }
 
+    public Map<String, Type> getParemeterNamesMap()
+    {
+        Map<String, Type> namesMap = new HashMap<>();
+        for (String name : nameListBool)
+        {
+            namesMap.put(name, Boolean.TYPE);
+        }
+        for (String name : nameListInt)
+        {
+            namesMap.put(name, Integer.TYPE);
+        }
+
+        return namesMap;
+    }
+
     private void updateParameterInSave(Parameter<?> parameter)
     {
         save.setSettingsValue(parameter.getName(), parameter.getValue());
