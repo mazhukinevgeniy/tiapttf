@@ -2,6 +2,7 @@ package homemade.game.model;
 
 import homemade.game.Game;
 import homemade.game.GameState;
+import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -24,16 +25,25 @@ public class GameModelLinker
     private NumberPool numberPool;
     private ArrayBasedGameState state;
 
-    GameModelLinker(FieldStructure structure, CellMap cellMap, ComboDetector comboDetector, NumberPool numberPool, ArrayBasedGameState state)
+    private GameController controller;
+
+    GameModelLinker(FieldStructure structure, CellMap cellMap, GameController controller, NumberPool numberPool)
     {
+        this.controller = controller;
         this.structure = structure;
         this.cellMap = cellMap;
-        this.comboDetector = comboDetector;
         this.numberPool = numberPool;
-        this.state = state;
+
+        state = new ArrayBasedGameState(structure);
+        comboDetector = ComboDetector.initializeComboDetection(structure, cellMap, controller);
     }
 
     public FieldStructure getStructure() { return structure; }
+
+    public void stopAllFacilities()
+    {
+        controller.gameOver();
+    }
 
 
     synchronized public void requestSpawn(Map<CellCode, Integer> changes)
