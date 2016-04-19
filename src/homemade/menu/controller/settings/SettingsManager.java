@@ -2,6 +2,7 @@ package homemade.menu.controller.settings;
 
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
+import homemade.menu.controller.MenuManager;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.Menu;
 import homemade.menu.view.settings.SettingsMenu;
@@ -30,6 +31,8 @@ public class SettingsManager implements HandlerButtons
         public static final Integer APPLY = 2;
     }
 
+    MenuManager manager;
+
     SettingsMenu settingsMenu;
     Settings settings;
     ButtonActionListener actionListener;
@@ -38,8 +41,9 @@ public class SettingsManager implements HandlerButtons
 
     private SettingsManager() {}
 
-    public SettingsManager(Settings settings)
+    public SettingsManager(MenuManager manager, Settings settings)
     {
+        this.manager = manager;
         this.settings = settings;
         actionListener = new ButtonActionListener<>(this);
 
@@ -76,7 +80,7 @@ public class SettingsManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.BACK_TO_MENU)
         {
-
+            manager.toggleToMenu(MenuManager.CodeMenu.MAIN_MENU);
         }
         else if (codeButton == CodeButton.RESET)
         {

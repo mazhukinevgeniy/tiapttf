@@ -22,7 +22,7 @@ public class MenuManager implements HandlerButtons
         public static final String MAIN_MENU = "Main menu";
     }
 
-    private final class CodeMenu
+    public static final class CodeMenu
     {
         public static final int GAME = 0;
         public static final int SETTINGS = 1;
@@ -45,7 +45,7 @@ public class MenuManager implements HandlerButtons
         Map<Integer, String> menuNames = createMenuNamesMap();
         Menu mainMenu = new MainMenu(menuNames, actionListener);
 
-        SettingsManager settingsManager = new SettingsManager(settings);
+        SettingsManager settingsManager = new SettingsManager(this, settings);
         Menu settingsMenu = settingsManager.getSettingsMenu();
 
         menus.put(CodeMenu.MAIN_MENU, mainMenu);
@@ -60,7 +60,6 @@ public class MenuManager implements HandlerButtons
         Map<Integer, String> menuNames = new HashMap<>();
         menuNames.put(CodeMenu.GAME, NameMenu.GAME);
         menuNames.put(CodeMenu.SETTINGS, NameMenu.SETTINGS);
-        menuNames.put(CodeMenu.MAIN_MENU, NameMenu.MAIN_MENU);
 
         return menuNames;
     }
@@ -94,7 +93,7 @@ public class MenuManager implements HandlerButtons
         currentMenu.setVisible(false);
     }
 
-    private void toggleToMenu(int codeMenu)
+    public void toggleToMenu(int codeMenu)
     {
         window.remove(currentMenu);
         setCurrentMenu(codeMenu);
