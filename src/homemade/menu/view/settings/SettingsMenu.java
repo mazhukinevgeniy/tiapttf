@@ -22,6 +22,9 @@ public class SettingsMenu extends Menu
     Vector<JCheckBox> checkBoxes = new Vector<>();
     Vector<JPanel> parameterPanels = new Vector<>();
 
+    Map<Integer, String> buttons;
+    ButtonActionListener actionListener;
+
     private SettingsMenu() {}
 
     public SettingsMenu(Map<String, Pair<Type, ?>> parameters, Map<Integer, String> buttons,
@@ -31,10 +34,21 @@ public class SettingsMenu extends Menu
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.parameters = parameters;
+        this.buttons = buttons;
+        this.actionListener = actionListener;
 
+        redrawUI();
+    }
+
+    public void redrawUI()
+    {
+        checkBoxes.clear();
+        parameterPanels.clear();
+        removeAll();
         initializeParametersUI();
         drawParametersUI();
         initializeButtonPanel(buttons, actionListener);
+        updateUI();
     }
 
     private void initializeParametersUI()
@@ -114,5 +128,10 @@ public class SettingsMenu extends Menu
         parameters = newParameters;
 
         return parameters;
+    }
+
+    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    {
+        this.parameters = parameters;
     }
 }

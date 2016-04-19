@@ -85,7 +85,7 @@ public class Settings
         }
     }
 
-    private void setDefaultSettings()
+    public void setDefaultSettings()
     {
         setDefaultSettingsToMap(nameListBool, boolParameters);
         setDefaultSettingsToMap(nameListInt, intParameters);

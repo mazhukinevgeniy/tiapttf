@@ -14,7 +14,7 @@ class BoolParameterFactory
     {
         JCheckBox checkBox = new JCheckBox(parameterName);
         checkBox.setSelected(value);
-        checkBox.setFont(FONT);
+        checkBox.setHorizontalTextPosition(JCheckBox.LEFT);
 
         return checkBox;
     }
