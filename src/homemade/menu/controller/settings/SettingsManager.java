@@ -75,7 +75,7 @@ public class SettingsManager implements HandlerButtons
             settings.setParameters(settingsMenu.getParameters());
             parameters = settings.getAllParameters();
             settingsMenu.setParameters(parameters);
-            settingsMenu.redrawUI();
+            settingsMenu.updateMenu();
         }
         else if (codeButton == CodeButton.BACK_TO_MENU)
         {
@@ -86,7 +86,7 @@ public class SettingsManager implements HandlerButtons
             settings.setDefaultSettings();
             parameters = settings.getAllParameters();
             settingsMenu.setParameters(parameters);
-            settingsMenu.redrawUI();
+            settingsMenu.updateMenu();
         }
     }
 }
