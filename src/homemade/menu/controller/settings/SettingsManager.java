@@ -72,7 +72,6 @@ public class SettingsManager implements HandlerButtons
     {
         if(codeButton == CodeButton.APPLY)
         {
-            System.out.println("click Apply");
             settings.setParameters(settingsMenu.getParameters());
             parameters = settings.getAllParameters();
             settingsMenu.setParameters(parameters);
