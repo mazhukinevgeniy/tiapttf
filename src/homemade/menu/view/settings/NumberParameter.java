@@ -2,11 +2,13 @@ package homemade.menu.view.settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 /**
  * Created by Marid on 18.04.2016.
  */
-class NumberParameter implements ParameterFactory<JPanel, Number>
+class NumberParameter implements ParameterFactory<JPanel, Integer>
 {
     private static class Index
     {
@@ -20,7 +22,7 @@ class NumberParameter implements ParameterFactory<JPanel, Number>
     public NumberParameter() {}
 
     @Override
-    public JPanel create(final String nameParameter, final Number value)
+    public JPanel create(final String nameParameter, final Integer value)
     {
         JPanel panel = new JPanel(new FlowLayout());
 
@@ -28,6 +30,7 @@ class NumberParameter implements ParameterFactory<JPanel, Number>
         String strValue = String.valueOf(value);
         JTextField textField = new JTextField(strValue, COLUMNS_TEXT_FIELD);
         textField.setFont(FONT_TEXT_FIELD);
+        textField.addFocusListener(new TextFieldProofreader());
 
         panel.add(label, Index.LABEL);
         panel.add(textField, Index.TEXT_FIELD);
@@ -49,9 +52,37 @@ class NumberParameter implements ParameterFactory<JPanel, Number>
     }
 
     @Override
-    public void setValue(JPanel parameterPanel, Number value)
+    public void setValue(JPanel parameterPanel, Integer value)
     {
         String strValue = String.valueOf(value);
         ((JTextField) parameterPanel.getComponent(Index.TEXT_FIELD)).setText(strValue);
+    }
+
+    private class TextFieldProofreader implements FocusListener
+    {
+        private JTextField textField;
+        private Integer lastValue;
+
+        @Override
+        public void focusGained(FocusEvent e)
+        {
+            textField = (JTextField) e.getComponent();
+            lastValue = Integer.valueOf(textField.getText());
+        }
+
+        @Override
+        public void focusLost(FocusEvent e)
+        {
+            String strValue = textField.getText();
+
+            Integer value = lastValue;
+            try
+            {
+                value = Integer.valueOf(strValue);
+            }
+            catch (Exception exception) {}
+
+            textField.setText(String.valueOf(value));
+        }
     }
 }
