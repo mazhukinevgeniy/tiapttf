@@ -17,6 +17,9 @@ import java.util.Vector;
  */
 public class SettingsMenu extends Menu
 {
+    BoolParameter boolParameter = new BoolParameter();
+    NumberParameter numberParameter = new NumberParameter();
+
     Map<String, Pair<Type, ?>> parameters;
 
     Vector<JCheckBox> checkBoxes = new Vector<>();
@@ -71,13 +74,13 @@ public class SettingsMenu extends Menu
 
     private void createBoolSetting(String parameterName, Boolean value)
     {
-        JCheckBox checkBox = BoolParameterFactory.createCheckBox(parameterName, value);
+        JCheckBox checkBox = boolParameter.create(parameterName, value);
         checkBoxes.add(checkBox);
     }
 
     private void createNumberSetting(String parameterName, Integer value)
     {
-        JPanel panel = NumberParameterFactory.createParameterPanel(parameterName, String.valueOf(value));
+        JPanel panel = numberParameter.create(parameterName, value);
         parameterPanels.add(panel);
     }
 
@@ -113,16 +116,16 @@ public class SettingsMenu extends Menu
         Map<String, Pair<Type, ?>> newParameters = new HashMap<>();
         for (JCheckBox checkBox : checkBoxes)
         {
-            String parameterName = checkBox.getText();
+            String parameterName = boolParameter.getName(checkBox);
             Pair<Type, ?> pair = parameters.get(parameterName);
-            pair = new Pair<>(pair.getKey(), checkBox.isSelected());
+            pair = new Pair<>(pair.getKey(), boolParameter.getValue(checkBox));
             newParameters.put(parameterName, pair);
         }
         for (JPanel panel : parameterPanels)
         {
-            String parameterName = ((JLabel)panel.getComponent(0)).getText();
+            String parameterName = numberParameter.getName(panel);
             Pair<Type, ?> pair = parameters.get(parameterName);
-            pair = new Pair<>(pair.getKey(), Integer.valueOf(((JTextField) panel.getComponent(1)).getText()));
+            pair = new Pair<>(pair.getKey(), numberParameter.getValue(panel));
             newParameters.put(parameterName, pair);
         }
         parameters = newParameters;
