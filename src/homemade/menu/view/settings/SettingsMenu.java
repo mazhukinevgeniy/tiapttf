@@ -17,6 +17,9 @@ import java.util.Vector;
  */
 public class SettingsMenu extends Menu
 {
+    BoolParameter boolFactory = new BoolParameter();
+    NumberParameter numberFactory = new NumberParameter();
+
     Map<String, Pair<Type, ?>> parameters;
 
     Vector<JCheckBox> checkBoxes = new Vector<>();
@@ -37,18 +40,14 @@ public class SettingsMenu extends Menu
         this.buttons = buttons;
         this.actionListener = actionListener;
 
-        redrawUI();
+        initializeUI();
     }
 
-    public void redrawUI()
+    private void initializeUI()
     {
-        checkBoxes.clear();
-        parameterPanels.clear();
-        removeAll();
         initializeParametersUI();
         drawParametersUI();
         initializeButtonPanel(buttons, actionListener);
-        updateUI();
     }
 
     private void initializeParametersUI()
@@ -71,25 +70,27 @@ public class SettingsMenu extends Menu
 
     private void createBoolSetting(String parameterName, Boolean value)
     {
-        JCheckBox checkBox = BoolParameterFactory.createCheckBox(parameterName, value);
+        JCheckBox checkBox = boolFactory.create(parameterName, value);
         checkBoxes.add(checkBox);
     }
 
     private void createNumberSetting(String parameterName, Integer value)
     {
-        JPanel panel = NumberParameterFactory.createParameterPanel(parameterName, String.valueOf(value));
+        JPanel panel = numberFactory.create(parameterName, value);
         parameterPanels.add(panel);
     }
 
     private void drawParametersUI()
     {
-        for (JCheckBox checkBox : checkBoxes)
+        drawParametersUI(checkBoxes);
+        drawParametersUI(parameterPanels);
+    }
+
+    private <TypeUI extends JComponent> void drawParametersUI(Vector<TypeUI> parametersUI)
+    {
+        for (TypeUI parameter : parametersUI)
         {
-            add(checkBox);
-        }
-        for (JPanel panel : parameterPanels)
-        {
-            add(panel);
+            add(parameter);
         }
     }
 
@@ -111,27 +112,51 @@ public class SettingsMenu extends Menu
     public Map<String, Pair<Type, ?>> getParameters()
     {
         Map<String, Pair<Type, ?>> newParameters = new HashMap<>();
-        for (JCheckBox checkBox : checkBoxes)
-        {
-            String parameterName = checkBox.getText();
-            Pair<Type, ?> pair = parameters.get(parameterName);
-            pair = new Pair<>(pair.getKey(), checkBox.isSelected());
-            newParameters.put(parameterName, pair);
-        }
-        for (JPanel panel : parameterPanels)
-        {
-            String parameterName = ((JLabel)panel.getComponent(0)).getText();
-            Pair<Type, ?> pair = parameters.get(parameterName);
-            pair = new Pair<>(pair.getKey(), Integer.valueOf(((JTextField) panel.getComponent(1)).getText()));
-            newParameters.put(parameterName, pair);
-        }
+        addValuesTo(newParameters, checkBoxes, boolFactory);
+        addValuesTo(newParameters, parameterPanels, numberFactory);
         parameters = newParameters;
 
         return parameters;
     }
 
-    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    private <TypeUI> Map<String, Pair<Type, ?>> addValuesTo(Map<String, Pair<Type, ?>> newParameters,
+                                                            Vector<TypeUI> parameterUI,
+                                                            ParameterFactory<TypeUI, ?> factory)
+    {
+        for (TypeUI parameter : parameterUI)
+        {
+            String parameterName = factory.getName(parameter);
+            Pair<Type, ?> pair = parameters.get(parameterName);
+            pair = new Pair<>(pair.getKey(), factory.getValue(parameter));
+            newParameters.put(parameterName, pair);
+        }
+        return newParameters;
+    }
+
+    public void updateMenu(Map<String, Pair<Type, ?>> parameters)
     {
         this.parameters = parameters;
+        reinitializeParametersUI(checkBoxes, boolFactory);
+        reinitializeParametersUI(parameterPanels, numberFactory);
+    }
+
+    private <TypeUI, TypeValue> void reinitializeParametersUI(Vector<TypeUI> parameterUI,
+                                                              ParameterFactory<TypeUI, TypeValue> factory)
+    {
+        for (TypeUI parameter : parameterUI)
+        {
+            String parameterName = factory.getName(parameter);
+            if (parameters.containsKey(parameterName))
+            {
+                TypeValue newValue = getValueFromParameters(parameterName);
+                factory.setValue(parameter, newValue);
+            }
+        }
+    }
+
+    private <TypeValue> TypeValue getValueFromParameters(String parameterName)
+    {
+        Pair<Type, TypeValue> pair = (Pair<Type, TypeValue>) parameters.get(parameterName);
+        return pair.getValue();
     }
 }

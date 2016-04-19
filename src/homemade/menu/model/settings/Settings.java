@@ -67,7 +67,7 @@ public class Settings
     {
         Default.initialize();
         initializeMaps();
-        setDefaultSettings();
+        setDefaultSettingsToMaps();
     }
 
     private void initializeMaps()
@@ -85,7 +85,7 @@ public class Settings
         }
     }
 
-    public void setDefaultSettings()
+    private void setDefaultSettingsToMaps()
     {
         setDefaultSettingsToMap(nameListBool, boolParameters);
         setDefaultSettingsToMap(nameListInt, intParameters);
@@ -147,6 +147,11 @@ public class Settings
             parameter.setValue(value);
             updateParameterInSave(parameter);
         }
+    }
+
+    private void updateParameterInSave(Parameter<?> parameter)
+    {
+        save.setSettingsValue(parameter.getName(), parameter.getValue());
     }
 
     //parameterName take from Settings.Name
@@ -245,8 +250,24 @@ public class Settings
         }
     }
 
-    private void updateParameterInSave(Parameter<?> parameter)
+    public void setDefaultSettings()
     {
-        save.setSettingsValue(parameter.getName(), parameter.getValue());
+        setDefaultSettingsToMaps();
+        updateAllParametersInSave();
+    }
+
+    private void updateAllParametersInSave()
+    {
+        Parameter<?> parameter;
+        for (String name : nameListBool)
+        {
+            parameter = boolParameters.get(name);
+            updateParameterInSave(parameter);
+        }
+        for (String name : nameListInt)
+        {
+            parameter = intParameters.get(name);
+            updateParameterInSave(parameter);
+        }
     }
 }
