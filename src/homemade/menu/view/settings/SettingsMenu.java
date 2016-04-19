@@ -133,13 +133,9 @@ public class SettingsMenu extends Menu
         return newParameters;
     }
 
-    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    public void updateMenu(Map<String, Pair<Type, ?>> parameters)
     {
         this.parameters = parameters;
-    }
-
-    public void updateMenu()
-    {
         reinitializeParametersUI(checkBoxes, boolFactory);
         reinitializeParametersUI(parameterPanels, numberFactory);
     }
