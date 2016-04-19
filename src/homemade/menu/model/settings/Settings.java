@@ -1,7 +1,9 @@
 package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
+import javafx.util.Pair;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +18,10 @@ public class Settings
     //1) add name new parameter
     public final class Name
     {
-        public static final String isRealTime = "isRealTime";
-        public static final String simultaneousSpawn = "simultaneousSpawn";
-        public static final String spawnPeriod = "spawnPeriod";
-        public static final String something = "something";
+        public static final String isRealTime = "Real time";
+        public static final String simultaneousSpawn = "Simultaneous spawn";
+        public static final String spawnPeriod = "Spawn period";
+        public static final String something = "Something";
     }
 
     //2) add parameter to eligible list with names
@@ -83,7 +85,7 @@ public class Settings
         }
     }
 
-    private void setDefaultSettings()
+    public void setDefaultSettings()
     {
         setDefaultSettingsToMap(nameListBool, boolParameters);
         setDefaultSettingsToMap(nameListInt, intParameters);
@@ -173,6 +175,74 @@ public class Settings
     public <Type> void get(String parameterName, Type out)
     {
         out = get(parameterName);
+    }
+
+    //parameterName take from Settings.Name
+    public Type getType(String parameterName)
+    {
+        Type type = null;
+        if (boolParameters.containsKey(parameterName))
+        {
+            type = Boolean.TYPE;
+        }
+        else if (intParameters.containsKey(parameterName))
+        {
+            type = Integer.TYPE;
+        }
+
+        return type;
+    }
+
+    public Map<String, Type> getParameterNamesMap()
+    {
+        Map<String, Type> namesMap = new HashMap<>();
+        for (String name : nameListBool)
+        {
+            namesMap.put(name, Boolean.TYPE);
+        }
+        for (String name : nameListInt)
+        {
+            namesMap.put(name, Integer.TYPE);
+        }
+
+        return namesMap;
+    }
+
+    public Map<String, Pair<Type, ?>> getAllParameters()
+    {
+        Map<String, Pair<Type, ?>> parameters = new HashMap<>();
+        for (String name : nameListBool)
+        {
+            Boolean value = boolParameters.get(name).getValue();
+            parameters.put(name, new Pair<>(Boolean.TYPE, value));
+        }
+        for (String name : nameListInt)
+        {
+            Integer value = intParameters.get(name).getValue();
+            parameters.put(name, new Pair<>(Integer.TYPE, value));
+        }
+
+        return parameters;
+    }
+
+    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    {
+        for (String name : nameListBool)
+        {
+            if(parameters.containsKey(name))
+            {
+                Boolean value = (Boolean) parameters.get(name).getValue();
+                set(name, value);
+            }
+        }
+        for (String name : nameListInt)
+        {
+            if (parameters.containsKey(name))
+            {
+                Integer value = (Integer) parameters.get(name).getValue();
+                set(name, value);
+            }
+        }
     }
 
     private void updateParameterInSave(Parameter<?> parameter)

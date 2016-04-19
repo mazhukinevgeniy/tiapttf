@@ -10,5 +10,7 @@ public class Menu extends JPanel
     public Menu()
     {
         super();
+
+        setVisible(true);
     }
 }

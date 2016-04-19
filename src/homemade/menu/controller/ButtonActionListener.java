@@ -6,17 +6,18 @@ import java.awt.event.ActionListener;
 /**
  * Created by Marid on 02.04.2016.
  */
-public class ButtonActionListener implements ActionListener
+public class ButtonActionListener<Type extends HandlerButtons> implements ActionListener
 {
-    private MenuManager manager;
+    private Type handler;
 
-    public ButtonActionListener(MenuManager manager)
+    public ButtonActionListener(Type handler)
     {
-        this.manager = manager;
+        this.handler = handler;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e)
     {
-        manager.processClickButton(Integer.valueOf(e.getActionCommand()));
+        handler.handleButtonClick(Integer.valueOf(e.getActionCommand()));
     }
 }

@@ -26,6 +26,12 @@ public class Window extends JFrame
         return getContentPane().add(component);
     }
 
+    @Override
+    public void remove(Component component)
+    {
+        getContentPane().remove(component);
+    }
+
     public void finaleInitialize()
     {
         pack();

@@ -1,8 +1,7 @@
 package homemade.menu.view.mainMenu;
 
-import homemade.menu.controller.MenuManager;
+import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.view.Menu;
-import homemade.menu.view.Window;
 
 import javax.swing.*;
 import java.util.Map;
@@ -13,26 +12,22 @@ import java.util.Set;
  */
 public class MainMenu extends Menu
 {
-    private MenuManager manager;
+    private MainMenu() {}
 
-    public MainMenu(MenuManager manager, Window window, Map<Integer, String> map)
+    public MainMenu(Map<Integer, String> menus, ButtonActionListener actionListener)
     {
         super();
-        this.manager = manager;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        Set<Integer> keys = map.keySet();
+        Set<Integer> keys = menus.keySet();
 
         for (int key : keys)
         {
-            String nameButton = map.get(key);
-            MainMenuButton button = new MainMenuButton(nameButton, manager.getActionListener());
+            String nameButton = menus.get(key);
+            JButton button = MainMenuButtonFactory.createButton(nameButton, actionListener);
             button.setActionCommand(String.valueOf(key));
             add(button);
         }
-
-        setVisible(false);
-        window.add(this);
     }
 }
