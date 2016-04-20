@@ -31,6 +31,8 @@ public class GameModelLinker
 
     private GameController controller;
 
+    private GameState lastGameState;
+
     GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller)
     {
         this.controller = controller;
@@ -42,8 +44,10 @@ public class GameModelLinker
         CellMapReader readOnlyMap = cellMap;
 
         state = new ArrayBasedGameState(structure);
-        spawner = new SpawnManager(this, settings, readOnlyMap, numberPool);
+        lastGameState = state.getImmutableCopy();
+
         comboDetector = ComboDetector.initializeComboDetection(structure, settings, readOnlyMap, controller);
+        spawner = new SpawnManager(this, settings, readOnlyMap, numberPool);
     }
 
     public FieldStructure getStructure() { return structure; }
@@ -94,9 +98,19 @@ public class GameModelLinker
         }
     }
 
-    public GameState copyGameState()
+    synchronized GameState copyGameState()
     {
-        return state.getImmutableCopy();
+        return lastGameState = state.getImmutableCopy();
+    }
+
+    /**
+     * Use this if
+     * A) you want an immutable gamestate
+     * B) you don't care if it's not updated since the last external use (e.g. rendering)
+     */
+    public GameState lastGameState()
+    {
+        return lastGameState;
     }
 
     private void actOnChangedCells(Set<CellCode> changedCells)
@@ -121,6 +135,14 @@ public class GameModelLinker
                 changedCells.addAll(removedCells.keySet());
             }
 
+            updateState(changedCells); //TODO: separate it from autocompletion
+        }
+    }
+
+    private void updateState(Set<CellCode> changedCells)
+    {
+        if (changedCells.size() > 0)
+        {
             Map<CellCode, Integer> updatedCells = new HashMap<>();
             Map<LinkCode, Direction> updatedLinks = new HashMap<>();
             Map<LinkCode, Integer> updatedChains = new HashMap<>();

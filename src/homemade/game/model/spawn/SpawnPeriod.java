@@ -71,7 +71,7 @@ class SpawnPeriod
 
     long getSpawnPeriod()
     {
-        GameState state = linker.copyGameState();
+        GameState state = linker.lastGameState();
 
         int occupiedCells = state.getCellsOccupied();
         int spawnsDenied = state.getSpawnsDenied();

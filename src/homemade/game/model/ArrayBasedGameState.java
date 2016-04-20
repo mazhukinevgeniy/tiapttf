@@ -10,7 +10,7 @@ import homemade.game.fieldstructure.LinkCode;
 import java.util.Map;
 
 /**
- * Created by user3 on 24.03.2016.
+ * Must be synchronized externally!
  */
 class ArrayBasedGameState implements GameState
 {
@@ -77,13 +77,13 @@ class ArrayBasedGameState implements GameState
         this.spawnsDenied = spawnsDenied;
     }
 
-    synchronized void incrementDenyCounter()
+    void incrementDenyCounter()
     {
         spawnsDenied++;
     }
 
 
-    synchronized void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates,
+    void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates,
                                           Map<LinkCode, Direction> linkUpdates,
                                           Map<LinkCode, Integer> chainUpdates)
     {
@@ -146,7 +146,7 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    synchronized public GameState getImmutableCopy()
+    public GameState getImmutableCopy()
     {
         if (immutableCopy == null)
             immutableCopy = new ArrayBasedGameState(field, links, chainLengths, spawnsDenied);
