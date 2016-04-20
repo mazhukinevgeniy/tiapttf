@@ -17,16 +17,16 @@ import java.util.Vector;
  */
 public class SettingsMenu extends Menu
 {
-    BoolParameter boolFactory = new BoolParameter();
-    NumberParameter numberFactory = new NumberParameter();
+    private BoolParameter boolFactory = new BoolParameter();
+    private NumberParameter numberFactory = new NumberParameter();
 
-    Map<String, Pair<Type, ?>> parameters;
+    private Map<String, Pair<Type, ?>> parameters;
 
-    Vector<JCheckBox> checkBoxes = new Vector<>();
-    Vector<JPanel> parameterPanels = new Vector<>();
+    private Vector<JCheckBox> checkBoxes = new Vector<>();
+    private Vector<JPanel> parameterPanels = new Vector<>();
 
-    Map<Integer, String> buttons;
-    ButtonActionListener actionListener;
+    private Map<Integer, String> buttons;
+    private ButtonActionListener actionListener;
 
     private SettingsMenu() {}
 

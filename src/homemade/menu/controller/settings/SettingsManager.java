@@ -19,25 +19,25 @@ public class SettingsManager implements HandlerButtons
 {
     private final class NameButton
     {
-        public static final String RESET = "Reset";
-        public static final String BACK_TO_MENU = "Back to menu";
-        public static final String APPLY = "Apply";
+        private static final String RESET = "Reset";
+        private static final String BACK_TO_MENU = "Back to menu";
+        private static final String APPLY = "Apply";
     }
 
     private static final class CodeButton
     {
-        public static final Integer RESET = 0;
-        public static final Integer BACK_TO_MENU = 1;
-        public static final Integer APPLY = 2;
+        private static final Integer RESET = 0;
+        private static final Integer BACK_TO_MENU = 1;
+        private static final Integer APPLY = 2;
     }
 
-    MenuManager manager;
+    private MenuManager manager;
 
-    SettingsMenu settingsMenu;
-    Settings settings;
-    ButtonActionListener actionListener;
+    private SettingsMenu settingsMenu;
+    private Settings settings;
+    private ButtonActionListener actionListener;
 
-    Map<String, Pair<Type, ?>> parameters;
+    private Map<String, Pair<Type, ?>> parameters;
 
     private SettingsManager() {}
 

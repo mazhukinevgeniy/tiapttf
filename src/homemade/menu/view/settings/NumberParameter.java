@@ -12,8 +12,8 @@ class NumberParameter implements ParameterFactory<JPanel, Integer>
 {
     private static class Index
     {
-        public static final int LABEL = 0;
-        public static final int TEXT_FIELD = 1;
+        private static final int LABEL = 0;
+        private static final int TEXT_FIELD = 1;
     }
 
     private static final Font FONT_TEXT_FIELD = new Font("Verdana", Font.PLAIN, 13);
