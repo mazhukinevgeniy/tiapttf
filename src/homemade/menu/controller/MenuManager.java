@@ -17,9 +17,9 @@ public class MenuManager implements HandlerButtons
 {
     private final class NameMenu
     {
-        public static final String GAME = "Game";
-        public static final String SETTINGS = "Settings";
-        public static final String MAIN_MENU = "Main menu";
+        private static final String GAME = "Game";
+        private static final String SETTINGS = "Settings";
+        private static final String MAIN_MENU = "Main menu";
     }
 
     public static final class CodeMenu
@@ -29,13 +29,13 @@ public class MenuManager implements HandlerButtons
         public static final int MAIN_MENU = 2;
     }
 
-    Window window;
+    private Window window;
 
-    Menu currentMenu;
-    Map<Integer, Menu> menus = new HashMap<>();
+    private Menu currentMenu;
+    private Map<Integer, Menu> menus = new HashMap<>();
 
-    GameController gameController;
-    ButtonActionListener actionListener;
+    private GameController gameController;
+    private ButtonActionListener actionListener;
 
     public MenuManager(Window window, Settings settings)
     {
