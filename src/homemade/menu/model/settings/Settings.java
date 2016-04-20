@@ -22,6 +22,7 @@ public class Settings
         public static final String simultaneousSpawn = "Simultaneous spawn";
         public static final String spawnPeriod = "Spawn period";
         public static final String something = "Something";
+        public static final String comboLength = "Min combo length";
     }
 
     //2) add parameter to eligible list with names
@@ -29,7 +30,8 @@ public class Settings
 
     private List<String> nameListInt = Arrays.asList(Name.simultaneousSpawn,
                                                      Name.spawnPeriod,
-                                                     Name.something);
+                                                     Name.something,
+                                                     Name.comboLength);
 
     //3) state default value and Range/Enum valid values
     private static Map<String, ValueChecker<?>> checkers = new HashMap<>();
@@ -40,6 +42,7 @@ public class Settings
         checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
         checkers.put(Name.spawnPeriod, new RangeChecker<>(1000, 1000, 1000 * 60 * 60));
         checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
+        checkers.put(Name.comboLength, new RangeChecker<>(5, 3, 9));
     }
     //4) everything should work (=
 
