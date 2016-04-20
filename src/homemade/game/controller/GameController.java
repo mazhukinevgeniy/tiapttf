@@ -1,6 +1,7 @@
 package homemade.game.controller;
 
 import homemade.game.Effect;
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
@@ -30,7 +31,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     private QuickTimer timer;
 
-    public GameController(Frame mainFrame)
+    public GameController(Frame mainFrame, GameSettings settings)
     {
         frame = mainFrame;
 

@@ -1,5 +1,6 @@
 package homemade.menu.controller;
 
+import homemade.game.GameSettings;
 import homemade.game.controller.GameController;
 import homemade.menu.controller.settings.SettingsManager;
 import homemade.menu.model.settings.Settings;
@@ -30,6 +31,7 @@ public class MenuManager implements HandlerButtons
     }
 
     private Window window;
+    private Settings settings;
 
     private Menu currentMenu;
     private Map<Integer, Menu> menus = new HashMap<>();
@@ -40,7 +42,9 @@ public class MenuManager implements HandlerButtons
     public MenuManager(Window window, Settings settings)
     {
         this.window = window;
-        this.actionListener = new ButtonActionListener<>(this);
+        this.settings = settings;
+
+        actionListener = new ButtonActionListener<>(this);
 
         Map<Integer, String> menuNames = createMenuNamesMap();
         Menu mainMenu = new MainMenu(menuNames, actionListener);
@@ -89,7 +93,7 @@ public class MenuManager implements HandlerButtons
 
     private void startGame()
     {
-        gameController = new GameController(window);
+        gameController = new GameController(window, new GameSettings(settings));
         currentMenu.setVisible(false);
     }
 
