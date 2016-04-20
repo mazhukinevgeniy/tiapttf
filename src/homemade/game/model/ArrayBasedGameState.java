@@ -92,7 +92,16 @@ class ArrayBasedGameState implements GameState
 
         for (Map.Entry<CellCode, Integer> entry : cellUpdates.entrySet())
         {
-            field[entry.getKey().intCode()] = entry.getValue();
+            int pos = entry.getKey().intCode();
+            int newValue = entry.getValue();
+            int oldValue = field[pos];
+
+            if (oldValue < 1 && newValue > 0)
+                cellsOccupied++;
+            else if (oldValue > 0 && newValue < 1)
+                cellsOccupied--;
+
+            field[pos] = newValue;
         }
 
         for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet())
