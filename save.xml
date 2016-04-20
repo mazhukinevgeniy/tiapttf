@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><data>
-<settings>
-	<parameter name="Real time" value="false"/>
-	<parameter name="Simultaneous spawn" value="4"/>
-	<parameter name="Spawn period" value="1000"/>
-	<parameter name="Something" value="2"/>
-</settings>
-<testBlock><parameter name="testParameter" value="1000000"/></testBlock></data>
