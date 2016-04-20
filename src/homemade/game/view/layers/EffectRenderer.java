@@ -6,9 +6,6 @@ import homemade.resources.Assets;
 
 import java.awt.*;
 
-/**
- * Created by user3 on 02.04.2016.
- */
 class EffectRenderer
 {
 
@@ -21,12 +18,10 @@ class EffectRenderer
     {
         if (timeRemaining > 0)
         {
-
             int numberOfFrames = Assets.disappear.length;
 
             int frame = Math.min(numberOfFrames - 1,
                     (numberOfFrames * timeRemaining) / Effect.FADING_BLOCK.getFullDuration());
-            System.out.println("frame " + frame);
 
             Image sprite = Assets.disappear[frame];
 
