@@ -7,7 +7,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.cellmap.CellMap;
+import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class ComboDetector
 {
 
-    public static ComboDetector initializeComboDetection(FieldStructure structure, GameSettings settings, CellMap cellMap, GameController controller)
+    public static ComboDetector initializeComboDetection(FieldStructure structure, GameSettings settings, CellMapReader cellMap, GameController controller)
     {
         GameScore gameScore = new GameScore(structure, controller, settings);
 
@@ -31,13 +31,13 @@ public class ComboDetector
     //it's probably better than reallocating every time
 
     private FieldStructure structure;
-    private CellMap cellMap;
+    private CellMapReader cellMap;
     private GameScore gameScore;
     private BlockRemovalHandler blockRemovalHandler;
 
     private int minCombo;
 
-    private ComboDetector(FieldStructure structure, GameSettings settings, CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
+    private ComboDetector(FieldStructure structure, GameSettings settings, CellMapReader cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
         int maxCellsPerLine = structure.getMaxDimension();
         tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);

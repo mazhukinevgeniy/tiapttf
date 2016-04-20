@@ -5,7 +5,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.NumberPool;
-import homemade.game.model.cellmap.CellMap;
+import homemade.game.model.cellmap.CellMapReader;
 import homemade.utils.timer.QuickTimer;
 import homemade.utils.timer.TimerTaskPerformer;
 
@@ -27,7 +27,7 @@ public class SpawnManager
 
     private GameModelLinker linker;
 
-    public SpawnManager(GameModelLinker linker, GameSettings settings, CellMap cellMap, NumberPool numberPool)
+    public SpawnManager(GameModelLinker linker, GameSettings settings, CellMapReader cellMap, NumberPool numberPool)
     {
         this.linker = linker;
 

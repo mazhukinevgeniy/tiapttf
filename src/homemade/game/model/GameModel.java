@@ -3,23 +3,22 @@ package homemade.game.model;
 import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.controller.GameController;
+import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.cellmap.CellMap;
-import homemade.game.model.spawn.SpawnManager;
 
+/**
+ * GameModel handles commands from GameController.
+ */
 public class GameModel
 {
-    private SpawnManager spawner;
     private GameModelLinker linker;
 
     public GameModel(GameController gameController, FieldStructure structure, GameSettings settings)
     {
-        NumberPool numberPool = new NumberPool(structure.getFieldSize());
-        CellMap cellMap = new CellMap(structure);
 
-        linker = new GameModelLinker(structure, settings, cellMap, gameController, numberPool);
 
-        spawner = new SpawnManager(linker, settings, cellMap, numberPool);
+        linker = new GameModelLinker(structure, settings, gameController);
+
     }
 
     public GameState copyGameState()
@@ -27,14 +26,13 @@ public class GameModel
         return linker.copyGameState();
     }
 
-    public SpawnManager getPauseToggler()
+    public void toggleSpawnPause()
     {
-        return spawner;
+        linker.togglePause();
     }
 
-    public GameModelLinker getMoveRequestHandler()
+    public void requestBlockMove(CellCode cellCodeFrom, CellCode cellCodeTo)
     {
-        return linker;
-        //TODO: fix terrible gap between the method name and the type returned
+        linker.tryCascadeChanges(cellCodeFrom, cellCodeTo);
     }
 }

@@ -67,7 +67,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     void requestPauseToggle()
     {
-        model.getPauseToggler().toggleSpawnPause();
+        model.toggleSpawnPause();
     }
 
     GameState copyGameState()
@@ -77,7 +77,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     void requestBlockMove(CellCode from, CellCode to)
     {
-        model.getMoveRequestHandler().requestBlockMove(from, to);
+        model.requestBlockMove(from, to);
     }
     //TODO: shall we move such methods out of GameController? make a class for doing simple things with current model
 
