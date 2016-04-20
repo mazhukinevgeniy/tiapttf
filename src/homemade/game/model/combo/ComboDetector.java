@@ -1,6 +1,6 @@
 package homemade.game.model.combo;
 
-import homemade.game.Game;
+import homemade.game.GameSettings;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
@@ -19,11 +19,11 @@ import java.util.Set;
 public class ComboDetector
 {
 
-    public static ComboDetector initializeComboDetection(FieldStructure structure, CellMap cellMap, GameController controller)
+    public static ComboDetector initializeComboDetection(FieldStructure structure, GameSettings settings, CellMap cellMap, GameController controller)
     {
-        GameScore gameScore = new GameScore(structure, controller);
+        GameScore gameScore = new GameScore(structure, controller, settings);
 
-        return new ComboDetector(structure, cellMap, controller, gameScore);
+        return new ComboDetector(structure, settings, cellMap, controller, gameScore);
     }
 
 
@@ -35,7 +35,9 @@ public class ComboDetector
     private GameScore gameScore;
     private BlockRemovalHandler blockRemovalHandler;
 
-    private ComboDetector(FieldStructure structure, CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
+    private int minCombo;
+
+    private ComboDetector(FieldStructure structure, GameSettings settings, CellMap cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
     {
         int maxCellsPerLine = structure.getMaxDimension();
         tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
@@ -44,6 +46,8 @@ public class ComboDetector
         this.cellMap = cellMap;
         this.gameScore = gameScore;
         this.blockRemovalHandler = blockRemovalHandler;
+
+        minCombo = settings.minCombo();
     }
 
     /**
@@ -107,7 +111,7 @@ public class ComboDetector
 
                 int comboLength = cellMap.getChainLength(nextLink);
 
-                if (comboLength >= Game.MIN_COMBO)
+                if (comboLength >= minCombo)
                 {
                     gameScore.handleCombo(comboLength);
 

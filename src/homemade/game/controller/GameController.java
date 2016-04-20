@@ -22,6 +22,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
     private Frame frame;
     private FieldStructure structure;
+    private GameSettings settings;
 
     private GameModel model;
     private GameView view;
@@ -34,17 +35,18 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     public GameController(Frame mainFrame, GameSettings settings)
     {
         frame = mainFrame;
+        this.settings = settings;
 
         structure = new FieldStructure();
 
-        model = new GameModel(this, structure);
+        model = new GameModel(this, structure, settings);
 
         selectionManager = new SelectionManager(this, structure);
         keyboard = new GameKeyboard(this);
 
         ViewListener viewListener = new ViewListener(selectionManager, keyboard);
 
-        view = new GameView(structure, viewListener, mainFrame);
+        view = new GameView(structure, settings, viewListener, mainFrame);
 
         long period = 1000 / TARGET_FPS;
         timer = new QuickTimer(new ControllerTimerTask(), period);
@@ -129,7 +131,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
                 view.getEffectManager().clearEffects();
                 selectionManager.createClearSelection();
 
-                model = new GameModel(controller, structure);
+                model =  new GameModel(controller, structure, settings);
             }
             else
             {

@@ -1,6 +1,6 @@
 package homemade.game.model.spawn;
 
-import homemade.game.Game;
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.model.GameModelLinker;
 import homemade.utils.PiecewiseConstantFunction;
@@ -22,31 +22,26 @@ import java.util.ArrayList;
  */
 class SpawnPeriod
 {
-    private static final int SATURATION_POINT = Game.MIN_COMBO * 3;
-    private static final int TIME_TO_FILL = 4 * 1000;
-
     private static final int MIN_PERIOD = 100;
 
-    private GameModelLinker linker;
-
-    private PiecewiseConstantFunction<Integer, Integer> basePeriod;
-
-    SpawnPeriod(GameModelLinker linker)
+    static SpawnPeriod newFastStart(GameModelLinker linker, GameSettings settings)
     {
-        this(linker, SATURATION_POINT, linker.getStructure().getFieldSize() - Game.MIN_COMBO, TIME_TO_FILL);
-    }
+        int minCombo = settings.minCombo();
 
-    SpawnPeriod(GameModelLinker linker, int saturationPoint, int oversaturationPoint, int timeToFill)
-    {
+        int saturationPoint = minCombo * 3;
+        int size = linker.getStructure().getFieldSize();
+        int oversaturationPoint = size - minCombo * 2;
+
+        if (saturationPoint >= oversaturationPoint)
+            throw new RuntimeException("minCombo is too big and fieldSize is too small");
+
         ArrayList<Integer> separators = new ArrayList<Integer>(4);
         separators.add(saturationPoint / 2);
         separators.add(saturationPoint);
         separators.add((oversaturationPoint + saturationPoint) / 2);
         separators.add(oversaturationPoint);
 
-        int size = linker.getStructure().getFieldSize();
-
-
+        int timeToFill = 4 * 1000; //TODO: use settings
         int spawnsToFill = Math.max(1, (size - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
         int finalPeriod = timeToFill / spawnsToFill;
 
@@ -57,12 +52,20 @@ class SpawnPeriod
         periods.add(Math.round(0.8f * finalPeriod));
         periods.add(finalPeriod);
 
-        basePeriod = new PiecewiseConstantFunction<Integer, Integer>(separators, periods);
+        PiecewiseConstantFunction<Integer, Integer> period =
+                new PiecewiseConstantFunction<>(separators, periods);
+
+        return new SpawnPeriod(linker, period);
+    }
+
+    private GameModelLinker linker;
+    private PiecewiseConstantFunction<Integer, Integer> basePeriod;
+
+    private SpawnPeriod(GameModelLinker linker, PiecewiseConstantFunction<Integer, Integer> period)
+    {
+        basePeriod = period;
 
         this.linker = linker;
-
-        if (saturationPoint >= oversaturationPoint || oversaturationPoint >= size)
-            throw new Error("SpawnPeriod initialized incorrectly");
     }
 
     long getSpawnPeriod()
@@ -80,5 +83,4 @@ class SpawnPeriod
 
         return Math.max(MIN_PERIOD, base - decrementFromDenies);
     }
-
 }

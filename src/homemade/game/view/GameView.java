@@ -1,5 +1,6 @@
 package homemade.game.view;
 
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.controller.ViewListener;
@@ -33,7 +34,7 @@ public class GameView
     private ArrayList<RenderingLayer> layers;
 
 
-    public GameView(FieldStructure structure, ViewListener viewListener, Frame mainFrame)
+    public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
     {
         this.structure = structure;
 
@@ -52,7 +53,7 @@ public class GameView
 
         effectManager = new EffectManager();
 
-        layers = RenderingLayer.getRenderingLayers(structure, effectManager);
+        layers = RenderingLayer.getRenderingLayers(structure, settings, effectManager);
     }
 
     public EffectManager getEffectManager()

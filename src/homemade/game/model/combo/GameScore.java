@@ -1,6 +1,6 @@
 package homemade.game.model.combo;
 
-import homemade.game.Game;
+import homemade.game.GameSettings;
 import homemade.game.controller.ScoreHandler;
 import homemade.game.fieldstructure.FieldStructure;
 
@@ -12,14 +12,18 @@ class GameScore
     private int score;
     private int scores[];
 
+    private int minCombo;
+
     private ScoreHandler scoreHandler;
 
-    GameScore(FieldStructure structure, ScoreHandler scoreHandler)
+    GameScore(FieldStructure structure, ScoreHandler scoreHandler, GameSettings settings)
     {
         this.scoreHandler = scoreHandler;
         scoreHandler.scoreUpdated(score = 0);
 
-        int lengthsPossible = structure.getMaxDimension() - Game.MIN_COMBO + 1;
+        minCombo = settings.minCombo();
+
+        int lengthsPossible = structure.getMaxDimension() - minCombo + 1;
         int baseScore = 100;
 
         scores = new int[lengthsPossible];
@@ -32,7 +36,7 @@ class GameScore
 
     synchronized void handleCombo(int length)
     {
-        score += scores[length - Game.MIN_COMBO];
+        score += scores[length - minCombo];
 
         scoreHandler.scoreUpdated(score);
     }

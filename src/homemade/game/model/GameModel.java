@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.FieldStructure;
@@ -11,14 +12,14 @@ public class GameModel
     private SpawnManager spawner;
     private GameModelLinker linker;
 
-    public GameModel(GameController gameController, FieldStructure structure)
+    public GameModel(GameController gameController, FieldStructure structure, GameSettings settings)
     {
         NumberPool numberPool = new NumberPool(structure.getFieldSize());
         CellMap cellMap = new CellMap(structure);
 
-        linker = new GameModelLinker(structure, cellMap, gameController, numberPool);
+        linker = new GameModelLinker(structure, settings, cellMap, gameController, numberPool);
 
-        spawner = new SpawnManager(linker, cellMap, numberPool);
+        spawner = new SpawnManager(linker, settings, cellMap, numberPool);
     }
 
     public GameState copyGameState()

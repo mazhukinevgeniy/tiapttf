@@ -1,5 +1,6 @@
 package homemade.game.model.spawn;
 
+import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModelLinker;
@@ -26,12 +27,12 @@ public class SpawnManager
 
     private GameModelLinker linker;
 
-    public SpawnManager(GameModelLinker linker, CellMap cellMap, NumberPool numberPool)
+    public SpawnManager(GameModelLinker linker, GameSettings settings, CellMap cellMap, NumberPool numberPool)
     {
         this.linker = linker;
 
         spawner = new BlockSpawner(this, cellMap, numberPool);
-        period = new SpawnPeriod(linker);
+        period = SpawnPeriod.newFastStart(linker, settings);
 
         timer = new QuickTimer(new SpawnTimerTaskPerformer(), period.getSpawnPeriod());
         //TODO: measure and show the actual period

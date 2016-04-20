@@ -1,6 +1,6 @@
 package homemade.game.view.layers;
 
-import homemade.game.Game;
+import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -27,7 +27,7 @@ class LinkLayer extends RenderingLayer
 
     private FieldStructure structure;
 
-    LinkLayer(FieldStructure structure)
+    LinkLayer(FieldStructure structure, GameSettings settings)
     {
         super();
 
@@ -47,9 +47,11 @@ class LinkLayer extends RenderingLayer
             offsets.put(direction, new Offset(img, width, height));
         }
 
+        double minCombo = (double) settings.minCombo();
+
         ArrayList<Double> separators = new ArrayList<Double>(2);
-        separators.add((double)Game.MIN_COMBO - 2.5);
-        separators.add((double)Game.MIN_COMBO - 1.5);
+        separators.add(minCombo - 2.5);
+        separators.add(minCombo - 1.5);
 
         ArrayList<Integer> spriteTier = new ArrayList<Integer>(3);
         spriteTier.add(2);

@@ -1,6 +1,7 @@
 package homemade.game.model;
 
 import homemade.game.Game;
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
@@ -27,7 +28,7 @@ public class GameModelLinker
 
     private GameController controller;
 
-    GameModelLinker(FieldStructure structure, CellMap cellMap, GameController controller, NumberPool numberPool)
+    GameModelLinker(FieldStructure structure, GameSettings settings, CellMap cellMap, GameController controller, NumberPool numberPool)
     {
         this.controller = controller;
         this.structure = structure;
@@ -35,7 +36,7 @@ public class GameModelLinker
         this.numberPool = numberPool;
 
         state = new ArrayBasedGameState(structure);
-        comboDetector = ComboDetector.initializeComboDetection(structure, cellMap, controller);
+        comboDetector = ComboDetector.initializeComboDetection(structure, settings, cellMap, controller);
     }
 
     public FieldStructure getStructure() { return structure; }

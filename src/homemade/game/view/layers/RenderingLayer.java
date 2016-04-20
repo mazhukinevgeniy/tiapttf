@@ -1,5 +1,6 @@
 package homemade.game.view.layers;
 
+import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
@@ -18,13 +19,15 @@ abstract public class RenderingLayer
 {
     private static final int fullCellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
-    public static final ArrayList<RenderingLayer> getRenderingLayers(FieldStructure structure, EffectManager effectManager)
+    public static final ArrayList<RenderingLayer> getRenderingLayers(FieldStructure structure,
+                                                                     GameSettings settings,
+                                                                     EffectManager effectManager)
     {
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
         list.add(new BlockLayer(effectManager));
         list.add(new NumberLayer(structure));
-        list.add(new LinkLayer(structure));
+        list.add(new LinkLayer(structure, settings));
 
         return list;
     }
