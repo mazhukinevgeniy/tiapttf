@@ -20,7 +20,7 @@ public class Settings
     {
         public static final String isRealTime = "Real time";
         public static final String simultaneousSpawn = "Simultaneous spawn";
-        public static final String spawnPeriod = "Spawn period";
+        public static final String spawnPeriod = "Max spawn period (ms)";
         public static final String something = "Something";
         public static final String comboLength = "Min combo length";
     }
@@ -40,7 +40,7 @@ public class Settings
     {
         checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
         checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
-        checkers.put(Name.spawnPeriod, new RangeChecker<>(1000, 1000, 1000 * 60 * 60));
+        checkers.put(Name.spawnPeriod, new RangeChecker<>(2000, 100, 1000 * 60));
         checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
         checkers.put(Name.comboLength, new RangeChecker<>(5, 3, 9));
     }

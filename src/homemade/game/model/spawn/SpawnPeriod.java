@@ -41,16 +41,17 @@ class SpawnPeriod
         separators.add((oversaturationPoint + saturationPoint) / 2);
         separators.add(oversaturationPoint);
 
-        int timeToFill = 4 * 1000; //TODO: use settings
+        int maxPeriod = settings.maxPeriod();
         int spawnsToFill = Math.max(1, (size - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
-        int finalPeriod = timeToFill / spawnsToFill;
+
+        System.out.println("time to fill from oversaturation = " + maxPeriod * spawnsToFill);
 
         ArrayList<Integer> periods = new ArrayList<Integer>(5);
-        periods.add(Math.round(0.2f * finalPeriod));
-        periods.add(Math.round(0.3f * finalPeriod));
-        periods.add(Math.round(0.5f * finalPeriod));
-        periods.add(Math.round(0.8f * finalPeriod));
-        periods.add(finalPeriod);
+        periods.add(Math.round(0.2f * maxPeriod));
+        periods.add(Math.round(0.3f * maxPeriod));
+        periods.add(Math.round(0.5f * maxPeriod));
+        periods.add(Math.round(0.8f * maxPeriod));
+        periods.add(maxPeriod);
 
         PiecewiseConstantFunction<Integer, Integer> period =
                 new PiecewiseConstantFunction<>(separators, periods);
