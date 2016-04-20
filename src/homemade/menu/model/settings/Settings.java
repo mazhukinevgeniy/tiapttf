@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class Settings
 {
     //1) add name new parameter
-    public final class Name
+    public static final class Name
     {
         public static final String isRealTime = "Real time";
         public static final String simultaneousSpawn = "Simultaneous spawn";
@@ -32,17 +32,14 @@ public class Settings
                                                      Name.something);
 
     //3) state default value and Range/Enum valid values
-    public static class Default
-    {
-        public static Map<String, ValueChecker<?>> checkers = new HashMap<>();
+    private static Map<String, ValueChecker<?>> checkers = new HashMap<>();
 
-        public static void initialize()
-        {
-            checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
-            checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
-            checkers.put(Name.spawnPeriod, new RangeChecker<>(1000, 1000, 1000 * 60 * 60));
-            checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
-        }
+    static
+    {
+        checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
+        checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
+        checkers.put(Name.spawnPeriod, new RangeChecker<>(1000, 1000, 1000 * 60 * 60));
+        checkers.put(Name.something, new InSetChecker<>(2, 1, 2, 3));
     }
     //4) everything should work (=
 
@@ -65,7 +62,6 @@ public class Settings
 
     private void primaryInitialization()
     {
-        Default.initialize();
         initializeMaps();
         setDefaultSettingsToMaps();
     }
@@ -96,7 +92,7 @@ public class Settings
         for (String name : nameList)
         {
             Parameter<Type> parameter = parameters.get(name);
-            ValueChecker<Type> checker = (ValueChecker<Type>)Default.checkers.get(name);
+            ValueChecker<Type> checker = (ValueChecker<Type>)checkers.get(name);
             parameter.setValueChecker(checker);
             parameter.setDefaultValue();
         }
