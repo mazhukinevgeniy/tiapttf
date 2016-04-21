@@ -2,6 +2,7 @@ package homemade.game.model;
 
 import homemade.game.Game;
 import homemade.game.GameSettings;
+import homemade.game.GameSettings.GameMode;
 import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
@@ -32,6 +33,7 @@ public class GameModelLinker
     private GameController controller;
 
     private GameState lastGameState;
+    private GameMode mode;
 
     GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller)
     {
@@ -48,6 +50,13 @@ public class GameModelLinker
 
         comboDetector = ComboDetector.initializeComboDetection(structure, settings, readOnlyMap, controller);
         spawner = new SpawnManager(this, settings, readOnlyMap, numberPool);
+
+        mode = settings.gameMode();
+        if (mode == GameMode.TURN_BASED)
+        {
+            for (int i = 0; i < 2; i++)
+                requestSpawn();
+        }
     }
 
     public FieldStructure getStructure() { return structure; }
@@ -108,6 +117,8 @@ public class GameModelLinker
 
             actOnChangedCells(cellMap.applyCascadeChanges(tmpMap));
 
+            if (mode == GameMode.TURN_BASED)
+                requestSpawn();
             if (riskOfSpawnDenial)
                 state.incrementDenyCounter();
         }
