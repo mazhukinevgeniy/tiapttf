@@ -58,13 +58,13 @@ public class GameModelLinker
      */
     void stopAllFacilities()
     {
-        spawner.stop();
+        spawner.spawnTimer().stop();
         controller.gameOver();
     }
 
     void togglePause()
     {
-        spawner.toggleSpawnPause();
+        spawner.spawnTimer().toggleSpawnPause();
     }
 
 
