@@ -5,10 +5,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMapReader;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Marks cells where blocks will spawn
@@ -18,10 +15,14 @@ class SpawnPlanner
     private CellMapReader cellMap;
     private NumberPool numberPool;
 
+    private Random random;
+
     SpawnPlanner(CellMapReader cellMap, NumberPool numberPool)
     {
         this.cellMap = cellMap;
         this.numberPool = numberPool;
+
+        random = new Random();
     }
 
 
@@ -47,11 +48,9 @@ class SpawnPlanner
 
             for (int i = 0; i < cellsToMark; i++)
             {
-                int position = (int) (Math.random() * (double) freeCells.size());
+                int position = random.nextInt(freeCells.size());
 
-                changes.put(freeCells.get(position), Game.CELL_MARKED_FOR_SPAWN);
-
-                freeCells.remove(position);
+                changes.put(freeCells.remove(position), Game.CELL_MARKED_FOR_SPAWN);
             }
         }
 
