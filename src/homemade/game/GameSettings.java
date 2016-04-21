@@ -7,6 +7,13 @@ import homemade.menu.model.settings.Settings;
  */
 public class GameSettings
 {
+    public enum GameMode
+    {
+        TURN_BASED, REAL_TIME
+    }
+
+    private GameMode mode;
+
     private int combo;
     private int period;
 
@@ -14,6 +21,13 @@ public class GameSettings
     {
         combo = settings.get(Settings.Name.comboLength);
         period = settings.get(Settings.Name.spawnPeriod);
+
+        mode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
+    }
+
+    public GameMode gameMode()
+    {
+        return mode;
     }
 
     public int minCombo()
