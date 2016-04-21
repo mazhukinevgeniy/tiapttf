@@ -49,81 +49,55 @@ public class Settings
     private Map<String, Parameter<Boolean>> boolParameters = new HashMap<>();
     private Map<String, Parameter<Integer>> intParameters = new HashMap<>();
 
-    private SettingsSave save = null;
-
-    public Settings()
-    {
-        primaryInitialization();
-    }
+    private SettingsSave save;
 
     public Settings(SettingsSave save)
     {
-        primaryInitialization();
         this.save = save;
-        setSavedValues();
+
+        prepareParameters(nameListBool, boolParameters);
+        prepareParameters(nameListInt, intParameters);
+
+        initializeValues();
+        updateAllParametersInSave();
     }
 
-    private void primaryInitialization()
+    private <Type> void prepareParameters(List<String> settingNames, Map<String, Parameter<Type>> parametersMap)
     {
-        initializeMaps();
-        setDefaultSettingsToMaps();
-    }
-
-    private void initializeMaps()
-    {
-        initializeMap(nameListBool, boolParameters);
-        initializeMap(nameListInt, intParameters);
-    }
-
-    private <Type> void initializeMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
-    {
-        for (String name : nameList)
+        for (String name : settingNames)
         {
             Parameter<Type> parameter = new Parameter<>(name);
-            parameters.put(name, parameter);
-        }
-    }
+            parametersMap.put(name, parameter);
 
-    private void setDefaultSettingsToMaps()
-    {
-        setDefaultSettingsToMap(nameListBool, boolParameters);
-        setDefaultSettingsToMap(nameListInt, intParameters);
-    }
-
-    private <Type> void setDefaultSettingsToMap(List<String> nameList, Map<String, Parameter<Type>> parameters)
-    {
-        for (String name : nameList)
-        {
-            Parameter<Type> parameter = parameters.get(name);
             ValueChecker<Type> checker = (ValueChecker<Type>)checkers.get(name);
             parameter.setValueChecker(checker);
-            parameter.setDefaultValue();
         }
     }
 
-    private void setSavedValues()
+    private void initializeValues()
     {
         Function<String, Boolean> boolSettingsValue = name -> save.getBoolSettingsValue(name);
         Function<String, Integer> intSettingsValue = name -> save.getIntSettingsValue(name);
 
-        setSavedValuesToMap(nameListBool, boolParameters, boolSettingsValue);
-        setSavedValuesToMap(nameListInt, intParameters, intSettingsValue);
+        setSavedValuesToMap(boolParameters, boolSettingsValue);
+        setSavedValuesToMap(intParameters, intSettingsValue);
     }
 
-    private <Type> void setSavedValuesToMap(List<String> nameList, Map<String, Parameter<Type>> parameters,
+    private <Type> void setSavedValuesToMap(Map<String, Parameter<Type>> parameters,
                                             Function<String, Type> saveGetSettingsValue)
     {
-        for(String name : nameList)
+        for(Map.Entry<String, Parameter<Type>> param : parameters.entrySet())
         {
-            Type value = saveGetSettingsValue.apply(name);
-            Parameter<Type> parameter = parameters.get(name);
-            if (value == null)
+            Type savedValue = saveGetSettingsValue.apply(param.getKey());
+            Parameter<Type> parameter = param.getValue();
+
+            if (savedValue == null)
             {
                 parameter.setDefaultValue();
             }
             else
             {
-                parameter.setValue(value);
+                parameter.setValue(savedValue);
             }
         }
     }
@@ -251,9 +225,21 @@ public class Settings
 
     public void setDefaultSettings()
     {
-        setDefaultSettingsToMaps();
+        resetParameters(intParameters);
+        resetParameters(boolParameters);
+
         updateAllParametersInSave();
     }
+
+    private <Type> void resetParameters(Map<String, Parameter<Type>> parameters)
+    {
+        for(Map.Entry<String, Parameter<Type>> param : parameters.entrySet())
+        {
+            Parameter<Type> parameter = param.getValue();
+            parameter.setDefaultValue();
+        }
+    }
+
 
     private void updateAllParametersInSave()
     {
