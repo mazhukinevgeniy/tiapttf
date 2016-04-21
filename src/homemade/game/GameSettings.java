@@ -15,11 +15,13 @@ public class GameSettings
     private GameMode mode;
 
     private int combo;
+    private int spawn;
     private int period;
 
     public GameSettings(Settings settings)
     {
         combo = settings.get(Settings.Name.comboLength);
+        spawn = settings.get(Settings.Name.simultaneousSpawn);
         period = settings.get(Settings.Name.spawnPeriod);
 
         mode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
@@ -33,6 +35,11 @@ public class GameSettings
     public int minCombo()
     {
         return combo;
+    }
+
+    public int maxSpawn()
+    {
+        return spawn;
     }
 
     public int maxPeriod()
