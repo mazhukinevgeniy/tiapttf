@@ -21,17 +21,22 @@ public class SpawnManager
     private boolean paused = false;
 
     private QuickTimer timer;
-
     private SpawnPeriod period;
+
     private BlockSpawner spawner;
+    private SpawnPlanner planner;
 
     private GameModelLinker linker;
+    private FieldStructure structure;
 
     public SpawnManager(GameModelLinker linker, GameSettings settings, CellMapReader cellMap, NumberPool numberPool)
     {
         this.linker = linker;
+        structure = linker.getStructure();
 
-        spawner = new BlockSpawner(this, cellMap, numberPool);
+        spawner = new BlockSpawner(cellMap, numberPool);
+        planner = new SpawnPlanner(cellMap, numberPool);
+
         period = SpawnPeriod.newFastStart(linker, settings);
 
         timer = new QuickTimer(new SpawnTimerTaskPerformer(), period.getSpawnPeriod());
@@ -43,12 +48,20 @@ public class SpawnManager
         paused = !paused;
     }
 
-    void spawnImpossible()
+    public void stop()
     {
         timer.stop();
         paused = true;
+    }
 
-        linker.stopAllFacilities();
+    public Map<CellCode, Integer> spawnBlocks()
+    {
+        return spawner.spawnBlocks(structure.getCellCodeIterator());
+    }
+
+    public Map<CellCode, Integer> markCells()
+    {
+        return planner.markCells(structure.getCellCodeIterator(), SIMULTANEOUS_SPAWN);
     }
 
     private class SpawnTimerTaskPerformer implements TimerTaskPerformer
@@ -62,14 +75,8 @@ public class SpawnManager
             {
                 timer.setPeriod(period.getSpawnPeriod());
 
-                FieldStructure structure = linker.getStructure();
-
-                Map<CellCode, Integer> changes = spawner.spawnBlocks(structure.getCellCodeIterator());
-                changes.putAll(spawner.markCells(structure.getCellCodeIterator(), SIMULTANEOUS_SPAWN));
-
-                linker.requestSpawn(changes);
+                linker.requestSpawn();
             }
-
         }
     }
 }

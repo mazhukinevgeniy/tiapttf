@@ -52,8 +52,13 @@ public class GameModelLinker
 
     public FieldStructure getStructure() { return structure; }
 
-    public void stopAllFacilities()
+    /**
+     * Makes sense to leave it package internal because GameModel might want to force stop if user quits before losing
+     * //TODO: implement said option and remove these comments
+     */
+    void stopAllFacilities()
     {
+        spawner.stop();
         controller.gameOver();
     }
 
@@ -63,10 +68,20 @@ public class GameModelLinker
     }
 
 
-    synchronized public void requestSpawn(Map<CellCode, Integer> changes)
+    synchronized public void requestSpawn()
     {
-        Set<CellCode> appliedChanges = cellMap.applyCascadeChanges(changes);
-        actOnChangedCells(appliedChanges);
+        Map<CellCode, Integer> spawnedBlocks = spawner.spawnBlocks();
+        actOnChangedCells(cellMap.applyCascadeChanges(spawnedBlocks));
+
+        Map<CellCode, Integer> marks = spawner.markCells();
+        if (marks.size() == 0)
+        {
+            stopAllFacilities();
+        }
+        else
+        {
+            actOnChangedCells(cellMap.applyCascadeChanges(marks));
+        }
     }
 
     /**

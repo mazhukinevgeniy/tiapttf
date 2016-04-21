@@ -7,7 +7,6 @@ import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -18,17 +17,13 @@ class BlockSpawner
     private CellMapReader cellMap;
     private NumberPool numberPool;
 
-    private SpawnManager manager;
-
-    BlockSpawner(SpawnManager manager, CellMapReader cellMap, NumberPool numberPool)
+    BlockSpawner(CellMapReader cellMap, NumberPool numberPool)
     {
         this.cellMap = cellMap;
         this.numberPool = numberPool;
-
-        this.manager = manager;
     }
 
-    synchronized Map<CellCode, Integer> spawnBlocks(Iterator<CellCode> iterator)
+    Map<CellCode, Integer> spawnBlocks(Iterator<CellCode> iterator)
     {
         Map<CellCode, Integer> changes = new HashMap<>();
 
@@ -42,43 +37,6 @@ class BlockSpawner
 
                 System.out.println("block spawned: " + cellCode.x() + ", " + cellCode.y() + " | " + changes.get(cellCode));
             }
-        }
-
-        return changes;
-    }
-
-    synchronized Map<CellCode, Integer> markCells(Iterator<CellCode> iterator, int targetAmount)
-    {
-        Map<CellCode, Integer> changes = new HashMap<>();
-
-        int canMark = numberPool.numbersAvailable();
-
-        if (canMark > 0)
-        {
-            LinkedList<CellCode> freeCells = new LinkedList<CellCode>();
-
-            while (iterator.hasNext())
-            {
-                CellCode cellCode = iterator.next();
-
-                if (cellMap.getCellValue(cellCode) == Game.CELL_EMPTY)
-                    freeCells.add(cellCode);
-            }
-
-            int cellsToMark = Math.min(freeCells.size(), Math.min(targetAmount, canMark));
-
-            for (int i = 0; i < cellsToMark; i++)
-            {
-                int position = (int) (Math.random() * (double) freeCells.size());
-
-                changes.put(freeCells.get(position), Game.CELL_MARKED_FOR_SPAWN);
-
-                freeCells.remove(position);
-            }
-        }
-        else
-        {
-            manager.spawnImpossible();
         }
 
         return changes;
