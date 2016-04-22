@@ -2,7 +2,6 @@ package homemade.game.controller;
 
 import homemade.game.Effect;
 import homemade.game.GameSettings;
-import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -16,7 +15,7 @@ import java.awt.*;
 /**
  * Created by user3 on 23.03.2016.
  */
-public class GameController implements ScoreHandler, BlockRemovalHandler
+public class GameController implements ScoreHandler, BlockRemovalHandler, MouseInputHandler
 {
     private static final int TARGET_FPS = 60;
 
@@ -27,7 +26,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
     private GameModel model;
     private GameView view;
 
-    private SelectionManager selectionManager;
     private GameKeyboard keyboard;
 
     private QuickTimer timer;
@@ -41,15 +39,24 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
 
         model = new GameModel(this, structure, settings);
 
-        selectionManager = new SelectionManager(this, structure);
         keyboard = new GameKeyboard(this);
-
-        ViewListener viewListener = new ViewListener(selectionManager, keyboard);
+        ViewListener viewListener = new ViewListener(this, keyboard);
 
         view = new GameView(structure, settings, viewListener, mainFrame);
 
         long period = 1000 / TARGET_FPS;
         timer = new QuickTimer(new ControllerTimerTask(), period);
+    }
+
+    @Override
+    public void handleMouseRelease(int canvasX, int canvasY)
+    {
+        int cellX = (canvasX - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+        int cellY = (canvasY - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+
+        CellCode eventCell = structure.getCellCode(cellX, cellY);
+
+        model.tryToActivateCell(eventCell);
     }
 
     @Override
@@ -70,17 +77,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
         model.toggleSpawnPause();
     }
 
-    GameState copyGameState()
-    {
-        return model.copyGameState();
-    }
-
-    void requestBlockMove(CellCode from, CellCode to)
-    {
-        model.requestBlockMove(from, to);
-    }
-    //TODO: shall we move such methods out of GameController? make a class for doing simple things with current model
-
     public void gameOver()
     {
         new QuickTimer(new GameOverTimerTask(this), 3 * 1000 / TARGET_FPS);
@@ -100,12 +96,12 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
                 Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
 
                 if (direction != null)
-                    selectionManager.tryToMoveSelectionIn(direction);
+                    model.tryMove(direction);
             }
             else
                 frameCounter++;
 
-            view.renderNextFrame(model.copyGameState(), selectionManager.getSelectionState());
+            view.renderNextFrame(model.copyGameState(), model.copySelectionState());
         }
     }
 
@@ -129,7 +125,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler
             {
                 gameOverTimer.stop();
                 view.getEffectManager().clearEffects();
-                selectionManager.createClearSelection();
 
                 model =  new GameModel(controller, structure, settings);
             }

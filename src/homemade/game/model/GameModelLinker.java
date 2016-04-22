@@ -60,6 +60,10 @@ public class GameModelLinker
     }
 
     public FieldStructure getStructure() { return structure; }
+    public CellMapReader getMapReader()
+    {
+        return cellMap;
+    }
 
     /**
      * Makes sense to leave it package internal because GameModel might want to force stop if user quits before losing
@@ -94,12 +98,9 @@ public class GameModelLinker
     }
 
     /**
-     * Use this for handing user input: requested moves might be based on an outdated gameState
-     * In this case, we should deny the attempt
-     *
      * Could overload method for complicated movements
      */
-    synchronized void tryCascadeChanges(CellCode moveFromCell, CellCode moveToCell)
+    synchronized public void tryCascadeChanges(CellCode moveFromCell, CellCode moveToCell)
     {
         boolean riskOfSpawnDenial = false;
 

@@ -1,11 +1,10 @@
-package homemade.game.controller;
+package homemade.game.model.selection;
 
-import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
-import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.view.GameView;
+import homemade.game.model.GameModelLinker;
+import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,49 +12,37 @@ import java.util.HashSet;
 /**
  * Created by user3 on 24.03.2016.
  */
-class SelectionManager implements MouseInputHandler
+public class BlockSelection
 {
-    private FieldStructure structure;
+    private GameModelLinker linker;
+    private CellMapReader cellMapReader;
 
     private ArrayList<CellCode> selection;
-    private GameController controller;
 
     private SelectionState state;
 
-    SelectionManager(GameController controller, FieldStructure fieldStructure)
+    public BlockSelection(GameModelLinker linker)
     {
-        this.controller = controller;
+        this.linker = linker;
+        cellMapReader = linker.getMapReader();
 
-        structure = fieldStructure;
-
-        createClearSelection();
-    }
-
-    void createClearSelection()
-    {
-        selection = new ArrayList<>(structure.getMaxDimension());
+        selection = new ArrayList<>(linker.getStructure().getMaxDimension());
 
         updateSelectionState();
     }
 
-
-    public synchronized void handleMouseRelease(int canvasX, int canvasY)
+    public synchronized void activateCell(CellCode eventCell)
     {
-        int cellX = (canvasX - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
-        int cellY = (canvasY - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
-
-        CellCode eventCell = structure.getCellCode(cellX, cellY);
-
-        if (controller.copyGameState().getCellValue(eventCell) > 0)
+        if (cellMapReader.getCellValue(eventCell) > 0)
         {
-            this.selection.clear();
-            this.selection.add(eventCell);
+            selection.clear();
+            selection.add(eventCell);
 
-            this.updateSelectionState();
+            updateSelectionState();
         }
-        else if (this.selection.size() == 1) //ie we move single blocks and we can move them by clicking nearby cells
+        else if (selection.size() == 1) //ie we move single blocks and we can move them by clicking cells
         {
-            CellCode selectedCell = this.selection.get(0);
+            CellCode selectedCell = selection.get(0);
             int distance = eventCell.distance(selectedCell);
 
             if (distance == 1)
@@ -64,14 +51,14 @@ class SelectionManager implements MouseInputHandler
             }
         }
 
-        System.out.println("apparently, mouse released at " + cellX + ", " + cellY);
+        System.out.println("apparently, mouse released at " + eventCell.x() + ", " + eventCell.y());
     }
 
-    void tryToMoveSelectionIn(Direction direction)
+    public synchronized void tryToMoveSelectionIn(Direction direction)
     {
         if (this.selection.size() == 1)
         {
-            CellCode cellCode = this.selection.get(0);
+            CellCode cellCode = selection.get(0);
 
             if (!cellCode.onBorder(direction))
             {
@@ -86,14 +73,12 @@ class SelectionManager implements MouseInputHandler
     {
         if (eventCell != selectedCell)
         {
-            controller.requestBlockMove(selectedCell, eventCell);
+            linker.tryCascadeChanges(selectedCell, eventCell);
 
             selection.clear();
 
-            GameState gameState = controller.copyGameState();
-
-            boolean selectedCellOccupied = gameState.getCellValue(selectedCell) > 0;
-            boolean eventCellOccupied = gameState.getCellValue(eventCell) > 0;
+            boolean selectedCellOccupied = cellMapReader.getCellValue(selectedCell) > 0;
+            boolean eventCellOccupied = cellMapReader.getCellValue(eventCell) > 0;
 
             if (selectedCellOccupied) //I think that means move failed
             {
@@ -111,8 +96,6 @@ class SelectionManager implements MouseInputHandler
 
     private void updateSelectionState()
     {
-        GameState state = controller.copyGameState();
-
         int selectionSize = selection.size();
         ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);
         HashSet<CellCode> cellsToMove = new HashSet<CellCode>(4 * selectionSize);
@@ -126,16 +109,16 @@ class SelectionManager implements MouseInputHandler
             {
                 CellCode neighbour = cellCode.neighbour(direction);
 
-                if (!cellCode.onBorder(direction) && state.getCellValue(neighbour) < 1)
+                if (!cellCode.onBorder(direction) && cellMapReader.getCellValue(neighbour) < 1)
                     cellsToMove.add(neighbour);
             }
         }
 
-        this.state = new SelectionStateProvider(copy, cellsToMove);
+        state = new SelectionStateProvider(copy, cellsToMove);
     }
 
-    SelectionState getSelectionState()
+    public SelectionState getSelectionState()
     {
-        return this.state;
-    }
+        return state;
+    } //TODO: return immutable copy
 }

@@ -1,4 +1,4 @@
-package homemade.game.controller;
+package homemade.game.model.selection;
 
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
@@ -6,17 +6,14 @@ import homemade.game.fieldstructure.CellCode;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- * Created by user3 on 25.03.2016.
- */
 class SelectionStateProvider implements SelectionState
 {
-    private ArrayList<CellCode> selection;
+    private HashSet<CellCode> selection;
     private HashSet<CellCode> cellsToMove;
 
-    SelectionStateProvider(ArrayList<CellCode> selectionData, HashSet<CellCode> cellsToMove)
+    SelectionStateProvider(ArrayList<CellCode> selectionData, HashSet<CellCode> cellsToMove)//TODO: do we have to accept selection data in the first place?
     {
-        this.selection = selectionData;
+        this.selection = new HashSet<>(selectionData);
         this.cellsToMove = cellsToMove;
     }
 
