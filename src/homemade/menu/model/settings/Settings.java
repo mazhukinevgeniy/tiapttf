@@ -37,7 +37,7 @@ public class Settings
     static
     {
         checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
-        checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 9));
+        checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 20));
         checkers.put(Name.spawnPeriod, new RangeChecker<>(2000, 100, 1000 * 60));
         checkers.put(Name.comboLength, new RangeChecker<>(5, 3, 9));
     }
