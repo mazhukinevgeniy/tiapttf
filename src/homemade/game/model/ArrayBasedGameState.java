@@ -92,7 +92,7 @@ class ArrayBasedGameState implements GameState
 
         for (Map.Entry<CellCode, Integer> entry : cellUpdates.entrySet())
         {
-            int pos = entry.getKey().intCode();
+            int pos = entry.getKey().hashCode();
             int newValue = entry.getValue();
             int oldValue = field[pos];
 
@@ -106,12 +106,12 @@ class ArrayBasedGameState implements GameState
 
         for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet())
         {
-            links[entry.getKey().intCode()] = entry.getValue();
+            links[entry.getKey().hashCode()] = entry.getValue();
         }
 
         for (Map.Entry<LinkCode, Integer> entry : chainUpdates.entrySet())
         {
-            chainLengths[entry.getKey().intCode()] = entry.getValue();
+            chainLengths[entry.getKey().hashCode()] = entry.getValue();
         }
     }
 
@@ -130,19 +130,19 @@ class ArrayBasedGameState implements GameState
     @Override
     public int getCellValue(CellCode cellCode)
     {
-        return this.field[cellCode.intCode()];
+        return this.field[cellCode.hashCode()];
     }
 
     @Override
     public Direction getLinkBetweenCells(LinkCode linkCode)
     {
-        return links[linkCode.intCode()];
+        return links[linkCode.hashCode()];
     }
 
     @Override
     public int getChainLength(LinkCode linkCode)
     {
-        return chainLengths[linkCode.intCode()];
+        return chainLengths[linkCode.hashCode()];
     }
 
     @Override

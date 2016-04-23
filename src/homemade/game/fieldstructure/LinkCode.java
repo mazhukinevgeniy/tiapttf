@@ -3,7 +3,7 @@ package homemade.game.fieldstructure;
 /**
  * This class represents link as a part of the field structure.
  */
-public class LinkCode
+public final class LinkCode
 {
 
     static LinkCode[] createLinkCodes(FieldStructure structure)
@@ -51,7 +51,8 @@ public class LinkCode
         this.code = code;
     }
 
-    public int intCode()
+    @Override
+    public int hashCode()
     {
         return code;
     }

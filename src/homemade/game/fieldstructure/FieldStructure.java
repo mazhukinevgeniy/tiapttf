@@ -108,7 +108,7 @@ public class FieldStructure
      */
     int linkCodeAsInt(CellCode lower, CellCode higher)
     {
-        if (lower.intCode() > higher.intCode())
+        if (lower.hashCode() > higher.hashCode())
         {
             CellCode tmp = lower;
             lower = higher;
@@ -125,7 +125,7 @@ public class FieldStructure
         }
         else if (lower.neighbour(Direction.BOTTOM) == higher)
         {
-            toReturn = lower.intCode();
+            toReturn = lower.hashCode();
         }
         else
             throw new Error("unresolvable linkCodeAsInt call");
@@ -140,6 +140,6 @@ public class FieldStructure
 
     int cellCodeAsInt(CellCode cell, Direction direction)
     {
-        return cell.intCode() + shifts.get(direction);
+        return cell.hashCode() + shifts.get(direction);
     }
 }

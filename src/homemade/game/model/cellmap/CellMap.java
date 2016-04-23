@@ -30,13 +30,13 @@ public class CellMap implements CellMapReader
         for (Iterator<LinkCode> iterator = structure.getLinkCodeIterator(); iterator.hasNext();)
         {
             LinkCode link = iterator.next();
-            links[link.intCode()] = new Link(link);
+            links[link.hashCode()] = new Link(link);
         }
     }
 
     public int getCellValue(CellCode cellCode)
     {
-        return cells[cellCode.intCode()].value;
+        return cells[cellCode.hashCode()].value;
     }
 
     public Direction getLinkDirection(CellCode cellA, CellCode cellB)
@@ -46,12 +46,12 @@ public class CellMap implements CellMapReader
 
     public Direction getLinkDirection(LinkCode linkCode)
     {
-        return links[linkCode.intCode()].direction;
+        return links[linkCode.hashCode()].direction;
     }
 
     public int getChainLength(LinkCode linkCode)
     {
-        return links[linkCode.intCode()].chainLength;
+        return links[linkCode.hashCode()].chainLength;
     }
 
     public Set<CellCode> applyCascadeChanges(Map<CellCode, Integer> changes)
@@ -86,7 +86,7 @@ public class CellMap implements CellMapReader
 
     private void setCellValue(CellCode cell, int newValue)
     {
-        Cell changedCell = cells[cell.intCode()];
+        Cell changedCell = cells[cell.hashCode()];
         changedCell.value = newValue;
     }
 
@@ -97,10 +97,10 @@ public class CellMap implements CellMapReader
 
         Direction lowerToHigher = linkCode.getLowerToHigherDirection();
 
-        Link link = links[linkCode.intCode()];
+        Link link = links[linkCode.hashCode()];
 
-        int valueA = cells[cell.intCode()].value;
-        int valueB = cells[nextCell.intCode()].value;
+        int valueA = cells[cell.hashCode()].value;
+        int valueB = cells[nextCell.hashCode()].value;
 
         boolean bothAreOccupied = valueA > 0 && valueB > 0;
 
@@ -122,7 +122,7 @@ public class CellMap implements CellMapReader
                 CellCode checkA = cell;
                 CellCode checkB = nextCell;
 
-                Link checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+                Link checkLink = links[structure.getLinkCode(checkA, checkB).hashCode()];
 
                 while (checkA != null && checkB != null && checkLink.direction == newDirection)
                 {
@@ -133,7 +133,7 @@ public class CellMap implements CellMapReader
 
                     if (checkA != null && checkB != null)
                     {
-                        checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+                        checkLink = links[structure.getLinkCode(checkA, checkB).hashCode()];
                     }
                 }
 
@@ -148,7 +148,7 @@ public class CellMap implements CellMapReader
 
                         if (checkA != null && checkB != null)
                         {
-                            checkLink = links[structure.getLinkCode(checkA, checkB).intCode()];
+                            checkLink = links[structure.getLinkCode(checkA, checkB).hashCode()];
                         }
                     }
                 }

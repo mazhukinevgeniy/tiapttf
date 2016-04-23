@@ -5,7 +5,7 @@ import java.util.EnumMap;
 /**
  * Created by user3 on 31.03.2016.
  */
-public class CellCode
+public final class CellCode
 {
 
     static CellCode[] createCellCodes(FieldStructure structure)
@@ -79,7 +79,12 @@ public class CellCode
         neighbours = new EnumMap<Direction, CellCode>(Direction.class);
     }
 
-    public int intCode() { return cCValue; }
+    @Override
+    public int hashCode()
+    {
+        return cCValue;
+    }
+
     public int x() {return cX; }
     public int y() { return cY; }
 
