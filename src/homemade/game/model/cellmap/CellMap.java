@@ -1,9 +1,12 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.CellStates;
 
 import java.util.*;
 
@@ -12,17 +15,24 @@ import java.util.*;
  */
 public class CellMap implements CellMapReader
 {
-    private Cell cells[];
+    private CellState cells[];
     private Link links[];
 
     private FieldStructure structure;
+    private CellStates states;
 
-    public CellMap(FieldStructure structure)
+    public CellMap(FieldStructure structure, CellStates states)
     {
         this.structure = structure;
+        this.states = states;
 
+        cells = new CellState[structure.getFieldSize()];
 
-        cells = Cell.createCells(structure);
+        for (int j = 0, height = structure.getHeight(); j < height; j++)
+            for (int i = 0, width = structure.getWidth(); i < width; i++)
+            {
+                cells[structure.getCellCode(i, j).hashCode()] = states.getState(Cell.EMPTY);
+            }
 
         int maxLinkCode = structure.getNumberOfLinks();
         links = new Link[maxLinkCode];
@@ -34,9 +44,9 @@ public class CellMap implements CellMapReader
         }
     }
 
-    public int getCellValue(CellCode cellCode)
+    public CellState getCell(CellCode cellCode)
     {
-        return cells[cellCode.hashCode()].value;
+        return cells[cellCode.hashCode()];
     }
 
     public Direction getLinkDirection(CellCode cellA, CellCode cellB)
@@ -54,7 +64,7 @@ public class CellMap implements CellMapReader
         return links[linkCode.hashCode()].chainLength;
     }
 
-    public Set<CellCode> applyCascadeChanges(Map<CellCode, Integer> changes)
+    public Set<CellCode> applyCascadeChanges(Map<CellCode, CellState> changes)
     {
         Set<CellCode> keys = changes.keySet();
         Set<CellCode> changedCells = new HashSet<CellCode>(keys);
@@ -63,7 +73,7 @@ public class CellMap implements CellMapReader
 
         for (CellCode key : keys)
         {
-            setCellValue(key, changes.get(key));
+            cells[key.hashCode()] = changes.get(key);
 
             for (Direction direction : Direction.values())
             {
@@ -84,12 +94,6 @@ public class CellMap implements CellMapReader
         return changedCells;
     }
 
-    private void setCellValue(CellCode cell, int newValue)
-    {
-        Cell changedCell = cells[cell.hashCode()];
-        changedCell.value = newValue;
-    }
-
     private void updateLinkValue(LinkCode linkCode)
     {
         CellCode cell = linkCode.getLower();
@@ -99,14 +103,14 @@ public class CellMap implements CellMapReader
 
         Link link = links[linkCode.hashCode()];
 
-        int valueA = cells[cell.hashCode()].value;
-        int valueB = cells[nextCell.hashCode()].value;
+        CellState cellA = cells[cell.hashCode()];
+        CellState cellB = cells[nextCell.hashCode()];
 
-        boolean bothAreOccupied = valueA > 0 && valueB > 0;
+        boolean bothAreOccupied = cellA.isOccupied() && cellB.isOccupied();
 
         Direction oldDirection = link.direction;
         Direction newDirection = bothAreOccupied ?
-                    (valueA > valueB ? lowerToHigher : lowerToHigher.getOpposite()) :
+                    (cellA.value() > cellB.value() ? lowerToHigher : lowerToHigher.getOpposite()) :
                     null;
 
         if (oldDirection != newDirection)

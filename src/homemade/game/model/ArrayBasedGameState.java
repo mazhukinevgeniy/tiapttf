@@ -1,7 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.Cell;
 import homemade.game.CellState;
-import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
@@ -24,7 +24,7 @@ class ArrayBasedGameState implements GameState
     private int cellsOccupied;
     private int spawnsDenied;
 
-    ArrayBasedGameState(FieldStructure structure)
+    ArrayBasedGameState(FieldStructure structure, CellStates states)
     {
         int fieldSize = structure.getFieldSize();
 
@@ -32,7 +32,7 @@ class ArrayBasedGameState implements GameState
 
         for (int i = 0; i < fieldSize; i++)
         {
-            field[i] = new CellState(Game.CELL_EMPTY);
+            field[i] = states.getState(Cell.EMPTY);
         }
 
         int numberOfLinks = structure.getNumberOfLinks();

@@ -1,10 +1,11 @@
 package homemade.game.model.spawn;
 
+import homemade.game.CellState;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.model.CellStatePool;
 import homemade.game.model.GameModelLinker;
-import homemade.game.model.NumberPool;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.Map;
@@ -23,12 +24,13 @@ public class SpawnManager
 
     private FieldStructure structure;
 
-    public SpawnManager(GameModelLinker linker, GameSettings settings, CellMapReader cellMap, NumberPool numberPool)
+    public SpawnManager(GameModelLinker linker, GameSettings settings, CellStatePool cellStatePool)
     {
         structure = linker.getStructure();
 
-        spawner = new BlockSpawner(cellMap, numberPool);
-        planner = new SpawnPlanner(cellMap, numberPool);
+        CellMapReader cellMap = linker.getMapReader();
+        spawner = new BlockSpawner(cellMap, cellStatePool);
+        planner = new SpawnPlanner(cellMap, cellStatePool, linker.getCellStates());
 
         GameSettings.GameMode mode = settings.gameMode();
         simultaneousSpawn = settings.maxSpawn();
@@ -41,12 +43,12 @@ public class SpawnManager
             throw new RuntimeException("unknown game mode");
     }
 
-    public Map<CellCode, Integer> spawnBlocks()
+    public Map<CellCode, CellState> spawnBlocks()
     {
         return spawner.spawnBlocks(structure.getCellCodeIterator());
     }
 
-    public Map<CellCode, Integer> markCells()
+    public Map<CellCode, CellState> markCells()
     {
         return planner.markCells(structure.getCellCodeIterator(), simultaneousSpawn);
     }

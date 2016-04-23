@@ -1,7 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.Cell;
 import homemade.game.CellState;
-import homemade.game.Game;
 import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
 import homemade.game.GameState;
@@ -23,10 +23,11 @@ import java.util.Set;
 public class GameModelLinker
 {
     private FieldStructure structure;
+    private CellStates cellStates;
 
     private CellMap cellMap;
     private ComboDetector comboDetector;
-    private NumberPool numberPool;
+    private CellStatePool cellStatePool;
     private SpawnManager spawner;
     private ArrayBasedGameState state;
 
@@ -40,16 +41,18 @@ public class GameModelLinker
         this.controller = controller;
         this.structure = structure;
 
-        numberPool = new NumberPool(structure.getFieldSize());
-        cellMap = new CellMap(structure);
+        cellStates = new CellStates(structure.getFieldSize());
+
+        cellStatePool = new CellStatePool(structure.getFieldSize(), cellStates);
+        cellMap = new CellMap(structure, cellStates);
 
         CellMapReader readOnlyMap = cellMap;
 
-        state = new ArrayBasedGameState(structure);
+        state = new ArrayBasedGameState(structure, cellStates);
         lastGameState = state.getImmutableCopy();
 
         comboDetector = ComboDetector.initializeComboDetection(structure, settings, readOnlyMap, controller);
-        spawner = new SpawnManager(this, settings, readOnlyMap, numberPool);
+        spawner = new SpawnManager(this, settings, cellStatePool);
 
         mode = settings.gameMode();
         if (mode == GameMode.TURN_BASED)
@@ -63,6 +66,10 @@ public class GameModelLinker
     public CellMapReader getMapReader()
     {
         return cellMap;
+    }
+    public CellStates getCellStates()
+    {
+        return cellStates;
     }
 
     /**
@@ -88,12 +95,12 @@ public class GameModelLinker
 
     synchronized private void requestSpawn(Set<CellCode> updatedCells)
     {
-        Map<CellCode, Integer> spawnedBlocks = spawner.spawnBlocks();
+        Map<CellCode, CellState> spawnedBlocks = spawner.spawnBlocks();
 
         updatedCells.addAll(spawnedBlocks.keySet());
         updatedCells.addAll(removeCombos(cellMap.applyCascadeChanges(spawnedBlocks)));
 
-        Map<CellCode, Integer> marks = spawner.markCells();
+        Map<CellCode, CellState> marks = spawner.markCells();
         if (marks.size() == 0)
         {
             stopAllFacilities();
@@ -113,17 +120,17 @@ public class GameModelLinker
     {
         boolean riskOfSpawnDenial = false;
 
-        if (cellMap.getCellValue(moveToCell) == Game.CELL_MARKED_FOR_SPAWN)
+        if (cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN)
             riskOfSpawnDenial = true;
 
-        int cellFromValue = cellMap.getCellValue(moveFromCell);
-        int cellToValue = cellMap.getCellValue(moveToCell);
+        CellState cellFrom = cellMap.getCell(moveFromCell);
+        CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (cellToValue <= 0 && cellFromValue > 0)
+        if (!cellTo.isOccupied() && cellFrom.isOccupied())
         {
-            Map<CellCode, Integer> tmpMap = new HashMap<>();
-            tmpMap.put(moveFromCell, Game.CELL_EMPTY);
-            tmpMap.put(moveToCell, cellFromValue);
+            Map<CellCode, CellState> tmpMap = new HashMap<>();
+            tmpMap.put(moveFromCell, cellStates.getState(Cell.EMPTY));
+            tmpMap.put(moveToCell, cellFrom);
 
             Set<CellCode> updatedCells = new HashSet<>(tmpMap.keySet());
             Set<CellCode> comboCells = removeCombos(cellMap.applyCascadeChanges(tmpMap));
@@ -160,15 +167,15 @@ public class GameModelLinker
 
     private Set<CellCode> removeCombos(Set<CellCode> changedCells)
     {
-        Map<CellCode, Integer> removedCells = new HashMap<>();
+        Map<CellCode, CellState> removedCells = new HashMap<>();
 
         Set<CellCode> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
 
         for (CellCode cellCode : cellsToRemove)
         {
-            numberPool.freeNumber(cellMap.getCellValue(cellCode));
+            cellStatePool.freeState(cellMap.getCell(cellCode));
 
-            removedCells.put(cellCode, Game.CELL_EMPTY);
+            removedCells.put(cellCode, cellStates.getState(Cell.EMPTY));
         }
 
         cellMap.applyCascadeChanges(removedCells);
@@ -186,7 +193,7 @@ public class GameModelLinker
 
             for (CellCode cellCode : changedCells)
             {
-                updatedCells.put(cellCode, new CellState(cellMap.getCellValue(cellCode)));//TODO: makes sense to store cellstates in cellmap, they're fine and immutable; this will kill class Cell ofc
+                updatedCells.put(cellCode, cellMap.getCell(cellCode));
 
                 for (Direction direction : Direction.values())
                 {

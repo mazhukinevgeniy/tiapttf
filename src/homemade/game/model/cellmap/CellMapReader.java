@@ -1,5 +1,6 @@
 package homemade.game.model.cellmap;
 
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
@@ -9,7 +10,7 @@ import homemade.game.fieldstructure.LinkCode;
  */
 public interface CellMapReader
 {
-    int getCellValue(CellCode cellCode);
+    CellState getCell(CellCode cellCode);
 
     Direction getLinkDirection(CellCode cellA, CellCode cellB);
     Direction getLinkDirection(LinkCode linkCode);

@@ -1,8 +1,10 @@
 package homemade.game.model.spawn;
 
-import homemade.game.Game;
+import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.NumberPool;
+import homemade.game.model.CellStatePool;
+import homemade.game.model.CellStates;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.*;
@@ -13,24 +15,28 @@ import java.util.*;
 class SpawnPlanner
 {
     private CellMapReader cellMap;
-    private NumberPool numberPool;
+    private CellStatePool cellStatePool;
+
+    private CellStates cellStates;
 
     private Random random;
 
-    SpawnPlanner(CellMapReader cellMap, NumberPool numberPool)
+    SpawnPlanner(CellMapReader cellMap, CellStatePool cellStatePool, CellStates cellStates)
     {
         this.cellMap = cellMap;
-        this.numberPool = numberPool;
+        this.cellStatePool = cellStatePool;
+        this.cellStates = cellStates;
+        //TODO: draw a line between cellstates and cellstatespool
 
         random = new Random();
     }
 
 
-    Map<CellCode, Integer> markCells(Iterator<CellCode> iterator, int targetAmount)
+    Map<CellCode, CellState> markCells(Iterator<CellCode> iterator, int targetAmount)
     {
-        Map<CellCode, Integer> changes = new HashMap<>();
+        Map<CellCode, CellState> changes = new HashMap<>();
 
-        int canMark = numberPool.numbersAvailable();
+        int canMark = cellStatePool.statesAvailable();
 
         if (canMark > 0)
         {
@@ -40,7 +46,7 @@ class SpawnPlanner
             {
                 CellCode cellCode = iterator.next();
 
-                if (cellMap.getCellValue(cellCode) == Game.CELL_EMPTY)
+                if (cellMap.getCell(cellCode).type() == Cell.EMPTY)
                     freeCells.add(cellCode);
             }
 
@@ -50,7 +56,7 @@ class SpawnPlanner
             {
                 int position = random.nextInt(freeCells.size());
 
-                changes.put(freeCells.remove(position), Game.CELL_MARKED_FOR_SPAWN);
+                changes.put(freeCells.remove(position), cellStates.getState(Cell.MARKED_FOR_SPAWN));
             }
         }
 

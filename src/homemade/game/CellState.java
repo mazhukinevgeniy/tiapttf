@@ -5,22 +5,30 @@ package homemade.game;
  */
 public class CellState
 {
-    private int code;
+    private Cell cellType;
+    private int cellValue;
 
-    public CellState(int code)
+    public CellState(Cell type, int code)
     {
-        this.code = code;
+        cellType = type;
+        cellValue = code;
+
+        if (type == Cell.OCCUPIED && code == Cell.DEFAULT_VALUE)
+            throw new RuntimeException("incorrect creation of cellState");
     }
 
     public int value()
     {
-        return code;
+        return cellValue;
+    }
+
+    public Cell type()
+    {
+        return cellType;
     }
 
     public boolean isOccupied()
     {
-        return code > 0;
+        return cellType == Cell.OCCUPIED;
     }
-
-    //TODO: add info about type (empty, normal block, dead block, super block etc)
 }

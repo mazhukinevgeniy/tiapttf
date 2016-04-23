@@ -1,41 +1,37 @@
 package homemade.game.model.spawn;
 
-import homemade.game.Game;
+import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.NumberPool;
+import homemade.game.model.CellStatePool;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by user3 on 29.03.2016.
- */
 class BlockSpawner
 {
     private CellMapReader cellMap;
-    private NumberPool numberPool;
+    private CellStatePool cellStatePool;
 
-    BlockSpawner(CellMapReader cellMap, NumberPool numberPool)
+    BlockSpawner(CellMapReader cellMap, CellStatePool cellStatePool)
     {
         this.cellMap = cellMap;
-        this.numberPool = numberPool;
+        this.cellStatePool = cellStatePool;
     }
 
-    Map<CellCode, Integer> spawnBlocks(Iterator<CellCode> iterator)
+    Map<CellCode, CellState> spawnBlocks(Iterator<CellCode> iterator)
     {
-        Map<CellCode, Integer> changes = new HashMap<>();
+        Map<CellCode, CellState> changes = new HashMap<>();
 
         while (iterator.hasNext())
         {
             CellCode cellCode = iterator.next();
 
-            if (cellMap.getCellValue(cellCode) == Game.CELL_MARKED_FOR_SPAWN)
+            if (cellMap.getCell(cellCode).type() == Cell.MARKED_FOR_SPAWN)
             {
-                changes.put(cellCode, numberPool.takeNumber());
-
-                System.out.println("block spawned: " + cellCode.x() + ", " + cellCode.y() + " | " + changes.get(cellCode));
+                changes.put(cellCode, cellStatePool.takeState());
             }
         }
 

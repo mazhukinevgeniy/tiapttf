@@ -115,11 +115,8 @@ public class ComboDetector
                 {
                     gameScore.handleCombo(comboLength);
 
-                    String report = "";
-
                     tmpStorage.add(currentCell);
                     blockRemovalHandler.blockRemoved(currentCell);
-                    report = " " + cellMap.getCellValue(currentCell) + report;
                     //TODO: overcome code duplication
 
                     Direction comboDirection = cellMap.getLinkDirection(nextLink);
@@ -128,13 +125,10 @@ public class ComboDetector
                     {
                         tmpStorage.add(nextCell);
                         blockRemovalHandler.blockRemoved(nextCell);
-                        report = " " + cellMap.getCellValue(nextCell) + report;
 
                         currentCell = nextCell;
                         nextCell = currentCell.neighbour(mainDirection);
                     }
-
-                    System.out.println("combo is" + report);
                 }
                 else
                 {

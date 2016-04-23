@@ -1,6 +1,7 @@
 package homemade.game.view.layers;
 
-import homemade.game.Game;
+import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.view.EffectManager;
 import homemade.resources.Assets;
@@ -31,10 +32,11 @@ class BlockLayer extends RenderingLayer
             graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
         }
 
+        CellState cell = state.getCellState(cellCode);
         int value = state.getCellState(cellCode).value();
         //TODO: see how this method should be written with the new cellState
 
-        if (value == Game.CELL_EMPTY)
+        if (cell.type() == Cell.EMPTY)
         {
             int time = effectManager.getFadeTimeRemaining(cellCode);
 
@@ -45,17 +47,19 @@ class BlockLayer extends RenderingLayer
         {
             Image sprite;
 
-            if (value == Game.CELL_MARKED_FOR_SPAWN)
+            if (cell.type() == Cell.MARKED_FOR_SPAWN)
             {
                 sprite = Assets.smallBlock;
             }
-            else //if (value > 0) //condition is always true if codes stay unchanged
+            else if (cell.type() == Cell.OCCUPIED)
             {
                 if (selectionState.isSelected(cellCode))
                     sprite = Assets.normalBlockSelected;
                 else
                     sprite = Assets.normalBlock;
             }
+            else
+                throw new RuntimeException("unknown cell type");
 
             graphics.drawImage(sprite, canvasX, canvasY, null);
         }

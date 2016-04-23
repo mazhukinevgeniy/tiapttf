@@ -39,7 +39,7 @@ public class BlockSelection
 
     public synchronized void activateCell(CellCode eventCell)
     {
-        if (cellMapReader.getCellValue(eventCell) > 0)
+        if (cellMapReader.getCell(eventCell).isOccupied())
         {
             selection.clear();
             selection.add(eventCell);
@@ -78,8 +78,8 @@ public class BlockSelection
 
             selection.clear();
 
-            boolean selectedCellOccupied = cellMapReader.getCellValue(selectedCell) > 0;
-            boolean eventCellOccupied = cellMapReader.getCellValue(eventCell) > 0;
+            boolean selectedCellOccupied = cellMapReader.getCell(selectedCell).isOccupied();
+            boolean eventCellOccupied = cellMapReader.getCell(eventCell).isOccupied();
 
             if (selectedCellOccupied) //I think that means move failed
             {
@@ -125,7 +125,7 @@ public class BlockSelection
 
                         if (neighbour != null && !unaccessableCells.contains(neighbour))
                         {
-                            if (cellMapReader.getCellValue(neighbour) < 1)
+                            if (!cellMapReader.getCell(neighbour).isOccupied())
                             {
                                 newBorder.add(neighbour);
                                 cellsToMove.add(neighbour);
