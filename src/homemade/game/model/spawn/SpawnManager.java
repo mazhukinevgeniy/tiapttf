@@ -14,12 +14,12 @@ import java.util.Map;
  */
 public class SpawnManager
 {
-    static final int SIMULTANEOUS_SPAWN = 3;
-
     private SpawnTimer timer;
 
     private BlockSpawner spawner;
     private SpawnPlanner planner;
+
+    private int simultaneousSpawn;
 
     private FieldStructure structure;
 
@@ -31,6 +31,7 @@ public class SpawnManager
         planner = new SpawnPlanner(cellMap, numberPool);
 
         GameSettings.GameMode mode = settings.gameMode();
+        simultaneousSpawn = settings.maxSpawn();
 
         if (mode == GameSettings.GameMode.TURN_BASED)
             timer = new SpawnTimer.EmptyTimer();
@@ -47,7 +48,7 @@ public class SpawnManager
 
     public Map<CellCode, Integer> markCells()
     {
-        return planner.markCells(structure.getCellCodeIterator(), SIMULTANEOUS_SPAWN);
+        return planner.markCells(structure.getCellCodeIterator(), simultaneousSpawn);
     }
 
     public SpawnTimer spawnTimer()

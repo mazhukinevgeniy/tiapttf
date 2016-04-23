@@ -42,7 +42,7 @@ class SpawnPeriod
         separators.add(oversaturationPoint);
 
         int maxPeriod = settings.maxPeriod();
-        int spawnsToFill = Math.max(1, (size - oversaturationPoint) / SpawnManager.SIMULTANEOUS_SPAWN);
+        int spawnsToFill = Math.max(1, (size - oversaturationPoint) / settings.maxSpawn());
 
         System.out.println("time to fill from oversaturation = " + maxPeriod * spawnsToFill);
 
