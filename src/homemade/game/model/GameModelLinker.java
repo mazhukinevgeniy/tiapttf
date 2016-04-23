@@ -15,13 +15,12 @@ import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.spawn.SpawnManager;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class GameModelLinker
 {
-    private static final boolean AUTOCOMPLETION = true;
-
     private FieldStructure structure;
 
     private CellMap cellMap;
@@ -83,8 +82,15 @@ public class GameModelLinker
 
     synchronized public void requestSpawn()
     {
+        requestSpawn(new HashSet<>());
+    }
+
+    synchronized private void requestSpawn(Set<CellCode> updatedCells)
+    {
         Map<CellCode, Integer> spawnedBlocks = spawner.spawnBlocks();
-        actOnChangedCells(cellMap.applyCascadeChanges(spawnedBlocks));
+
+        updatedCells.addAll(spawnedBlocks.keySet());
+        updatedCells.addAll(removeCombos(cellMap.applyCascadeChanges(spawnedBlocks)));
 
         Map<CellCode, Integer> marks = spawner.markCells();
         if (marks.size() == 0)
@@ -93,8 +99,10 @@ public class GameModelLinker
         }
         else
         {
-            actOnChangedCells(cellMap.applyCascadeChanges(marks));
+            updatedCells.addAll(cellMap.applyCascadeChanges(marks));
         }
+
+        updateState(updatedCells);
     }
 
     /**
@@ -116,10 +124,19 @@ public class GameModelLinker
             tmpMap.put(moveFromCell, Game.CELL_EMPTY);
             tmpMap.put(moveToCell, cellFromValue);
 
-            actOnChangedCells(cellMap.applyCascadeChanges(tmpMap));
+            Set<CellCode> updatedCells = new HashSet<>(tmpMap.keySet());
+            Set<CellCode> comboCells = removeCombos(cellMap.applyCascadeChanges(tmpMap));
+            updatedCells.addAll(comboCells);
 
-            if (mode == GameMode.TURN_BASED)
-                requestSpawn();
+            if (mode == GameMode.TURN_BASED && comboCells.isEmpty())
+            {
+                requestSpawn(updatedCells);
+            }
+            else
+            {
+                updateState(updatedCells);
+            }
+
             if (riskOfSpawnDenial)
                 state.incrementDenyCounter();
         }
@@ -140,30 +157,22 @@ public class GameModelLinker
         return lastGameState;
     }
 
-    private void actOnChangedCells(Set<CellCode> changedCells)
+    private Set<CellCode> removeCombos(Set<CellCode> changedCells)
     {
-        if (changedCells.size() > 0)
+        Map<CellCode, Integer> removedCells = new HashMap<>();
+
+        Set<CellCode> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
+
+        for (CellCode cellCode : cellsToRemove)
         {
-            if (AUTOCOMPLETION)
-            {
-                Map<CellCode, Integer> removedCells = new HashMap<>();
+            numberPool.freeNumber(cellMap.getCellValue(cellCode));
 
-                Set<CellCode> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
-
-                for (CellCode cellCode : cellsToRemove)
-                {
-                    numberPool.freeNumber(cellMap.getCellValue(cellCode));
-
-                    removedCells.put(cellCode, Game.CELL_EMPTY);
-                }
-
-                cellMap.applyCascadeChanges(removedCells);
-
-                changedCells.addAll(removedCells.keySet());
-            }
-
-            updateState(changedCells); //TODO: separate it from autocompletion
+            removedCells.put(cellCode, Game.CELL_EMPTY);
         }
+
+        cellMap.applyCascadeChanges(removedCells);
+
+        return removedCells.keySet();
     }
 
     private void updateState(Set<CellCode> changedCells)
