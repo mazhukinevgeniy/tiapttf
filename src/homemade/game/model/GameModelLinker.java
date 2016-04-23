@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.CellState;
 import homemade.game.Game;
 import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
@@ -179,13 +180,13 @@ public class GameModelLinker
     {
         if (changedCells.size() > 0)
         {
-            Map<CellCode, Integer> updatedCells = new HashMap<>();
+            Map<CellCode, CellState> updatedCells = new HashMap<>();
             Map<LinkCode, Direction> updatedLinks = new HashMap<>();
             Map<LinkCode, Integer> updatedChains = new HashMap<>();
 
             for (CellCode cellCode : changedCells)
             {
-                updatedCells.put(cellCode, cellMap.getCellValue(cellCode));
+                updatedCells.put(cellCode, new CellState(cellMap.getCellValue(cellCode)));//TODO: makes sense to store cellstates in cellmap, they're fine and immutable; this will kill class Cell ofc
 
                 for (Direction direction : Direction.values())
                 {

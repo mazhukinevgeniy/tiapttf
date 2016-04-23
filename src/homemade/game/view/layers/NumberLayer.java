@@ -1,5 +1,6 @@
 package homemade.game.view.layers;
 
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.resources.Assets;
@@ -22,9 +23,11 @@ class NumberLayer extends RenderingLayer
     @Override
     void renderForCell(CellCode cellCode)
     {
-        int value = state.getCellValue(cellCode);
-        if (value > 0)
+        CellState cell = state.getCellState(cellCode);
+        if (cell.isOccupied())
         {
+            int value = cell.value();
+
             String numberToDraw = String.valueOf(value);
 
             int numberLength = numberToDraw.length();

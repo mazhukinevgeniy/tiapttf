@@ -31,7 +31,8 @@ class BlockLayer extends RenderingLayer
             graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
         }
 
-        int value = state.getCellValue(cellCode);
+        int value = state.getCellState(cellCode).value();
+        //TODO: see how this method should be written with the new cellState
 
         if (value == Game.CELL_EMPTY)
         {

@@ -12,7 +12,7 @@ public interface GameState
     public int getCellsOccupied();
     public int getSpawnsDenied();
 
-    public int getCellValue(CellCode cellCode);
+    public CellState getCellState(CellCode cellCode);
 
     public Direction getLinkBetweenCells(LinkCode linkCode);
     public int getChainLength(LinkCode linkCode);

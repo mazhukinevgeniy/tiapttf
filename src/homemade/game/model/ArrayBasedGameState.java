@@ -1,5 +1,6 @@
 package homemade.game.model;
 
+import homemade.game.CellState;
 import homemade.game.Game;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 class ArrayBasedGameState implements GameState
 {
-    private int[] field;
+    private CellState[] field;
     private Direction[] links;
     private int[] chainLengths;
 
@@ -27,11 +28,11 @@ class ArrayBasedGameState implements GameState
     {
         int fieldSize = structure.getFieldSize();
 
-        field = new int[fieldSize];
+        field = new CellState[fieldSize];
 
         for (int i = 0; i < fieldSize; i++)
         {
-            field[i] = Game.CELL_EMPTY;
+            field[i] = new CellState(Game.CELL_EMPTY);
         }
 
         int numberOfLinks = structure.getNumberOfLinks();
@@ -54,7 +55,7 @@ class ArrayBasedGameState implements GameState
         spawnsDenied = 0;
     }
 
-    private ArrayBasedGameState(int[] fieldData, Direction[] linkData, int[] chainData, int spawnsDenied)
+    private ArrayBasedGameState(CellState[] fieldData, Direction[] linkData, int[] chainData, int spawnsDenied)
     {
         if (fieldData == null || linkData == null || chainData == null)
             throw new Error("corrupted game state copy has been created");
@@ -66,9 +67,9 @@ class ArrayBasedGameState implements GameState
 
         int counter = 0;
 
-        for (int value : fieldData)
+        for (CellState cell : fieldData)
         {
-            if (value > 0)
+            if (cell.isOccupied())
                 counter++;
         }
 
@@ -83,25 +84,25 @@ class ArrayBasedGameState implements GameState
     }
 
 
-    void updateFieldSnapshot(Map<CellCode, Integer> cellUpdates,
-                                          Map<LinkCode, Direction> linkUpdates,
-                                          Map<LinkCode, Integer> chainUpdates)
+    void updateFieldSnapshot( Map<CellCode, CellState> cellUpdates,
+                              Map<LinkCode, Direction> linkUpdates,
+                              Map<LinkCode, Integer> chainUpdates)
     {
         immutableCopy = null;
 
 
-        for (Map.Entry<CellCode, Integer> entry : cellUpdates.entrySet())
+        for (Map.Entry<CellCode, CellState> entry : cellUpdates.entrySet())
         {
             int pos = entry.getKey().hashCode();
-            int newValue = entry.getValue();
-            int oldValue = field[pos];
+            CellState newState = entry.getValue();
+            CellState oldState = field[pos];
 
-            if (oldValue < 1 && newValue > 0)
+            if (!oldState.isOccupied() && newState.isOccupied())
                 cellsOccupied++;
-            else if (oldValue > 0 && newValue < 1)
+            else if (oldState.isOccupied() && !newState.isOccupied())
                 cellsOccupied--;
 
-            field[pos] = newValue;
+            field[pos] = newState;
         }
 
         for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet())
@@ -128,7 +129,7 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    public int getCellValue(CellCode cellCode)
+    public CellState getCellState(CellCode cellCode)
     {
         return this.field[cellCode.hashCode()];
     }
