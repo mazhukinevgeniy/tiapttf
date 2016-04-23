@@ -3,6 +3,7 @@ package homemade.game.model.selection;
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
@@ -17,6 +18,8 @@ public class BlockSelection
     private GameModelLinker linker;
     private CellMapReader cellMapReader;
 
+    private int fieldSize;
+
     private ArrayList<CellCode> selection;
 
     private SelectionState state;
@@ -26,7 +29,10 @@ public class BlockSelection
         this.linker = linker;
         cellMapReader = linker.getMapReader();
 
-        selection = new ArrayList<>(linker.getStructure().getMaxDimension());
+        FieldStructure structure = linker.getStructure();
+        fieldSize = structure.getFieldSize();
+
+        selection = new ArrayList<>(structure.getMaxDimension());
 
         updateSelectionState();
     }
@@ -40,15 +46,10 @@ public class BlockSelection
 
             updateSelectionState();
         }
-        else if (selection.size() == 1) //ie we move single blocks and we can move them by clicking cells
+        else if (selection.size() == 1 && state.canMoveTo(eventCell))
         {
             CellCode selectedCell = selection.get(0);
-            int distance = eventCell.distance(selectedCell);
-
-            if (distance == 1)
-            {
-                tryMove(selectedCell, eventCell, true);
-            }
+            tryMove(selectedCell, eventCell, true);
         }
 
         System.out.println("apparently, mouse released at " + eventCell.x() + ", " + eventCell.y());
@@ -96,21 +97,48 @@ public class BlockSelection
 
     private void updateSelectionState()
     {
-        int selectionSize = selection.size();
-        ArrayList<CellCode> copy = new ArrayList<CellCode>(selectionSize);
-        HashSet<CellCode> cellsToMove = new HashSet<CellCode>(4 * selectionSize);
+        HashSet<CellCode> copy = new HashSet<CellCode>(selection);
 
-        for (int i = 0; i < selectionSize; i++)
+        HashSet<CellCode> cellsToMove = new HashSet<CellCode>(fieldSize);
+
+        if (selection.size() > 1)
+            throw new RuntimeException("accessable cells are undefined");
+        else if (selection.size() == 1)
         {
-            CellCode cellCode = selection.get(i);
-            copy.add(cellCode);
+            HashSet<CellCode> unaccessableCells = new HashSet<>(fieldSize);
+            HashSet<CellCode> borderCells = new HashSet<>(1);
+            Direction[] directions = Direction.values();
 
-            for (Direction direction : Direction.values())
+            borderCells.add(selection.get(0));
+
+            while (!borderCells.isEmpty())
             {
-                CellCode neighbour = cellCode.neighbour(direction);
+                HashSet<CellCode> newBorder = new HashSet<>(Math.min(borderCells.size() * 2, fieldSize / 2));
 
-                if (!cellCode.onBorder(direction) && cellMapReader.getCellValue(neighbour) < 1)
-                    cellsToMove.add(neighbour);
+                for (CellCode borderCell : borderCells)
+                {
+                    unaccessableCells.add(borderCell);
+
+                    for (Direction direction : directions)
+                    {
+                        CellCode neighbour = borderCell.neighbour(direction);
+
+                        if (neighbour != null && !unaccessableCells.contains(neighbour))
+                        {
+                            if (cellMapReader.getCellValue(neighbour) < 1)
+                            {
+                                newBorder.add(neighbour);
+                                cellsToMove.add(neighbour);
+                            }
+                            else
+                            {
+                                unaccessableCells.add(neighbour);
+                            }
+                        }
+                    }
+                }
+
+                borderCells = newBorder;
             }
         }
 
@@ -120,5 +148,5 @@ public class BlockSelection
     public SelectionState getSelectionState()
     {
         return state;
-    } //TODO: return immutable copy
+    }
 }
