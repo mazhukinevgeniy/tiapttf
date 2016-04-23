@@ -9,6 +9,7 @@ import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by user3 on 24.03.2016.
@@ -95,8 +96,16 @@ public class BlockSelection
         }
     }
 
-    private void updateSelectionState()
+    public synchronized void updateSelectionState()
     {
+        for (Iterator<CellCode> iterator = selection.iterator(); iterator.hasNext(); )
+        {
+            CellCode next = iterator.next();
+
+            if (!cellMapReader.getCell(next).isOccupied())
+                iterator.remove();
+        }
+
         HashSet<CellCode> copy = new HashSet<CellCode>(selection);
 
         HashSet<CellCode> cellsToMove = new HashSet<CellCode>(fieldSize);

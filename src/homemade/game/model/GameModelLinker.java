@@ -13,6 +13,7 @@ import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.combo.ComboDetector;
+import homemade.game.model.selection.BlockSelection;
 import homemade.game.model.spawn.SpawnManager;
 
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class GameModelLinker
     private GameController controller;
 
     private GameState lastGameState;
+    private BlockSelection selection;
     private GameMode mode;
 
     GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller)
@@ -60,6 +62,8 @@ public class GameModelLinker
             for (int i = 0; i < 2; i++)
                 requestSpawn();
         }
+
+        selection = new BlockSelection(this);
     }
 
     public FieldStructure getStructure() { return structure; }
@@ -70,6 +74,11 @@ public class GameModelLinker
     public CellStates getCellStates()
     {
         return cellStates;
+    }
+
+    BlockSelection getSelection()
+    {
+        return selection;
     }
 
     /**
@@ -187,6 +196,8 @@ public class GameModelLinker
     {
         if (changedCells.size() > 0)
         {
+            selection.updateSelectionState();
+
             Map<CellCode, CellState> updatedCells = new HashMap<>();
             Map<LinkCode, Direction> updatedLinks = new HashMap<>();
             Map<LinkCode, Integer> updatedChains = new HashMap<>();

@@ -7,7 +7,6 @@ import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.selection.BlockSelection;
 
 /**
  * GameModel handles commands from GameController.
@@ -15,13 +14,10 @@ import homemade.game.model.selection.BlockSelection;
 public class GameModel
 {
     private GameModelLinker linker;
-    private BlockSelection selection;
 
     public GameModel(GameController gameController, FieldStructure structure, GameSettings settings)
     {
         linker = new GameModelLinker(structure, settings, gameController);
-
-        selection = new BlockSelection(linker);
     }
 
     public GameState copyGameState()
@@ -31,7 +27,7 @@ public class GameModel
 
     public SelectionState copySelectionState()
     {
-        return selection.getSelectionState();
+        return linker.getSelection().getSelectionState();
     }
 
     public void toggleSpawnPause()
@@ -41,11 +37,11 @@ public class GameModel
 
     public void tryToActivateCell(CellCode cell)
     {
-        selection.activateCell(cell);
+        linker.getSelection().activateCell(cell);
     }
 
     public void tryMove(Direction direction)
     {
-        selection.tryToMoveSelectionIn(direction);
+        linker.getSelection().tryToMoveSelectionIn(direction);
     }
 }
