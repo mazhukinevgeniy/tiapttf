@@ -24,7 +24,7 @@ class NumberLayer extends RenderingLayer
     void renderForCell(CellCode cellCode)
     {
         CellState cell = state.getCellState(cellCode);
-        if (cell.isOccupied())
+        if (cell.isOccupiedByBlock())
         {
             int value = cell.value();
 

@@ -9,7 +9,7 @@ import homemade.game.fieldstructure.LinkCode;
  */
 public interface GameState
 {
-    public int getCellsOccupied();
+    public int numberOfBlocks();
     public int getSpawnsDenied();
 
     public CellState getCellState(CellCode cellCode);

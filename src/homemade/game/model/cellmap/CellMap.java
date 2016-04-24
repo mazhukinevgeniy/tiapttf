@@ -106,7 +106,7 @@ public class CellMap implements CellMapReader
         CellState cellA = cells[cell.hashCode()];
         CellState cellB = cells[nextCell.hashCode()];
 
-        boolean bothAreOccupied = cellA.isOccupied() && cellB.isOccupied();
+        boolean bothAreOccupied = cellA.isOccupiedByBlock() && cellB.isOccupiedByBlock();
 
         Direction oldDirection = link.direction;
         Direction newDirection = bothAreOccupied ?

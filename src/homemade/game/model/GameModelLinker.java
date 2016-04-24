@@ -135,7 +135,7 @@ public class GameModelLinker
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (!cellTo.isOccupied() && cellFrom.isOccupied())
+        if (cellTo.isFreeForMove() && cellFrom.isOccupiedByBlock())
         {
             Map<CellCode, CellState> tmpMap = new HashMap<>();
             tmpMap.put(moveFromCell, cellStates.getState(Cell.EMPTY));

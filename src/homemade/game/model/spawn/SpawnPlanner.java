@@ -46,7 +46,7 @@ class SpawnPlanner
             {
                 CellCode cellCode = iterator.next();
 
-                if (cellMap.getCell(cellCode).type() == Cell.EMPTY)
+                if (cellMap.getCell(cellCode).isFreeForSpawn())
                     freeCells.add(cellCode);
             }
 

@@ -21,7 +21,7 @@ class ArrayBasedGameState implements GameState
 
     private GameState immutableCopy;
 
-    private int cellsOccupied;
+    private int numberOfBlocks;
     private int spawnsDenied;
 
     ArrayBasedGameState(FieldStructure structure, CellStates states)
@@ -51,7 +51,7 @@ class ArrayBasedGameState implements GameState
             chainLengths[i] = 0;
         }
 
-        cellsOccupied = 0;
+        numberOfBlocks = 0;
         spawnsDenied = 0;
     }
 
@@ -69,11 +69,11 @@ class ArrayBasedGameState implements GameState
 
         for (CellState cell : fieldData)
         {
-            if (cell.isOccupied())
+            if (cell.isOccupiedByBlock())
                 counter++;
         }
 
-        cellsOccupied = counter;
+        numberOfBlocks = counter;
 
         this.spawnsDenied = spawnsDenied;
     }
@@ -97,10 +97,10 @@ class ArrayBasedGameState implements GameState
             CellState newState = entry.getValue();
             CellState oldState = field[pos];
 
-            if (!oldState.isOccupied() && newState.isOccupied())
-                cellsOccupied++;
-            else if (oldState.isOccupied() && !newState.isOccupied())
-                cellsOccupied--;
+            if (!oldState.isOccupiedByBlock() && newState.isOccupiedByBlock())
+                numberOfBlocks++;
+            else if (oldState.isOccupiedByBlock() && !newState.isOccupiedByBlock())
+                numberOfBlocks--;
 
             field[pos] = newState;
         }
@@ -123,9 +123,9 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    public int getCellsOccupied()
+    public int numberOfBlocks()
     {
-        return cellsOccupied;
+        return numberOfBlocks;
     }
 
     @Override

@@ -21,6 +21,7 @@ public class Assets
     public static Image field;
     public static Image normalBlock;
     public static Image normalBlockSelected;
+    public static Image deadBlock;
     public static Image smallBlock;
     public static Image placeToMove;
     public static Image digit[];
@@ -56,6 +57,9 @@ public class Assets
 
             input = getClass().getResourceAsStream("normal_block_selected.png");
             Assets.normalBlockSelected = ImageIO.read(input);
+
+            input = getClass().getResourceAsStream("gray_block.png");
+            Assets.deadBlock = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("small_block.png");
             Assets.smallBlock = ImageIO.read(input);

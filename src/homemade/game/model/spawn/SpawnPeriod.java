@@ -73,7 +73,7 @@ class SpawnPeriod
     {
         GameState state = linker.lastGameState();
 
-        int occupiedCells = state.getCellsOccupied();
+        int occupiedCells = state.numberOfBlocks();
         int spawnsDenied = state.getSpawnsDenied();
 
 

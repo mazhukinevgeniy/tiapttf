@@ -58,6 +58,10 @@ class BlockLayer extends RenderingLayer
                 else
                     sprite = Assets.normalBlock;
             }
+            else if (cell.type() == Cell.DEAD_BLOCK)
+            {
+                sprite = Assets.deadBlock;
+            }
             else
                 throw new RuntimeException("unknown cell type");
 
