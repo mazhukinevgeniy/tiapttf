@@ -138,7 +138,7 @@ public class GameModelLinker
         if (cellTo.isFreeForMove() && cellFrom.isOccupiedByBlock())
         {
             Map<CellCode, CellState> tmpMap = new HashMap<>();
-            tmpMap.put(moveFromCell, cellStates.getState(Cell.EMPTY));
+            tmpMap.put(moveFromCell, cellStates.getState(riskOfSpawnDenial ? Cell.DEAD_BLOCK : Cell.EMPTY));
             tmpMap.put(moveToCell, cellFrom);
 
             Set<CellCode> updatedCells = new HashSet<>(tmpMap.keySet());
