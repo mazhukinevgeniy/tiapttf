@@ -6,12 +6,12 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.GameView;
-import homemade.resources.Assets;
 import homemade.utils.PiecewiseConstantFunction;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
 /**
  * As of 2.04.2016, this layer will not work properly if we don't call renderForCell for each cell
@@ -19,8 +19,6 @@ import java.util.List;
 class LinkLayer extends RenderingLayer
 {
     private EnumSet<Direction> drawingDirections = EnumSet.of(Direction.BOTTOM, Direction.RIGHT);
-    private List<Map<Direction, Image>> assets;
-    //TODO: check if we can design safe asset storage
 
     private EnumMap<Direction, Offset> offsets;
     private PiecewiseConstantFunction<Double, Integer> chainLengthToSpriteTier;
@@ -33,13 +31,11 @@ class LinkLayer extends RenderingLayer
 
         this.structure = structure;
 
-        assets = Assets.arrows;
-
         offsets = new EnumMap<Direction, Offset>(Direction.class);
 
-        for (Direction direction : assets.get(0).keySet())
+        for (Direction direction : Direction.values())
         {
-            Image img = assets.get(0).get(direction);
+            Image img = assets.getArrow(direction, 0);
 
             int width = direction.isHorizontal() ? 2 : 1;
             int height = direction.isHorizontal() ? 1 : 2;
@@ -58,7 +54,10 @@ class LinkLayer extends RenderingLayer
         spriteTier.add(1);
         spriteTier.add(0);
 
-        chainLengthToSpriteTier = new PiecewiseConstantFunction<Double, Integer>(separators, spriteTier);
+        if (assets.getNumberOfArrowTiers() != 3)
+            throw new RuntimeException("wrong assumptions in linklayer");
+
+        chainLengthToSpriteTier = new PiecewiseConstantFunction<>(separators, spriteTier);
     }
 
     @Override
@@ -78,7 +77,7 @@ class LinkLayer extends RenderingLayer
                     Double comboLength = (double) state.getChainLength(link);
                     int spriteTier = chainLengthToSpriteTier.getValueAt(comboLength);
 
-                    Image sprite = assets.get(spriteTier).get(linkDirection);
+                    Image sprite = assets.getArrow(linkDirection, spriteTier);
                     Offset offset = offsets.get(linkDirection);
 
                     graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);

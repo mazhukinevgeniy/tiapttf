@@ -15,7 +15,7 @@ class DigitMetadata
     private int offsetX[];
     int offsetY = (GameView.CELL_WIDTH - digitHeight) / 2;
 
-    DigitMetadata(FieldStructure structure)
+    DigitMetadata(FieldStructure structure, Assets assets)
     {
         int size = structure.getFieldSize();
 
@@ -26,7 +26,7 @@ class DigitMetadata
 
         for (int i = 0; i < 10; i++)
         {
-            this.digitWidth[i] = Assets.digit[i].getWidth(null);
+            this.digitWidth[i] = assets.getDigit(i).getWidth(null);
         }
 
         //we don't need offset for number 0

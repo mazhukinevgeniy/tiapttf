@@ -17,72 +17,130 @@ import java.util.Map;
  */
 public class Assets
 {
-    public static Image grid;
-    public static Image field;
-    public static Image normalBlock;
-    public static Image normalBlockSelected;
-    public static Image deadBlock;
-    public static Image smallBlock;
-    public static Image placeToMove;
-    public static Image digit[];
-    public static Image disappear[];
-    public static List<Map<Direction, Image>> arrows;
-    //TODO: change access so that no class can corrupt loaded assets
+    private static Assets instance;
 
-    public static void loadAssets()
+    synchronized public static void loadAssets()
     {
-        new Assets();
+        if (instance == null)
+            instance = new Assets();
+        else
+            throw new RuntimeException("no need to load assets again");
     }
+
+    synchronized public static Assets getAssets()
+    {
+        if (instance == null)
+            throw new RuntimeException("must load assets");
+        else
+            return instance;
+    }
+
+
+    private Image field;
+    private Image normalBlock;
+    private Image normalBlockSelected;
+    private Image deadBlock;
+    private Image smallBlock;
+    private Image placeToMove;
+    private Image digit[];
+    private Image disappear[];
+    private List<Map<Direction, Image>> arrows;
 
     private Assets()
     {
         InputStream input;
 
-        Assets.digit = new Image[10];
-        Assets.disappear = new Image[3];
-
+        digit = new Image[10];
+        disappear = new Image[3];
 
         try
         {
             initializeArrowImages();
 
-            input = getClass().getResourceAsStream("grid.png");
-            Assets.grid = ImageIO.read(input);
-
             input = getClass().getResourceAsStream("field.png");
-            Assets.field = ImageIO.read(input);
+            field = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("normal_block.png");
-            Assets.normalBlock = ImageIO.read(input);
+            normalBlock = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("normal_block_selected.png");
-            Assets.normalBlockSelected = ImageIO.read(input);
+            normalBlockSelected = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("gray_block.png");
-            Assets.deadBlock = ImageIO.read(input);
+            deadBlock = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("small_block.png");
-            Assets.smallBlock = ImageIO.read(input);
+            smallBlock = ImageIO.read(input);
 
             input = getClass().getResourceAsStream("place2move.png");
-            Assets.placeToMove = ImageIO.read(input);
+            placeToMove = ImageIO.read(input);
 
             for (int i = 0; i < 10; i++)
             {
                 input = getClass().getResourceAsStream(i + ".png");
-                Assets.digit[i] = ImageIO.read(input);
+                digit[i] = ImageIO.read(input);
             }
 
             for (int i = 0; i < 3; i++)
             {
                 input = getClass().getResourceAsStream("dis_" + (i + 1) + ".png");
-                Assets.disappear[2 - i] = ImageIO.read(input);
+                disappear[2 - i] = ImageIO.read(input);
             }
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
+    }
+
+    public Image getField()
+    {
+        return field;
+    }
+
+    public Image getDeadBlock()
+    {
+        return deadBlock;
+    }
+
+    public Image getSmallBlock()
+    {
+        return smallBlock;
+    }
+
+    public Image getBlock(boolean selected)
+    {
+        return selected ? normalBlockSelected : normalBlock;
+    }
+
+    public Image getPlaceToMove()
+    {
+        return placeToMove;
+    }
+
+    public int getNumberOfArrowTiers()
+    {
+        return arrows.size();
+    }
+
+    public Image getArrow(Direction direction, int tier)
+    {
+        return arrows.get(tier).get(direction);
+    }
+
+    public Image getDigit(int value)
+    {
+        return digit[value];
+    }
+
+    public int getDisappearanceLength()
+    {
+        return disappear.length;
+    }
+
+    public Image getDisappearanceSprite(int step)
+    {
+        return disappear[step];
     }
 
     private void initializeArrowImages()
@@ -123,7 +181,7 @@ public class Assets
             }
         }
 
-        Assets.arrows = listOfMaps;
+        arrows = listOfMaps;
     }
 
     private Image createRotatedCopy(Image image, double angleInRadians)

@@ -7,6 +7,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
+import homemade.resources.Assets;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -38,9 +39,11 @@ abstract public class RenderingLayer
     protected int canvasX;
     protected int canvasY;
 
+    protected Assets assets;
+
     RenderingLayer()
     {
-        super();
+        assets = Assets.getAssets();
     }
 
     final public void renderLayer(Iterator<CellCode> cellCodeIterator, GameState state, SelectionState selection, Graphics graphics)

@@ -78,7 +78,7 @@ public class GameView
 
                 graphics.clearRect(0, 0, GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT);
 
-                graphics.drawImage(Assets.field, GameView.GRID_OFFSET, GameView.GRID_OFFSET, null);
+                graphics.drawImage(Assets.getAssets().getField(), GameView.GRID_OFFSET, GameView.GRID_OFFSET, null);
 
                 for (RenderingLayer layer : layers)
                 {

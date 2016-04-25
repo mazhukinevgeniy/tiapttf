@@ -1,10 +1,8 @@
 package homemade.game.view.layers;
 
 import homemade.game.Cell;
-import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.view.EffectManager;
-import homemade.resources.Assets;
 
 import java.awt.*;
 
@@ -29,14 +27,12 @@ class BlockLayer extends RenderingLayer
     {
         if (selectionState.canMoveTo(cellCode))
         {
-            graphics.drawImage(Assets.placeToMove, canvasX, canvasY, null);
+            graphics.drawImage(assets.getPlaceToMove(), canvasX, canvasY, null);
         }
 
-        CellState cell = state.getCellState(cellCode);
-        int value = state.getCellState(cellCode).value();
-        //TODO: see how this method should be written with the new cellState
+        Cell type = state.getCellState(cellCode).type();
 
-        if (cell.type() == Cell.EMPTY)
+        if (type == Cell.EMPTY)
         {
             int time = effectManager.getFadeTimeRemaining(cellCode);
 
@@ -47,20 +43,17 @@ class BlockLayer extends RenderingLayer
         {
             Image sprite;
 
-            if (cell.type() == Cell.MARKED_FOR_SPAWN)
+            if (type == Cell.MARKED_FOR_SPAWN)
             {
-                sprite = Assets.smallBlock;
+                sprite = assets.getSmallBlock();
             }
-            else if (cell.type() == Cell.OCCUPIED)
+            else if (type == Cell.OCCUPIED)
             {
-                if (selectionState.isSelected(cellCode))
-                    sprite = Assets.normalBlockSelected;
-                else
-                    sprite = Assets.normalBlock;
+                sprite = assets.getBlock(selectionState.isSelected(cellCode));
             }
-            else if (cell.type() == Cell.DEAD_BLOCK)
+            else if (type == Cell.DEAD_BLOCK)
             {
-                sprite = Assets.deadBlock;
+                sprite = assets.getDeadBlock();
             }
             else
                 throw new RuntimeException("unknown cell type");

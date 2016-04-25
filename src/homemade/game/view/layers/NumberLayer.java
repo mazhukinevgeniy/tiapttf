@@ -3,7 +3,6 @@ package homemade.game.view.layers;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.resources.Assets;
 
 /**
  * Created by user3 on 02.04.2016.
@@ -17,7 +16,7 @@ class NumberLayer extends RenderingLayer
     {
         super();
 
-        digitMetadata = new DigitMetadata(structure);
+        digitMetadata = new DigitMetadata(structure, assets);
     }
 
     @Override
@@ -41,7 +40,7 @@ class NumberLayer extends RenderingLayer
             {
                 int digit = Character.getNumericValue(numberToDraw.charAt(k));
 
-                graphics.drawImage(Assets.digit[digit], canvasX, canvasY, null);
+                graphics.drawImage(assets.getDigit(digit), canvasX, canvasY, null);
 
                 canvasX += 1 + digitMetadata.digitWidth[digit];
             }
