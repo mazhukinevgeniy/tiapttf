@@ -147,12 +147,6 @@ public class Settings
     }
 
     //parameterName take from Settings.Name
-    public <Type> void get(String parameterName, Type out)
-    {
-        out = get(parameterName);
-    }
-
-    //parameterName take from Settings.Name
     public Type getType(String parameterName)
     {
         Type type = null;
