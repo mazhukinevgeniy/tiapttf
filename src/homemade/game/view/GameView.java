@@ -36,6 +36,13 @@ public class GameView
 
     public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
     {
+        initialize(structure, settings, viewListener, mainFrame);
+    }
+
+    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
+    {
+        effectManager = new EffectManager();
+
         this.structure = structure;
 
         canvas = new Canvas();
@@ -51,17 +58,15 @@ public class GameView
 
         strategy = canvas.getBufferStrategy();
 
-        effectManager = new EffectManager();
-
         layers = RenderingLayer.getRenderingLayers(structure, settings, effectManager);
     }
 
-    public EffectManager getEffectManager()
+    public synchronized EffectManager getEffectManager()
     {
         return effectManager;
     }
 
-    public void renderNextFrame(GameState state, SelectionState selection)
+    public synchronized void renderNextFrame(GameState state, SelectionState selection)
     {
         effectManager.measureTimePassed();
 

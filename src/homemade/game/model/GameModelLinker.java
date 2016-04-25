@@ -40,6 +40,11 @@ public class GameModelLinker
 
     GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller)
     {
+        initialize(structure, settings, controller);
+    }
+
+    private synchronized void initialize(FieldStructure structure, GameSettings settings, GameController controller)
+    {
         this.controller = controller;
         this.structure = structure;
 
@@ -66,17 +71,17 @@ public class GameModelLinker
         selection = new BlockSelection(this);
     }
 
-    public FieldStructure getStructure() { return structure; }
-    public CellMapReader getMapReader()
+    synchronized public FieldStructure getStructure() { return structure; }
+    synchronized public CellMapReader getMapReader()
     {
         return cellMap;
     }
-    public CellStates getCellStates()
+    synchronized public CellStates getCellStates()
     {
         return cellStates;
     }
 
-    BlockSelection getSelection()
+    synchronized BlockSelection getSelection()
     {
         return selection;
     }
@@ -85,13 +90,13 @@ public class GameModelLinker
      * Makes sense to leave it package internal because GameModel might want to force stop if user quits before losing
      * //TODO: implement said option and remove these comments
      */
-    void stopAllFacilities()
+    synchronized void stopAllFacilities()
     {
         spawner.spawnTimer().stop();
         controller.gameOver();
     }
 
-    void togglePause()
+    synchronized void togglePause()
     {
         spawner.spawnTimer().toggleSpawnPause();
     }
@@ -169,7 +174,7 @@ public class GameModelLinker
      * A) you want an immutable gamestate
      * B) you don't care if it's not updated since the last external use (e.g. rendering)
      */
-    public GameState lastGameState()
+    synchronized public GameState lastGameState()
     {
         return lastGameState;
     }

@@ -23,7 +23,6 @@ class DynamicPeriodTimer implements SpawnTimer
 
         long startingPeriod = period.getSpawnPeriod();
         timer = new QuickTimer(new SpawnTimerTaskPerformer(), startingPeriod, startingPeriod);
-        //TODO: this timer can trigger timerTask before view is ready, must fix
         //TODO: measure and show the actual period
     }
 

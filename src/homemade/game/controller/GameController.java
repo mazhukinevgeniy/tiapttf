@@ -32,6 +32,11 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     public GameController(Frame mainFrame, GameSettings settings)
     {
+        initialize(mainFrame, settings);
+    }
+
+    private synchronized void initialize(Frame mainFrame, GameSettings settings)
+    {
         frame = mainFrame;
         this.settings = settings;
 
@@ -49,7 +54,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
     }
 
     @Override
-    public void handleMouseRelease(int canvasX, int canvasY)
+    public synchronized void handleMouseRelease(int canvasX, int canvasY)
     {
         int cellX = (canvasX - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
         int cellY = (canvasY - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
@@ -60,24 +65,24 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
     }
 
     @Override
-    public void scoreUpdated(int score)
+    public synchronized void scoreUpdated(int score)
     {
         frame.setTitle("score: " + String.valueOf(score));
     }
 
-    public void blockRemoved(CellCode atCell)
+    public synchronized void blockRemoved(CellCode atCell)
     {
         Effect effect = Effect.FADING_BLOCK;
 
         view.getEffectManager().displayEffect(effect, atCell);
     }
 
-    void requestPauseToggle()
+    synchronized void requestPauseToggle()
     {
         model.toggleSpawnPause();
     }
 
-    public void gameOver()
+    public synchronized void gameOver()
     {
         new QuickTimer(new GameOverTimerTask(this), 3 * 1000 / TARGET_FPS);
     }
@@ -126,7 +131,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
                 gameOverTimer.stop();
                 view.getEffectManager().clearEffects();
 
-                model =  new GameModel(controller, structure, settings);
+                model = new GameModel(controller, structure, settings);
             }
             else
             {
