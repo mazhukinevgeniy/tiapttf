@@ -4,7 +4,7 @@ import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
 import homemade.menu.model.settings.Settings;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.SettingsMenu;
 import javafx.util.Pair;
 
@@ -62,7 +62,7 @@ public class SettingsManager implements HandlerButtons
         return  buttons;
     }
 
-    public Menu getSettingsMenu()
+    public MenuPanel getSettingsMenu()
     {
         return this.settingsMenu;
     }
@@ -77,7 +77,7 @@ public class SettingsManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.BACK_TO_MENU)
         {
-            manager.toggleToMenu(MenuManager.CodeMenu.MAIN_MENU);
+            manager.toggleToMenu(MenuManager.Menu.MAIN_MENU.getKey());
         }
         else if (codeButton == CodeButton.RESET)
         {

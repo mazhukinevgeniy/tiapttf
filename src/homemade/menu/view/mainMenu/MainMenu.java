@@ -1,7 +1,7 @@
 package homemade.menu.view.mainMenu;
 
 import homemade.menu.controller.ButtonActionListener;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 
 import javax.swing.*;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Marid on 02.04.2016.
  */
-public class MainMenu extends Menu
+public class MainMenu extends MenuPanel
 {
     private MainMenu() {}
 
