@@ -84,7 +84,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     public synchronized void gameOver()
     {
-        new QuickTimer(new GameOverTimerTask(this), 3 * 1000 / TARGET_FPS);
+        new QuickTimer(new GameOverTimerTask(this), GameOverTimerTask.PERIOD);
     }
 
     private class ControllerTimerTask implements TimerTaskPerformer
@@ -112,7 +112,9 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     private class GameOverTimerTask implements TimerTaskPerformer
     {
-        private static final int TASKS_BEFORE_RESTART = 30;
+        private static final int TASKS_BEFORE_RESTART = 10;
+        private static final int PERIOD = 2 * 1000 / TASKS_BEFORE_RESTART;
+
         private int taskCounter = 0;
 
         private QuickTimer gameOverTimer;
