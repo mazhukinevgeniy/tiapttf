@@ -87,7 +87,7 @@ public class GameView
 
                 for (RenderingLayer layer : layers)
                 {
-                    layer.renderLayer(structure.getCellCodeIterator(), state, selection, graphics);
+                    layer.renderLayer(structure, state, selection, graphics);
                 }
 
 

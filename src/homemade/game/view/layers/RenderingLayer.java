@@ -5,6 +5,7 @@ import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
@@ -28,7 +29,7 @@ abstract public class RenderingLayer
 
         list.add(new BlockLayer(effectManager));
         list.add(new NumberLayer(structure));
-        list.add(new LinkLayer(structure, settings));
+        list.add(new LinkLayer(settings));
 
         return list;
     }
@@ -46,29 +47,23 @@ abstract public class RenderingLayer
         assets = Assets.getAssets();
     }
 
-    final public void renderLayer(Iterator<CellCode> cellCodeIterator, GameState state, SelectionState selection, Graphics graphics)
+    final public void renderLayer(FieldStructure structure, GameState state, SelectionState selection, Graphics graphics)
     {
         this.state = state;
         this.selectionState = selection;
         this.graphics = graphics;
 
-        while (cellCodeIterator.hasNext())
-        {
-            CellCode next = cellCodeIterator.next();
-
-            int x = next.x();
-            int y = next.y();
-
-            setCanvasCoordinates(x, y);
-            renderForCell(next);
-        }
+        iterate(structure);
 
         this.state = null;
         this.selectionState = null;
         this.graphics = null;
     }
 
-    abstract void renderForCell(CellCode cellCode);
+    protected abstract void iterate(FieldStructure structure);
+
+    protected void renderForCell(CellCode cellCode) { }
+    protected void renderForLink(LinkCode linkCode) { }
 
     final protected void setCanvasCoordinates(int i, int j)
     {
@@ -76,5 +71,44 @@ abstract public class RenderingLayer
         canvasY = GameView.GRID_OFFSET + fullCellWidth * j;
     }
 
+    static class Cells extends RenderingLayer
+    {
+        @Override
+        protected void iterate(FieldStructure structure)
+        {
+            Iterator<CellCode> cellCodeIterator = structure.getCellCodeIterator();
 
+            while (cellCodeIterator.hasNext())
+            {
+                CellCode next = cellCodeIterator.next();
+
+                int x = next.x();
+                int y = next.y();
+
+                setCanvasCoordinates(x, y);
+                renderForCell(next);
+            }
+        }
+    }
+
+    static class Links extends RenderingLayer
+    {
+        @Override
+        protected void iterate(FieldStructure structure)
+        {
+            Iterator<LinkCode> linkCodeIterator = structure.getLinkCodeIterator();
+
+            while (linkCodeIterator.hasNext())
+            {
+                LinkCode next = linkCodeIterator.next();
+
+                CellCode lower = next.getLower();
+                int x = lower.x();
+                int y = lower.y();
+
+                setCanvasCoordinates(x, y);
+                renderForLink(next);
+            }
+        }
+    }
 }

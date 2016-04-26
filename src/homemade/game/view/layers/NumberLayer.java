@@ -7,7 +7,7 @@ import homemade.game.fieldstructure.FieldStructure;
 /**
  * Created by user3 on 02.04.2016.
  */
-class NumberLayer extends RenderingLayer
+class NumberLayer extends RenderingLayer.Cells
 {
     private DigitMetadata digitMetadata;
 
@@ -20,7 +20,7 @@ class NumberLayer extends RenderingLayer
     }
 
     @Override
-    void renderForCell(CellCode cellCode)
+    protected void renderForCell(CellCode cellCode)
     {
         CellState cell = state.getCellState(cellCode);
         if (cell.isOccupiedByBlock())

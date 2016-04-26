@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * Created by user3 on 02.04.2016.
  */
-class BlockLayer extends RenderingLayer
+class BlockLayer extends RenderingLayer.Cells
 {
     private EffectRenderer effects;
     private EffectManager effectManager;
@@ -23,7 +23,7 @@ class BlockLayer extends RenderingLayer
     }
 
     @Override
-    void renderForCell(CellCode cellCode)
+    protected void renderForCell(CellCode cellCode)
     {
         if (selectionState.canMoveTo(cellCode))
         {
