@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Marks cells where blocks will spawn
  */
-class SpawnPlanner
+class CellMarker
 {
     private CellMapReader cellMap;
     private CellStatePool cellStatePool;
@@ -21,7 +21,7 @@ class SpawnPlanner
 
     private Random random;
 
-    SpawnPlanner(CellMapReader cellMap, CellStatePool cellStatePool, CellStates cellStates)
+    CellMarker(CellMapReader cellMap, CellStatePool cellStatePool, CellStates cellStates)
     {
         this.cellMap = cellMap;
         this.cellStatePool = cellStatePool;
@@ -31,8 +31,33 @@ class SpawnPlanner
         random = new Random();
     }
 
+    /**
+     * Can mark more or less than given percentage of cells
+     * @param percentage 0..100
+     */
+    Map<CellCode, CellState> markAnyCell(Iterator<CellCode> iterator, Cell type, int percentage)
+    {
+        Map<CellCode, CellState> changes = new HashMap<>();
 
-    Map<CellCode, CellState> markCells(Iterator<CellCode> iterator, int targetAmount)
+        CellState state = cellStates.getState(type);
+
+        if (state == null)
+            throw new RuntimeException("not a simple type");
+
+        while (iterator.hasNext())
+        {
+            CellCode cellCode = iterator.next();
+
+            if (random.nextInt(100) < percentage)
+            {
+                changes.put(cellCode, state);
+            }
+        }
+
+        return changes;
+    }
+
+    Map<CellCode, CellState> markForSpawn(Iterator<CellCode> iterator, int targetAmount)
     {
         Map<CellCode, CellState> changes = new HashMap<>();
 

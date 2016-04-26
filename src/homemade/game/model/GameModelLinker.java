@@ -101,6 +101,11 @@ public class GameModelLinker
         spawner.spawnTimer().toggleSpawnPause();
     }
 
+    synchronized void killRandomBlocks()
+    {
+        updateState(cellMap.applyCascadeChanges(spawner.spawnDeadBlocks()));
+    }
+
 
     synchronized public void requestSpawn()
     {
@@ -114,7 +119,7 @@ public class GameModelLinker
         updatedCells.addAll(spawnedBlocks.keySet());
         updatedCells.addAll(removeCombos(cellMap.applyCascadeChanges(spawnedBlocks)));
 
-        Map<CellCode, CellState> marks = spawner.markCells();
+        Map<CellCode, CellState> marks = spawner.markCellsForSpawn();
         if (marks.size() == 0)
         {
             stopAllFacilities();

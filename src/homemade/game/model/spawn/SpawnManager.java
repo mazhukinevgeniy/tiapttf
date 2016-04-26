@@ -1,5 +1,6 @@
 package homemade.game.model.spawn;
 
+import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
@@ -18,7 +19,7 @@ public class SpawnManager
     private SpawnTimer timer;
 
     private BlockSpawner spawner;
-    private SpawnPlanner planner;
+    private CellMarker cellMarker;
 
     private int simultaneousSpawn;
 
@@ -30,7 +31,7 @@ public class SpawnManager
 
         CellMapReader cellMap = linker.getMapReader();
         spawner = new BlockSpawner(cellMap, cellStatePool);
-        planner = new SpawnPlanner(cellMap, cellStatePool, linker.getCellStates());
+        cellMarker = new CellMarker(cellMap, cellStatePool, linker.getCellStates());
 
         GameSettings.GameMode mode = settings.gameMode();
         simultaneousSpawn = settings.maxSpawn();
@@ -48,9 +49,14 @@ public class SpawnManager
         return spawner.spawnBlocks(structure.getCellCodeIterator());
     }
 
-    public Map<CellCode, CellState> markCells()
+    public Map<CellCode, CellState> markCellsForSpawn()
     {
-        return planner.markCells(structure.getCellCodeIterator(), simultaneousSpawn);
+        return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
+    }
+
+    public Map<CellCode, CellState> spawnDeadBlocks()
+    {
+        return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.DEAD_BLOCK, 5);
     }
 
     public SpawnTimer spawnTimer()

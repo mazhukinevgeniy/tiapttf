@@ -30,10 +30,17 @@ public class GameModel
         return linker.getSelection().getSelectionState();
     }
 
+
     public void toggleSpawnPause()
     {
         linker.togglePause();
     }
+
+    public void killRandomBlocks()
+    {
+        linker.killRandomBlocks();
+    }
+
 
     public void tryToActivateCell(CellCode cell)
     {

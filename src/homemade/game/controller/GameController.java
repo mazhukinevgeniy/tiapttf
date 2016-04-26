@@ -137,7 +137,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
             }
             else
             {
-                //TODO: show something; the easiest thing to do is to make model remove random blocks
+                model.killRandomBlocks();
 
                 taskCounter++;
             }
