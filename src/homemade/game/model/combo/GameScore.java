@@ -1,12 +1,12 @@
 package homemade.game.model.combo;
 
+import homemade.game.Combo;
 import homemade.game.GameSettings;
 import homemade.game.controller.ScoreHandler;
 import homemade.game.fieldstructure.FieldStructure;
 
-/**
- * Created by user3 on 02.04.2016.
- */
+import java.util.Iterator;
+
 class GameScore
 {
     private int score;
@@ -34,10 +34,27 @@ class GameScore
         }
     }
 
-    synchronized void handleCombo(int length)
+    //TODO: find combos on linker level, then send them there
+    void handleCombos(ComboPack pack)
     {
-        score += scores[length - minCombo];
+        int packScore = 0;
 
-        scoreHandler.scoreUpdated(score);
+        for (Iterator<Combo> iterator = pack.comboIterator(); iterator.hasNext(); )
+        {
+            Combo next = iterator.next();
+
+            packScore += scores[next.getLength() - minCombo];
+        }
+
+        int packMultiplier = pack.numberOfCombos();
+        packScore *= packMultiplier;
+
+        if (packScore != 0)
+            synchronized(this)
+            {
+                score += packScore;
+
+                scoreHandler.scoreUpdated(score);
+            }
     }
 }

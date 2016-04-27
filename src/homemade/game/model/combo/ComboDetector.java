@@ -1,5 +1,6 @@
 package homemade.game.model.combo;
 
+import homemade.game.Combo;
 import homemade.game.GameSettings;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.controller.GameController;
@@ -13,9 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by user3 on 26.03.2016.
- */
 public class ComboDetector
 {
 
@@ -29,6 +27,7 @@ public class ComboDetector
 
     private ArrayList<CellCode> tmpStorage;
     //it's probably better than reallocating every time
+    //TODO: check if it is
 
     private FieldStructure structure;
     private CellMapReader cellMap;
@@ -53,6 +52,7 @@ public class ComboDetector
     /**
      * @return Set of cellCodes in which blocks are bound to be removed because they were part of a combo
      */
+    //TODO: return combopack instead
     public Set<CellCode> findCellsToRemove(Set<CellCode> starts)
     {
         int numberOfStarts = starts.size();
@@ -72,32 +72,31 @@ public class ComboDetector
         int maxCellsToRemove = hSize * structure.getWidth() + vSize * structure.getHeight() - hSize * vSize;
 
         HashSet<CellCode> cellsToRemove = new HashSet<CellCode>(maxCellsToRemove);
+        ComboPack pack = new ComboPack();
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(cellsToRemove, structure.getCellCode(0, horizontal), Direction.RIGHT);
+            iterateThroughTheLine(pack, cellsToRemove, structure.getCellCode(0, horizontal), Direction.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(cellsToRemove, structure.getCellCode(vertical, 0), Direction.BOTTOM);
+            iterateThroughTheLine(pack, cellsToRemove, structure.getCellCode(vertical, 0), Direction.BOTTOM);
         }
+
+        gameScore.handleCombos(pack);
 
         return cellsToRemove;
     }
 
     /**
      *
-     * @param set storage for found cells
+     * @param cellsToRemove storage for found cells
      * @param start cellCode of the beginning
      * @param mainDirection where to look for the next cell
      */
-    private void iterateThroughTheLine(Set<CellCode> set, CellCode start, Direction mainDirection)
+    private void iterateThroughTheLine(ComboPack pack, Set<CellCode> cellsToRemove, CellCode start, Direction mainDirection)
     {
-        tmpStorage.clear();
-
-        //System.out.println("start = " + start + ", direction = " + direction);
-
         CellCode currentCell = start;
 
         while (currentCell != null)
@@ -113,7 +112,7 @@ public class ComboDetector
 
                 if (comboLength >= minCombo)
                 {
-                    gameScore.handleCombo(comboLength);
+                    tmpStorage.clear();
 
                     tmpStorage.add(currentCell);
                     blockRemovalHandler.blockRemoved(currentCell);
@@ -129,6 +128,9 @@ public class ComboDetector
                         currentCell = nextCell;
                         nextCell = currentCell.neighbour(mainDirection);
                     }
+
+                    pack.add(new Combo(new HashSet<>(tmpStorage)));
+                    cellsToRemove.addAll(tmpStorage);
                 }
                 else
                 {
@@ -141,6 +143,5 @@ public class ComboDetector
             }
         }
 
-        set.addAll(tmpStorage);
     }
 }
