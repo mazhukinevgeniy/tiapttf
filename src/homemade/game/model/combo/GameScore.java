@@ -24,7 +24,7 @@ class GameScore
         minCombo = settings.minCombo();
 
         int lengthsPossible = structure.getMaxDimension() - minCombo + 1;
-        int baseScore = 100;
+        int baseScore = 5;
 
         scores = new int[lengthsPossible];
 
@@ -46,12 +46,13 @@ class GameScore
             packScore += scores[next.getLength() - minCombo];
         }
 
-        int packMultiplier = pack.numberOfCombos();
-        packScore *= packMultiplier;
-
         if (packScore != 0)
             synchronized(this)
             {
+                int globalMultiplier = 1; //TODO: add spawn stunning and persistent global multiplier
+                int packMultiplier = pack.numberOfCombos();
+                packScore *= packMultiplier * (globalMultiplier + packMultiplier / 2);
+
                 score += packScore;
 
                 scoreHandler.scoreUpdated(score);
