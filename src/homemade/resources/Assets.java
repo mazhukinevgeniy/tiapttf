@@ -1,21 +1,15 @@
 package homemade.resources;
 
 import homemade.game.fieldstructure.Direction;
+import homemade.utils.AssetLoader;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by user3 on 23.03.2016.
- */
-public class Assets
+public class Assets extends AssetLoader
 {
     private static Assets instance;
 
@@ -48,48 +42,29 @@ public class Assets
 
     private Assets()
     {
-        InputStream input;
-
         digit = new Image[10];
         disappear = new Image[3];
 
-        try
+        initializeArrowImages();
+
+        field = getImage("field.png");
+
+        normalBlock = getImage("normal_block.png");
+        normalBlockSelected = getImage("normal_block_selected.png");
+
+        deadBlock = getImage("gray_block.png");
+        smallBlock = getImage("small_block.png");
+
+        placeToMove = getImage("place2move.png");
+
+        for (int i = 0; i < 10; i++)
         {
-            initializeArrowImages();
-
-            input = getClass().getResourceAsStream("field.png");
-            field = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("normal_block.png");
-            normalBlock = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("normal_block_selected.png");
-            normalBlockSelected = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("gray_block.png");
-            deadBlock = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("small_block.png");
-            smallBlock = ImageIO.read(input);
-
-            input = getClass().getResourceAsStream("place2move.png");
-            placeToMove = ImageIO.read(input);
-
-            for (int i = 0; i < 10; i++)
-            {
-                input = getClass().getResourceAsStream(i + ".png");
-                digit[i] = ImageIO.read(input);
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                input = getClass().getResourceAsStream("dis_" + (i + 1) + ".png");
-                disappear[2 - i] = ImageIO.read(input);
-            }
+            digit[i] = getImage(i + ".png");
         }
-        catch (IOException e)
+
+        for (int i = 0; i < 3; i++)
         {
-            e.printStackTrace();
+            disappear[2 - i] = getImage("dis_" + (i + 1) + ".png");
         }
     }
 
@@ -168,57 +143,14 @@ public class Assets
             Map<Direction, Image> arrows = new EnumMap<>(Direction.class);
             listOfMaps.add(arrows);
 
-            InputStream inputStream = getClass().getResourceAsStream(imageName);
-            Image baseImage;
+            Image baseImage = getImage(imageName);
 
-            try
+            for (Map.Entry<Direction, Double> entry : angles.entrySet())
             {
-                baseImage = ImageIO.read(inputStream);
-
-                for (Map.Entry<Direction, Double> entry : angles.entrySet())
-                {
-                    arrows.put(entry.getKey(), createRotatedCopy(baseImage, entry.getValue()));
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
+                arrows.put(entry.getKey(), createRotatedCopy(baseImage, entry.getValue()));
             }
         }
 
         arrows = listOfMaps;
-    }
-
-    private Image createRotatedCopy(Image image, double angleInRadians)
-    {
-        int     width = image.getWidth(null),
-                height = image.getHeight(null);
-
-
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        // Draw the image on to the buffered image
-        Graphics2D graphics = bufferedImage.createGraphics();
-        graphics.drawImage(image, 0, 0, null);
-        graphics.dispose();
-
-        //buffered image is ready
-
-        double  sin = Math.abs(Math.sin(angleInRadians)),
-                cos = Math.abs(Math.cos(angleInRadians));
-
-
-        int     newW = (int) Math.floor(width * cos + height * sin),
-                newH = (int) Math.floor(height * cos + width * sin);
-
-        BufferedImage rotatedImage = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-        graphics = rotatedImage.createGraphics();
-
-        graphics.translate((newW - width) / 2, (newH - height) / 2);
-        graphics.rotate(angleInRadians, width / 2, height / 2);
-        graphics.drawRenderedImage(bufferedImage, null);
-        graphics.dispose();
-
-        return rotatedImage;
     }
 }
