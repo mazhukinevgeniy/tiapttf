@@ -61,14 +61,14 @@ public class GameModelLinker
         comboDetector = ComboDetector.initializeComboDetection(structure, settings, readOnlyMap, controller);
         spawner = new SpawnManager(this, settings, cellStatePool);
 
+        selection = new BlockSelection(this);
+
         mode = settings.gameMode();
         if (mode == GameMode.TURN_BASED)
         {
             for (int i = 0; i < 2; i++)
                 requestSpawn();
         }
-
-        selection = new BlockSelection(this);
     }
 
     synchronized public FieldStructure getStructure() { return structure; }
