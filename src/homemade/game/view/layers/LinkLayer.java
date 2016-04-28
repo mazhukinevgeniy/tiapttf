@@ -2,6 +2,7 @@ package homemade.game.view.layers;
 
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.Direction;
+import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.GameView;
 import homemade.utils.PiecewiseConstantFunction;
@@ -15,6 +16,10 @@ class LinkLayer extends RenderingLayer.Links
     private EnumMap<Direction, Offset> offsets;
     private PiecewiseConstantFunction<Double, Integer> chainLengthToSpriteTier;
 
+    private int counter = 0;
+    private int countCap;
+    private final int rendersPerLinkFrame = 10; //TODO: better link it to the fps
+
     LinkLayer(GameSettings settings)
     {
         super();
@@ -23,7 +28,7 @@ class LinkLayer extends RenderingLayer.Links
 
         for (Direction direction : Direction.values())
         {
-            Image img = assets.getArrow(direction, 0);
+            Image img = assets.getArrow(direction, 0, 0);
 
             int width = direction.isHorizontal() ? 2 : 1;
             int height = direction.isHorizontal() ? 1 : 2;
@@ -31,19 +36,23 @@ class LinkLayer extends RenderingLayer.Links
             offsets.put(direction, new Offset(img, width, height));
         }
 
+        countCap = rendersPerLinkFrame * assets.getNumberOfArrowFrames();
+
         double minCombo = (double) settings.minCombo();
+        int minSpriteTier = assets.getNumberOfArrowTiers();
 
-        ArrayList<Double> separators = new ArrayList<Double>(2);
-        separators.add(minCombo - 2.5);
-        separators.add(minCombo - 1.5);
+        ArrayList<Double> separators = new ArrayList<Double>(minSpriteTier - 1);
+        ArrayList<Integer> spriteTier = new ArrayList<Integer>(minSpriteTier);
 
-        ArrayList<Integer> spriteTier = new ArrayList<Integer>(3);
-        spriteTier.add(2);
-        spriteTier.add(1);
-        spriteTier.add(0);
+        for (int i = 0; i < minSpriteTier - 1; i++)
+        {
+            separators.add(minCombo - minSpriteTier + 0.5 + i);
+        }
 
-        if (assets.getNumberOfArrowTiers() != 3)
-            throw new RuntimeException("wrong assumptions in linklayer");
+        for (int i = 0; i < minSpriteTier; i++)
+        {
+            spriteTier.add(minSpriteTier - (i + 1));
+        }
 
         chainLengthToSpriteTier = new PiecewiseConstantFunction<>(separators, spriteTier);
     }
@@ -58,11 +67,19 @@ class LinkLayer extends RenderingLayer.Links
             Double comboLength = (double) state.getChainLength(linkCode);
             int spriteTier = chainLengthToSpriteTier.getValueAt(comboLength);
 
-            Image sprite = assets.getArrow(linkDirection, spriteTier);
+            Image sprite = assets.getArrow(linkDirection, spriteTier, counter / rendersPerLinkFrame);
             Offset offset = offsets.get(linkDirection);
 
             graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);
         }
+    }
+
+    @Override
+    protected void iterate(FieldStructure structure)
+    {
+        super.iterate(structure);
+
+        counter = (counter + 1) % countCap;
     }
 
     private static final class Offset

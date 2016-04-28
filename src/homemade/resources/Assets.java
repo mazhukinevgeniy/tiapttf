@@ -123,9 +123,14 @@ public class Assets
         return arrows.size();
     }
 
-    public Image getArrow(Direction direction, int tier)
+    public int getNumberOfArrowFrames()
     {
-        return arrows.get(tier).get(direction);
+        return 1; //TODO: return actual value
+    }
+
+    public Image getArrow(Direction direction, int tier, int frame)
+    {
+        return arrows.get(tier).get(direction);//TODO: use frame
     }
 
     public Image getDigit(int value)
