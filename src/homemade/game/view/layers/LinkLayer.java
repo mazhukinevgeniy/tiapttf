@@ -5,6 +5,7 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.view.GameView;
+import homemade.resources.links.LinkAssets;
 import homemade.utils.PiecewiseConstantFunction;
 
 import java.awt.*;
@@ -20,15 +21,19 @@ class LinkLayer extends RenderingLayer.Links
     private int countCap;
     private final int rendersPerLinkFrame = 10; //TODO: better link it to the fps
 
+    private LinkAssets linkAssets;
+
     LinkLayer(GameSettings settings)
     {
         super();
+
+        linkAssets = assets.getLinkAssets();
 
         offsets = new EnumMap<Direction, Offset>(Direction.class);
 
         for (Direction direction : Direction.values())
         {
-            Image img = assets.getArrow(direction, 0, 0);
+            Image img = linkAssets.getArrow(direction, 0, 0);
 
             int width = direction.isHorizontal() ? 2 : 1;
             int height = direction.isHorizontal() ? 1 : 2;
@@ -36,10 +41,10 @@ class LinkLayer extends RenderingLayer.Links
             offsets.put(direction, new Offset(img, width, height));
         }
 
-        countCap = rendersPerLinkFrame * assets.getNumberOfArrowFrames();
+        countCap = rendersPerLinkFrame * linkAssets.getNumberOfArrowFrames();
 
         double minCombo = (double) settings.minCombo();
-        int minSpriteTier = assets.getNumberOfArrowTiers();
+        int minSpriteTier = linkAssets.getNumberOfArrowTiers();
 
         ArrayList<Double> separators = new ArrayList<Double>(minSpriteTier - 1);
         ArrayList<Integer> spriteTier = new ArrayList<Integer>(minSpriteTier);
@@ -67,7 +72,7 @@ class LinkLayer extends RenderingLayer.Links
             Double comboLength = (double) state.getChainLength(linkCode);
             int spriteTier = chainLengthToSpriteTier.getValueAt(comboLength);
 
-            Image sprite = assets.getArrow(linkDirection, spriteTier, counter / rendersPerLinkFrame);
+            Image sprite = linkAssets.getArrow(linkDirection, spriteTier, counter / rendersPerLinkFrame);
             Offset offset = offsets.get(linkDirection);
 
             graphics.drawImage(sprite, canvasX + offset.x, canvasY + offset.y, null);
