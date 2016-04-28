@@ -15,9 +15,9 @@ public class LinkAssets extends AssetLoader
     public enum Variation
     {
         ANIMATED, COLORED
-    };
+    }
 
-    private List<Map<Direction, Image>> assets;
+    private List<List<Map<Direction, Image>>> assets;
 
     public LinkAssets(Variation variation)
     {
@@ -31,7 +31,19 @@ public class LinkAssets extends AssetLoader
 
     private void loadAnimatedLinks()
     {
-        throw new RuntimeException("isn't implemented yet");//TODO: implement
+        assets = new ArrayList<>(6);
+
+        for (int frame = 1; frame < 7; frame++)
+        {
+            List<Map<Direction, Image>> listOfMaps = new ArrayList<>(1);
+
+            Map<Direction, Double> angles = getAngles(-Math.PI / 2);
+
+            Image baseImage = getImage(frame + ".png");
+            listOfMaps.add(getRotatedLinks(baseImage, angles));
+
+            assets.add(listOfMaps);
+        }
     }
 
     private void loadColoredLinks()
@@ -43,41 +55,54 @@ public class LinkAssets extends AssetLoader
 
         List<Map<Direction, Image>> listOfMaps = new ArrayList<>(3);
 
-        Map<Direction, Double> angles = new EnumMap<>(Direction.class);
-        angles.put(Direction.BOTTOM, 0.0);
-        angles.put(Direction.LEFT, Math.PI / 2);
-        angles.put(Direction.TOP, Math.PI);
-        angles.put(Direction.RIGHT, 3 * Math.PI / 2);
+        Map<Direction, Double> angles = getAngles(0.0);
 
         for (String imageName : images)
         {
-            Map<Direction, Image> arrows = new EnumMap<>(Direction.class);
-            listOfMaps.add(arrows);
-
             Image baseImage = getImage(imageName);
-
-            for (Map.Entry<Direction, Double> entry : angles.entrySet())
-            {
-                arrows.put(entry.getKey(), createRotatedCopy(baseImage, entry.getValue()));
-            }
+            listOfMaps.add(getRotatedLinks(baseImage, angles));
         }
 
-        assets = listOfMaps;
+        assets = new ArrayList<>(1);
+        assets.add(listOfMaps);
+    }
+
+    private Map<Direction, Double> getAngles(double rotateToBottom)
+    {
+        Map<Direction, Double> angles = new EnumMap<>(Direction.class);
+        angles.put(Direction.BOTTOM, rotateToBottom + 0.0);
+        angles.put(Direction.LEFT, rotateToBottom + Math.PI / 2);
+        angles.put(Direction.TOP, rotateToBottom + Math.PI);
+        angles.put(Direction.RIGHT, rotateToBottom + 3 * Math.PI / 2);
+
+        return angles;
+    }
+
+    private Map<Direction, Image> getRotatedLinks(Image baseImage, Map<Direction, Double> angles)
+    {
+        Map<Direction, Image> arrows = new EnumMap<>(Direction.class);
+
+        for (Map.Entry<Direction, Double> entry : angles.entrySet())
+        {
+            arrows.put(entry.getKey(), createRotatedCopy(baseImage, entry.getValue()));
+        }
+
+        return arrows;
     }
 
 
     public int getNumberOfArrowTiers()
     {
-        return assets.size();
+        return assets.get(0).size();
     }
 
     public int getNumberOfArrowFrames()
     {
-        return 1; //TODO: return actual value
+        return assets.size();
     }
 
     public Image getArrow(Direction direction, int tier, int frame)
     {
-        return assets.get(tier).get(direction);//TODO: use frame
+        return assets.get(frame).get(tier).get(direction);
     }
 }
