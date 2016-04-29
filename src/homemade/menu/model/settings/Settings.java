@@ -48,6 +48,8 @@ public class Settings
 
     private SettingsSave save;
 
+    private Settings() {}
+
     public Settings(SettingsSave save)
     {
         this.save = save;

@@ -1,11 +1,15 @@
 package homemade.menu.model.save;
 
+import homemade.menu.model.records.Record;
+import homemade.utils.Serializer;
+
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by Marid on 16.04.2016.
  */
-public class LocalSaveManager implements SettingsSave
+public class LocalSaveManager implements SettingsSave, RecordsSave
 {
     private Save save = null;
 
@@ -21,16 +25,19 @@ public class LocalSaveManager implements SettingsSave
         return save != null;
     }
 
+    @Override
     public Integer getIntSettingsValue(String parameterName)
     {
         return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
     }
 
+    @Override
     public Boolean getBoolSettingsValue(String parameterName)
     {
         return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
     }
 
+    @Override
     public void setSettingsValue(String parameterName, Object value)
     {
         String stringValue = value.toString();
@@ -60,6 +67,20 @@ public class LocalSaveManager implements SettingsSave
             }
         }
         return convertedValue;
+    }
+
+    @Override
+    public List<Record> getRecords()
+    {
+        return null;
+    }
+
+    @Override
+    public void addRecord(Record record)
+    {
+        Serializer<Record> serializer = new Serializer<>();
+        String serialisedRecord = serializer.serialize(record);
+        save.addParameter(Block.RECORDS, "record", serialisedRecord);
     }
 
     //there you may add new name blocks to save

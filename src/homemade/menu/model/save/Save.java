@@ -57,9 +57,20 @@ class Save
         document.appendChild(newBlock);
     }
 
-    public boolean isValid()
+    private void saveDocument()
     {
-        return xmlDocument != null;
+        try
+        {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            Result output = new StreamResult(new File(pathToFile));
+            Source input = new DOMSource(xmlDocument);
+
+            transformer.transform(input, output);
+        }
+        catch (Exception exception)
+        {
+            System.err.print("XML save error!");
+        }
     }
 
     public String getParameterValue(String blockName, String parameterName)
@@ -85,13 +96,12 @@ class Save
             block = addBlock(blockName);
         }
 
-        Node node = findNode(block, parameterName);
-        if (node == null)
+        Node parameterNode = findNode(block, parameterName);
+        if (parameterNode == null)
         {
-            node = addParameterNode(block, parameterName);
+            parameterNode = addParameterNode(block, parameterName);
         }
-        Node attribute = getAttribute(node, Attribute.VALUE);
-        attribute.setNodeValue(newValue);
+        setAtributeValue(parameterNode, Attribute.VALUE, newValue);
 
         saveDocument();
     }
@@ -132,27 +142,39 @@ class Save
             NamedNodeMap attributes = node.getAttributes();
             if (attributes != null)
             {
-                Node nameAttrib = attributes.getNamedItem(Attribute.NAME);
-                String name = nameAttrib.getNodeValue();
-                if (name.equals(parameterName))
+                Node nameAttribute = attributes.getNamedItem(Attribute.NAME);
+                if(nameAttribute != null)
                 {
-                    sought = node;
-                    break;
+                    String name = nameAttribute.getNodeValue();
+                    if (name.equals(parameterName))
+                    {
+                        sought = node;
+                        break;
+                    }
                 }
             }
         }
         return sought;
     }
 
-    private String getAttributeValue(Node node, String attributeName)
+    private String getAttributeValue(Node parameterNode, String attributeName)
     {
-        Node attribute = getAttribute(node, attributeName);
+        Node attribute = getAttribute(parameterNode, attributeName);
         String value = null;
         if (attribute != null)
         {
             value = attribute.getNodeValue();
         }
         return value;
+    }
+
+    private void setAtributeValue(Node parameterNode, String attributeName, String value)
+    {
+        Node attribute = getAttribute(parameterNode, attributeName);
+        if (attribute != null)
+        {
+            attribute.setNodeValue(value);
+        }
     }
 
     private Node getAttribute(Node node, String attributeName)
@@ -190,26 +212,23 @@ class Save
         return parameter;
     }
 
-    private void saveDocument()
+    public void addParameter(String blockName, String parameterName, String value)
     {
-        try
+        Node block = findBlock(blockName);
+        if (block == null)
         {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(new File(pathToFile));
-            Source input = new DOMSource(xmlDocument);
+            block = addBlock(blockName);
+        }
 
-            transformer.transform(input, output);
-        }
-        catch (Exception exception)
-        {
-            System.err.print("XML save error!");
-        }
+        Node parameterNode = addParameterNode(block, parameterName);
+        setAtributeValue(parameterNode, Attribute.VALUE, value);
+
+        saveDocument();
     }
 
     private final class Attribute
     {
         public static final String NAME = "name";
-        public static final String TYPE = "type";
         public static final String VALUE = "value";
     }
 

@@ -16,12 +16,12 @@ public class Records
     private RecordsSave save;
 
 
-    public Records() {}
+    private Records() {}
 
     public Records(RecordsSave save)
     {
         this.save = save;
-        initializeRecords();
+        //initializeRecords();
     }
 
     private void initializeRecords()
@@ -55,7 +55,7 @@ public class Records
         Record record = new Record(score, playerName, dataTime.toString());
         int index = findEligiblePlace(record.getScore());
         records.add(index, record);
-        //addRecordToSave(record);
+        addRecordToSave(record);
     }
 
     private int findEligiblePlace(int score)

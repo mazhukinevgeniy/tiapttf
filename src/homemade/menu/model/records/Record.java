@@ -1,9 +1,11 @@
 package homemade.menu.model.records;
 
+import java.io.Serializable;
+
 /**
  * Created by Marid on 29.04.2016.
  */
-public class Record
+public class Record implements Serializable
 {
     private int score;
     private String playerName;
