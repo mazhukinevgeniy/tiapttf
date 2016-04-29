@@ -1,9 +1,9 @@
 package homemade.menu.model.save;
 
 import homemade.menu.model.records.Record;
-import homemade.utils.Serializer;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,14 +72,24 @@ public class LocalSaveManager implements SettingsSave, RecordsSave
     @Override
     public List<Record> getRecords()
     {
-        return null;
+        List<String> strRecords = save.getParametersValues(Block.RECORDS, "record");
+        List<Record> records = new ArrayList<>();
+        for (String strRec : strRecords)
+        {
+            Record record = Record.valueOf(strRec);
+            if(record != null)
+            {
+                records.add(record);
+            }
+        }
+
+        return records;
     }
 
     @Override
     public void addRecord(Record record)
     {
-        Serializer<Record> serializer = new Serializer<>();
-        String serialisedRecord = serializer.serialize(record);
+        String serialisedRecord = record.toString();
         save.addParameter(Block.RECORDS, "record", serialisedRecord);
     }
 

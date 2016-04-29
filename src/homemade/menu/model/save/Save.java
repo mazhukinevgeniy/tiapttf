@@ -12,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marid on 28.03.2016.
@@ -133,28 +135,54 @@ class Save
 
     private Node findNode(Node block, String parameterName)
     {
-        Node sought = null;
+        Node sought = findOf(block, parameterName, true).get(0);
+
+        return sought;
+    }
+
+    private List<Node> findNodes(Node block, String parameterName)
+    {
+        return findOf(block, parameterName, false);
+    }
+
+    private List<Node> findOf(Node block, String parameterName, boolean justFirst)
+    {
+        List<Node> soughts = new ArrayList<>();
 
         NodeList children = block.getChildNodes();
         int numberOfChild = children.getLength();
         for (int i = 0; i < numberOfChild; ++i) {
             Node node = children.item(i);
-            NamedNodeMap attributes = node.getAttributes();
-            if (attributes != null)
+            if(isEligibleNode(node, parameterName))
             {
-                Node nameAttribute = attributes.getNamedItem(Attribute.NAME);
-                if(nameAttribute != null)
+                soughts.add(node);
+                if(justFirst)
                 {
-                    String name = nameAttribute.getNodeValue();
-                    if (name.equals(parameterName))
-                    {
-                        sought = node;
-                        break;
-                    }
+                    break;
                 }
             }
         }
-        return sought;
+        return soughts;
+    }
+
+    private boolean isEligibleNode(Node node, String parameterName)
+    {
+        boolean isEligible = false;
+        NamedNodeMap attributes = node.getAttributes();
+        if (attributes != null)
+        {
+            Node nameAttribute = attributes.getNamedItem(Attribute.NAME);
+            if(nameAttribute != null)
+            {
+                String name = nameAttribute.getNodeValue();
+                if (name.equals(parameterName))
+                {
+                    isEligible = true;
+                }
+            }
+        }
+
+        return isEligible;
     }
 
     private String getAttributeValue(Node parameterNode, String attributeName)
@@ -224,6 +252,24 @@ class Save
         setAtributeValue(parameterNode, Attribute.VALUE, value);
 
         saveDocument();
+    }
+
+    public List<String> getParametersValues(String blockName, String parametersName)
+    {
+        List<String> values = new ArrayList<>();
+
+        Node block = findBlock(blockName);
+        if (block != null)
+        {
+            List<Node> parameters = findNodes(block, parametersName);
+            for (Node param : parameters)
+            {
+                String value = getAttributeValue(param, Attribute.VALUE);
+                values.add(value);
+            }
+        }
+
+        return values;
     }
 
     private final class Attribute
