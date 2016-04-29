@@ -35,7 +35,6 @@ class GameScore
         }
     }
 
-    //TODO: find combos on linker level, then send them there
     void handleCombos(ComboPack pack)
     {
         int packScore = 0;

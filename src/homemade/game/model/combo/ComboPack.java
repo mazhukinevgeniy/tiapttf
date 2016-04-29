@@ -17,7 +17,7 @@ public class ComboPack
 {
     private ArrayList<Combo> combos;
 
-    ComboPack()
+    public ComboPack()
     {
         combos = new ArrayList<>();
     }
