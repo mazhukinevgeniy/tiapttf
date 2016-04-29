@@ -13,6 +13,7 @@ import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.combo.ComboDetector;
+import homemade.game.model.combo.ComboPack;
 import homemade.game.model.selection.BlockSelection;
 import homemade.game.model.spawn.SpawnManager;
 
@@ -188,9 +189,9 @@ public class GameModelLinker
     {
         Map<CellCode, CellState> removedCells = new HashMap<>();
 
-        Set<CellCode> cellsToRemove = comboDetector.findCellsToRemove(changedCells);
+        ComboPack combos = comboDetector.findCombos(changedCells);
 
-        for (CellCode cellCode : cellsToRemove)
+        for (CellCode cellCode : combos.cellSet())
         {
             cellStatePool.freeState(cellMap.getCell(cellCode));
 

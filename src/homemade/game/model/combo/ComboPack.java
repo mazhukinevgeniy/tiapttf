@@ -1,9 +1,12 @@
 package homemade.game.model.combo;
 
 import homemade.game.Combo;
+import homemade.game.fieldstructure.CellCode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Represents a set of combos, created "simultaneously".
@@ -24,6 +27,21 @@ public class ComboPack
         combos.addAll(anotherPack.combos);
     }
 
+    public Set<CellCode> cellSet()
+    {
+        Set<CellCode> cells = new HashSet<>();
+
+        for (Combo combo : combos)
+            cells.addAll(combo.toSet());
+
+        return cells;
+    }
+
+    Iterator<Combo> comboIterator()
+    {
+        return combos.iterator();
+    }
+
     void add(Combo combo)
     {
         combos.add(combo);
@@ -32,11 +50,6 @@ public class ComboPack
     int numberOfCombos()
     {
         return combos.size();
-    }
-
-    Iterator<Combo> comboIterator()
-    {
-        return combos.iterator();
     }
 
 }

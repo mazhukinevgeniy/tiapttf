@@ -49,11 +49,7 @@ public class ComboDetector
         minCombo = settings.minCombo();
     }
 
-    /**
-     * @return Set of cellCodes in which blocks are bound to be removed because they were part of a combo
-     */
-    //TODO: return combopack instead
-    public Set<CellCode> findCellsToRemove(Set<CellCode> starts)
+    public ComboPack findCombos(Set<CellCode> starts)
     {
         int numberOfStarts = starts.size();
 
@@ -69,33 +65,28 @@ public class ComboDetector
         int hSize = horizontals.size();
         int vSize = verticals.size();
 
-        int maxCellsToRemove = hSize * structure.getWidth() + vSize * structure.getHeight() - hSize * vSize;
-
-        HashSet<CellCode> cellsToRemove = new HashSet<CellCode>(maxCellsToRemove);
         ComboPack pack = new ComboPack();
 
         for (int horizontal : horizontals)
         {
-            iterateThroughTheLine(pack, cellsToRemove, structure.getCellCode(0, horizontal), Direction.RIGHT);
+            iterateThroughTheLine(pack, structure.getCellCode(0, horizontal), Direction.RIGHT);
         }
 
         for (int vertical : verticals)
         {
-            iterateThroughTheLine(pack, cellsToRemove, structure.getCellCode(vertical, 0), Direction.BOTTOM);
+            iterateThroughTheLine(pack, structure.getCellCode(vertical, 0), Direction.BOTTOM);
         }
 
-        gameScore.handleCombos(pack);
+        gameScore.handleCombos(pack);//TODO: move the call to the gamemodellinker
 
-        return cellsToRemove;
+        return pack;
     }
 
     /**
-     *
-     * @param cellsToRemove storage for found cells
      * @param start cellCode of the beginning
      * @param mainDirection where to look for the next cell
      */
-    private void iterateThroughTheLine(ComboPack pack, Set<CellCode> cellsToRemove, CellCode start, Direction mainDirection)
+    private void iterateThroughTheLine(ComboPack pack, CellCode start, Direction mainDirection)
     {
         CellCode currentCell = start;
 
@@ -130,7 +121,6 @@ public class ComboDetector
                     }
 
                     pack.add(new Combo(new HashSet<>(tmpStorage)));
-                    cellsToRemove.addAll(tmpStorage);
                 }
                 else
                 {
