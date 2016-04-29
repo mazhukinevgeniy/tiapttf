@@ -29,6 +29,7 @@ public class GameModelLinker
 
     private CellMap cellMap;
     private ComboDetector comboDetector;
+    private GameScore gameScore;
     private CellStatePool cellStatePool;
     private SpawnManager spawner;
     private ArrayBasedGameState state;
@@ -59,7 +60,8 @@ public class GameModelLinker
         state = new ArrayBasedGameState(structure, cellStates);
         lastGameState = state.getImmutableCopy();
 
-        comboDetector = ComboDetector.initializeComboDetection(structure, settings, readOnlyMap, controller);
+        comboDetector = new ComboDetector(structure, settings, readOnlyMap, controller);
+        gameScore = new GameScore(structure, controller, settings);
         spawner = new SpawnManager(this, settings, cellStatePool);
 
         selection = new BlockSelection(this);
@@ -190,6 +192,7 @@ public class GameModelLinker
         Map<CellCode, CellState> removedCells = new HashMap<>();
 
         ComboPack combos = comboDetector.findCombos(changedCells);
+        gameScore.handleCombos(combos);
 
         for (CellCode cellCode : combos.cellSet())
         {

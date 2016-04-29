@@ -1,9 +1,10 @@
-package homemade.game.model.combo;
+package homemade.game.model;
 
 import homemade.game.Combo;
 import homemade.game.GameSettings;
 import homemade.game.controller.ScoreHandler;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.model.combo.ComboPack;
 
 import java.util.Iterator;
 

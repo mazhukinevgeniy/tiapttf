@@ -17,9 +17,14 @@ public class ComboPack
 {
     private ArrayList<Combo> combos;
 
-    public ComboPack()
+    ComboPack()
     {
         combos = new ArrayList<>();
+    }
+
+    void add(Combo combo)
+    {
+        combos.add(combo);
     }
 
     public void append(ComboPack anotherPack)
@@ -37,17 +42,12 @@ public class ComboPack
         return cells;
     }
 
-    Iterator<Combo> comboIterator()
+    public Iterator<Combo> comboIterator()
     {
         return combos.iterator();
     }
 
-    void add(Combo combo)
-    {
-        combos.add(combo);
-    }
-
-    int numberOfCombos()
+    public int numberOfCombos()
     {
         return combos.size();
     }

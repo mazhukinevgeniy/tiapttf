@@ -3,7 +3,6 @@ package homemade.game.model.combo;
 import homemade.game.Combo;
 import homemade.game.GameSettings;
 import homemade.game.controller.BlockRemovalHandler;
-import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -16,34 +15,23 @@ import java.util.Set;
 
 public class ComboDetector
 {
-
-    public static ComboDetector initializeComboDetection(FieldStructure structure, GameSettings settings, CellMapReader cellMap, GameController controller)
-    {
-        GameScore gameScore = new GameScore(structure, controller, settings);
-
-        return new ComboDetector(structure, settings, cellMap, controller, gameScore);
-    }
-
-
     private ArrayList<CellCode> tmpStorage;
     //it's probably better than reallocating every time
     //TODO: check if it is
 
     private FieldStructure structure;
     private CellMapReader cellMap;
-    private GameScore gameScore;
     private BlockRemovalHandler blockRemovalHandler;
 
     private int minCombo;
 
-    private ComboDetector(FieldStructure structure, GameSettings settings, CellMapReader cellMap, BlockRemovalHandler blockRemovalHandler, GameScore gameScore)
+    public ComboDetector(FieldStructure structure, GameSettings settings, CellMapReader cellMap, BlockRemovalHandler blockRemovalHandler)
     {
         int maxCellsPerLine = structure.getMaxDimension();
         tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
 
         this.structure = structure;
         this.cellMap = cellMap;
-        this.gameScore = gameScore;
         this.blockRemovalHandler = blockRemovalHandler;
 
         minCombo = settings.minCombo();
@@ -76,8 +64,6 @@ public class ComboDetector
         {
             iterateThroughTheLine(pack, structure.getCellCode(vertical, 0), Direction.BOTTOM);
         }
-
-        gameScore.handleCombos(pack);//TODO: move the call to the gamemodellinker
 
         return pack;
     }
