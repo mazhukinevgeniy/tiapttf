@@ -57,10 +57,7 @@ class Updater
         storedChanges.addAll(cellMapChanges);
     }
 
-    /**
-     * @return number of combos found
-     */
-    int takeComboChanges(Map<CellCode, CellState> changedCells)
+    void takeComboChanges(Map<CellCode, CellState> changedCells)
     {
         Set<CellCode> cellMapChanges = cellMap.applyCascadeChanges(changedCells);
         storedChanges.addAll(cellMapChanges);
@@ -70,8 +67,6 @@ class Updater
 
         Set<CellCode> comboCells = cellMap.applyCascadeChanges(removeCombos(newCombos));
         storedChanges.addAll(comboCells);
-
-        return newCombos.numberOfCombos();
     }
 
     void flush()
@@ -86,6 +81,11 @@ class Updater
     boolean hasCellChanges()
     {
         return !storedChanges.isEmpty();
+    }
+
+    boolean hasCombos()
+    {
+        return storedCombos.numberOfCombos() > 0;
     }
 
     private Map<CellCode, CellState> removeCombos(ComboPack combos)

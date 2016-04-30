@@ -143,9 +143,9 @@ public class GameModelLinker
             tmpMap.put(moveFromCell, cellStates.getState(riskOfSpawnDenial ? Cell.DEAD_BLOCK : Cell.EMPTY));
             tmpMap.put(moveToCell, cellFrom);
 
-            boolean noCombos = updater.takeComboChanges(tmpMap) == 0;
+            updater.takeComboChanges(tmpMap);
 
-            if (mode == GameMode.TURN_BASED && noCombos)
+            if (mode == GameMode.TURN_BASED && !updater.hasCombos())
             {
                 requestSpawn();
             }
