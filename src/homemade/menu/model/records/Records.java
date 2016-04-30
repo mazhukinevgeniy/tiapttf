@@ -21,7 +21,7 @@ public class Records
     public Records(RecordsSave save)
     {
         this.save = save;
-        //initializeRecords();
+        initializeRecords();
     }
 
     private void initializeRecords()
@@ -45,6 +45,7 @@ public class Records
                     records.add(i, recordJ);
                     records.remove(j);
                     records.add(j, recordI);
+                    recordI = recordJ;
                 }
             }
         }
