@@ -5,7 +5,7 @@ import homemade.game.CellState;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.CellStatePool;
+import homemade.game.model.BlockPool;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
@@ -25,13 +25,13 @@ public class SpawnManager
 
     private FieldStructure structure;
 
-    public SpawnManager(GameModelLinker linker, GameSettings settings, CellStatePool cellStatePool)
+    public SpawnManager(GameModelLinker linker, GameSettings settings, BlockPool blockPool)
     {
         structure = linker.getStructure();
 
         CellMapReader cellMap = linker.getMapReader();
-        spawner = new BlockSpawner(cellMap, cellStatePool);
-        cellMarker = new CellMarker(cellMap, cellStatePool, linker.getCellStates());
+        spawner = new BlockSpawner(cellMap, blockPool);
+        cellMarker = new CellMarker(cellMap, blockPool, linker.getCellStates());
 
         GameSettings.GameMode mode = settings.gameMode();
         simultaneousSpawn = settings.maxSpawn();

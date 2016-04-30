@@ -3,7 +3,7 @@ package homemade.game.model.spawn;
 import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.CellStatePool;
+import homemade.game.model.BlockPool;
 import homemade.game.model.CellStates;
 import homemade.game.model.cellmap.CellMapReader;
 
@@ -15,18 +15,17 @@ import java.util.*;
 class CellMarker
 {
     private CellMapReader cellMap;
-    private CellStatePool cellStatePool;
+    private BlockPool blockPool;
 
     private CellStates cellStates;
 
     private Random random;
 
-    CellMarker(CellMapReader cellMap, CellStatePool cellStatePool, CellStates cellStates)
+    CellMarker(CellMapReader cellMap, BlockPool blockPool, CellStates cellStates)
     {
         this.cellMap = cellMap;
-        this.cellStatePool = cellStatePool;
+        this.blockPool = blockPool;
         this.cellStates = cellStates;
-        //TODO: draw a line between cellstates and cellstatespool
 
         random = new Random();
     }
@@ -61,7 +60,7 @@ class CellMarker
     {
         Map<CellCode, CellState> changes = new HashMap<>();
 
-        int canMark = cellStatePool.statesAvailable();
+        int canMark = blockPool.blocksAvailable();
 
         if (canMark > 0)
         {

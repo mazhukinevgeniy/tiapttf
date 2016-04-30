@@ -73,17 +73,25 @@ public class CellMap implements CellMapReader
 
         for (CellCode key : keys)
         {
-            cells[key.hashCode()] = changes.get(key);
+            CellState newState = changes.get(key);
+            CellState oldState = cells[key.hashCode()];
 
-            for (Direction direction : Direction.values())
+            if (newState != oldState)
             {
-                CellCode neighbour = key.neighbour(direction);
+                cells[key.hashCode()] = newState;
 
-                if (neighbour != null)
+                for (Direction direction : Direction.values())
                 {
-                    linksToUpdate.add(structure.getLinkCode(key, neighbour));
+                    CellCode neighbour = key.neighbour(direction);
+
+                    if (neighbour != null)
+                    {
+                        linksToUpdate.add(structure.getLinkCode(key, neighbour));
+                    }
                 }
             }
+            else
+                System.out.println("no change in cellmap");
         }
 
         for (LinkCode linkCode : linksToUpdate)

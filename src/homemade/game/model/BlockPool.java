@@ -6,12 +6,12 @@ import homemade.game.CellState;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class CellStatePool
+public class BlockPool
 {
     private LinkedList<CellState> available;
     private Random random;
 
-    CellStatePool(int max, CellStates states)
+    BlockPool(int max, CellStates states)
     {
         available = new LinkedList<>();
 
@@ -23,7 +23,7 @@ public class CellStatePool
         random = new Random();
     }
 
-    public CellState takeState()
+    public CellState takeBlock()
     {
         int length = available.size();
         int position = random.nextInt(length);
@@ -31,12 +31,12 @@ public class CellStatePool
         return available.remove(position);
     }
 
-    public void freeState(CellState state)
+    public void freeBlock(CellState state)
     {
         available.add(state);
     }
 
-    public int statesAvailable()
+    public int blocksAvailable()
     {
         return available.size();
     }

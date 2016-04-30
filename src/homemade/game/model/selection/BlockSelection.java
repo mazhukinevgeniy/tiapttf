@@ -75,7 +75,7 @@ public class BlockSelection
     {
         if (eventCell != selectedCell)
         {
-            linker.tryCascadeChanges(selectedCell, eventCell);
+            linker.tryMove(selectedCell, eventCell);
 
             selection.clear();
 
