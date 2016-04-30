@@ -92,11 +92,30 @@ class Updater
     {
         Map<CellCode, CellState> cellsToRemove = new HashMap<>();
 
-        for (CellCode cellCode : combos.cellSet())
+        CellState empty = cellStates.getState(Cell.EMPTY);
+
+        Set<CellCode> comboCells = combos.cellSet();
+
+        for (CellCode cellCode : comboCells)
         {
             blockPool.freeBlock(cellMap.getCell(cellCode));
 
-            cellsToRemove.put(cellCode, cellStates.getState(Cell.EMPTY));
+            cellsToRemove.put(cellCode, empty);
+        }
+
+        Direction[] directions = Direction.values();
+
+        for (CellCode cellCode : comboCells)
+        {
+            for (Direction direction : directions)
+            {
+                CellCode neighbour = cellCode.neighbour(direction);
+
+                if (    neighbour != null &&
+                        !cellsToRemove.containsKey(neighbour) &&
+                        cellMap.getCell(neighbour).type() == Cell.DEAD_BLOCK)
+                    cellsToRemove.put(neighbour, empty);
+            }
         }
 
         return cellsToRemove;
