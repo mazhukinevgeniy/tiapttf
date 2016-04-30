@@ -9,16 +9,11 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMapReader;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ComboDetector
 {
-    private ArrayList<CellCode> tmpStorage;
-    //it's probably better than reallocating every time
-    //TODO: check if it is
-
     private FieldStructure structure;
     private CellMapReader cellMap;
     private BlockRemovalHandler blockRemovalHandler;
@@ -27,9 +22,6 @@ public class ComboDetector
 
     public ComboDetector(FieldStructure structure, GameSettings settings, CellMapReader cellMap, BlockRemovalHandler blockRemovalHandler)
     {
-        int maxCellsPerLine = structure.getMaxDimension();
-        tmpStorage = new ArrayList<CellCode>(maxCellsPerLine);
-
         this.structure = structure;
         this.cellMap = cellMap;
         this.blockRemovalHandler = blockRemovalHandler;
@@ -89,9 +81,9 @@ public class ComboDetector
 
                 if (comboLength >= minCombo)
                 {
-                    tmpStorage.clear();
+                    Set<CellCode> comboCells = new HashSet<>(comboLength);
 
-                    tmpStorage.add(currentCell);
+                    comboCells.add(currentCell);
                     blockRemovalHandler.blockRemoved(currentCell);
                     //TODO: overcome code duplication
 
@@ -99,14 +91,14 @@ public class ComboDetector
 
                     while (nextCell != null && cellMap.getLinkDirection(currentCell, nextCell) == comboDirection)
                     {
-                        tmpStorage.add(nextCell);
+                        comboCells.add(nextCell);
                         blockRemovalHandler.blockRemoved(nextCell);
 
                         currentCell = nextCell;
                         nextCell = currentCell.neighbour(mainDirection);
                     }
 
-                    pack.add(new Combo(new HashSet<>(tmpStorage)));
+                    pack.add(new Combo(comboCells));
                 }
                 else
                 {
