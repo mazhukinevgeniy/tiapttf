@@ -20,9 +20,11 @@ public class GameView
 
     public static final int CELL_WIDTH = 50;
     public static final int CELL_OFFSET = 1;
-    public static final int GRID_OFFSET = 1;
-    public static final int CANVAS_WIDTH = 460;
-    public static final int CANVAS_HEIGHT = 460;
+
+    public static final int GRID_OFFSET_X = 1;
+    public static final int GRID_OFFSET_Y = 40;
+    public static final int GRID_WIDTH = 460;
+    public static final int GRID_HEIGHT = 460;
 
     private FieldStructure structure;
 
@@ -46,7 +48,7 @@ public class GameView
         this.structure = structure;
 
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT));
+        canvas.setPreferredSize(new Dimension(GameView.GRID_OFFSET_X + GameView.GRID_WIDTH, GameView.GRID_OFFSET_Y + GameView.GRID_HEIGHT));
         mainFrame.add(canvas);
 
         GameMouseAdapter mouseAdapter = new GameMouseAdapter(viewListener.mouseInputHandler());
@@ -81,9 +83,9 @@ public class GameView
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
 
-                graphics.clearRect(0, 0, GameView.CANVAS_WIDTH, GameView.CANVAS_HEIGHT);
+                graphics.clearRect(GRID_OFFSET_X, GRID_OFFSET_Y, GameView.GRID_WIDTH, GameView.GRID_HEIGHT);
 
-                graphics.drawImage(Assets.getAssets().getField(), GameView.GRID_OFFSET, GameView.GRID_OFFSET, null);
+                graphics.drawImage(Assets.getAssets().getField(), GameView.GRID_OFFSET_X, GameView.GRID_OFFSET_Y, null);
 
                 for (RenderingLayer layer : layers)
                 {

@@ -12,9 +12,6 @@ import homemade.utils.timer.TimerTaskPerformer;
 
 import java.awt.*;
 
-/**
- * Created by user3 on 23.03.2016.
- */
 public class GameController implements ScoreHandler, BlockRemovalHandler, MouseInputHandler
 {
     private static final int TARGET_FPS = 60;
@@ -56,12 +53,23 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
     @Override
     public synchronized void handleMouseRelease(int canvasX, int canvasY)
     {
-        int cellX = (canvasX - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
-        int cellY = (canvasY - GameView.GRID_OFFSET) / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+        int gridX = canvasX - GameView.GRID_OFFSET_X;
+        int gridY = canvasY - GameView.GRID_OFFSET_Y;
 
-        CellCode eventCell = structure.getCellCode(cellX, cellY);
+        int fullCell = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
-        model.tryToActivateCell(eventCell);
+        int maxX = structure.getWidth() * fullCell;
+        int maxY = structure.getHeight() * fullCell;
+
+        if (gridX >= 0 && gridX < maxX && gridY >= 0 && gridY < maxY)
+        {
+            int cellX = gridX / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+            int cellY = gridY / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
+
+            CellCode eventCell = structure.getCellCode(cellX, cellY);
+
+            model.tryToActivateCell(eventCell);
+        }
     }
 
     @Override

@@ -42,13 +42,9 @@ public class FieldStructure
         linkCodes = LinkCode.createLinkCodes(this);
     }
 
-
     public CellCode getCellCode(int x, int y)
     {
-        assert x > 0;
-        assert x < width;
-        assert y > 0;
-        assert y < height;
+        assert x >= 0 && x < width && y >= 0 && y < height;
 
         return cellCodes[cellCodeAsInt(x, y)];
         //fun fact: can be calculated as x * rightshift + y * downshift

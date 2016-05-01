@@ -67,8 +67,8 @@ abstract public class RenderingLayer
 
     final protected void setCanvasCoordinates(int i, int j)
     {
-        canvasX = GameView.GRID_OFFSET + fullCellWidth * i;
-        canvasY = GameView.GRID_OFFSET + fullCellWidth * j;
+        canvasX = GameView.GRID_OFFSET_X + fullCellWidth * i;
+        canvasY = GameView.GRID_OFFSET_Y + fullCellWidth * j;
     }
 
     static class Cells extends RenderingLayer
