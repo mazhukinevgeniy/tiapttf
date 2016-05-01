@@ -12,9 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
-/**
- * Created by user3 on 23.03.2016.
- */
 public class GameView
 {
 
@@ -28,12 +25,12 @@ public class GameView
 
     private FieldStructure structure;
 
-    private Canvas canvas;
-
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
     private ArrayList<RenderingLayer> layers;
+
+    private FpsTracker fpsTracker;
 
 
     public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
@@ -44,10 +41,11 @@ public class GameView
     private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
     {
         effectManager = new EffectManager();
+        fpsTracker = new FpsTracker();
 
         this.structure = structure;
 
-        canvas = new Canvas();
+        Canvas canvas = new Canvas();
         canvas.setPreferredSize(new Dimension(GameView.GRID_OFFSET_X + GameView.GRID_WIDTH, GameView.GRID_OFFSET_Y + GameView.GRID_HEIGHT));
         mainFrame.add(canvas);
 
@@ -71,6 +69,7 @@ public class GameView
     public synchronized void renderNextFrame(GameState state, SelectionState selection)
     {
         effectManager.measureTimePassed();
+        fpsTracker.addTimestamp();
 
         // Render single frame
         do
