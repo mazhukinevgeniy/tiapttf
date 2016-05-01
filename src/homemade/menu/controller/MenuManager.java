@@ -2,7 +2,9 @@ package homemade.menu.controller;
 
 import homemade.game.GameSettings;
 import homemade.game.controller.GameController;
+import homemade.menu.controller.records.RecordsManager;
 import homemade.menu.controller.settings.SettingsManager;
+import homemade.menu.model.records.Records;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.Window;
@@ -34,7 +36,7 @@ public class MenuManager implements HandlerButtons
     private GameController gameController;
     private ButtonActionListener actionListener;
 
-    public MenuManager(Window window, Settings settings)
+    public MenuManager(Window window, Settings settings, Records records)
     {
         this.window = window;
         this.settings = settings;
@@ -47,8 +49,12 @@ public class MenuManager implements HandlerButtons
         SettingsManager settingsManager = new SettingsManager(this, settings);
         MenuPanel settingsMenu = settingsManager.getSettingsMenu();
 
+        RecordsManager recordsManager = new RecordsManager(this, records);
+        MenuPanel recordsMenu = recordsManager.getRecordsMenu();
+
         menus.put(Menu.MAIN_MENU.getKey(), mainMenu);
         menus.put(Menu.SETTINGS.getKey(), settingsMenu);
+        menus.put(Menu.RECORDS.getKey(), recordsMenu);
 
         setCurrentMenu(Menu.MAIN_MENU.getKey());
         window.add(currentMenu);
@@ -84,6 +90,10 @@ public class MenuManager implements HandlerButtons
         else if (codeButton == Menu.SETTINGS.getKey())
         {
             toggleToMenu(Menu.SETTINGS.getKey());
+        }
+        else if (codeButton == Menu.RECORDS.getKey())
+        {
+            toggleToMenu(Menu.RECORDS.getKey());
         }
     }
 

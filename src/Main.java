@@ -23,7 +23,7 @@ public class Main
         Window window = new Window();
         window.setVisible(true);
 
-        MenuManager menuManager = new MenuManager(window, settings);
+        MenuManager menuManager = new MenuManager(window, settings, records);
 
         window.finaleInitialize();
     }

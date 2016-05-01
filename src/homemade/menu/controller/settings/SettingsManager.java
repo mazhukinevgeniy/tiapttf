@@ -33,9 +33,9 @@ public class SettingsManager implements HandlerButtons
 
     private MenuManager manager;
 
-    private SettingsMenu settingsMenu;
     private Settings settings;
     private ButtonActionListener actionListener;
+    private SettingsMenu settingsMenu;
 
     private Map<String, Pair<Type, ?>> parameters;
 
