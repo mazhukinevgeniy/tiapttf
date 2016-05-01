@@ -93,6 +93,12 @@ public class LocalSaveManager implements SettingsSave, RecordsSave
         save.addParameter(Block.RECORDS, "record", serialisedRecord);
     }
 
+    @Override
+    public void deleteAllRecords()
+    {
+        save.deleteParameters(Block.RECORDS, "record");
+    }
+
     //there you may add new name blocks to save
     public final class Block
     {

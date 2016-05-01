@@ -272,6 +272,20 @@ class Save
         return values;
     }
 
+    public void deleteParameters(String blockName, String parametersName)
+    {
+        Node block = findBlock(blockName);
+        if (block != null)
+        {
+            List<Node> parameters = findNodes(block, parametersName);
+            for (Node param : parameters)
+            {
+                block.removeChild(param);
+            }
+            saveDocument();
+        }
+    }
+
     private final class Attribute
     {
         public static final String NAME = "name";

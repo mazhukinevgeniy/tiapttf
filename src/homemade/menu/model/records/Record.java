@@ -1,13 +1,12 @@
 package homemade.menu.model.records;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 /**
  * Created by Marid on 29.04.2016.
  */
-public class Record implements Serializable
+public class Record
 {
     private static final String SEPARATOR = "&";
 

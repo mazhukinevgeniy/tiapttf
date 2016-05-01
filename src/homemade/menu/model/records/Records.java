@@ -92,4 +92,10 @@ public class Records
     {
         return new ArrayList<>(records);
     }
+
+    public void emptyOut()
+    {
+        save.deleteAllRecords();
+        records.clear();
+    }
 }

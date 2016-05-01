@@ -12,4 +12,5 @@ public interface RecordsSave
     List<Record> getRecords();
 
     void addRecord(Record record);
+    void deleteAllRecords();
 }
