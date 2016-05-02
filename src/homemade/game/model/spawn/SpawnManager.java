@@ -11,9 +11,6 @@ import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.Map;
 
-/**
- * Created by user3 on 07.04.2016.
- */
 public class SpawnManager
 {
     private SpawnTimer timer;
@@ -25,7 +22,7 @@ public class SpawnManager
 
     private FieldStructure structure;
 
-    public SpawnManager(GameModelLinker linker, GameSettings settings, BlockPool blockPool)
+    public SpawnManager(GameModelLinker linker, BlockPool blockPool)
     {
         structure = linker.getStructure();
 
@@ -33,6 +30,7 @@ public class SpawnManager
         spawner = new BlockSpawner(cellMap, blockPool);
         cellMarker = new CellMarker(cellMap, blockPool, linker.getCellStates());
 
+        GameSettings settings = linker.getSettings();
         GameSettings.GameMode mode = settings.gameMode();
         simultaneousSpawn = settings.maxSpawn();
 

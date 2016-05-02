@@ -1,12 +1,12 @@
 package homemade.game.model.combo;
 
 import homemade.game.Combo;
-import homemade.game.GameSettings;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.HashSet;
@@ -20,13 +20,14 @@ public class ComboDetector
 
     private int minCombo;
 
-    public ComboDetector(FieldStructure structure, GameSettings settings, CellMapReader cellMap, BlockRemovalHandler blockRemovalHandler)
+    public ComboDetector(GameModelLinker linker, BlockRemovalHandler blockRemovalHandler)
     {
-        this.structure = structure;
-        this.cellMap = cellMap;
+        structure = linker.getStructure();
+        cellMap = linker.getMapReader();
+
         this.blockRemovalHandler = blockRemovalHandler;
 
-        minCombo = settings.minCombo();
+        minCombo = linker.getSettings().minCombo();
     }
 
     public ComboPack findCombos(Set<CellCode> starts)

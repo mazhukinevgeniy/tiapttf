@@ -30,7 +30,8 @@ public class GameModelLinker
 
     private GameState lastGameState;
     private BlockSelection selection;
-    private GameMode mode;
+
+    private GameSettings settings;
 
     private Updater updater;
 
@@ -43,26 +44,25 @@ public class GameModelLinker
     {
         this.controller = controller;
         this.structure = structure;
+        this.settings = settings;
 
         cellStates = new CellStates(structure.getFieldSize());
 
         BlockPool blockPool = new BlockPool(structure.getFieldSize(), cellStates);
         cellMap = new CellMap(structure, cellStates);
 
-        CellMapReader readOnlyMap = cellMap;
-
         state = new ArrayBasedGameState(structure, cellStates);
         lastGameState = state.getImmutableCopy();
 
-        ComboDetector comboDetector = new ComboDetector(structure, settings, readOnlyMap, controller);
+        ComboDetector comboDetector = new ComboDetector(this, controller);
         GameScore gameScore = new GameScore(structure, controller, settings);
 
-        updater = new Updater(structure, cellStates, comboDetector, cellMap, gameScore, blockPool, state);
+        updater = new Updater(this, comboDetector, cellMap, gameScore, blockPool, state);
 
-        spawner = new SpawnManager(this, settings, blockPool);
+        spawner = new SpawnManager(this, blockPool);
         selection = new BlockSelection(this);
 
-        mode = settings.gameMode();
+        GameMode mode = settings.gameMode();
         if (mode == GameMode.TURN_BASED)
         {
             for (int i = 0; i < 2; i++)
@@ -70,8 +70,14 @@ public class GameModelLinker
         }
     }
 
-    //TODO: either use or remove methods below
-    synchronized public FieldStructure getStructure() { return structure; }
+    synchronized public FieldStructure getStructure()
+    {
+        return structure;
+    }
+    synchronized public GameSettings getSettings()
+    {
+        return settings;
+    }
     synchronized public CellMapReader getMapReader()
     {
         return cellMap;
@@ -145,7 +151,7 @@ public class GameModelLinker
 
             updater.takeComboChanges(tmpMap);
 
-            if (mode == GameMode.TURN_BASED && !updater.hasCombos())
+            if (settings.gameMode() == GameMode.TURN_BASED && !updater.hasCombos())
             {
                 requestSpawn();
             }

@@ -35,10 +35,10 @@ class Updater
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(FieldStructure structure, CellStates cellStates, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, BlockPool blockPool, ArrayBasedGameState state)
+    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, BlockPool blockPool, ArrayBasedGameState state)
     {
-        this.structure = structure;
-        this.cellStates = cellStates;
+        structure = linker.getStructure();
+        cellStates = linker.getCellStates();
 
         this.comboDetector = comboDetector;
 
