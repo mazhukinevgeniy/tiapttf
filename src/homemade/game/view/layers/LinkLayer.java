@@ -19,7 +19,7 @@ class LinkLayer extends RenderingLayer.Links
 
     private int counter = 0;
     private int countCap;
-    private final int rendersPerLinkFrame = 20; //TODO: better link it to the fps and/or assets
+    private final int rendersPerLinkFrame = 10; //TODO: better link it to the fps and/or assets
 
     private LinkAssets linkAssets;
 
