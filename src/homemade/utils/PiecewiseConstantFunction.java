@@ -3,9 +3,6 @@ package homemade.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by user3 on 08.04.2016.
- */
 public class PiecewiseConstantFunction<Separator extends Comparable<Separator>, Value>
 {
     private List<Value> values;
@@ -16,8 +13,7 @@ public class PiecewiseConstantFunction<Separator extends Comparable<Separator>, 
     {
         if (separators.size() + 1 != values.size())
         {
-            throw new Error("incorrect data is passed to PiecewiseConstantFunction");
-            //TODO: might as well check for unsorted and/or equal separators
+            throw new RuntimeException("incorrect data is passed to PiecewiseConstantFunction");
         }
         else
         {
