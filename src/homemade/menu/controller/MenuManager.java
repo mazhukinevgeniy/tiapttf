@@ -9,7 +9,6 @@ import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.Window;
 import homemade.menu.view.mainMenu.MainMenu;
-import javafx.util.Pair;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,14 +21,6 @@ public class MenuManager implements HandlerButtons
         SETTINGS,
         MAIN_MENU,
         RECORDS
-    }
-
-    public static final class Menu
-    {
-        public static final Pair<Integer, String> GAME = new Pair<> (0, "Game");
-        public static final Pair<Integer, String> SETTINGS = new Pair<> (1, "Settings");
-        public static final Pair<Integer, String> RECORDS = new Pair<> (2, "Records");
-        public static final Pair<Integer, String> MAIN_MENU = new Pair<> (3, "Main menu");
     }
 
     private Window window;
