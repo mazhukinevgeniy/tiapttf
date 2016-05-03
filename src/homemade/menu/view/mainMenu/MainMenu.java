@@ -2,12 +2,12 @@ package homemade.menu.view.mainMenu;
 
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.MenuManager.MenuCode;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 
 import javax.swing.*;
 import java.util.Map;
 
-public class MainMenu extends Menu
+public class MainMenu extends MenuPanel
 {
 
     public MainMenu(Map<MenuCode, String> menuNames, ButtonActionListener actionListener)

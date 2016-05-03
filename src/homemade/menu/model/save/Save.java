@@ -12,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marid on 28.03.2016.
@@ -57,9 +59,20 @@ class Save
         document.appendChild(newBlock);
     }
 
-    public boolean isValid()
+    private void saveDocument()
     {
-        return xmlDocument != null;
+        try
+        {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            Result output = new StreamResult(new File(pathToFile));
+            Source input = new DOMSource(xmlDocument);
+
+            transformer.transform(input, output);
+        }
+        catch (Exception exception)
+        {
+            System.err.print("XML save error!");
+        }
     }
 
     public String getParameterValue(String blockName, String parameterName)
@@ -85,13 +98,12 @@ class Save
             block = addBlock(blockName);
         }
 
-        Node node = findNode(block, parameterName);
-        if (node == null)
+        Node parameterNode = findNode(block, parameterName);
+        if (parameterNode == null)
         {
-            node = addParameterNode(block, parameterName);
+            parameterNode = addParameterNode(block, parameterName);
         }
-        Node attribute = getAttribute(node, Attribute.VALUE);
-        attribute.setNodeValue(newValue);
+        setAtributeValue(parameterNode, Attribute.VALUE, newValue);
 
         saveDocument();
     }
@@ -123,36 +135,74 @@ class Save
 
     private Node findNode(Node block, String parameterName)
     {
-        Node sought = null;
+        Node sought = findOf(block, parameterName, true).get(0);
+
+        return sought;
+    }
+
+    private List<Node> findNodes(Node block, String parameterName)
+    {
+        return findOf(block, parameterName, false);
+    }
+
+    private List<Node> findOf(Node block, String parameterName, boolean justFirst)
+    {
+        List<Node> soughts = new ArrayList<>();
 
         NodeList children = block.getChildNodes();
         int numberOfChild = children.getLength();
         for (int i = 0; i < numberOfChild; ++i) {
             Node node = children.item(i);
-            NamedNodeMap attributes = node.getAttributes();
-            if (attributes != null)
+            if(isEligibleNode(node, parameterName))
             {
-                Node nameAttrib = attributes.getNamedItem(Attribute.NAME);
-                String name = nameAttrib.getNodeValue();
-                if (name.equals(parameterName))
+                soughts.add(node);
+                if(justFirst)
                 {
-                    sought = node;
                     break;
                 }
             }
         }
-        return sought;
+        return soughts;
     }
 
-    private String getAttributeValue(Node node, String attributeName)
+    private boolean isEligibleNode(Node node, String parameterName)
     {
-        Node attribute = getAttribute(node, attributeName);
+        boolean isEligible = false;
+        NamedNodeMap attributes = node.getAttributes();
+        if (attributes != null)
+        {
+            Node nameAttribute = attributes.getNamedItem(Attribute.NAME);
+            if(nameAttribute != null)
+            {
+                String name = nameAttribute.getNodeValue();
+                if (name.equals(parameterName))
+                {
+                    isEligible = true;
+                }
+            }
+        }
+
+        return isEligible;
+    }
+
+    private String getAttributeValue(Node parameterNode, String attributeName)
+    {
+        Node attribute = getAttribute(parameterNode, attributeName);
         String value = null;
         if (attribute != null)
         {
             value = attribute.getNodeValue();
         }
         return value;
+    }
+
+    private void setAtributeValue(Node parameterNode, String attributeName, String value)
+    {
+        Node attribute = getAttribute(parameterNode, attributeName);
+        if (attribute != null)
+        {
+            attribute.setNodeValue(value);
+        }
     }
 
     private Node getAttribute(Node node, String attributeName)
@@ -190,26 +240,55 @@ class Save
         return parameter;
     }
 
-    private void saveDocument()
+    public void addParameter(String blockName, String parameterName, String value)
     {
-        try
+        Node block = findBlock(blockName);
+        if (block == null)
         {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(new File(pathToFile));
-            Source input = new DOMSource(xmlDocument);
-
-            transformer.transform(input, output);
+            block = addBlock(blockName);
         }
-        catch (Exception exception)
+
+        Node parameterNode = addParameterNode(block, parameterName);
+        setAtributeValue(parameterNode, Attribute.VALUE, value);
+
+        saveDocument();
+    }
+
+    public List<String> getParametersValues(String blockName, String parametersName)
+    {
+        List<String> values = new ArrayList<>();
+
+        Node block = findBlock(blockName);
+        if (block != null)
         {
-            System.err.print("XML save error!");
+            List<Node> parameters = findNodes(block, parametersName);
+            for (Node param : parameters)
+            {
+                String value = getAttributeValue(param, Attribute.VALUE);
+                values.add(value);
+            }
+        }
+
+        return values;
+    }
+
+    public void deleteParameters(String blockName, String parametersName)
+    {
+        Node block = findBlock(blockName);
+        if (block != null)
+        {
+            List<Node> parameters = findNodes(block, parametersName);
+            for (Node param : parameters)
+            {
+                block.removeChild(param);
+            }
+            saveDocument();
         }
     }
 
     private final class Attribute
     {
         public static final String NAME = "name";
-        public static final String TYPE = "type";
         public static final String VALUE = "value";
     }
 

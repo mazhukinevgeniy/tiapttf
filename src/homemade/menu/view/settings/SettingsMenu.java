@@ -1,7 +1,7 @@
 package homemade.menu.view.settings;
 
 import homemade.menu.controller.ButtonActionListener;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ import java.util.Vector;
 /**
  * Created by Marid on 18.04.2016.
  */
-public class SettingsMenu extends Menu
+public class SettingsMenu extends MenuPanel
 {
     private BoolParameter boolFactory = new BoolParameter();
     private NumberParameter numberFactory = new NumberParameter();

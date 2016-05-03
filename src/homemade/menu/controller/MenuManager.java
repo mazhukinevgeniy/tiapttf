@@ -2,11 +2,14 @@ package homemade.menu.controller;
 
 import homemade.game.GameSettings;
 import homemade.game.controller.GameController;
+import homemade.menu.controller.records.RecordsManager;
 import homemade.menu.controller.settings.SettingsManager;
+import homemade.menu.model.records.Records;
 import homemade.menu.model.settings.Settings;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 import homemade.menu.view.Window;
 import homemade.menu.view.mainMenu.MainMenu;
+import javafx.util.Pair;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,19 +18,30 @@ public class MenuManager implements HandlerButtons
 {
     public enum MenuCode
     {
-        GAME, SETTINGS, MAIN_MENU
+        GAME,
+        SETTINGS,
+        MAIN_MENU,
+        RECORDS
+    }
+
+    public static final class Menu
+    {
+        public static final Pair<Integer, String> GAME = new Pair<> (0, "Game");
+        public static final Pair<Integer, String> SETTINGS = new Pair<> (1, "Settings");
+        public static final Pair<Integer, String> RECORDS = new Pair<> (2, "Records");
+        public static final Pair<Integer, String> MAIN_MENU = new Pair<> (3, "Main menu");
     }
 
     private Window window;
     private Settings settings;
 
-    private Menu currentMenu;
-    private Map<MenuCode, Menu> menus;
+    private MenuPanel currentMenu;
+    private Map<MenuCode, MenuPanel> menus;
 
     private GameController gameController;
     private ButtonActionListener actionListener;
 
-    public MenuManager(Window window, Settings settings)
+    public MenuManager(Window window, Settings settings, Records records)
     {
         this.window = window;
         this.settings = settings;
@@ -35,15 +49,19 @@ public class MenuManager implements HandlerButtons
         actionListener = new ButtonActionListener<>(this);
 
         Map<MenuCode, String> menuNames = createMenuNamesMap();
-        Menu mainMenu = new MainMenu(menuNames, actionListener);
+        MenuPanel mainMenu = new MainMenu(menuNames, actionListener);
 
         SettingsManager settingsManager = new SettingsManager(this, settings);
-        Menu settingsMenu = settingsManager.getSettingsMenu();
+        MenuPanel settingsMenu = settingsManager.getSettingsMenu();
+
+        RecordsManager recordsManager = new RecordsManager(this, records);
+        MenuPanel recordsMenu = recordsManager.getRecordsMenu();
 
         menus = new EnumMap<>(MenuCode.class);
         menus.put(MenuCode.MAIN_MENU, mainMenu);
         menus.put(MenuCode.SETTINGS, settingsMenu);
-        menus.put(MenuCode.GAME, new Menu());
+        menus.put(MenuCode.RECORDS, recordsMenu);
+        menus.put(MenuCode.GAME, new MenuPanel());
 
         setCurrentMenu(MenuCode.MAIN_MENU);
         window.add(currentMenu);
@@ -54,6 +72,7 @@ public class MenuManager implements HandlerButtons
         Map<MenuCode, String> menuNames = new EnumMap<>(MenuCode.class);
         menuNames.put(MenuCode.GAME, "Game");
         menuNames.put(MenuCode.SETTINGS, "Settings");
+        menuNames.put(MenuCode.RECORDS, "Records");
 
         return menuNames;
     }

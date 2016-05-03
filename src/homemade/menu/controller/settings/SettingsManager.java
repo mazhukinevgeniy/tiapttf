@@ -4,7 +4,7 @@ import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
 import homemade.menu.model.settings.Settings;
-import homemade.menu.view.Menu;
+import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.SettingsMenu;
 import javafx.util.Pair;
 
@@ -30,9 +30,9 @@ public class SettingsManager implements HandlerButtons
 
     private MenuManager manager;
 
-    private SettingsMenu settingsMenu;
     private Settings settings;
     private ButtonActionListener actionListener;
+    private SettingsMenu settingsMenu;
 
     private Map<String, Pair<Type, ?>> parameters;
 
@@ -59,7 +59,7 @@ public class SettingsManager implements HandlerButtons
         return  buttons;
     }
 
-    public Menu getSettingsMenu()
+    public MenuPanel getSettingsMenu()
     {
         return this.settingsMenu;
     }
