@@ -73,12 +73,6 @@ public class MenuManager implements HandlerButtons
         currentMenu = menus.get(code);
     }
 
-    //TODO: tell me what is this method for
-    public ButtonActionListener<MenuManager> getActionListener()
-    {
-        return actionListener;
-    }
-
     @Override
     public void handleButtonClick(int code)
     {
