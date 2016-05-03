@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Must be synchronized externally!
+ */
 class FpsTracker
 {
     private static long nanosPerSecond = TimeUnit.MILLISECONDS.toNanos(1000);

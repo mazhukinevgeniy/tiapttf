@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-/**
- * Created by user3 on 24.03.2016.
- */
 public class BlockSelection
 {
     private GameModelLinker linker;

@@ -33,12 +33,12 @@ public class GameView
     private FpsTracker fpsTracker;
 
 
-    public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
+    public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container)
     {
-        initialize(structure, settings, viewListener, mainFrame);
+        initialize(structure, settings, viewListener, container);
     }
 
-    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Frame mainFrame)
+    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container)
     {
         effectManager = new EffectManager();
         fpsTracker = new FpsTracker();
@@ -47,7 +47,7 @@ public class GameView
 
         Canvas canvas = new Canvas();
         canvas.setPreferredSize(new Dimension(GameView.GRID_OFFSET_X + GameView.GRID_WIDTH, GameView.GRID_OFFSET_Y + GameView.GRID_HEIGHT));
-        mainFrame.add(canvas);
+        container.add(canvas);
 
         GameMouseAdapter mouseAdapter = new GameMouseAdapter(viewListener.mouseInputHandler());
         canvas.addMouseListener(mouseAdapter);

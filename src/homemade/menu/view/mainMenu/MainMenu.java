@@ -1,32 +1,26 @@
 package homemade.menu.view.mainMenu;
 
 import homemade.menu.controller.ButtonActionListener;
+import homemade.menu.controller.MenuManager.MenuCode;
 import homemade.menu.view.Menu;
 
 import javax.swing.*;
 import java.util.Map;
-import java.util.Set;
 
-/**
- * Created by Marid on 02.04.2016.
- */
 public class MainMenu extends Menu
 {
-    private MainMenu() {}
 
-    public MainMenu(Map<Integer, String> menus, ButtonActionListener actionListener)
+    public MainMenu(Map<MenuCode, String> menuNames, ButtonActionListener actionListener)
     {
         super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        Set<Integer> keys = menus.keySet();
-
-        for (int key : keys)
+        for (Map.Entry<MenuCode, String> entry : menuNames.entrySet())
         {
-            String nameButton = menus.get(key);
+            String nameButton = entry.getValue();
             JButton button = MainMenuButtonFactory.createButton(nameButton, actionListener);
-            button.setActionCommand(String.valueOf(key));
+            button.setActionCommand(String.valueOf(entry.getKey().ordinal()));
             add(button);
         }
     }

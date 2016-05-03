@@ -27,12 +27,12 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     private QuickTimer timer;
 
-    public GameController(Frame mainFrame, GameSettings settings)
+    public GameController(Frame mainFrame, Container container, GameSettings settings)
     {
-        initialize(mainFrame, settings);
+        initialize(mainFrame, container, settings);
     }
 
-    private synchronized void initialize(Frame mainFrame, GameSettings settings)
+    private synchronized void initialize(Frame mainFrame, Container container, GameSettings settings)
     {
         frame = mainFrame;
         this.settings = settings;
@@ -44,7 +44,7 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
         keyboard = new GameKeyboard(this);
         ViewListener viewListener = new ViewListener(this, keyboard);
 
-        view = new GameView(structure, settings, viewListener, mainFrame);
+        view = new GameView(structure, settings, viewListener, container);
 
         long period = 1000 / TARGET_FPS;
         timer = new QuickTimer(new ControllerTimerTask(), period);

@@ -8,33 +8,21 @@ import homemade.menu.view.Menu;
 import homemade.menu.view.Window;
 import homemade.menu.view.mainMenu.MainMenu;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
-/**
- * Created by Marid on 02.04.2016.
- */
 public class MenuManager implements HandlerButtons
 {
-    private final class NameMenu
+    public enum MenuCode
     {
-        private static final String GAME = "Game";
-        private static final String SETTINGS = "Settings";
-        private static final String MAIN_MENU = "Main menu";
-    }
-
-    public static final class CodeMenu
-    {
-        public static final int GAME = 0;
-        public static final int SETTINGS = 1;
-        public static final int MAIN_MENU = 2;
+        GAME, SETTINGS, MAIN_MENU
     }
 
     private Window window;
     private Settings settings;
 
     private Menu currentMenu;
-    private Map<Integer, Menu> menus = new HashMap<>();
+    private Map<MenuCode, Menu> menus;
 
     private GameController gameController;
     private ButtonActionListener actionListener;
@@ -46,62 +34,61 @@ public class MenuManager implements HandlerButtons
 
         actionListener = new ButtonActionListener<>(this);
 
-        Map<Integer, String> menuNames = createMenuNamesMap();
+        Map<MenuCode, String> menuNames = createMenuNamesMap();
         Menu mainMenu = new MainMenu(menuNames, actionListener);
 
         SettingsManager settingsManager = new SettingsManager(this, settings);
         Menu settingsMenu = settingsManager.getSettingsMenu();
 
-        menus.put(CodeMenu.MAIN_MENU, mainMenu);
-        menus.put(CodeMenu.SETTINGS, settingsMenu);
+        menus = new EnumMap<>(MenuCode.class);
+        menus.put(MenuCode.MAIN_MENU, mainMenu);
+        menus.put(MenuCode.SETTINGS, settingsMenu);
+        menus.put(MenuCode.GAME, new Menu());
 
-        setCurrentMenu(CodeMenu.MAIN_MENU);
+        setCurrentMenu(MenuCode.MAIN_MENU);
         window.add(currentMenu);
     }
 
-    private Map<Integer, String> createMenuNamesMap()
+    private Map<MenuCode, String> createMenuNamesMap()
     {
-        Map<Integer, String> menuNames = new HashMap<>();
-        menuNames.put(CodeMenu.GAME, NameMenu.GAME);
-        menuNames.put(CodeMenu.SETTINGS, NameMenu.SETTINGS);
+        Map<MenuCode, String> menuNames = new EnumMap<>(MenuCode.class);
+        menuNames.put(MenuCode.GAME, "Game");
+        menuNames.put(MenuCode.SETTINGS, "Settings");
 
         return menuNames;
     }
 
-    private void setCurrentMenu(int codeMenu)
+    private void setCurrentMenu(MenuCode code)
     {
-        currentMenu = menus.get(codeMenu);
+        currentMenu = menus.get(code);
     }
 
+    //TODO: tell me what is this method for
     public ButtonActionListener<MenuManager> getActionListener()
     {
         return actionListener;
     }
 
     @Override
-    public void handleButtonClick(int codeButton)
+    public void handleButtonClick(int code)
     {
-        if (codeButton == CodeMenu.GAME)
-        {
-            startGame();
-        }
-        else if (codeButton == CodeMenu.SETTINGS)
-        {
-            toggleToMenu(CodeMenu.SETTINGS);
-        }
+        MenuCode menuCode = MenuCode.values()[code];
+
+        switchToMenu(menuCode);
     }
 
-    private void startGame()
-    {
-        gameController = new GameController(window, new GameSettings(settings));
-        currentMenu.setVisible(false);
-    }
-
-    public void toggleToMenu(int codeMenu)
+    public void switchToMenu(MenuCode code)
     {
         window.remove(currentMenu);
-        setCurrentMenu(codeMenu);
+        setCurrentMenu(code);
         window.add(currentMenu);
+
+        if (code == MenuCode.GAME)
+        {
+            currentMenu.removeAll();
+            gameController = new GameController(window, currentMenu, new GameSettings(settings));
+        }
+
         currentMenu.updateUI();
     }
 }

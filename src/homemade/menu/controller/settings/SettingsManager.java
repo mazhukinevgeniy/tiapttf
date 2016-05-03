@@ -12,9 +12,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Marid on 18.04.2016.
- */
 public class SettingsManager implements HandlerButtons
 {
     private final class NameButton
@@ -77,7 +74,7 @@ public class SettingsManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.BACK_TO_MENU)
         {
-            manager.toggleToMenu(MenuManager.CodeMenu.MAIN_MENU);
+            manager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
         }
         else if (codeButton == CodeButton.RESET)
         {
