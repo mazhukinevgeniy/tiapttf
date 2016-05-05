@@ -42,7 +42,7 @@ public class Assets extends AssetLoader
         digit = new Image[10];
         disappear = new Image[3];
 
-        linkAssets = new LinkAssets(LinkAssets.Variation.ANIMATED);
+        linkAssets = new LinkAssets(LinkAssets.Variation.COLORED);
 
         field = getImage("field.png");
 
