@@ -5,7 +5,7 @@ package homemade.utils.timer;
  */
 public interface TimerTaskPerformer
 {
-    public void handleTimerTask();
+    void handleTimerTask();
 
     /**
      * Use this if your timer task performer needs to manipulate timer for some reason
@@ -13,5 +13,16 @@ public interface TimerTaskPerformer
     default void setTimer(QuickTimer timer)
     {
 
+    }
+
+    abstract class TimerAwarePerformer implements TimerTaskPerformer
+    {
+        protected QuickTimer timer;
+
+        @Override
+        public void setTimer(QuickTimer timer)
+        {
+            this.timer = timer;
+        }
     }
 }

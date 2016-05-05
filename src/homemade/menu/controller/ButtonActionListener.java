@@ -3,14 +3,11 @@ package homemade.menu.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by Marid on 02.04.2016.
- */
-public class ButtonActionListener<Type extends HandlerButtons> implements ActionListener
+public class ButtonActionListener implements ActionListener
 {
-    private Type handler;
+    private HandlerButtons handler;
 
-    public ButtonActionListener(Type handler)
+    public ButtonActionListener(HandlerButtons handler)
     {
         this.handler = handler;
     }

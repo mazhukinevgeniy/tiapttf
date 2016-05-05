@@ -92,10 +92,6 @@ public class GameModelLinker
         return selection;
     }
 
-    /**
-     * Makes sense to leave it package internal because GameModel might want to force stop if user quits before losing
-     * //TODO: implement said option and remove these comments
-     */
     synchronized void stopAllFacilities()
     {
         spawner.spawnTimer().stop();

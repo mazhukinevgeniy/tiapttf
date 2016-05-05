@@ -8,6 +8,7 @@ import homemade.menu.model.records.Records;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.Window;
+import homemade.menu.view.gameMenu.GameMenu;
 import homemade.menu.view.mainMenu.MainMenu;
 
 import java.util.EnumMap;
@@ -29,18 +30,13 @@ public class MenuManager implements HandlerButtons
     private MenuPanel currentMenu;
     private Map<MenuCode, MenuPanel> menus;
 
-    private GameController gameController;
-    private ButtonActionListener actionListener;
-
     public MenuManager(Window window, Settings settings, Records records)
     {
         this.window = window;
         this.settings = settings;
 
-        actionListener = new ButtonActionListener<>(this);
-
         Map<MenuCode, String> menuNames = createMenuNamesMap();
-        MenuPanel mainMenu = new MainMenu(menuNames, actionListener);
+        MenuPanel mainMenu = new MainMenu(menuNames, new ButtonActionListener(this));
 
         SettingsManager settingsManager = new SettingsManager(this, settings);
         MenuPanel settingsMenu = settingsManager.getSettingsMenu();
@@ -52,7 +48,7 @@ public class MenuManager implements HandlerButtons
         menus.put(MenuCode.MAIN_MENU, mainMenu);
         menus.put(MenuCode.SETTINGS, settingsMenu);
         menus.put(MenuCode.RECORDS, recordsMenu);
-        menus.put(MenuCode.GAME, new MenuPanel());
+        menus.put(MenuCode.GAME, new GameMenu());
 
         setCurrentMenu(MenuCode.MAIN_MENU);
         window.add(currentMenu);
@@ -73,12 +69,6 @@ public class MenuManager implements HandlerButtons
         currentMenu = menus.get(code);
     }
 
-    //TODO: tell me what is this method for
-    public ButtonActionListener<MenuManager> getActionListener()
-    {
-        return actionListener;
-    }
-
     @Override
     public void handleButtonClick(int code)
     {
@@ -89,14 +79,18 @@ public class MenuManager implements HandlerButtons
 
     public void switchToMenu(MenuCode code)
     {
+        window.setTitle("here we go again");
+
+        if (currentMenu != null)
+            currentMenu.onQuit();
+
         window.remove(currentMenu);
         setCurrentMenu(code);
         window.add(currentMenu);
 
         if (code == MenuCode.GAME)
         {
-            currentMenu.removeAll();
-            gameController = new GameController(window, currentMenu, new GameSettings(settings));
+            new GameController(this, window, currentMenu, new GameSettings(settings));
         }
 
         currentMenu.updateUI();

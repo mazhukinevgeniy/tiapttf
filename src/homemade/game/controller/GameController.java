@@ -7,6 +7,7 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
+import homemade.menu.controller.MenuManager;
 import homemade.utils.timer.QuickTimer;
 import homemade.utils.timer.TimerTaskPerformer;
 
@@ -15,6 +16,8 @@ import java.awt.*;
 public class GameController implements ScoreHandler, BlockRemovalHandler, MouseInputHandler
 {
     private static final int TARGET_FPS = 60;
+
+    private MenuManager menuManager;
 
     private Frame frame;
     private FieldStructure structure;
@@ -25,29 +28,31 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     private GameKeyboard keyboard;
 
-    private QuickTimer timer;
+    private QuickTimer mainTimer;
 
-    public GameController(Frame mainFrame, Container container, GameSettings settings)
+    public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings)
     {
-        initialize(mainFrame, container, settings);
+        initialize(menuManager, mainFrame, container, settings);
     }
 
-    private synchronized void initialize(Frame mainFrame, Container container, GameSettings settings)
+    private synchronized void initialize(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings)
     {
+        this.menuManager = menuManager;
+
         frame = mainFrame;
         this.settings = settings;
 
         structure = new FieldStructure();
 
-        model = new GameModel(this, structure, settings);
-
         keyboard = new GameKeyboard(this);
-        ViewListener viewListener = new ViewListener(this, keyboard);
+        ViewListener viewListener = new ViewListener(this, this, keyboard);
 
         view = new GameView(structure, settings, viewListener, container);
+        model = new GameModel(this, structure, settings);
+        //model must be initialized after view because there could be combos in initialization
 
         long period = 1000 / TARGET_FPS;
-        timer = new QuickTimer(new ControllerTimerTask(), period);
+        mainTimer = new QuickTimer(new ControllerTimerTask(), period);
     }
 
     @Override
@@ -90,9 +95,14 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
         model.toggleSpawnPause();
     }
 
+    synchronized void requestQuit()
+    {
+        model.forceStop();
+    }
+
     public synchronized void gameOver()
     {
-        new QuickTimer(new GameOverTimerTask(this), GameOverTimerTask.PERIOD);
+        new QuickTimer(new GameOverTimerTask(), GameOverTimerTask.PERIOD);
     }
 
     private class ControllerTimerTask implements TimerTaskPerformer
@@ -118,30 +128,23 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
         }
     }
 
-    private class GameOverTimerTask implements TimerTaskPerformer
+    private class GameOverTimerTask extends TimerTaskPerformer.TimerAwarePerformer
     {
-        private static final int TASKS_BEFORE_RESTART = 10;
-        private static final int PERIOD = 2 * 1000 / TASKS_BEFORE_RESTART;
+        private static final int TASKS_BEFORE_QUIT = 5;
+        private static final int PERIOD = 1000 / TASKS_BEFORE_QUIT;
 
         private int taskCounter = 0;
-
-        private QuickTimer gameOverTimer;
-        private GameController controller;
-
-        GameOverTimerTask(GameController controller)
-        {
-            this.controller = controller;
-        }
 
         @Override
         public void handleTimerTask()
         {
-            if (taskCounter == TASKS_BEFORE_RESTART)
+            if (taskCounter == TASKS_BEFORE_QUIT)
             {
-                gameOverTimer.stop();
-                view.getEffectManager().clearEffects();
+                mainTimer.stop();
+                timer.stop();
+                view.dispose();
 
-                model = new GameModel(controller, structure, settings);
+                menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
             }
             else
             {
@@ -149,12 +152,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
                 taskCounter++;
             }
-        }
-
-        @Override
-        public void setTimer(QuickTimer timer)
-        {
-            gameOverTimer = timer;
         }
     }
 }

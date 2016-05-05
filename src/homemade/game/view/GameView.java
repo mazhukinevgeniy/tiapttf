@@ -55,7 +55,7 @@ public class GameView
         layeredPane.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
         container.add(layeredPane);
 
-        new GameInfoPanel(layeredPane, CANVAS_WIDTH, GRID_OFFSET_Y);
+        new GameInfoPanel(viewListener, layeredPane, CANVAS_WIDTH, GRID_OFFSET_Y);
 
         Canvas canvas = new Canvas();
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -79,6 +79,17 @@ public class GameView
         return effectManager;
     }
 
+    public synchronized void dispose()
+    {
+        strategy.dispose();
+        strategy = null;
+
+        effectManager.clearEffects();
+    }
+
+    /**
+     * Would cause an exception if called after dispose()
+     */
     public synchronized void renderNextFrame(GameState state, SelectionState selection)
     {
         effectManager.measureTimePassed();

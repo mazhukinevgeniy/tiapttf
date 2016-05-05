@@ -36,6 +36,11 @@ public class GameModel
         linker.togglePause();
     }
 
+    public void forceStop()
+    {
+        linker.stopAllFacilities();
+    }
+
     public void killRandomBlocks()
     {
         linker.killRandomBlocks();
