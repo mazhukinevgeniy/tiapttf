@@ -34,7 +34,7 @@ public class RecordsMenu extends MenuPanel
 
     private void drawCapTable()
     {
-        JLabel newRow = RowRecordFactory.create(CupTable.PLACE, CupTable.PLAYER_NAME, CupTable.SCORE);
+        JPanel newRow = RowRecordFactory.create(CupTable.PLACE, CupTable.PLAYER_NAME, CupTable.SCORE);
         add(newRow);
     }
 
@@ -46,7 +46,7 @@ public class RecordsMenu extends MenuPanel
             Record record = records.get(i);
             String placeNumber = String.valueOf(i);
             String score = String.valueOf(record.getScore());
-            JLabel newRow = RowRecordFactory.create(placeNumber, record.getPlayerName(), score);
+            JPanel newRow = RowRecordFactory.create(placeNumber, record.getPlayerName(), score);
             add(newRow);
         }
     }
