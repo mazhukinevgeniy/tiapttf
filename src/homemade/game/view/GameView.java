@@ -8,12 +8,15 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 public class GameView
 {
+    static final Integer CANVAS_LAYER = 0;
+    static final Integer PANEL_LAYER = 1;
 
     public static final int CELL_WIDTH = 50;
     public static final int CELL_OFFSET = 1;
@@ -45,9 +48,19 @@ public class GameView
 
         this.structure = structure;
 
+        final int CANVAS_WIDTH = GRID_OFFSET_X + GRID_WIDTH;
+        final int CANVAS_HEIGHT = GRID_OFFSET_Y + GRID_HEIGHT;
+
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+        container.add(layeredPane);
+
+        new GameInfoPanel(viewListener, layeredPane, CANVAS_WIDTH, GRID_OFFSET_Y);
+
         Canvas canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(GameView.GRID_OFFSET_X + GameView.GRID_WIDTH, GameView.GRID_OFFSET_Y + GameView.GRID_HEIGHT));
-        container.add(canvas);
+        canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+        canvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        layeredPane.add(canvas, CANVAS_LAYER);
 
         GameMouseAdapter mouseAdapter = new GameMouseAdapter(viewListener.mouseInputHandler());
         canvas.addMouseListener(mouseAdapter);
@@ -66,6 +79,17 @@ public class GameView
         return effectManager;
     }
 
+    public synchronized void dispose()
+    {
+        strategy.dispose();
+        strategy = null;
+
+        effectManager.clearEffects();
+    }
+
+    /**
+     * Would cause an exception if called after dispose()
+     */
     public synchronized void renderNextFrame(GameState state, SelectionState selection)
     {
         effectManager.measureTimePassed();
@@ -82,9 +106,9 @@ public class GameView
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
 
-                graphics.clearRect(GRID_OFFSET_X, GRID_OFFSET_Y, GameView.GRID_WIDTH, GameView.GRID_HEIGHT);
+                graphics.clearRect(GRID_OFFSET_X, GRID_OFFSET_Y, GRID_WIDTH, GRID_HEIGHT);
 
-                graphics.drawImage(Assets.getAssets().getField(), GameView.GRID_OFFSET_X, GameView.GRID_OFFSET_Y, null);
+                graphics.drawImage(Assets.getAssets().getField(), GRID_OFFSET_X, GRID_OFFSET_Y, null);
 
                 for (RenderingLayer layer : layers)
                 {

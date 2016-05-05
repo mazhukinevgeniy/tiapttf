@@ -10,4 +10,12 @@ public class MenuPanel extends JPanel
 
         setVisible(true);
     }
+
+    /**
+     * Called by MenuManager when swithing to another menu
+     */
+    public void onQuit()
+    {
+
+    }
 }

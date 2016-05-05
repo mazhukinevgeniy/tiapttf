@@ -11,6 +11,7 @@ public class QuickTimer
     private TimerTaskPerformer performer;
     private long period;
 
+    private boolean stopped = false;
 
     public QuickTimer(TimerTaskPerformer performer, long period)
     {
@@ -25,35 +26,47 @@ public class QuickTimer
         performer.setTimer(this);
 
         timer = new Timer();
-        timer.schedule(new SmartTimerTask(), delay, period);
+        timer.schedule(new SynchronizedTask(), delay, period);
     }
 
-    public void stop()
+    private synchronized void runSynchronized()
+    {
+        //System.out.println(this.toString() + " " + stopped);
+
+        if (!stopped)
+        {
+            performer.handleTimerTask();
+        }
+    }
+
+    public synchronized void stop()
     {
         timer.cancel();
+        stopped = true;
     }
 
     /**
      * Care: this will cancel all tasks if period is actually changed.
      */
-    public void setPeriod(long newPeriod)
+    public synchronized void setPeriod(long newPeriod)
     {
-        if (newPeriod != period)
+        if (!stopped && newPeriod != period)
         {
             period = newPeriod;
 
             timer.cancel();
             timer = new Timer();
-            timer.schedule(new SmartTimerTask(), period, period);
+            timer.schedule(new SynchronizedTask(), period, period);
+            //TODO: separate quicktimer and variableperiodtimer so that inner quicktimer is truly stopped when period changes
         }
     }
 
-    private class SmartTimerTask extends TimerTask
+    private class SynchronizedTask extends TimerTask
     {
         @Override
         public void run()
         {
-            performer.handleTimerTask();
+            runSynchronized();
         }
     }
 }

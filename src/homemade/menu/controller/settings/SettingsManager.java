@@ -36,13 +36,11 @@ public class SettingsManager implements HandlerButtons
 
     private Map<String, Pair<Type, ?>> parameters;
 
-    private SettingsManager() {}
-
     public SettingsManager(MenuManager manager, Settings settings)
     {
         this.manager = manager;
         this.settings = settings;
-        actionListener = new ButtonActionListener<>(this);
+        actionListener = new ButtonActionListener(this);
 
         parameters = settings.getAllParameters();
         Map<Integer, String> buttons = createButtonsMap();
