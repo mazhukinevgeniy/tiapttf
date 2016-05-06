@@ -75,6 +75,14 @@ public class RecordsMenu extends MenuPanel
         add(panel);
     }
 
+    public void updateMenu(List<Record> records)
+    {
+        this.records = records;
+        removeAll();
+        initializeUI();
+        updateUI();
+    }
+
     /**
      * Called by MenuManager when swithing to another menu
      */

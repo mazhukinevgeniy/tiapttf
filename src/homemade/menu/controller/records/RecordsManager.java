@@ -21,10 +21,12 @@ public class RecordsManager implements HandlerButtons
     private MenuManager manager;
 
     private RecordsMenu recordsMenu;
+    private Records records;
 
     public RecordsManager(MenuManager manager, Records records)
     {
         this.manager = manager;
+        this.records = records;
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
         Map<CodeButton, String> buttons = createButtonsMap();
@@ -46,8 +48,18 @@ public class RecordsManager implements HandlerButtons
     }
 
     @Override
-    public void handleButtonClick(int codeButton)
+    public void handleButtonClick(int code)
     {
+        CodeButton codeButton = CodeButton.values()[code];
 
+        if (codeButton == CodeButton.BACK_TO_MENU)
+        {
+            manager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
+        }
+        else if (codeButton == CodeButton.RESET)
+        {
+            records.emptyOut();
+            recordsMenu.updateMenu(records.getRecords());
+        }
     }
 }
