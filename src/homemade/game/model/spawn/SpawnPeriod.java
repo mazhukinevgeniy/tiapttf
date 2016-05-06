@@ -74,7 +74,7 @@ class SpawnPeriod
         GameState state = linker.lastGameState();
 
         int occupiedCells = state.numberOfBlocks();
-        int spawnsDenied = state.getSpawnsDenied();
+        int spawnsDenied = state.spawnsDenied();
 
 
         int base = basePeriod.getValueAt(occupiedCells);

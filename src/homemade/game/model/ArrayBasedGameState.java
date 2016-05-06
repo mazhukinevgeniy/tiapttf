@@ -22,7 +22,10 @@ class ArrayBasedGameState implements GameState
     private GameState immutableCopy;
 
     private int numberOfBlocks;
-    private int spawnsDenied;
+    private int denies;
+
+    private int score;
+    private int multiplier;
 
     ArrayBasedGameState(FieldStructure structure, CellStates states)
     {
@@ -52,7 +55,9 @@ class ArrayBasedGameState implements GameState
         }
 
         numberOfBlocks = 0;
-        spawnsDenied = 0;
+        denies = 0;
+        score = 0;
+        multiplier = 1;
     }
 
     private ArrayBasedGameState(ArrayBasedGameState stateToCopy)
@@ -62,12 +67,20 @@ class ArrayBasedGameState implements GameState
         chainLengths = stateToCopy.chainLengths.clone();
 
         numberOfBlocks = stateToCopy.numberOfBlocks;
-        spawnsDenied = stateToCopy.spawnsDenied;
+        denies = stateToCopy.denies;
+
+        score = stateToCopy.score;
+        multiplier = stateToCopy.multiplier;
     }
 
     void incrementDenyCounter()
     {
-        spawnsDenied++;
+        denies++;
+    }
+
+    void updateScore(int newScore)
+    {
+        score = newScore;
     }
 
 
@@ -104,15 +117,27 @@ class ArrayBasedGameState implements GameState
     }
 
     @Override
-    public int getSpawnsDenied()
+    public int spawnsDenied()
     {
-        return spawnsDenied;
+        return denies;
     }
 
     @Override
     public int numberOfBlocks()
     {
         return numberOfBlocks;
+    }
+
+    @Override
+    public int gameScore()
+    {
+        return score;
+    }
+
+    @Override
+    public int globalMultiplier()
+    {
+        return multiplier;
     }
 
     @Override
@@ -133,8 +158,7 @@ class ArrayBasedGameState implements GameState
         return chainLengths[linkCode.hashCode()];
     }
 
-    @Override
-    public GameState getImmutableCopy()
+    GameState getImmutableCopy()
     {
         if (immutableCopy == null)
             immutableCopy = new ArrayBasedGameState(this);

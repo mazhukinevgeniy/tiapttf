@@ -2,6 +2,7 @@ package homemade.game.controller;
 
 import homemade.game.Effect;
 import homemade.game.GameSettings;
+import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -13,7 +14,7 @@ import homemade.utils.timer.TimerTaskPerformer;
 
 import java.awt.*;
 
-public class GameController implements ScoreHandler, BlockRemovalHandler, MouseInputHandler
+public class GameController implements BlockRemovalHandler, MouseInputHandler
 {
     private static final int TARGET_FPS = 60;
 
@@ -21,7 +22,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
     private Frame frame;
     private FieldStructure structure;
-    private GameSettings settings;
 
     private GameModel model;
     private GameView view;
@@ -40,7 +40,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
         this.menuManager = menuManager;
 
         frame = mainFrame;
-        this.settings = settings;
 
         structure = new FieldStructure();
 
@@ -75,12 +74,6 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
 
             model.tryToActivateCell(eventCell);
         }
-    }
-
-    @Override
-    public synchronized void scoreUpdated(int score)
-    {
-        frame.setTitle("score: " + String.valueOf(score));
     }
 
     public synchronized void blockRemoved(CellCode atCell)
@@ -124,7 +117,10 @@ public class GameController implements ScoreHandler, BlockRemovalHandler, MouseI
             else
                 frameCounter++;
 
-            view.renderNextFrame(model.copyGameState(), model.copySelectionState());
+            GameState state = model.copyGameState();
+
+            frame.setTitle("score: " + state.gameScore() + ", multiplier: " + state.globalMultiplier());
+            view.renderNextFrame(state, model.copySelectionState());
         }
     }
 

@@ -55,7 +55,7 @@ public class GameModelLinker
         lastGameState = state.getImmutableCopy();
 
         ComboDetector comboDetector = new ComboDetector(this, controller);
-        GameScore gameScore = new GameScore(structure, controller, settings);
+        GameScore gameScore = new GameScore(this);
 
         updater = new Updater(this, comboDetector, cellMap, gameScore, blockPool, state);
 
@@ -107,6 +107,11 @@ public class GameModelLinker
     {
         updater.takeChanges(spawner.spawnDeadBlocks());
         updateStates();
+    }
+
+    synchronized void updateScore(int newScore)
+    {
+        state.updateScore(newScore);
     }
 
     synchronized public void requestSpawn()

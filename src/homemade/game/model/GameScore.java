@@ -1,9 +1,6 @@
 package homemade.game.model;
 
 import homemade.game.Combo;
-import homemade.game.GameSettings;
-import homemade.game.controller.ScoreHandler;
-import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.combo.ComboPack;
 
 import java.util.Iterator;
@@ -15,16 +12,16 @@ class GameScore
 
     private int minCombo;
 
-    private ScoreHandler scoreHandler;
+    private GameModelLinker linker;
 
-    GameScore(FieldStructure structure, ScoreHandler scoreHandler, GameSettings settings)
+    GameScore(GameModelLinker linker)
     {
-        this.scoreHandler = scoreHandler;
-        scoreHandler.scoreUpdated(score = 0);
+        this.linker = linker;
+        linker.updateScore(score = 0);
 
-        minCombo = settings.minCombo();
+        minCombo = linker.getSettings().minCombo();
 
-        int lengthsPossible = structure.getMaxDimension() - minCombo + 1;
+        int lengthsPossible = linker.getStructure().getMaxDimension() - minCombo + 1;
         int baseScore = 5;
 
         scores = new int[lengthsPossible];
@@ -49,13 +46,15 @@ class GameScore
         if (packScore != 0)
             synchronized(this)
             {
-                int globalMultiplier = 1; //TODO: add spawn stunning and persistent global multiplier
+                int globalMultiplier = linker.lastGameState().globalMultiplier();
                 int packMultiplier = pack.numberOfCombos();
                 packScore *= packMultiplier * (globalMultiplier + packMultiplier / 2);
 
                 score += packScore;
 
-                scoreHandler.scoreUpdated(score);
+                linker.updateScore(score);
+                //TODO: increase global multiplier
+                //TODO: add spawn stunning
             }
     }
 }
