@@ -1,11 +1,15 @@
 package homemade.menu.view.records;
 
 import homemade.menu.controller.ButtonActionListener;
+import homemade.menu.controller.records.RecordsManager.CodeButton;
 import homemade.menu.model.records.Record;
 import homemade.menu.view.MenuPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Marid on 01.05.2016.
@@ -13,13 +17,18 @@ import java.util.List;
 public class RecordsMenu extends MenuPanel
 {
     private List<Record> records = null;
+    private Map<CodeButton, String> buttons;
+    private ButtonActionListener actionListener;
 
-    public RecordsMenu(ButtonActionListener actionListener, List<Record> records)
+    public RecordsMenu(List<Record> records, Map<CodeButton, String> buttons,
+                       ButtonActionListener actionListener)
     {
         super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.records = records;
+        this.buttons = buttons;
+        this.actionListener = actionListener;
 
         initializeUI();
     }
@@ -28,6 +37,7 @@ public class RecordsMenu extends MenuPanel
     {
         drawCapTable();
         drawRecordsTable();
+        initializeButtonPanel(buttons, actionListener);
     }
 
     private void drawCapTable()
@@ -47,6 +57,22 @@ public class RecordsMenu extends MenuPanel
             JPanel newRow = RowRecordFactory.create(placeNumber, record.getPlayerName(), score);
             add(newRow);
         }
+    }
+
+    private void initializeButtonPanel(Map<CodeButton, String> buttons,
+                                       ButtonActionListener actionListener)
+    {
+        JPanel panel = new JPanel(new FlowLayout());
+
+        Set<CodeButton> keys = buttons.keySet();
+        for (CodeButton key : keys)
+        {
+            String nameButton = buttons.get(key);
+            JButton button = RecordsButtonFactory.createButton(nameButton, actionListener);
+            button.setActionCommand(String.valueOf(key.ordinal()));
+            panel.add(button);
+        }
+        add(panel);
     }
 
     /**
