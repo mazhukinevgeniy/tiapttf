@@ -18,7 +18,6 @@ public class Main
         Settings settings = new Settings(save);
 
         Records records = new Records(save);
-        records.print();
 
         Window window = new Window();
         window.setVisible(true);

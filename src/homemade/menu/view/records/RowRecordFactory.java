@@ -21,7 +21,6 @@ class RowRecordFactory
         rowRecord.setLayout(new BoxLayout(rowRecord, BoxLayout.LINE_AXIS));
         rowRecord.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         rowRecord.setMaximumSize(new Dimension(ROW_WIDTH, ROW_HEIGHT));
-        rowRecord.setBackground(Color.CYAN);
 
         rowRecord.add(placeLabel);
         rowRecord.add(playerNameLabel);
