@@ -55,27 +55,14 @@ class ArrayBasedGameState implements GameState
         spawnsDenied = 0;
     }
 
-    private ArrayBasedGameState(CellState[] fieldData, Direction[] linkData, int[] chainData, int spawnsDenied)
+    private ArrayBasedGameState(ArrayBasedGameState stateToCopy)
     {
-        if (fieldData == null || linkData == null || chainData == null)
-            throw new Error("corrupted game state copy has been created");
+        field = stateToCopy.field.clone();
+        links = stateToCopy.links.clone();
+        chainLengths = stateToCopy.chainLengths.clone();
 
-        field = fieldData.clone();
-        links = linkData.clone();
-        chainLengths = chainData.clone();
-
-
-        int counter = 0;
-
-        for (CellState cell : fieldData)
-        {
-            if (cell.isOccupiedByBlock())
-                counter++;
-        }
-
-        numberOfBlocks = counter;
-
-        this.spawnsDenied = spawnsDenied;
+        numberOfBlocks = stateToCopy.numberOfBlocks;
+        spawnsDenied = stateToCopy.spawnsDenied;
     }
 
     void incrementDenyCounter()
@@ -150,7 +137,7 @@ class ArrayBasedGameState implements GameState
     public GameState getImmutableCopy()
     {
         if (immutableCopy == null)
-            immutableCopy = new ArrayBasedGameState(field, links, chainLengths, spawnsDenied);
+            immutableCopy = new ArrayBasedGameState(this);
 
         return immutableCopy;
     }
