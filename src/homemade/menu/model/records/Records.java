@@ -80,14 +80,6 @@ public class Records
         save.addRecord(record);
     }
 
-    public void print()
-    {
-        for (Record record : records)
-        {
-            System.out.println(record.getScore() + " " + record.getPlayerName());
-        }
-    }
-
     public List<Record> getRecords()
     {
         return new ArrayList<>(records);
