@@ -52,7 +52,7 @@ public class RecordsMenu extends MenuPanel
         for (int i = 0; i < size; ++i)
         {
             Record record = records.get(i);
-            String placeNumber = String.valueOf(i);
+            String placeNumber = String.valueOf(i + 1);
             String score = String.valueOf(record.getScore());
             JPanel newRow = RowRecordFactory.create(placeNumber, record.getPlayerName(), score);
             add(newRow);
