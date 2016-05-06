@@ -9,29 +9,22 @@ import homemade.menu.view.settings.SettingsMenu;
 import javafx.util.Pair;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class SettingsManager implements HandlerButtons
 {
-    private final class NameButton
-    {
-        private static final String RESET = "Reset";
-        private static final String BACK_TO_MENU = "Back to menu";
-        private static final String APPLY = "Apply";
-    }
 
-    private static final class CodeButton
+    public enum CodeButton
     {
-        private static final Integer RESET = 0;
-        private static final Integer BACK_TO_MENU = 1;
-        private static final Integer APPLY = 2;
+        RESET,
+        BACK_TO_MENU,
+        APPLY
     }
 
     private MenuManager manager;
 
     private Settings settings;
-    private ButtonActionListener actionListener;
     private SettingsMenu settingsMenu;
 
     private Map<String, Pair<Type, ?>> parameters;
@@ -40,19 +33,19 @@ public class SettingsManager implements HandlerButtons
     {
         this.manager = manager;
         this.settings = settings;
-        actionListener = new ButtonActionListener(this);
+        ButtonActionListener actionListener = new ButtonActionListener(this);
 
         parameters = settings.getAllParameters();
-        Map<Integer, String> buttons = createButtonsMap();
+        Map<CodeButton, String> buttons = createButtonsMap();
         settingsMenu = new SettingsMenu(parameters, buttons, actionListener);
     }
 
-    private Map<Integer, String> createButtonsMap()
+    private Map<CodeButton, String> createButtonsMap()
     {
-        Map<Integer, String> buttons = new HashMap<>();
-        buttons.put(CodeButton.RESET, NameButton.RESET);
-        buttons.put(CodeButton.BACK_TO_MENU, NameButton.BACK_TO_MENU);
-        buttons.put(CodeButton.APPLY, NameButton.APPLY);
+        Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
+        buttons.put(CodeButton.RESET, "Reset");
+        buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
+        buttons.put(CodeButton.APPLY, "Apply");
 
         return  buttons;
     }
@@ -63,8 +56,10 @@ public class SettingsManager implements HandlerButtons
     }
 
     @Override
-    public void handleButtonClick(int codeButton)
+    public void handleButtonClick(int code)
     {
+        CodeButton codeButton = CodeButton.values()[code];
+
         if(codeButton == CodeButton.APPLY)
         {
             settings.setParameters(settingsMenu.getParameters());

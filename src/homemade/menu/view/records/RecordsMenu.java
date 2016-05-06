@@ -14,8 +14,6 @@ public class RecordsMenu extends MenuPanel
 {
     private List<Record> records = null;
 
-    private RecordsMenu() {}
-
     public RecordsMenu(ButtonActionListener actionListener, List<Record> records)
     {
         super();
@@ -49,6 +47,15 @@ public class RecordsMenu extends MenuPanel
             JPanel newRow = RowRecordFactory.create(placeNumber, record.getPlayerName(), score);
             add(newRow);
         }
+    }
+
+    /**
+     * Called by MenuManager when swithing to another menu
+     */
+    @Override
+    public void onQuit()
+    {
+
     }
 
     private static class CupTable

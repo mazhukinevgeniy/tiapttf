@@ -1,6 +1,7 @@
 package homemade.menu.view.settings;
 
 import homemade.menu.controller.ButtonActionListener;
+import homemade.menu.controller.settings.SettingsManager.CodeButton;
 import homemade.menu.view.MenuPanel;
 import javafx.util.Pair;
 
@@ -25,12 +26,10 @@ public class SettingsMenu extends MenuPanel
     private Vector<JCheckBox> checkBoxes = new Vector<>();
     private Vector<JPanel> parameterPanels = new Vector<>();
 
-    private Map<Integer, String> buttons;
+    private Map<CodeButton, String> buttons;
     private ButtonActionListener actionListener;
 
-    private SettingsMenu() {}
-
-    public SettingsMenu(Map<String, Pair<Type, ?>> parameters, Map<Integer, String> buttons,
+    public SettingsMenu(Map<String, Pair<Type, ?>> parameters, Map<CodeButton, String> buttons,
                         ButtonActionListener actionListener)
     {
         super();
@@ -94,16 +93,16 @@ public class SettingsMenu extends MenuPanel
         }
     }
 
-    private void initializeButtonPanel(Map<Integer, String> buttons, ButtonActionListener actionListener)
+    private void initializeButtonPanel(Map<CodeButton, String> buttons, ButtonActionListener actionListener)
     {
         JPanel panel = new JPanel(new FlowLayout());
 
-        Set<Integer> keys = buttons.keySet();
-        for (int key : keys)
+        Set<CodeButton> keys = buttons.keySet();
+        for (CodeButton key : keys)
         {
             String nameButton = buttons.get(key);
             JButton button = SettingsButtonFactory.createButton(nameButton, actionListener);
-            button.setActionCommand(String.valueOf(key));
+            button.setActionCommand(String.valueOf(key.ordinal()));
             panel.add(button);
         }
         add(panel);
