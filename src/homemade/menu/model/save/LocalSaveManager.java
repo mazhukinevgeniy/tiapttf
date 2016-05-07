@@ -6,14 +6,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Marid on 16.04.2016.
- */
 public class LocalSaveManager implements SettingsSave, RecordsSave
 {
     private Save save = null;
-
-    private LocalSaveManager () {}
 
     public LocalSaveManager(String pathToSave)
     {
@@ -100,9 +95,9 @@ public class LocalSaveManager implements SettingsSave, RecordsSave
     }
 
     //there you may add new name blocks to save
-    public final class Block
+    private static final class Block
     {
-        public static final String SETTINGS = "settings";
-        public static final String RECORDS = "records";
+        private static final String SETTINGS = "settings";
+        private static final String RECORDS = "records";
     }
 }

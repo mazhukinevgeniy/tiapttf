@@ -3,9 +3,6 @@ package homemade.menu.model.records;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
-/**
- * Created by Marid on 29.04.2016.
- */
 public class Record
 {
     private static final String SEPARATOR = "&";
@@ -16,7 +13,7 @@ public class Record
 
     private Record() {}
 
-    public Record(int score, String playerName, String dataTime)
+    Record(int score, String playerName, String dataTime)
     {
         this.score = score;
         this.playerName = playerName;
@@ -55,13 +52,13 @@ public class Record
         Record record = new Record();
         try
         {
-            record.score = Integer.valueOf(fields[0]);
+            record.score = Integer.parseInt(fields[0]);
             record.playerName = fields[1];
 
             LocalDateTime.parse(fields[2]);
             record.dataTime = fields[2];
         }
-        catch (Exception e)
+        catch (Exception e) //TODO: tell me what could cause an exception here
         {
             e.printStackTrace();
             record = null;

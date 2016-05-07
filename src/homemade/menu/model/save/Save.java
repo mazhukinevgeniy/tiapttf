@@ -5,19 +5,13 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Marid on 28.03.2016.
- */
 class Save
 {
     private String pathToFile;
@@ -69,7 +63,7 @@ class Save
 
             transformer.transform(input, output);
         }
-        catch (Exception exception)
+        catch (TransformerException exception)
         {
             System.err.print("XML save error!");
         }
@@ -286,15 +280,15 @@ class Save
         }
     }
 
-    private final class Attribute
+    private static final class Attribute
     {
-        public static final String NAME = "name";
-        public static final String VALUE = "value";
+        private static final String NAME = "name";
+        private static final String VALUE = "value";
     }
 
-    private final class SaveNode
+    private static final class SaveNode
     {
-        public static final String PARAMETER = "parameter";
-        public static final String ROOT_NODE = "data";
+        private static final String PARAMETER = "parameter";
+        private static final String ROOT_NODE = "data";
     }
 }

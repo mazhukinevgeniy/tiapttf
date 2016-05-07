@@ -58,7 +58,7 @@ class NumberParameter implements ParameterFactory<JPanel, Integer>
         ((JTextField) parameterPanel.getComponent(Index.TEXT_FIELD)).setText(strValue);
     }
 
-    private class TextFieldProofreader implements FocusListener
+    private static class TextFieldProofreader implements FocusListener
     {
         private JTextField textField;
         private Integer lastValue;
