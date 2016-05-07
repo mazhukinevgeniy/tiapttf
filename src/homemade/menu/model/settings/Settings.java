@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * Created by Marid on 27.03.2016.
- */
 public class Settings
 {
     //1) add name new parameter
@@ -47,8 +44,6 @@ public class Settings
     private Map<String, Parameter<Integer>> intParameters = new HashMap<>();
 
     private SettingsSave save;
-
-    private Settings() {}
 
     public Settings(SettingsSave save)
     {

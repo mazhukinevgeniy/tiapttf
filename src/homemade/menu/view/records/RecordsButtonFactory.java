@@ -5,9 +5,6 @@ import homemade.menu.controller.ButtonActionListener;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Marid on 06.05.2016.
- */
 public class RecordsButtonFactory
 {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);

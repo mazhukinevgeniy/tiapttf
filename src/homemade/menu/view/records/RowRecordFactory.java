@@ -3,9 +3,6 @@ package homemade.menu.view.records;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Marid on 01.05.2016.
- */
 class RowRecordFactory
 {
     private static final int ROW_WIDTH = 200;

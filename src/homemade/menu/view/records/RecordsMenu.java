@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Marid on 01.05.2016.
- */
 public class RecordsMenu extends MenuPanel
 {
     private List<Record> records = null;

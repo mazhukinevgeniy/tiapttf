@@ -8,9 +8,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-/**
- * Created by Marid on 02.04.2016.
- */
 class MainMenuButtonFactory
 {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);

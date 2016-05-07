@@ -5,9 +5,6 @@ import homemade.menu.controller.ButtonActionListener;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Marid on 18.04.2016.
- */
 class SettingsButtonFactory
 {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);

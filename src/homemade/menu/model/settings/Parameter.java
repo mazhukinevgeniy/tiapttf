@@ -1,8 +1,5 @@
 package homemade.menu.model.settings;
 
-/**
- * Created by Marid on 27.03.2016.
- */
 class Parameter<Type>
 {
     public static final String INDEFINITE_NAME = "";
@@ -10,8 +7,6 @@ class Parameter<Type>
     protected String name = INDEFINITE_NAME;
     protected Type value = null;
     protected ValueChecker<Type> valueChecker = null;
-
-    public Parameter() {}
 
     public Parameter(final String name)
     {
