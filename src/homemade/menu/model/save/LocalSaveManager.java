@@ -15,11 +15,6 @@ public class LocalSaveManager implements SettingsSave, RecordsSave
         save = new Save(pathToSave);
     }
 
-    boolean isValid()
-    {
-        return save != null;
-    }
-
     @Override
     public Integer getIntSettingsValue(String parameterName)
     {

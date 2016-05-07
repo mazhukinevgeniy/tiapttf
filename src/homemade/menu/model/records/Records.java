@@ -6,9 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Marid on 29.04.2016.
- */
 public class Records
 {
 

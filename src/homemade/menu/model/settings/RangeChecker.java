@@ -1,15 +1,10 @@
 package homemade.menu.model.settings;
 
-/**
- * Created by Marid on 27.03.2016.
- */
 class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
 {
     private Type defaultValue = null;
     private Type begin = null;
     private Type end = null;
-
-    private RangeChecker() {}
 
     public RangeChecker(final Type defaultValue, final Type begin, final Type end)
     {

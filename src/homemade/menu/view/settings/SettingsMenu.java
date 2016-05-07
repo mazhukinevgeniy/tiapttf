@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-/**
- * Created by Marid on 18.04.2016.
- */
 public class SettingsMenu extends MenuPanel
 {
     private BoolParameter boolFactory = new BoolParameter();

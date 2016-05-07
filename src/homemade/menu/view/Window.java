@@ -3,9 +3,6 @@ package homemade.menu.view;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Marid on 02.04.2016.
- */
 public class Window extends JFrame
 {
     public static final String CAPTION = "there's a pattern there to follow";

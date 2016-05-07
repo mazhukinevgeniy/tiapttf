@@ -5,9 +5,6 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-/**
- * Created by Marid on 18.04.2016.
- */
 class NumberParameter implements ParameterFactory<JPanel, Integer>
 {
     private static class Index

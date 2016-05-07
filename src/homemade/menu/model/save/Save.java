@@ -17,8 +17,6 @@ class Save
     private String pathToFile;
     private Document xmlDocument;
 
-    private Save() {}
-
     public Save(String path)
     {
         pathToFile = path;
