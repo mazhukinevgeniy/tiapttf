@@ -43,9 +43,6 @@ public class ComboDetector
             verticals.add(cellCode.x());
         }
 
-        int hSize = horizontals.size();
-        int vSize = verticals.size();
-
         ComboPack pack = new ComboPack();
 
         for (int horizontal : horizontals)
