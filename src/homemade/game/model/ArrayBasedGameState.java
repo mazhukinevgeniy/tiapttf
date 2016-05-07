@@ -83,6 +83,11 @@ class ArrayBasedGameState implements GameState
         score = newScore;
     }
 
+    void updateMultiplier(int newMultiplier)
+    {
+        multiplier = newMultiplier;
+    }
+
 
     void updateFieldSnapshot( Map<CellCode, CellState> cellUpdates,
                               Map<LinkCode, Direction> linkUpdates,

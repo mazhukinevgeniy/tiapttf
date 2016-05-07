@@ -35,26 +35,27 @@ class GameScore
     void handleCombos(ComboPack pack)
     {
         int packScore = 0;
+        int packMultiplier = 0;
 
         for (Iterator<Combo> iterator = pack.comboIterator(); iterator.hasNext(); )
         {
             Combo next = iterator.next();
+            int tier = next.getLength() - minCombo;
 
-            packScore += scores[next.getLength() - minCombo];
+            packScore += scores[tier];
+            packMultiplier += tier + 1;
         }
 
         if (packScore != 0)
             synchronized(this)
             {
                 int globalMultiplier = linker.lastGameState().globalMultiplier();
-                int packMultiplier = pack.numberOfCombos();
                 packScore *= packMultiplier * (globalMultiplier + packMultiplier / 2);
 
                 score += packScore;
 
                 linker.updateScore(score);
-                //TODO: increase global multiplier
-                //TODO: add spawn stunning
+                linker.modifyGlobalMultiplier(packMultiplier);
             }
     }
 }
