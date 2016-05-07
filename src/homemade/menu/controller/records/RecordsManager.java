@@ -63,7 +63,7 @@ public class RecordsManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.RESET)
         {
-            records.emptyOut();
+            records.setDefaultRecords();
             recordsMenu.updateMenu(records.getRecords());
         }
     }

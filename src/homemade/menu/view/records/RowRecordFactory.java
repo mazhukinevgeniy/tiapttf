@@ -5,7 +5,7 @@ import java.awt.*;
 
 class RowRecordFactory
 {
-    private static final int ROW_WIDTH = 200;
+    private static final int ROW_WIDTH = 300;
     private static final int ROW_HEIGHT = 35;
 
     public static JPanel create(String place, String playerName, String score)
