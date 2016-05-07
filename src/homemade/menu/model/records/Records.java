@@ -15,9 +15,6 @@ public class Records
     private List<Record> records = new ArrayList<>();
     private RecordsSave save;
 
-
-    private Records() {}
-
     public Records(RecordsSave save)
     {
         this.save = save;
