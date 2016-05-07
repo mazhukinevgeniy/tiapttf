@@ -114,17 +114,28 @@ public class GameModelLinker
         state.updateScore(newScore);
     }
 
+    synchronized void modifyGlobalMultiplier(int change)
+    {
+        int rawMultiplier = state.globalMultiplier() + change;
+        int newMultiplier = Math.max(1, rawMultiplier);
+
+        state.updateMultiplier(newMultiplier);
+    }
+
     synchronized public void requestSpawn()
     {
         updater.takeComboChanges(spawner.spawnBlocks());
 
         Map<CellCode, CellState> marks = spawner.markCellsForSpawn();
-        if (marks.size() == 0)
+
+        if (marks.isEmpty())
         {
             stopAllFacilities();
         }
         else
         {
+            //TODO: add spawn stunning
+            modifyGlobalMultiplier(-1);
             updater.takeChanges(marks);
         }
 
