@@ -90,6 +90,7 @@ public class MenuManager implements HandlerButtons
         window.remove(currentMenu);
         setCurrentMenu(code);
         window.add(currentMenu);
+        currentMenu.onShown();
 
         if (code == MenuCode.GAME)
         {

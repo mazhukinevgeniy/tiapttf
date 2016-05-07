@@ -1,6 +1,7 @@
 package homemade.menu.view.records;
 
 import homemade.menu.controller.ButtonActionListener;
+import homemade.menu.controller.records.RecordsManager;
 import homemade.menu.controller.records.RecordsManager.CodeButton;
 import homemade.menu.model.records.Record;
 import homemade.menu.view.MenuPanel;
@@ -13,14 +14,18 @@ import java.util.Set;
 
 public class RecordsMenu extends MenuPanel
 {
+    private RecordsManager manager;
+
     private List<Record> records = null;
     private Map<CodeButton, String> buttons;
     private ButtonActionListener actionListener;
 
-    public RecordsMenu(List<Record> records, Map<CodeButton, String> buttons,
+    public RecordsMenu(RecordsManager manager,
+                       List<Record> records, Map<CodeButton, String> buttons,
                        ButtonActionListener actionListener)
     {
         super();
+        this.manager = manager;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.records = records;
@@ -80,13 +85,10 @@ public class RecordsMenu extends MenuPanel
         updateUI();
     }
 
-    /**
-     * Called by MenuManager when swithing to another menu
-     */
     @Override
-    public void onQuit()
+    public void onShown()
     {
-
+        manager.requestUpdate();
     }
 
     private static class CupTable

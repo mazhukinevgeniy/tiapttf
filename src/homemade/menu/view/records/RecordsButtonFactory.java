@@ -5,7 +5,7 @@ import homemade.menu.controller.ButtonActionListener;
 import javax.swing.*;
 import java.awt.*;
 
-public class RecordsButtonFactory
+class RecordsButtonFactory
 {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);
     private static final int WIDTH = 100;
