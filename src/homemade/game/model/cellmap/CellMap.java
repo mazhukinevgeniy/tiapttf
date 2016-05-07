@@ -19,19 +19,19 @@ public class CellMap implements CellMapReader
     private Link links[];
 
     private FieldStructure structure;
-    private CellStates states;
 
     public CellMap(FieldStructure structure, CellStates states)
     {
         this.structure = structure;
-        this.states = states;
 
         cells = new CellState[structure.getFieldSize()];
+
+        CellState emptyState = states.getState(Cell.EMPTY);
 
         for (int j = 0, height = structure.getHeight(); j < height; j++)
             for (int i = 0, width = structure.getWidth(); i < width; i++)
             {
-                cells[structure.getCellCode(i, j).hashCode()] = states.getState(Cell.EMPTY);
+                cells[structure.getCellCode(i, j).hashCode()] = emptyState;
             }
 
         int maxLinkCode = structure.getNumberOfLinks();
@@ -40,7 +40,7 @@ public class CellMap implements CellMapReader
         for (Iterator<LinkCode> iterator = structure.getLinkCodeIterator(); iterator.hasNext();)
         {
             LinkCode link = iterator.next();
-            links[link.hashCode()] = new Link(link);
+            links[link.hashCode()] = new Link();
         }
     }
 
@@ -179,5 +179,17 @@ public class CellMap implements CellMapReader
             }
         }
         //TODO: seems like there must be an opportunity to reduce code duplication
+    }
+
+    private static class Link
+    {
+        private Direction direction;
+        private int chainLength;
+
+        private Link()
+        {
+            direction = null;
+            chainLength = 0;
+        }
     }
 }
