@@ -30,10 +30,13 @@ public class MenuManager implements HandlerButtons
     private MenuPanel currentMenu;
     private Map<MenuCode, MenuPanel> menus;
 
+    private Records records;
+
     public MenuManager(Window window, Settings settings, Records records)
     {
         this.window = window;
         this.settings = settings;
+        this.records = records;
 
         Map<MenuCode, String> menuNames = createMenuNamesMap();
         MenuPanel mainMenu = new MainMenu(menuNames, new ButtonActionListener(this));
@@ -90,7 +93,7 @@ public class MenuManager implements HandlerButtons
 
         if (code == MenuCode.GAME)
         {
-            new GameController(this, window, currentMenu, new GameSettings(settings));
+            new GameController(this, window, currentMenu, new GameSettings(settings), records);
         }
 
         currentMenu.updateUI();
