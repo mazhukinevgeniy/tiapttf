@@ -55,7 +55,7 @@ public class Record
         Record record = new Record();
         try
         {
-            record.score = Integer.valueOf(fields[0]);
+            record.score = Integer.parseInt(fields[0]);
             record.playerName = fields[1];
 
             LocalDateTime.parse(fields[2]);

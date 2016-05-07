@@ -15,6 +15,6 @@ public class ButtonActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        handler.handleButtonClick(Integer.valueOf(e.getActionCommand()));
+        handler.handleButtonClick(Integer.parseInt(e.getActionCommand()));
     }
 }
