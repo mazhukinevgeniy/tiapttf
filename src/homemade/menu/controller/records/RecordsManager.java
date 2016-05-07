@@ -30,7 +30,7 @@ public class RecordsManager implements HandlerButtons
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
         Map<CodeButton, String> buttons = createButtonsMap();
-        recordsMenu = new RecordsMenu(records.getRecords(), buttons, actionListener);
+        recordsMenu = new RecordsMenu(this, records.getRecords(), buttons, actionListener);
     }
 
     private Map<CodeButton, String> createButtonsMap()
@@ -45,6 +45,11 @@ public class RecordsManager implements HandlerButtons
     public MenuPanel getRecordsMenu()
     {
         return recordsMenu;
+    }
+
+    public void requestUpdate()
+    {
+        recordsMenu.updateMenu(records.getRecords());
     }
 
     @Override

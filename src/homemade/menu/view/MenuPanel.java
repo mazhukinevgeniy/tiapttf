@@ -18,4 +18,12 @@ public class MenuPanel extends JPanel
     {
 
     }
+
+    /**
+     * Called by MenuManager when swithing to current menu
+     */
+    public void onShown()
+    {
+
+    }
 }
