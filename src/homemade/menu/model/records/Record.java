@@ -3,6 +3,10 @@ package homemade.menu.model.records;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
+/**
+ * This class has a natural ordering that is inconsistent with equals:
+ * player name is considered in equals but not in compareTo
+ */
 public class Record implements Comparable<Record>
 {
     private static final String SEPARATOR = "&";
@@ -73,5 +77,18 @@ public class Record implements Comparable<Record>
         boolean comparableByScore = score != otherScore;
 
         return comparableByScore ? (score > otherScore ? -1 : 1) : date.compareTo(otherRecord.date);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj.getClass() == getClass())
+        {
+            Record record = (Record) obj;
+
+            return score == record.score && playerName.equals(record.playerName) && date.equals(record.date);
+        }
+        else
+            return false;
     }
 }
