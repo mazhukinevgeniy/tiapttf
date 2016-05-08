@@ -4,11 +4,15 @@ import homemade.menu.model.save.RecordsSave;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
+//TODO: make sure it's synchronized and everything is saved when user closes application
 public class Records
 {
     private static final int MAX_NUMBER_OF_RECORDS = 10;
+
     private List<Record> records = new ArrayList<>();
     private RecordsSave save;
 
@@ -21,43 +25,25 @@ public class Records
     private void initializeRecords()
     {
         records = save.getRecords();
-        sortRecords();
-        if(records.size() > MAX_NUMBER_OF_RECORDS)
-        {
-            shrinkToFit();
-            rewriteSave();
-        }
-    }
 
-    private void sortRecords()
-    {
-        int size = records.size();
-        for (int i = 0; i < size; ++i)
+        if(records.size() < MAX_NUMBER_OF_RECORDS)
         {
-            Record recordI = records.get(i);
-            for (int j = i + 1; j < size; ++j)
-            {
-                Record recordJ = records.get(j);
-                if (recordI.getScore() < recordJ.getScore())
+            for (Record record : DefaultRecords.records)
+                if (!records.contains(record))
                 {
-                    records.remove(i);
-                    records.add(i, recordJ);
-                    records.remove(j);
-                    records.add(j, recordI);
-                    recordI = recordJ;
+                    records.add(record);
                 }
-            }
         }
+
+        Collections.sort(records);
+        cullRecords();
+        rewriteSave();
     }
 
-    private void shrinkToFit()
+    private void cullRecords()
     {
         int size = records.size();
-        int afterLast = MAX_NUMBER_OF_RECORDS;
-        for (int i = MAX_NUMBER_OF_RECORDS; i < size; ++i)
-        {
-            records.remove(afterLast);
-        }
+        records.subList(MAX_NUMBER_OF_RECORDS, size).clear();
     }
 
     private void rewriteSave()
@@ -65,45 +51,28 @@ public class Records
         save.deleteAllRecords();
         for (Record rec : records)
         {
-            addRecordToSave(rec);
+            save.addRecord(rec);
         }
     }
 
-    public void add(int score, String playerName, LocalDateTime dataTime)
+    public void add(int score, String playerName, LocalDateTime dateTime)
     {
-        Record record = new Record(score, playerName, dataTime.toString());
-        int index = findEligiblePlace(record.getScore());
+        Record record = new Record(score, playerName, dateTime.toString());
+
+        int index = Collections.binarySearch(records, record);
+        index = index < 0 ? -(index + 1) : index; //see binarySearch docs
+
         records.add(index, record);
-        if (records.size() > MAX_NUMBER_OF_RECORDS)
+        cullRecords();
+
+        if (new Random().nextInt(10) < 1) //we don't want to rewrite save every time but we can't let it just grow
         {
-            shrinkToFit();
             rewriteSave();
         }
         else
         {
-            addRecordToSave(record);
+            save.addRecord(record);
         }
-    }
-
-    private int findEligiblePlace(int score)
-    {
-        int size = records.size();
-        int i;
-        for (i = 0; i < size; ++i)
-        {
-            Record recordI = records.get(i);
-            if (score > recordI.getScore())
-            {
-                break;
-            }
-        }
-
-        return i;
-    }
-
-    private void addRecordToSave(Record record)
-    {
-        save.addRecord(record);
     }
 
     public List<Record> getRecords()
@@ -113,32 +82,30 @@ public class Records
 
     public void setDefaultRecords()
     {
-        save.deleteAllRecords();
-        records.clear();
-        records.addAll(ImaginaryRecords.records);
-        sortRecords();
+        records = new ArrayList<>(DefaultRecords.records);
+        Collections.sort(records);
         rewriteSave();
     }
 
-    private static class ImaginaryRecords
+    private static class DefaultRecords
     {
         private static List<Record> records = new ArrayList<>();
 
         static
         {
-            String now = LocalDateTime.now().toString();
-            records.add(new Record(5, "Прохожий", now));
-            records.add(new Record(15, "Ловкая Мышь", now));
-            records.add(new Record(100, "Бизнескот", now));
-            records.add(new Record(235, "Одноногий Голубь", now));
-            records.add(new Record(345, "Лохматый Кентавр", now));
+            String longTimeAgo = LocalDateTime.MIN.toString();
 
-            records.add(new Record(450, "Испания", now));
-            records.add(new Record(500, "Антон", now));
-            records.add(new Record(750, "Одноглазый Волшебник", now));
-            records.add(new Record(1000, "Титан", now));
-            records.add(new Record(10000, "Злой Джин", now));
+            records.add(new Record(5, "Прохожий", longTimeAgo));
+            records.add(new Record(15, "Ловкая Мышь", longTimeAgo));
+            records.add(new Record(100, "Бизнескот", longTimeAgo));
+            records.add(new Record(235, "Одноногий Голубь", longTimeAgo));
+            records.add(new Record(345, "Лохматый Кентавр", longTimeAgo));
+
+            records.add(new Record(450, "Испания", longTimeAgo));
+            records.add(new Record(500, "Антон", longTimeAgo));
+            records.add(new Record(750, "Mad Wizard", longTimeAgo));
+            records.add(new Record(1000, "Титан", longTimeAgo));
+            records.add(new Record(10000, "Злой Джинн", longTimeAgo));
         }
-
     }
 }
