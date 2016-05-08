@@ -3,21 +3,21 @@ package homemade.menu.model.records;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
-public class Record
+public class Record implements Comparable<Record>
 {
     private static final String SEPARATOR = "&";
 
     private int score;
     private String playerName;
-    private String dataTime;
+    private String date;
 
     private Record() {}
 
-    Record(int score, String playerName, String dataTime)
+    Record(int score, String playerName, String date)
     {
         this.score = score;
         this.playerName = playerName;
-        this.dataTime = dataTime;
+        this.date = date;
     }
 
     public int getScore()
@@ -30,9 +30,9 @@ public class Record
         return  playerName;
     }
 
-    public String getDataTime()
+    public String getDate()
     {
-        return dataTime;
+        return date;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Record
     {
         String string = String.valueOf(score) + SEPARATOR;
         string += playerName + SEPARATOR;
-        string += dataTime;
+        string += date;
         return string;
     }
 
@@ -56,7 +56,7 @@ public class Record
             record.playerName = fields[1];
 
             LocalDateTime.parse(fields[2]);
-            record.dataTime = fields[2];
+            record.date = fields[2];
         }
         catch (Exception e) //TODO: tell me what could cause an exception here
         {
@@ -66,4 +66,12 @@ public class Record
         return record;
     }
 
+    @Override
+    public int compareTo(Record otherRecord)
+    {
+        int otherScore = otherRecord.score;
+        boolean comparableByScore = score != otherScore;
+
+        return comparableByScore ? (score > otherScore ? -1 : 1) : date.compareTo(otherRecord.date);
+    }
 }
