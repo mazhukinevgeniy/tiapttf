@@ -13,11 +13,11 @@ public class Record implements Comparable<Record>
 
     private int score;
     private String playerName;
-    private String date;
+    private LocalDateTime date;
 
     private Record() {}
 
-    Record(int score, String playerName, String date)
+    Record(int score, String playerName, LocalDateTime date)
     {
         this.score = score;
         this.playerName = playerName;
@@ -34,7 +34,7 @@ public class Record implements Comparable<Record>
         return  playerName;
     }
 
-    public String getDate()
+    public LocalDateTime getDate()
     {
         return date;
     }
@@ -44,7 +44,7 @@ public class Record implements Comparable<Record>
     {
         String string = String.valueOf(score) + SEPARATOR;
         string += playerName + SEPARATOR;
-        string += date;
+        string += date.toString();
         return string;
     }
 
@@ -59,8 +59,7 @@ public class Record implements Comparable<Record>
             record.score = Integer.parseInt(fields[0]);
             record.playerName = fields[1];
 
-            LocalDateTime.parse(fields[2]);
-            record.date = fields[2];
+            record.date = LocalDateTime.parse(fields[2]);
         }
         catch (Exception e) //TODO: tell me what could cause an exception here
         {
