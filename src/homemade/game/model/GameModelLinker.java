@@ -124,41 +124,41 @@ public class GameModelLinker
 
     synchronized public void requestSpawn()
     {
-        updater.takeComboChanges(spawner.spawnBlocks());
+        int fieldSize = structure.getFieldSize();
 
-        Map<CellCode, CellState> marks = spawner.markCellsForSpawn();
-
-        if (marks.isEmpty())
+        if (state.globalMultiplier() > 1 && state.numberOfBlocks() > fieldSize / 2)
         {
-            stopAllFacilities();
+            modifyGlobalMultiplier(-1);
         }
         else
         {
-            //TODO: add spawn stunning
-            modifyGlobalMultiplier(-1);
-            updater.takeChanges(marks);
+            updater.takeComboChanges(spawner.spawnBlocks());
+            updater.takeChanges(spawner.markCellsForSpawn());
         }
 
         updateStates();
+
+        if (state.numberOfBlocks() == fieldSize)
+        {
+            stopAllFacilities();
+        }
     }
 
     synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell)
     {
-        boolean riskOfSpawnDenial = false;
-
-        if (cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN)
-            riskOfSpawnDenial = true;
+        boolean repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
+                                state.globalMultiplier() == 1;
 
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (cellTo.isFreeForMove() && cellFrom.isOccupiedByBlock())
+        if (cellTo.isFreeForMove() && cellFrom.isNormalBlock())
         {
-            if (riskOfSpawnDenial)
+            if (repercussions)
                 state.incrementDenyCounter();
 
             Map<CellCode, CellState> tmpMap = new HashMap<>();
-            tmpMap.put(moveFromCell, cellStates.getState(riskOfSpawnDenial ? Cell.DEAD_BLOCK : Cell.EMPTY));
+            tmpMap.put(moveFromCell, cellStates.getState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
             tmpMap.put(moveToCell, cellFrom);
 
             updater.takeComboChanges(tmpMap);

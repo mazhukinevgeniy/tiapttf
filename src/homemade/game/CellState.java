@@ -9,18 +9,15 @@ import java.util.Set;
 public class CellState
 {
     private static Set<Cell> cellFreeToMove = EnumSet.of(Cell.EMPTY, Cell.MARKED_FOR_SPAWN);
+    private static Set<Cell> blocks = EnumSet.of(Cell.OCCUPIED, Cell.DEAD_BLOCK);
 
     private Cell cellType;
     private int cellValue;
-
-    private boolean freeToMove;
 
     public CellState(Cell type, int code)
     {
         cellType = type;
         cellValue = code;
-
-        freeToMove = cellFreeToMove.contains(type);
 
         if (type == Cell.OCCUPIED && code == Cell.DEFAULT_VALUE)
             throw new RuntimeException("incorrect creation of cellState");
@@ -39,14 +36,20 @@ public class CellState
         return cellType;
     }
 
-    public boolean isOccupiedByBlock()
+    public boolean isNormalBlock()
     {
         return cellType == Cell.OCCUPIED;
     }
 
+    public boolean isAnyBlock()
+    {
+        return blocks.contains(cellType);
+    }
+
+
     public boolean isFreeForMove()
     {
-        return freeToMove;
+        return cellFreeToMove.contains(cellType);
     }
 
     public boolean isFreeForSpawn()

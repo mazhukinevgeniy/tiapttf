@@ -95,16 +95,15 @@ class ArrayBasedGameState implements GameState
     {
         immutableCopy = null;
 
-
         for (Map.Entry<CellCode, CellState> entry : cellUpdates.entrySet())
         {
             int pos = entry.getKey().hashCode();
             CellState newState = entry.getValue();
             CellState oldState = field[pos];
 
-            if (!oldState.isOccupiedByBlock() && newState.isOccupiedByBlock())
+            if (!oldState.isAnyBlock() && newState.isAnyBlock())
                 numberOfBlocks++;
-            else if (oldState.isOccupiedByBlock() && !newState.isOccupiedByBlock())
+            else if (oldState.isAnyBlock() && !newState.isAnyBlock())
                 numberOfBlocks--;
 
             field[pos] = newState;

@@ -23,7 +23,7 @@ class NumberLayer extends RenderingLayer.Cells
     protected void renderForCell(CellCode cellCode)
     {
         CellState cell = state.getCellState(cellCode);
-        if (cell.isOccupiedByBlock())
+        if (cell.isNormalBlock())
         {
             int value = cell.value();
 
