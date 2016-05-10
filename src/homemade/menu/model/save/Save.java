@@ -127,9 +127,9 @@ class Save
 
     private Node findNode(Node block, String parameterName)
     {
-        Node sought = findOf(block, parameterName, true).get(0);
+        List<Node> nodeList = findOf(block, parameterName, true);
 
-        return sought;
+        return nodeList.isEmpty() ? null : nodeList.get(0);
     }
 
     private List<Node> findNodes(Node block, String parameterName)
