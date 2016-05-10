@@ -57,7 +57,7 @@ public class Records
 
     public void add(int score, String playerName, LocalDateTime dateTime)
     {
-        Record record = new Record(score, playerName, dateTime.toString());
+        Record record = new Record(score, playerName, dateTime);
 
         int index = Collections.binarySearch(records, record);
         index = index < 0 ? -(index + 1) : index; //see binarySearch docs
@@ -93,7 +93,7 @@ public class Records
 
         static
         {
-            String longTimeAgo = LocalDateTime.MIN.toString();
+            LocalDateTime longTimeAgo = LocalDateTime.MIN;
 
             records.add(new Record(5, "Прохожий", longTimeAgo));
             records.add(new Record(15, "Ловкая Мышь", longTimeAgo));
