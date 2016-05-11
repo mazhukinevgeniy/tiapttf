@@ -10,6 +10,8 @@ import homemade.menu.view.MenuPanel;
 import homemade.menu.view.Window;
 import homemade.menu.view.gameMenu.GameMenu;
 import homemade.menu.view.mainMenu.MainMenu;
+import homemade.resources.Assets;
+import homemade.resources.links.LinkAssets.Variation;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -90,13 +92,16 @@ public class MenuManager implements HandlerButtons
         window.remove(currentMenu);
         setCurrentMenu(code);
         window.add(currentMenu);
-        currentMenu.onShown();
 
         if (code == MenuCode.GAME)
         {
+            Variation assetType = settings.get(Settings.Name.animatedLinks) ? Variation.ANIMATED : Variation.COLORED;
+            Assets.loadAssets(assetType);
+
             new GameController(this, window, currentMenu, new GameSettings(settings), records);
         }
 
+        currentMenu.onShown();
         currentMenu.updateUI();
     }
 }

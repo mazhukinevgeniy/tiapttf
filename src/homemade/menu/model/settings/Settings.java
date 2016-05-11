@@ -15,6 +15,7 @@ public class Settings
     //1) add name new parameter
     public static final class Name
     {
+        public static final String animatedLinks = "Animated links";
         public static final String isRealTime = "Real time";
         public static final String simultaneousSpawn = "Simultaneous spawn";
         public static final String spawnPeriod = "Max spawn period (ms)";
@@ -22,7 +23,7 @@ public class Settings
     }
 
     //2) add parameter to eligible list with names
-    private List<String> nameListBool = Arrays.asList(Name.isRealTime);
+    private List<String> nameListBool = Arrays.asList(Name.isRealTime, Name.animatedLinks);
 
     private List<String> nameListInt = Arrays.asList(Name.simultaneousSpawn,
                                                      Name.spawnPeriod,
@@ -33,6 +34,7 @@ public class Settings
 
     static
     {
+        checkers.put(Name.animatedLinks, new InSetChecker<>(false, true, false));
         checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
         checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 20));
         checkers.put(Name.spawnPeriod, new RangeChecker<>(2000, 100, 1000 * 60));

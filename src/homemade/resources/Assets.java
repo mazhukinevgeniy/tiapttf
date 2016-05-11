@@ -9,12 +9,9 @@ public class Assets extends AssetLoader
 {
     private static Assets instance;
 
-    synchronized public static void loadAssets()
+    synchronized public static void loadAssets(LinkAssets.Variation variation)
     {
-        if (instance == null)
-            instance = new Assets();
-        else
-            throw new RuntimeException("no need to load assets again");
+        instance = new Assets(variation);
     }
 
     synchronized public static Assets getAssets()
@@ -37,12 +34,12 @@ public class Assets extends AssetLoader
 
     private LinkAssets linkAssets;
 
-    private Assets()
+    private Assets(LinkAssets.Variation variation)
     {
         digit = new Image[10];
         disappear = new Image[3];
 
-        linkAssets = new LinkAssets(LinkAssets.Variation.COLORED);
+        linkAssets = new LinkAssets(variation);
 
         field = getImage("field.png");
 
