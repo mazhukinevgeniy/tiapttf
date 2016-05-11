@@ -1,6 +1,7 @@
 package homemade.menu.model.records;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 /**
@@ -53,19 +54,25 @@ public class Record implements Comparable<Record>
         Pattern pattern = Pattern.compile(SEPARATOR);
         String[] fields = pattern.split(string);
 
-        Record record = new Record();
-        try
+        Record record = null;
+
+        if (fields.length == 3)
         {
-            record.score = Integer.parseInt(fields[0]);
+            record = new Record();
             record.playerName = fields[1];
 
-            record.date = LocalDateTime.parse(fields[2]);
+            try
+            {
+                record.score = Integer.parseInt(fields[0]);
+                record.date = LocalDateTime.parse(fields[2]);
+            }
+            catch (NumberFormatException | DateTimeParseException e)
+            {
+                System.out.println("can't recover record: " + string);
+                record = null;
+            }
         }
-        catch (Exception e) //TODO: tell me what could cause an exception here
-        {
-            e.printStackTrace();
-            record = null;
-        }
+
         return record;
     }
 
