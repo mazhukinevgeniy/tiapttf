@@ -115,7 +115,7 @@ public class GameController implements BlockRemovalHandler, MouseInputHandler
             if (frameCounter == FRAMES_BEFORE_KEY_INPUT)
             {
                 frameCounter = 0;
-                Direction direction = keyboard.keyCodeToDirection(keyboard.extractKey());
+                Direction direction = keyboard.extractDirection();
 
                 if (direction != null)
                     model.tryMove(direction);

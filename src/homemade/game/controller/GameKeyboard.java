@@ -3,15 +3,32 @@ package homemade.game.controller;
 import homemade.game.fieldstructure.Direction;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
-/**
- * Created by user3 on 31.03.2016.
- */
 class GameKeyboard implements KeyboardInputHandler
 {
+    private static Map<Integer, Direction> keyToDirection;
+
+    static
+    {
+        keyToDirection = new HashMap<>(9);
+
+        keyToDirection.put(KeyEvent.VK_UP, Direction.TOP);
+        keyToDirection.put(KeyEvent.VK_W, Direction.TOP);
+
+        keyToDirection.put(KeyEvent.VK_DOWN, Direction.BOTTOM);
+        keyToDirection.put(KeyEvent.VK_S, Direction.BOTTOM);
+
+        keyToDirection.put(KeyEvent.VK_LEFT, Direction.LEFT);
+        keyToDirection.put(KeyEvent.VK_A, Direction.LEFT);
+
+        keyToDirection.put(KeyEvent.VK_RIGHT, Direction.RIGHT);
+        keyToDirection.put(KeyEvent.VK_D, Direction.RIGHT);
+
+        keyToDirection.put(KeyEvent.VK_UNDEFINED, null);
+    }
+
+
     private ArrayList<Integer> keyCodesPressed;
 
     /**
@@ -30,13 +47,13 @@ class GameKeyboard implements KeyboardInputHandler
      */
     private HashSet<Integer> releasedKeys;
 
-    GameController controller;
+    private GameController controller;
 
     GameKeyboard(GameController controller)
     {
         this.controller = controller;
 
-        pressableKeys = new HashSet<Integer>(4);
+        pressableKeys = new HashSet<>(8);
 
         pressableKeys.add(KeyEvent.VK_UP);
         pressableKeys.add(KeyEvent.VK_DOWN);
@@ -49,38 +66,28 @@ class GameKeyboard implements KeyboardInputHandler
 
 
         int maxKeys = pressableKeys.size();
-        keyCodesPressed = new ArrayList<Integer>(maxKeys);
-        readKeys = new HashSet<Integer>(maxKeys);
-        releasedKeys = new HashSet<Integer>(maxKeys);
+        keyCodesPressed = new ArrayList<>(maxKeys);
+        readKeys = new HashSet<>(maxKeys);
+        releasedKeys = new HashSet<>(maxKeys);
     }
 
-    Direction keyCodeToDirection(int keyCode)
-    {
-        Direction retVal = null;
-
-        if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W)
-            retVal = Direction.TOP;
-        else if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S)
-            retVal = Direction.BOTTOM;
-        else if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A)
-            retVal = Direction.LEFT;
-        else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D)
-            retVal = Direction.RIGHT;
-
-        return retVal;
-    }
-
-    synchronized int extractKey()
+    synchronized Direction extractDirection()
     {
         int size = keyCodesPressed.size();
-
-        int key = 0; //TODO: find safe named return value
+        int key = KeyEvent.VK_UNDEFINED;
 
         if (size != 0)
         {
             key = keyCodesPressed.get(size - 1);
         }
 
+        handleKeyExtraction();
+
+        return keyToDirection.get(key);
+    }
+
+    private void handleKeyExtraction()
+    {
         Iterator<Integer> iterator = keyCodesPressed.iterator();
 
         while (iterator.hasNext())
@@ -95,8 +102,6 @@ class GameKeyboard implements KeyboardInputHandler
         }
 
         readKeys.addAll(keyCodesPressed); //every remaining keyCode was read at least once anyway
-
-        return key;
     }
 
     @Override
