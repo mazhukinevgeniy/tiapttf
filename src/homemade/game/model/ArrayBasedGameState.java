@@ -85,6 +85,7 @@ class ArrayBasedGameState implements GameState
 
     void updateMultiplier(int newMultiplier)
     {
+        immutableCopy = null;
         multiplier = newMultiplier;
     }
 
