@@ -6,9 +6,6 @@ import homemade.game.view.EffectManager;
 
 import java.awt.*;
 
-/**
- * Created by user3 on 02.04.2016.
- */
 class BlockLayer extends RenderingLayer.Cells
 {
     private EffectRenderer effects;
@@ -34,7 +31,7 @@ class BlockLayer extends RenderingLayer.Cells
 
         if (type == Cell.EMPTY)
         {
-            int time = effectManager.getFadeTimeRemaining(cellCode);
+            float time = effectManager.getFadeTimeRemaining(cellCode);
 
             if (time > 0)
                 effects.renderFadingBlock(canvasX, canvasY, time, graphics);

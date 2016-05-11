@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by user3 on 02.04.2016.
- */
 public class EffectManager
 {
     private Map<CellCode, Integer> fadingBlocks;
@@ -25,13 +22,14 @@ public class EffectManager
 
     synchronized public void displayEffect(Effect effect, CellCode cell)
     {
-        int fadeTime = effect.getFullDuration();
+        int fadeTime = getDuration(effect);
 
         if (effect == Effect.FADING_BLOCK)
         {
             fadingBlocks.put(cell, fadeTime);
         }
-        else throw new Error("unknown effect at EffectManager.displayEffect(...)");
+        else
+            throw new RuntimeException("unknown effect at EffectManager.displayEffect(...)");
     }
 
     synchronized public void clearEffects()
@@ -74,13 +72,18 @@ public class EffectManager
         }
     }
 
-    synchronized public int getFadeTimeRemaining(CellCode cell)
+    synchronized public float getFadeTimeRemaining(CellCode cell)
     {
-        int time = 0;
+        float time = 0;
 
         if (fadingBlocks.containsKey(cell))
-            time = fadingBlocks.get(cell);
+            time = (float)fadingBlocks.get(cell) / getDuration(Effect.FADING_BLOCK);
 
         return time;
+    }
+
+    private int getDuration(Effect effect)
+    {
+        return 400;
     }
 }

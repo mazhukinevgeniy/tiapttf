@@ -2,9 +2,6 @@ package homemade.game.fieldstructure;
 
 import java.util.EnumMap;
 
-/**
- * Created by user3 on 31.03.2016.
- */
 public final class CellCode
 {
 
@@ -76,7 +73,7 @@ public final class CellCode
         else if (y == height - 1)
             isOnBorder[Direction.BOTTOM.ordinal()] = true;
 
-        neighbours = new EnumMap<Direction, CellCode>(Direction.class);
+        neighbours = new EnumMap<>(Direction.class);
     }
 
     @Override
@@ -91,7 +88,6 @@ public final class CellCode
     public boolean onBorder(Direction direction) { return isOnBorder[direction.ordinal()]; }
 
     /**
-     *
      * @return null if there's no such neighbour
      */
     public CellCode neighbour(Direction direction)

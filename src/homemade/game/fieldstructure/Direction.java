@@ -2,9 +2,6 @@ package homemade.game.fieldstructure;
 
 import java.util.EnumMap;
 
-/**
- * Created by user3 on 31.03.2016.
- */
 public enum Direction
 {
     LEFT()

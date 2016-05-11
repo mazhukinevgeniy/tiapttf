@@ -4,9 +4,6 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
 
-/**
- * Created by user3 on 25.03.2016.
- */
 class DigitMetadata
 {
     int digitWidth[] = new int[10];
@@ -22,7 +19,7 @@ class DigitMetadata
         offsetX = new int[size];
 
         if (size > 100)
-            throw new Error("can't compose digit metadata");
+            throw new RuntimeException("can't compose digit metadata");
 
         for (int i = 0; i < 10; i++)
         {

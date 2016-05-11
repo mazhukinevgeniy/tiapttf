@@ -90,7 +90,7 @@ public class Record implements Comparable<Record>
     @Override
     public boolean equals(Object obj)
     {
-        if (obj.getClass() == getClass())
+        if (obj != null && obj.getClass() == getClass())
         {
             Record record = (Record) obj;
 
@@ -98,5 +98,11 @@ public class Record implements Comparable<Record>
         }
         else
             return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return score + playerName.length() + date.hashCode();
     }
 }

@@ -4,9 +4,6 @@ import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 
-/**
- * Created by user3 on 02.04.2016.
- */
 class NumberLayer extends RenderingLayer.Cells
 {
     private DigitMetadata digitMetadata;

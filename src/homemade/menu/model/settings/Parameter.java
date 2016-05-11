@@ -2,9 +2,7 @@ package homemade.menu.model.settings;
 
 class Parameter<Type>
 {
-    public static final String INDEFINITE_NAME = "";
-
-    protected String name = INDEFINITE_NAME;
+    protected String name = null;
     protected Type value = null;
     protected ValueChecker<Type> valueChecker = null;
 
@@ -25,10 +23,11 @@ class Parameter<Type>
         this.value = value;
         this.valueChecker = valueChecker;
     }
+    //TODO: tell me which unused methods and constructors are safe to remove
 
     public boolean isValid()
     {
-        return name != INDEFINITE_NAME && value != null;
+        return name != null;
     }
 
     public String getName()

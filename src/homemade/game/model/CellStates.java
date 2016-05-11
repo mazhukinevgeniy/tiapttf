@@ -21,7 +21,7 @@ public class CellStates
         Set<Cell> simpleTypes = EnumSet.of(Cell.EMPTY, Cell.MARKED_FOR_SPAWN, Cell.DEAD_BLOCK);
 
         if (Cell.values().length != 4)
-            throw new Error("new cell type added, update class CellStates");
+            throw new RuntimeException("new cell type added, update class CellStates");
 
         for (Cell type : simpleTypes)
             simpleStates.put(type, new CellState(type, 0));

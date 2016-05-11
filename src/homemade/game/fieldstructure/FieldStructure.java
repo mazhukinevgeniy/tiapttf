@@ -3,9 +3,6 @@ package homemade.game.fieldstructure;
 import java.util.EnumMap;
 import java.util.Iterator;
 
-/**
- * Created by user3 on 14.04.2016.
- */
 public class FieldStructure
 {
     private static final int FIELD_WIDTH = 9;
@@ -97,7 +94,7 @@ public class FieldStructure
      */
 
     /**
-     * See, if we enumerate vertical links, it's easily done.
+     * If we enumerate vertical links, it's easily done.
      *
      * The idea of this enumeration is to numerate vertical links first,
      * and then horizontal, as if they were vertical.
@@ -124,7 +121,7 @@ public class FieldStructure
             toReturn = lower.hashCode();
         }
         else
-            throw new Error("unresolvable linkCodeAsInt call");
+            throw new RuntimeException("unresolvable linkCodeAsInt call");
 
         return toReturn;
     }

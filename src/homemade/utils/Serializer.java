@@ -2,9 +2,7 @@ package homemade.utils;
 
 import java.io.*;
 
-/**
- * Created by Marid on 29.04.2016.
- */
+//TODO: remove if it's not going to be used
 public class Serializer<ObjectType extends Serializable>
 {
     public String serialize(ObjectType object)
