@@ -68,10 +68,12 @@ public class Record implements Comparable<Record>
             }
             catch (NumberFormatException | DateTimeParseException e)
             {
-                System.out.println("can't recover record: " + string);
                 record = null;
             }
         }
+
+        if (record == null)
+            System.out.println("can't recover record: " + string);
 
         return record;
     }
