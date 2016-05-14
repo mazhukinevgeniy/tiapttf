@@ -1,59 +1,36 @@
 package homemade.menu.model.settings;
 
-class Parameter<Type> implements ParameterReadonly<Type>
+public class Parameter<Type>
 {
+    protected Class<Type> type;
     protected String name = null;
     protected Type value = null;
-    protected ValueChecker<Type> valueChecker = null;
 
-    public Parameter(final String name)
+    public Parameter(Class<Type> type, final String name)
     {
+        this.type = type;
         this.name = name;
     }
 
-    @Override
+    public Parameter(Class<Type> type, final String name, Type value)
+    {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+    }
+
     public String getName()
     {
         return name;
     }
 
-    public void setName(final String newName)
-    {
-        name = newName;
-    }
-
-    @Override
     public Type getValue()
     {
         return value;
     }
 
-    @Override
-    public Diapason<Type> getDiapason()
+    public Class<Type> getType()
     {
-        return valueChecker;
-    }
-
-    public void setValue(final Type newValue)
-    {
-        if (valueChecker.isValidValue(newValue))
-        {
-            value = newValue;
-        }
-    }
-
-    public void setDefaultValue()
-    {
-        value = valueChecker.getDefaultValue();
-    }
-
-    public void setValidValue(final Type newValue)
-    {
-        value = valueChecker.getValidValue(newValue);
-    }
-
-    public void setValueChecker(final ValueChecker<Type> valueChecker)
-    {
-        this.valueChecker = valueChecker;
+        return type;
     }
 }
