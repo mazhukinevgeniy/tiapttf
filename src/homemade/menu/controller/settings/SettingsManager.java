@@ -3,13 +3,13 @@ package homemade.menu.controller.settings;
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
+import homemade.menu.model.settings.Parameter;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.SettingsMenu;
-import javafx.util.Pair;
 
-import java.lang.reflect.Type;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class SettingsManager implements HandlerButtons
@@ -26,7 +26,7 @@ public class SettingsManager implements HandlerButtons
     private Settings settings;
     private SettingsMenu settingsMenu;
 
-    private Map<String, Pair<Type, ?>> parameters;
+    private List<Parameter<?>> parameters;
 
     public SettingsManager(MenuManager manager, Settings settings)
     {

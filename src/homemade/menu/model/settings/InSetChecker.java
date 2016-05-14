@@ -5,8 +5,6 @@ import java.util.Set;
 
 class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
 {
-    private static final int INDEFINITE_INDEX = -1;
-
     private Type defaultValue = null;
     private Set<Type> elements = null;
 
@@ -58,5 +56,24 @@ class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
     public boolean isValidValue(final Type value)
     {
         return elements.contains(value);
+    }
+
+    @Override
+    public Diapason<Type> getDiapason()
+    {
+        Type min = defaultValue;
+        Type max = defaultValue;
+        for (Type element : elements)
+        {
+            if (element.compareTo(min) < 0)
+            {
+                min = element;
+            }
+            if (element.compareTo(max) > 0)
+            {
+                max = element;
+            }
+        }
+        return new Diapason<>(min, max);
     }
 }

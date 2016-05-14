@@ -1,33 +1,22 @@
 package homemade.menu.model.settings;
 
-class Parameter<Type>
+public class Parameter<Type>
 {
+    protected Class<Type> type;
     protected String name = null;
     protected Type value = null;
-    protected ValueChecker<Type> valueChecker = null;
 
-    public Parameter(final String name)
+    public Parameter(Class<Type> type, final String name)
     {
+        this.type = type;
         this.name = name;
     }
 
-    public Parameter(final String name, final Type value)
+    public Parameter(Class<Type> type, final String name, Type value)
     {
-        this.name = name;
-        this.value = value;
-    }
-
-    public Parameter(final String name, final Type value, final ValueChecker<Type> valueChecker)
-    {
+        this.type = type;
         this.name = name;
         this.value = value;
-        this.valueChecker = valueChecker;
-    }
-    //TODO: tell me which unused methods and constructors are safe to remove
-
-    public boolean isValid()
-    {
-        return name != null;
     }
 
     public String getName()
@@ -35,41 +24,13 @@ class Parameter<Type>
         return name;
     }
 
-    public void setName(final String newName)
-    {
-        name = newName;
-    }
-
-    private boolean hasValue()
-    {
-        return value != null;
-    }
-
     public Type getValue()
     {
         return value;
     }
 
-    public void setValue(final Type newValue)
+    public Class<Type> getType()
     {
-        if (valueChecker.isValidValue(newValue))
-        {
-            value = newValue;
-        }
-    }
-
-    public void setDefaultValue()
-    {
-        value = valueChecker.getDefaultValue();
-    }
-
-    public void setValidValue(final Type newValue)
-    {
-        value = valueChecker.getValidValue(newValue);
-    }
-
-    public void setValueChecker(final ValueChecker<Type> valueChecker)
-    {
-        this.valueChecker = valueChecker;
+        return type;
     }
 }

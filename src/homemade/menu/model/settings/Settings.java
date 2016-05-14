@@ -1,13 +1,9 @@
 package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
-import javafx.util.Pair;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class Settings
@@ -42,8 +38,8 @@ public class Settings
     }
     //4) everything should work (=
 
-    private Map<String, Parameter<Boolean>> boolParameters = new HashMap<>();
-    private Map<String, Parameter<Integer>> intParameters = new HashMap<>();
+    private Map<String, ValidParameter<Boolean>> boolParameters = new HashMap<>();
+    private Map<String, ValidParameter<Integer>> intParameters = new HashMap<>();
 
     private SettingsSave save;
 
@@ -51,18 +47,18 @@ public class Settings
     {
         this.save = save;
 
-        prepareParameters(nameListBool, boolParameters);
-        prepareParameters(nameListInt, intParameters);
+        prepareParameters(nameListBool, boolParameters, Boolean.class);
+        prepareParameters(nameListInt, intParameters, Integer.class);
 
         initializeValues();
         updateAllParametersInSave();
     }
 
-    private <Type> void prepareParameters(List<String> settingNames, Map<String, Parameter<Type>> parametersMap)
+    private <Type> void prepareParameters(List<String> settingNames, Map<String, ValidParameter<Type>> parametersMap, Class<Type> type)
     {
         for (String name : settingNames)
         {
-            Parameter<Type> parameter = new Parameter<>(name);
+            ValidParameter<Type> parameter = new ValidParameter<>(type, name);
             parametersMap.put(name, parameter);
 
             ValueChecker<Type> checker = (ValueChecker<Type>)checkers.get(name);
@@ -79,13 +75,13 @@ public class Settings
         setSavedValuesToMap(intParameters, intSettingsValue);
     }
 
-    private <Type> void setSavedValuesToMap(Map<String, Parameter<Type>> parameters,
+    private <Type> void setSavedValuesToMap(Map<String, ValidParameter<Type>> parameters,
                                             Function<String, Type> saveGetSettingsValue)
     {
-        for(Map.Entry<String, Parameter<Type>> param : parameters.entrySet())
+        for(Map.Entry<String, ValidParameter<Type>> param : parameters.entrySet())
         {
             Type savedValue = saveGetSettingsValue.apply(param.getKey());
-            Parameter<Type> parameter = param.getValue();
+            ValidParameter<Type> parameter = param.getValue();
 
             if (savedValue == null)
             {
@@ -101,14 +97,14 @@ public class Settings
     //parameterName take from Settings.Name
     public <Type> void set(String parameterName, Type value)
     {
-        Parameter<Type> parameter = null;
+        ValidParameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName))
         {
-            parameter = (Parameter<Type>)boolParameters.get(parameterName);
+            parameter = (ValidParameter<Type>)boolParameters.get(parameterName);
         }
         else if (intParameters.containsKey(parameterName))
         {
-            parameter = (Parameter<Type>)intParameters.get(parameterName);
+            parameter = (ValidParameter<Type>)intParameters.get(parameterName);
         }
 
         if (parameter != null)
@@ -118,7 +114,7 @@ public class Settings
         }
     }
 
-    private void updateParameterInSave(Parameter<?> parameter)
+    private void updateParameterInSave(ValidParameter<?> parameter)
     {
         save.setSettingsValue(parameter.getName(), parameter.getValue());
     }
@@ -126,14 +122,14 @@ public class Settings
     //parameterName take from Settings.Name
     public <Type> Type get(String parameterName)
     {
-        Parameter<Type> parameter = null;
+        ValidParameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName))
         {
-            parameter = (Parameter<Type>)boolParameters.get(parameterName);
+            parameter = (ValidParameter<Type>)boolParameters.get(parameterName);
         }
         else if (intParameters.containsKey(parameterName))
         {
-            parameter = (Parameter<Type>)intParameters.get(parameterName);
+            parameter = (ValidParameter<Type>)intParameters.get(parameterName);
         }
 
         Type value = null;
@@ -176,38 +172,38 @@ public class Settings
         return namesMap;
     }
 
-    public Map<String, Pair<Type, ?>> getAllParameters()
+    public List<Parameter<?>> getAllParameters()
     {
-        Map<String, Pair<Type, ?>> parameters = new HashMap<>();
+        List<Parameter<?>> parameters = new ArrayList<>();
         for (String name : nameListBool)
         {
-            Boolean value = boolParameters.get(name).getValue();
-            parameters.put(name, new Pair<>(Boolean.TYPE, value));
+            parameters.add(boolParameters.get(name));
         }
         for (String name : nameListInt)
         {
-            Integer value = intParameters.get(name).getValue();
-            parameters.put(name, new Pair<>(Integer.TYPE, value));
+            parameters.add(intParameters.get(name));
         }
 
         return parameters;
     }
 
-    public void setParameters(Map<String, Pair<Type, ?>> parameters)
+    public void setParameters(List<Parameter<?>> parameters)
     {
-        for (String name : nameListBool)
+        for (Parameter<?> param : parameters)
         {
-            if(parameters.containsKey(name))
+            String name = param.getName();
+            if (nameListBool.contains(name))
             {
-                Boolean value = (Boolean) parameters.get(name).getValue();
+                Boolean value = (Boolean) param.getValue();
                 set(name, value);
             }
         }
-        for (String name : nameListInt)
+        for (Parameter<?> param : parameters)
         {
-            if (parameters.containsKey(name))
+            String name = param.getName();
+            if (nameListInt.contains(name))
             {
-                Integer value = (Integer) parameters.get(name).getValue();
+                Integer value = (Integer) param.getValue();
                 set(name, value);
             }
         }
@@ -221,11 +217,11 @@ public class Settings
         updateAllParametersInSave();
     }
 
-    private <Type> void resetParameters(Map<String, Parameter<Type>> parameters)
+    private <Type> void resetParameters(Map<String, ValidParameter<Type>> parameters)
     {
-        for(Map.Entry<String, Parameter<Type>> param : parameters.entrySet())
+        for(Map.Entry<String, ValidParameter<Type>> param : parameters.entrySet())
         {
-            Parameter<Type> parameter = param.getValue();
+            ValidParameter<Type> parameter = param.getValue();
             parameter.setDefaultValue();
         }
     }
@@ -233,7 +229,7 @@ public class Settings
 
     private void updateAllParametersInSave()
     {
-        Parameter<?> parameter;
+        ValidParameter<?> parameter;
         for (String name : nameListBool)
         {
             parameter = boolParameters.get(name);
