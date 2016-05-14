@@ -23,7 +23,6 @@ import java.util.Set;
 class Updater
 {
     private FieldStructure structure;
-    private CellStates cellStates;
 
     private ComboDetector comboDetector;
 
@@ -38,7 +37,6 @@ class Updater
     Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, BlockPool blockPool, ArrayBasedGameState state)
     {
         structure = linker.getStructure();
-        cellStates = linker.getCellStates();
 
         this.comboDetector = comboDetector;
 
@@ -92,7 +90,7 @@ class Updater
     {
         Map<CellCode, CellState> cellsToRemove = new HashMap<>();
 
-        CellState empty = cellStates.getState(Cell.EMPTY);
+        CellState empty = CellState.simpleState(Cell.EMPTY);
 
         Set<CellCode> comboCells = combos.cellSet();
 

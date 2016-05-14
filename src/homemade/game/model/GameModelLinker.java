@@ -20,7 +20,6 @@ import java.util.Map;
 public class GameModelLinker
 {
     private FieldStructure structure;
-    private CellStates cellStates;
 
     private CellMap cellMap;
     private SpawnManager spawner;
@@ -46,12 +45,10 @@ public class GameModelLinker
         this.structure = structure;
         this.settings = settings;
 
-        cellStates = new CellStates(structure.getFieldSize());
+        BlockPool blockPool = new BlockPool(structure.getFieldSize());
+        cellMap = new CellMap(structure);
 
-        BlockPool blockPool = new BlockPool(structure.getFieldSize(), cellStates);
-        cellMap = new CellMap(structure, cellStates);
-
-        state = new ArrayBasedGameState(structure, cellStates);
+        state = new ArrayBasedGameState(structure);
         lastGameState = state.getImmutableCopy();
 
         ComboDetector comboDetector = new ComboDetector(this, controller);
@@ -81,10 +78,6 @@ public class GameModelLinker
     synchronized public CellMapReader getMapReader()
     {
         return cellMap;
-    }
-    synchronized public CellStates getCellStates()
-    {
-        return cellStates;
     }
 
     synchronized BlockSelection getSelection()
@@ -158,7 +151,7 @@ public class GameModelLinker
                 state.incrementDenyCounter();
 
             Map<CellCode, CellState> tmpMap = new HashMap<>();
-            tmpMap.put(moveFromCell, cellStates.getState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
+            tmpMap.put(moveFromCell, CellState.simpleState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
             tmpMap.put(moveToCell, cellFrom);
 
             updater.takeComboChanges(tmpMap);

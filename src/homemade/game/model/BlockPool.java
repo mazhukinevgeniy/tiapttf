@@ -1,6 +1,5 @@
 package homemade.game.model;
 
-import homemade.game.Cell;
 import homemade.game.CellState;
 
 import java.util.LinkedList;
@@ -11,13 +10,13 @@ public class BlockPool
     private LinkedList<CellState> available;
     private Random random;
 
-    BlockPool(int max, CellStates states)
+    BlockPool(int max)
     {
         available = new LinkedList<>();
 
         for (int i = 0; i < max; i++)
         {
-            available.add(states.getState(Cell.OCCUPIED, i + 1));
+            available.add(new CellState(i + 1));
         }
 
         random = new Random();
@@ -33,7 +32,7 @@ public class BlockPool
 
     public void freeBlock(CellState state)
     {
-        available.add(state);
+        available.add(new CellState(state.value()));
     }
 
     public int blocksAvailable()

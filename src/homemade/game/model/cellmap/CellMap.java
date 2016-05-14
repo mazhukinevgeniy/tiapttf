@@ -6,7 +6,6 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.CellStates;
 
 import java.util.*;
 
@@ -20,13 +19,13 @@ public class CellMap implements CellMapReader
 
     private FieldStructure structure;
 
-    public CellMap(FieldStructure structure, CellStates states)
+    public CellMap(FieldStructure structure)
     {
         this.structure = structure;
 
         cells = new CellState[structure.getFieldSize()];
 
-        CellState emptyState = states.getState(Cell.EMPTY);
+        CellState emptyState = CellState.simpleState(Cell.EMPTY);
 
         for (int j = 0, height = structure.getHeight(); j < height; j++)
             for (int i = 0, width = structure.getWidth(); i < width; i++)

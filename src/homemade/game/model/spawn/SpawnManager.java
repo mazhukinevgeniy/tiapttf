@@ -28,7 +28,7 @@ public class SpawnManager
 
         CellMapReader cellMap = linker.getMapReader();
         spawner = new BlockSpawner(cellMap, blockPool);
-        cellMarker = new CellMarker(cellMap, blockPool, linker.getCellStates());
+        cellMarker = new CellMarker(cellMap, blockPool);
 
         GameSettings settings = linker.getSettings();
         GameSettings.GameMode mode = settings.gameMode();

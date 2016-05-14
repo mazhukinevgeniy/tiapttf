@@ -27,15 +27,16 @@ class ArrayBasedGameState implements GameState
     private int score;
     private int multiplier;
 
-    ArrayBasedGameState(FieldStructure structure, CellStates states)
+    ArrayBasedGameState(FieldStructure structure)
     {
         int fieldSize = structure.getFieldSize();
 
         field = new CellState[fieldSize];
 
+        CellState empty = CellState.simpleState(Cell.EMPTY);
         for (int i = 0; i < fieldSize; i++)
         {
-            field[i] = states.getState(Cell.EMPTY);
+            field[i] = empty;
         }
 
         int numberOfLinks = structure.getNumberOfLinks();
