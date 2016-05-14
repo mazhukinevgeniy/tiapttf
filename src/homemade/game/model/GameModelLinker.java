@@ -117,21 +117,14 @@ public class GameModelLinker
 
     synchronized public void requestSpawn()
     {
-        int fieldSize = structure.getFieldSize();
+        modifyGlobalMultiplier(-1);
 
-        if (state.globalMultiplier() > 1 && state.numberOfBlocks() > fieldSize / 2)
-        {
-            modifyGlobalMultiplier(-1);
-        }
-        else
-        {
-            updater.takeComboChanges(spawner.spawnBlocks());
-            updater.takeChanges(spawner.markCellsForSpawn());
-        }
+        updater.takeComboChanges(spawner.spawnBlocks());
+        updater.takeChanges(spawner.markCellsForSpawn());
 
         updateStates();
 
-        if (state.numberOfBlocks() == fieldSize)
+        if (state.numberOfBlocks() == structure.getFieldSize())
         {
             stopAllFacilities();
         }
