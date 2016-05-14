@@ -1,6 +1,6 @@
 package homemade.menu.model.settings;
 
-class Parameter<Type>
+class Parameter<Type> implements ParameterReadonly<Type>
 {
     protected String name = null;
     protected Type value = null;
@@ -11,25 +11,7 @@ class Parameter<Type>
         this.name = name;
     }
 
-    public Parameter(final String name, final Type value)
-    {
-        this.name = name;
-        this.value = value;
-    }
-
-    public Parameter(final String name, final Type value, final ValueChecker<Type> valueChecker)
-    {
-        this.name = name;
-        this.value = value;
-        this.valueChecker = valueChecker;
-    }
-    //TODO: tell me which unused methods and constructors are safe to remove
-
-    public boolean isValid()
-    {
-        return name != null;
-    }
-
+    @Override
     public String getName()
     {
         return name;
@@ -40,14 +22,16 @@ class Parameter<Type>
         name = newName;
     }
 
-    private boolean hasValue()
-    {
-        return value != null;
-    }
-
+    @Override
     public Type getValue()
     {
         return value;
+    }
+
+    @Override
+    public Diapason<Type> getDiapason()
+    {
+        return valueChecker;
     }
 
     public void setValue(final Type newValue)

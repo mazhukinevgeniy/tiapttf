@@ -8,9 +8,16 @@ class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
 
     public RangeChecker(final Type defaultValue, final Type begin, final Type end)
     {
-        this.begin = begin;
-        this.end = end;
-        setDefaultValue(defaultValue);
+        if (begin.compareTo(end) < 0)
+        {
+            this.begin = begin;
+            this.end = end;
+            setDefaultValue(defaultValue);
+        }
+        else
+        {
+            throw new RuntimeException("Error: begin > end");
+        }
     }
 
     private void setDefaultValue(Type defaultValue)
@@ -50,5 +57,17 @@ class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
     public boolean isValidValue(final Type value)
     {
         return begin.compareTo(value) <= 0 && value.compareTo(end) <= 0;
+    }
+
+    @Override
+    public Type getMin()
+    {
+        return begin;
+    }
+
+    @Override
+    public Type getMax()
+    {
+        return end;
     }
 }

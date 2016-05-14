@@ -59,4 +59,32 @@ class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
     {
         return elements.contains(value);
     }
+
+    @Override
+    public Type getMin()
+    {
+        Type min = defaultValue;
+        for (Type element : elements)
+        {
+            if (element.compareTo(min) < 0)
+            {
+               min = element;
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public Type getMax()
+    {
+        Type max = defaultValue;
+        for (Type element : elements)
+        {
+            if (element.compareTo(max) < 0)
+            {
+                max = element;
+            }
+        }
+        return max;
+    }
 }

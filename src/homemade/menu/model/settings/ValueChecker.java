@@ -1,6 +1,6 @@
 package homemade.menu.model.settings;
 
-interface ValueChecker<Type>
+interface ValueChecker<Type> extends Diapason<Type>
 {
     Type getDefaultValue();
     Type getValidValue(final Type uncheckedValue);
