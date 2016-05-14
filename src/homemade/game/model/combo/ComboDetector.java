@@ -73,27 +73,22 @@ public class ComboDetector
             if (nextCell != null)
             {
                 LinkCode nextLink = structure.getLinkCode(currentCell, nextCell);
-
                 int comboLength = cellMap.getChainLength(nextLink);
 
                 if (comboLength >= minCombo)
                 {
                     Set<CellCode> comboCells = new HashSet<>(comboLength);
-                    Direction comboDirection = cellMap.getLinkDirection(nextLink);
 
-                    comboCells.add(currentCell);
-                    blockRemovalHandler.blockRemoved(currentCell);
-
-                    while (nextCell != null && cellMap.getLinkDirection(currentCell, nextCell) == comboDirection)
+                    for (int i = 0; i < comboLength; i++)
                     {
-                        comboCells.add(nextCell);
-                        blockRemovalHandler.blockRemoved(nextCell);
+                        comboCells.add(currentCell);
+                        blockRemovalHandler.blockRemoved(currentCell);
 
                         currentCell = nextCell;
-                        nextCell = currentCell.neighbour(mainDirection);
+                        nextCell = (nextCell == null) ? null : nextCell.neighbour(mainDirection);
                     }
 
-                    pack.add(new Combo(comboCells));
+                    pack.add(new Combo(comboCells, comboLength - minCombo + 1));
                 }
                 else
                 {

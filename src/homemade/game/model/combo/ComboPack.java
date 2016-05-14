@@ -17,19 +17,24 @@ public class ComboPack
 {
     private ArrayList<Combo> combos;
 
+    private int tier;
+
     public ComboPack()
     {
         combos = new ArrayList<>();
+        tier = 0;
     }
 
     void add(Combo combo)
     {
         combos.add(combo);
+        tier += combo.getTier();
     }
 
     public void append(ComboPack anotherPack)
     {
         combos.addAll(anotherPack.combos);
+        tier += anotherPack.tier;
     }
 
     public Set<CellCode> cellSet()
@@ -52,4 +57,8 @@ public class ComboPack
         return combos.size();
     }
 
+    public int packTier()
+    {
+        return tier;
+    }
 }

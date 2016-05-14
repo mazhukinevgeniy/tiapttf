@@ -8,20 +8,25 @@ import java.util.Set;
 public class Combo
 {
     private Set<CellCode> cells;
-    private int length;
+    private int tier;
 
     /**
      * @param cells used without copying, creator must not modify it
      */
-    public Combo(Set<CellCode> cells)
+    public Combo(Set<CellCode> cells, int tier)
     {
+        assert tier > 0;
+
         this.cells = cells;
-        length = cells.size();
+        this.tier = tier;
     }
 
-    public int getLength()
+    /**
+     * @return 1 or more
+     */
+    public int getTier()
     {
-        return length;
+        return tier;
     }
 
     public Set<CellCode> toSet()

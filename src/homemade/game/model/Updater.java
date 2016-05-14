@@ -86,6 +86,11 @@ class Updater
         return storedCombos.numberOfCombos() > 0;
     }
 
+    int comboPackTier()
+    {
+        return storedCombos.packTier();
+    }
+
     private Map<CellCode, CellState> removeCombos(ComboPack combos)
     {
         Map<CellCode, CellState> cellsToRemove = new HashMap<>();

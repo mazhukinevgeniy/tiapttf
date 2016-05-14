@@ -8,9 +8,6 @@ import java.util.Iterator;
 class GameScore
 {
     private int score;
-    private int scores[];
-
-    private int minCombo;
 
     private GameModelLinker linker;
 
@@ -18,32 +15,18 @@ class GameScore
     {
         this.linker = linker;
         linker.updateScore(score = 0);
-
-        minCombo = linker.getSettings().minCombo();
-
-        int lengthsPossible = linker.getStructure().getMaxDimension() - minCombo + 1;
-        int baseScore = 5;
-
-        scores = new int[lengthsPossible];
-
-        for (int i = 0; i < lengthsPossible; i++)
-        {
-            scores[i] = baseScore * (1 + i);
-        }
     }
 
     void handleCombos(ComboPack pack)
     {
         int packScore = 0;
-        int packMultiplier = 0;
+        int packMultiplier = pack.packTier();
 
         for (Iterator<Combo> iterator = pack.comboIterator(); iterator.hasNext(); )
         {
             Combo next = iterator.next();
-            int tier = next.getLength() - minCombo;
 
-            packScore += scores[tier];
-            packMultiplier += tier + 1;
+            packScore += getScore(next.getTier());
         }
 
         if (packScore != 0)
@@ -57,5 +40,12 @@ class GameScore
                 linker.updateScore(score);
                 linker.modifyGlobalMultiplier(packMultiplier);
             }
+    }
+
+    private int getScore(int tier)
+    {
+        int baseScore = 5;
+
+        return baseScore * tier * tier;
     }
 }
