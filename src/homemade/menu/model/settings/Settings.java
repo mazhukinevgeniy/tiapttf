@@ -47,8 +47,8 @@ public class Settings
     {
         this.save = save;
 
-        prepareParameters(nameListBool, boolParameters, Boolean.TYPE);
-        prepareParameters(nameListInt, intParameters, Integer.TYPE);
+        prepareParameters(nameListBool, boolParameters, Boolean.class);
+        prepareParameters(nameListInt, intParameters, Integer.class);
 
         initializeValues();
         updateAllParametersInSave();

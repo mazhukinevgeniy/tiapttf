@@ -47,11 +47,11 @@ public class SettingsMenu extends MenuPanel
     {
         for(Parameter<?> param : parameters)
         {
-            if (param.getType() == Boolean.TYPE)
+            if (param.getType() == Boolean.class)
             {
                 createBoolSetting(param.getName(), (Boolean) param.getValue());
             }
-            else if (param.getType() == Integer.TYPE)
+            else if (param.getType() == Integer.class)
             {
                 createNumberSetting(param.getName(), (Integer) param.getValue());
             }
@@ -102,8 +102,8 @@ public class SettingsMenu extends MenuPanel
     public List<Parameter<?>> getParameters()
     {
         List<Parameter<?>> newParameters = new ArrayList<>();
-        addValuesTo(newParameters, checkBoxes, boolFactory, Boolean.TYPE);
-        addValuesTo(newParameters, parameterPanels, numberFactory, Integer.TYPE);
+        addValuesTo(newParameters, checkBoxes, boolFactory, Boolean.class);
+        addValuesTo(newParameters, parameterPanels, numberFactory, Integer.class);
         parameters = newParameters;
 
         return parameters;
