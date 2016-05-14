@@ -1,8 +1,10 @@
 package homemade.game.view.layers;
 
 import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.view.EffectManager;
+import homemade.resources.blocks.BlockAssets;
 
 import java.awt.*;
 
@@ -11,12 +13,16 @@ class BlockLayer extends RenderingLayer.Cells
     private EffectRenderer effects;
     private EffectManager effectManager;
 
+    private BlockAssets blockAssets;
+
     BlockLayer(EffectManager effectManager)
     {
         super();
 
         this.effectManager = effectManager;
         effects = new EffectRenderer();
+
+        blockAssets = assets.getBlockAssets();
     }
 
     @Override
@@ -27,7 +33,8 @@ class BlockLayer extends RenderingLayer.Cells
             graphics.drawImage(assets.getPlaceToMove(), canvasX, canvasY, null);
         }
 
-        Cell type = state.getCellState(cellCode).type();
+        CellState cellState = state.getCellState(cellCode);
+        Cell type = cellState.type();
 
         if (type == Cell.EMPTY)
         {
@@ -46,11 +53,11 @@ class BlockLayer extends RenderingLayer.Cells
             }
             else if (type == Cell.OCCUPIED)
             {
-                sprite = assets.getBlock(selectionState.isSelected(cellCode));
+                sprite = blockAssets.getBlock(selectionState.isSelected(cellCode), cellState.effect());
             }
             else if (type == Cell.DEAD_BLOCK)
             {
-                sprite = assets.getDeadBlock();
+                sprite = blockAssets.getDeadBlock();
             }
             else
                 throw new RuntimeException("unknown cell type");

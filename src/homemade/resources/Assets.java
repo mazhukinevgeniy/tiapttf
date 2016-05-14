@@ -1,5 +1,6 @@
 package homemade.resources;
 
+import homemade.resources.blocks.BlockAssets;
 import homemade.resources.links.LinkAssets;
 import homemade.utils.AssetLoader;
 
@@ -24,15 +25,13 @@ public class Assets extends AssetLoader
 
 
     private Image field;
-    private Image normalBlock;
-    private Image normalBlockSelected;
-    private Image deadBlock;
     private Image smallBlock;
     private Image placeToMove;
     private Image digit[];
     private Image disappear[];
 
     private LinkAssets linkAssets;
+    private BlockAssets blockAssets;
 
     private Assets(LinkAssets.Variation variation)
     {
@@ -40,15 +39,11 @@ public class Assets extends AssetLoader
         disappear = new Image[3];
 
         linkAssets = new LinkAssets(variation);
+        blockAssets = new BlockAssets();
 
         field = getImage("field.png");
 
-        normalBlock = getImage("normal_block.png");
-        normalBlockSelected = getImage("normal_block_selected.png");
-
-        deadBlock = getImage("gray_block.png");
         smallBlock = getImage("small_block.png");
-
         placeToMove = getImage("place2move.png");
 
         for (int i = 0; i < 10; i++)
@@ -67,19 +62,9 @@ public class Assets extends AssetLoader
         return field;
     }
 
-    public Image getDeadBlock()
-    {
-        return deadBlock;
-    }
-
     public Image getSmallBlock()
     {
         return smallBlock;
-    }
-
-    public Image getBlock(boolean selected)
-    {
-        return selected ? normalBlockSelected : normalBlock;
     }
 
     public Image getPlaceToMove()
@@ -105,5 +90,10 @@ public class Assets extends AssetLoader
     public LinkAssets getLinkAssets()
     {
         return linkAssets;
+    }
+
+    public BlockAssets getBlockAssets()
+    {
+        return blockAssets;
     }
 }
