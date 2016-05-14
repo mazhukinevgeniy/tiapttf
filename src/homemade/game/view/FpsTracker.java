@@ -2,6 +2,7 @@ package homemade.game.view;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,6 +43,7 @@ class FpsTracker
 
         long fps = ((frames - 1) * nanosPerSecond) / divider;
 
-        System.out.println("fps is " + fps);
+        if (new Random().nextInt(100) < 10)
+            System.out.println("fps is " + fps);
     }
 }
