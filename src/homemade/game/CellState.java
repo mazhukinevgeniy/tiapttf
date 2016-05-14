@@ -64,6 +64,11 @@ public class CellState
         return cellValue;
     }
 
+    public ComboEffect effect()
+    {
+        return effect;
+    }
+
     /**
      * I think we need this method for view
      */

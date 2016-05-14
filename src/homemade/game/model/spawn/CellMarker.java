@@ -52,6 +52,49 @@ class CellMarker
         return changes;
     }
 
+    Map<CellCode, CellState> markBlocks(Iterator<CellCode> iterator, int tier)
+    {
+        Map<CellCode, CellState> changes = new HashMap<>();
+
+        int explosions = tier / 2;
+        tier = tier - explosions * 2;
+        int bonusTiers = tier;
+
+        LinkedList<Cell.ComboEffect> effects = new LinkedList<>();
+
+        for (int i = 0; i < explosions; i++)
+            effects.add(Cell.ComboEffect.EXPLOSION);
+
+        for (int i = 0; i < bonusTiers; i++)
+            effects.add(Cell.ComboEffect.EXTRA_COMBO_TIER);
+        //TODO: cellMarker has nothing to do with it, just pass the list from the linker
+
+
+        LinkedList<CellCode> availableBlocks = new LinkedList<>();
+        while (iterator.hasNext())
+        {
+            CellCode cellCode = iterator.next();
+            CellState cellState = cellMap.getCell(cellCode);
+
+            if (cellState.isNormalBlock() && cellState.effect() == null)
+                availableBlocks.add(cellCode);
+        }
+
+        while (!availableBlocks.isEmpty() && !effects.isEmpty())
+        {
+            int position = random.nextInt(availableBlocks.size());
+
+            CellCode cellCode = availableBlocks.remove(position);
+            CellState newCellState = new CellState(cellMap.getCell(cellCode), effects.removeFirst());
+
+            System.out.println("marked block: " + newCellState.value() + ", " + newCellState.effect().toString());
+
+            changes.put(cellCode, newCellState);
+        }
+
+        return changes;
+    }
+
     Map<CellCode, CellState> markForSpawn(Iterator<CellCode> iterator, int targetAmount)
     {
         Map<CellCode, CellState> changes = new HashMap<>();
@@ -84,4 +127,5 @@ class CellMarker
         return changes;
     }
 
+    //TODO: try to reduce code duplication
 }

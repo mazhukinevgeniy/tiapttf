@@ -171,6 +171,9 @@ public class GameModelLinker
     {
         if (updater.hasCellChanges())
         {
+            int comboPackTier = updater.comboPackTier();
+            updater.takeChanges(spawner.markBlocksWithEffects(comboPackTier));
+
             selection.updateSelectionState();
             updater.flush();
         }

@@ -52,6 +52,11 @@ public class SpawnManager
         return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
     }
 
+    public Map<CellCode, CellState> markBlocksWithEffects(int tier)
+    {
+        return cellMarker.markBlocks(structure.getCellCodeIterator(), tier);
+    }
+
     public Map<CellCode, CellState> spawnDeadBlocks()
     {
         return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.DEAD_BLOCK, 5);
