@@ -1,7 +1,6 @@
 package homemade.game.model.combo;
 
 import homemade.game.Cell;
-import homemade.game.CellState;
 import homemade.game.Combo;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.fieldstructure.CellCode;
