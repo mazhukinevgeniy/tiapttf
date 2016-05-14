@@ -1,5 +1,7 @@
 package homemade.game.model.combo;
 
+import homemade.game.Cell;
+import homemade.game.CellState;
 import homemade.game.Combo;
 import homemade.game.controller.BlockRemovalHandler;
 import homemade.game.fieldstructure.CellCode;
@@ -78,17 +80,28 @@ public class ComboDetector
                 if (comboLength >= minCombo)
                 {
                     Set<CellCode> comboCells = new HashSet<>(comboLength);
+                    int comboTier = comboLength - minCombo + 1;
+
+                    CellCode lastCell = currentCell;
 
                     for (int i = 0; i < comboLength; i++)
                     {
+                        currentCell = lastCell;
+                        nextCell = lastCell.neighbour(mainDirection);
+
+                        if (cellMap.getCell(currentCell).effect() == Cell.ComboEffect.EXTRA_COMBO_TIER)
+                            comboTier++;
+
                         comboCells.add(currentCell);
                         blockRemovalHandler.blockRemoved(currentCell);
 
-                        currentCell = nextCell;
-                        nextCell = (nextCell == null) ? null : nextCell.neighbour(mainDirection);
+                        lastCell = nextCell;
                     }
 
-                    pack.add(new Combo(comboCells, comboLength - minCombo + 1));
+                    System.out.println("length " + comboLength + " tier " + comboTier);
+                    pack.add(new Combo(comboCells, comboTier));
+
+                    //currentCell must be the last cell of combo after this block
                 }
                 else
                 {
