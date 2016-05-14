@@ -1,7 +1,23 @@
 package homemade.menu.model.settings;
 
-public interface Diapason<Type>
+public class Diapason<Type>
 {
-    Type getMin();
-    Type getMax();
+    private Type min;
+    private Type max;
+
+    public Diapason(Type min, Type max)
+    {
+        this.min = min;
+        this.max = max;
+    }
+
+    public Type getMin()
+    {
+        return min;
+    }
+
+    public Type getMax()
+    {
+        return max;
+    }
 }

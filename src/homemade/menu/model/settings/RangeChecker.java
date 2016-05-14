@@ -60,14 +60,8 @@ class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type>
     }
 
     @Override
-    public Type getMin()
+    public Diapason<Type> getDiapason()
     {
-        return begin;
-    }
-
-    @Override
-    public Type getMax()
-    {
-        return end;
+        return new Diapason<>(begin, end);
     }
 }
