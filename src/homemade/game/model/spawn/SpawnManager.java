@@ -62,6 +62,11 @@ public class SpawnManager
         return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.DEAD_BLOCK, 5);
     }
 
+    public Map<CellCode, CellState> removeRandomBlocks()
+    {
+        return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.EMPTY, 25);
+    }
+
     public SpawnTimer spawnTimer()
     {
         return timer;

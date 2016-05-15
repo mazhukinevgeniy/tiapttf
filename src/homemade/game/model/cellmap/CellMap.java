@@ -6,6 +6,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.BlockPool;
 
 import java.util.*;
 
@@ -19,9 +20,12 @@ public class CellMap implements CellMapReader
 
     private FieldStructure structure;
 
-    public CellMap(FieldStructure structure)
+    private BlockPool blockPool;
+
+    public CellMap(FieldStructure structure, BlockPool blockPool)
     {
         this.structure = structure;
+        this.blockPool = blockPool;
 
         cells = new CellState[structure.getFieldSize()];
 
@@ -70,27 +74,36 @@ public class CellMap implements CellMapReader
 
         Set<LinkCode> linksToUpdate = new HashSet<>(keys.size() * 4);
 
+        Set<CellState> removedBlocks = new HashSet<>();
+        Set<Integer> addedBlockNumbers = new HashSet<>();
+
         for (CellCode key : keys)
         {
             CellState newState = changes.get(key);
             CellState oldState = cells[key.hashCode()];
 
-            if (newState != oldState)
+            cells[key.hashCode()] = newState;
+
+            for (Direction direction : Direction.values())
             {
-                cells[key.hashCode()] = newState;
+                CellCode neighbour = key.neighbour(direction);
 
-                for (Direction direction : Direction.values())
+                if (neighbour != null)
                 {
-                    CellCode neighbour = key.neighbour(direction);
-
-                    if (neighbour != null)
-                    {
-                        linksToUpdate.add(structure.getLinkCode(key, neighbour));
-                    }
+                    linksToUpdate.add(structure.getLinkCode(key, neighbour));
                 }
             }
-            else
-                System.out.println("no change in cellmap");
+
+            if (oldState.isNormalBlock())
+                removedBlocks.add(oldState);
+            if (newState.isNormalBlock())
+                addedBlockNumbers.add(newState.value());
+        }
+
+        for (CellState removedBlock : removedBlocks)
+        {
+            if (!addedBlockNumbers.contains(removedBlock.value()))
+                blockPool.freeBlock(removedBlock);
         }
 
         for (LinkCode linkCode : linksToUpdate)

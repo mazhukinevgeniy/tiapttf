@@ -28,13 +28,12 @@ class Updater
 
     private CellMap cellMap;
     private GameScore gameScore;
-    private BlockPool blockPool;
     private ArrayBasedGameState state;
 
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, BlockPool blockPool, ArrayBasedGameState state)
+    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedGameState state)
     {
         structure = linker.getStructure();
 
@@ -42,7 +41,6 @@ class Updater
 
         this.cellMap = cellMap;
         this.gameScore = gameScore;
-        this.blockPool = blockPool;
         this.state = state;
 
         storedChanges = new HashSet<>();
@@ -101,8 +99,6 @@ class Updater
 
         for (CellCode cellCode : comboCells)
         {
-            blockPool.freeBlock(cellMap.getCell(cellCode));
-
             cellsToRemove.put(cellCode, empty);
         }
 

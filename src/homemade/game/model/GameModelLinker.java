@@ -46,7 +46,7 @@ public class GameModelLinker
         this.settings = settings;
 
         BlockPool blockPool = new BlockPool(structure.getFieldSize());
-        cellMap = new CellMap(structure);
+        cellMap = new CellMap(structure, blockPool);
 
         state = new ArrayBasedGameState(structure);
         lastGameState = state.getImmutableCopy();
@@ -54,7 +54,7 @@ public class GameModelLinker
         ComboDetector comboDetector = new ComboDetector(this, controller);
         GameScore gameScore = new GameScore(this);
 
-        updater = new Updater(this, comboDetector, cellMap, gameScore, blockPool, state);
+        updater = new Updater(this, comboDetector, cellMap, gameScore, state);
 
         spawner = new SpawnManager(this, blockPool);
         selection = new BlockSelection(this);
@@ -126,7 +126,21 @@ public class GameModelLinker
 
         if (state.numberOfBlocks() == structure.getFieldSize())
         {
-            stopAllFacilities();
+            int multiplier = state.globalMultiplier();
+
+            if (multiplier > 1)
+            {
+                modifyGlobalMultiplier(-multiplier);
+
+                updater.takeChanges(spawner.removeRandomBlocks());
+                updateStates();
+                System.out.println("multiplier consumed");
+            }
+            else
+            {
+                stopAllFacilities();
+                System.out.println("no multiplier");
+            }
         }
     }
 
