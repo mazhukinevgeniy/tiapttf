@@ -109,10 +109,15 @@ public class GameModelLinker
 
     synchronized void modifyGlobalMultiplier(int change)
     {
-        int rawMultiplier = state.globalMultiplier() + change;
+        int oldMultiplier = state.globalMultiplier();
+        int rawMultiplier = oldMultiplier + change;
         int newMultiplier = Math.max(1, rawMultiplier);
 
-        state.updateMultiplier(newMultiplier);
+        if (oldMultiplier != newMultiplier)
+        {
+            state.updateMultiplier(newMultiplier);
+            controller.multiplierChanged(change);
+        }
     }
 
     synchronized public void requestSpawn()

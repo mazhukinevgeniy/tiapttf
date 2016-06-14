@@ -1,6 +1,5 @@
 package homemade.game.controller;
 
-import homemade.game.Effect;
 import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
@@ -84,9 +83,12 @@ public class GameController implements BlockRemovalHandler, MouseInputHandler
 
     public synchronized void blockRemoved(CellCode atCell)
     {
-        Effect effect = Effect.FADING_BLOCK;
+        view.getEffectManager().addFadingBlock(atCell);
+    }
 
-        view.getEffectManager().displayEffect(effect, atCell);
+    public synchronized void multiplierChanged(int change)
+    {
+        view.getEffectManager().blink(change > 0);
     }
 
     synchronized void requestPauseToggle()

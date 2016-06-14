@@ -28,6 +28,7 @@ public class GameView
 
     private FieldStructure structure;
 
+    private Container container;
     private BufferStrategy strategy;
     private EffectManager effectManager;
 
@@ -47,6 +48,7 @@ public class GameView
         fpsTracker = new FpsTracker();
 
         this.structure = structure;
+        this.container = container;
 
         final int CANVAS_WIDTH = GRID_OFFSET_X + GRID_WIDTH;
         final int CANVAS_HEIGHT = GRID_OFFSET_Y + GRID_HEIGHT;
@@ -94,6 +96,8 @@ public class GameView
     {
         effectManager.measureTimePassed();
         fpsTracker.addTimestamp();
+
+        container.setBackground(effectManager.getBackgroundColor());
 
         // Render single frame
         do
