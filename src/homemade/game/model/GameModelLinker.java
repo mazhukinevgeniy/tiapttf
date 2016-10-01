@@ -157,7 +157,7 @@ public class GameModelLinker
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (cellTo.isFreeForMove() && cellFrom.isNormalBlock())
+        if (cellTo.isFreeForMove() && cellFrom.isMovable())
         {
             if (repercussions)
                 state.incrementDenyCounter();

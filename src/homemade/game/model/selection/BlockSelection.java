@@ -37,7 +37,7 @@ public class BlockSelection
 
     public synchronized void activateCell(CellCode eventCell)
     {
-        if (cellMapReader.getCell(eventCell).isNormalBlock())
+        if (cellMapReader.getCell(eventCell).isMovable())
         {
             selection.clear();
             selection.add(eventCell);

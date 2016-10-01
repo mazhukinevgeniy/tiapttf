@@ -82,6 +82,8 @@ public class CellState
         return cellType == Cell.OCCUPIED;
     }
 
+    public boolean isMovable() { return isNormalBlock() && effect != ComboEffect.EXTRA_BASE_TIER; }
+
     public boolean isAnyBlock()
     {
         return blocks.contains(cellType);
