@@ -82,7 +82,7 @@ public class CellState
         return cellType == Cell.OCCUPIED;
     }
 
-    public boolean isMovable() { return isNormalBlock() && effect != ComboEffect.EXTRA_BASE_TIER; }
+    public boolean isMovable() { return isNormalBlock() && effect != ComboEffect.IMMOVABLE; }
 
     public boolean isAnyBlock()
     {

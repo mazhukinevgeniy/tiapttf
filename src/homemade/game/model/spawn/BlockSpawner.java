@@ -42,7 +42,7 @@ class BlockSpawner
             changes.put(cells.remove(pos),
                         new CellState(Cell.OCCUPIED,
                                       blockValuePool.takeBlockValue(),
-                                      Cell.ComboEffect.EXTRA_BASE_TIER));
+                                      Cell.ComboEffect.IMMOVABLE));
 
             blocksToImmobilize--;
             cSize--;

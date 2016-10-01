@@ -10,6 +10,7 @@ import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,6 +66,9 @@ public class ComboDetector
      */
     private void iterateThroughTheLine(ComboPack pack, CellCode start, Direction mainDirection)
     {
+        Set<Cell.ComboEffect> extraTierEffects =
+                EnumSet.of(Cell.ComboEffect.EXTRA_COMBO_TIER, Cell.ComboEffect.IMMOVABLE);
+
         CellCode currentCell = start;
 
         while (currentCell != null)
@@ -88,7 +92,7 @@ public class ComboDetector
                         currentCell = lastCell;
                         nextCell = lastCell.neighbour(mainDirection);
 
-                        if (cellMap.getCell(currentCell).effect() == Cell.ComboEffect.EXTRA_COMBO_TIER)
+                        if (extraTierEffects.contains(cellMap.getCell(currentCell).effect()))
                             comboTier++;
 
                         comboCells.add(currentCell);
