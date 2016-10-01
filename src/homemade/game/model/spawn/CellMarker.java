@@ -3,7 +3,7 @@ package homemade.game.model.spawn;
 import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.BlockPool;
+import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.*;
@@ -14,14 +14,14 @@ import java.util.*;
 class CellMarker
 {
     private CellMapReader cellMap;
-    private BlockPool blockPool;
+    private BlockValuePool blockValuePool;
 
     private Random random;
 
-    CellMarker(CellMapReader cellMap, BlockPool blockPool)
+    CellMarker(CellMapReader cellMap, BlockValuePool blockValuePool)
     {
         this.cellMap = cellMap;
-        this.blockPool = blockPool;
+        this.blockValuePool = blockValuePool;
 
         random = new Random();
     }
@@ -99,7 +99,7 @@ class CellMarker
     {
         Map<CellCode, CellState> changes = new HashMap<>();
 
-        int canMark = blockPool.blocksAvailable();
+        int canMark = blockValuePool.blocksAvailable();
 
         if (canMark > 0)
         {

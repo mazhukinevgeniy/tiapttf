@@ -3,7 +3,7 @@ package homemade.game.model.spawn;
 import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.BlockPool;
+import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.HashMap;
@@ -13,12 +13,12 @@ import java.util.Map;
 class BlockSpawner
 {
     private CellMapReader cellMap;
-    private BlockPool blockPool;
+    private BlockValuePool blockValuePool;
 
-    BlockSpawner(CellMapReader cellMap, BlockPool blockPool)
+    BlockSpawner(CellMapReader cellMap, BlockValuePool blockValuePool)
     {
         this.cellMap = cellMap;
-        this.blockPool = blockPool;
+        this.blockValuePool = blockValuePool;
     }
 
     Map<CellCode, CellState> spawnBlocks(Iterator<CellCode> iterator)
@@ -31,7 +31,7 @@ class BlockSpawner
 
             if (cellMap.getCell(cellCode).type() == Cell.MARKED_FOR_SPAWN)
             {
-                changes.put(cellCode, blockPool.takeBlock());
+                changes.put(cellCode, new CellState(blockValuePool.takeBlockValue()));
             }
         }
 

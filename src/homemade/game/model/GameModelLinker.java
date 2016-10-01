@@ -45,8 +45,8 @@ public class GameModelLinker
         this.structure = structure;
         this.settings = settings;
 
-        BlockPool blockPool = new BlockPool(structure.getFieldSize());
-        cellMap = new CellMap(structure, blockPool);
+        BlockValuePool blockValuePool = new BlockValuePool(structure.getFieldSize());
+        cellMap = new CellMap(structure, blockValuePool);
 
         state = new ArrayBasedGameState(structure);
         lastGameState = state.getImmutableCopy();
@@ -56,7 +56,7 @@ public class GameModelLinker
 
         updater = new Updater(this, comboDetector, cellMap, gameScore, state);
 
-        spawner = new SpawnManager(this, blockPool);
+        spawner = new SpawnManager(this, blockValuePool);
         selection = new BlockSelection(this);
 
         GameMode mode = settings.gameMode();

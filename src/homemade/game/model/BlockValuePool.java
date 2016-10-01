@@ -1,28 +1,26 @@
 package homemade.game.model;
 
-import homemade.game.CellState;
-
 import java.util.LinkedList;
 import java.util.Random;
 
-public class BlockPool
+public class BlockValuePool
 {
-    private LinkedList<CellState> available;
+    private LinkedList<Integer> available;
     private Random random;
 
-    BlockPool(int max)
+    BlockValuePool(int max)
     {
         available = new LinkedList<>();
 
         for (int i = 0; i < max; i++)
         {
-            available.add(new CellState(i + 1));
+            available.add(Integer.valueOf(i + 1));
         }
 
         random = new Random();
     }
 
-    public CellState takeBlock()
+    public Integer takeBlockValue()
     {
         int length = available.size();
         int position = random.nextInt(length);
@@ -30,9 +28,9 @@ public class BlockPool
         return available.remove(position);
     }
 
-    public void freeBlock(CellState state)
+    public void freeBlockValue(Integer value)
     {
-        available.add(new CellState(state.value()));
+        available.add(value);
     }
 
     public int blocksAvailable()

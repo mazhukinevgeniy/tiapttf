@@ -6,7 +6,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.BlockPool;
+import homemade.game.model.BlockValuePool;
 
 import java.util.*;
 
@@ -20,12 +20,12 @@ public class CellMap implements CellMapReader
 
     private FieldStructure structure;
 
-    private BlockPool blockPool;
+    private BlockValuePool blockValuePool;
 
-    public CellMap(FieldStructure structure, BlockPool blockPool)
+    public CellMap(FieldStructure structure, BlockValuePool blockValuePool)
     {
         this.structure = structure;
-        this.blockPool = blockPool;
+        this.blockValuePool = blockValuePool;
 
         cells = new CellState[structure.getFieldSize()];
 
@@ -102,8 +102,10 @@ public class CellMap implements CellMapReader
 
         for (CellState removedBlock : removedBlocks)
         {
-            if (!addedBlockNumbers.contains(removedBlock.value()))
-                blockPool.freeBlock(removedBlock);
+            Integer val = Integer.valueOf(removedBlock.value());
+
+            if (!addedBlockNumbers.contains(val))
+                blockValuePool.freeBlockValue(val);
         }
 
         for (LinkCode linkCode : linksToUpdate)
