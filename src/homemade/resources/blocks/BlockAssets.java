@@ -30,6 +30,7 @@ public class BlockAssets extends AssetLoader
         unselectedBlocks.put(null, getImage("normal_block.png"));
         unselectedBlocks.put(ComboEffect.EXTRA_COMBO_TIER, getImage("special_block.png"));
         unselectedBlocks.put(ComboEffect.EXPLOSION, getImage("normal_block.png"));
+        unselectedBlocks.put(ComboEffect.EXTRA_BASE_TIER, getImage("immovable_block.png"));
 
         deadBlock = getImage("gray_block.png");
     }

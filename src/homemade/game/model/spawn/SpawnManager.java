@@ -9,6 +9,7 @@ import homemade.game.model.BlockValuePool;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class SpawnManager
@@ -44,7 +45,10 @@ public class SpawnManager
 
     public Map<CellCode, CellState> spawnBlocks()
     {
-        return spawner.spawnBlocks(structure.getCellCodeIterator());
+        int blocksToImmobilize = 1; //let's say it's either 0 or 1
+        //TODO: add mechanic to determine whether we immobilize blocks or not
+
+        return spawner.spawnBlocks(structure.getCellCodeIterator(), blocksToImmobilize);
     }
 
     public Map<CellCode, CellState> markCellsForSpawn()

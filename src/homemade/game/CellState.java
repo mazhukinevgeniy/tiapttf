@@ -52,7 +52,7 @@ public class CellState
             throw new RuntimeException("incorrect creation of cellState with effect");
     }
 
-    private CellState(Cell type, int code, ComboEffect effect)
+    public CellState(Cell type, int code, ComboEffect effect)
     {
         cellType = type;
         cellValue = code;
