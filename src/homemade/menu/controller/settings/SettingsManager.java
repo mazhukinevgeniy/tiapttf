@@ -16,25 +16,34 @@ public class SettingsManager implements HandlerButtons
 {
     public enum CodeButton
     {
-        RESET,
+        TURN_BASED_EASY,
+        TURN_BASED_MEDIUM,
+        TURN_BASED_HARD,
+        REALTIME_EASY,
+        REALTIME_MEDIUM,
+        REALTIME_HARD,
         BACK_TO_MENU,
-        APPLY
+        CUSTOM
     }
 
-    private MenuManager manager;
+    private MenuManager mainManager;
 
     private Settings settings;
     private SettingsMenu settingsMenu;
 
+    private CustomManager customManager;
+
     private List<Parameter<?>> parameters;
 
-    public SettingsManager(MenuManager manager, Settings settings)
+    public SettingsManager(MenuManager mainManager, Settings settings)
     {
-        this.manager = manager;
+        this.mainManager = mainManager;
         this.settings = settings;
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
         parameters = settings.getAllParameters();
+        customManager = new CustomManager(this, parameters);
+
         Map<CodeButton, String> buttons = createButtonsMap();
         settingsMenu = new SettingsMenu(parameters, buttons, actionListener);
     }
@@ -42,9 +51,14 @@ public class SettingsManager implements HandlerButtons
     private Map<CodeButton, String> createButtonsMap()
     {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
-        buttons.put(CodeButton.RESET, "Reset");
+        buttons.put(CodeButton.TURN_BASED_EASY, "Easy");
+        buttons.put(CodeButton.TURN_BASED_MEDIUM, "Medium");
+        buttons.put(CodeButton.TURN_BASED_HARD, "Hard");
+        buttons.put(CodeButton.REALTIME_EASY, "Easy");
+        buttons.put(CodeButton.REALTIME_MEDIUM, "Medium");
+        buttons.put(CodeButton.REALTIME_HARD, "Hard");
         buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
-        buttons.put(CodeButton.APPLY, "Apply");
+        buttons.put(CodeButton.CUSTOM, "Custom");
 
         return  buttons;
     }
@@ -54,24 +68,23 @@ public class SettingsManager implements HandlerButtons
         return this.settingsMenu;
     }
 
+    public MenuPanel getCustomMenu()
+    {
+        return customManager.getCustomMenu();
+    }
+
     @Override
     public void handleButtonClick(int code)
     {
         CodeButton codeButton = CodeButton.values()[code];
 
-        if(codeButton == CodeButton.APPLY)
+        if (codeButton == CodeButton.BACK_TO_MENU)
         {
-            settings.setParameters(settingsMenu.getParameters());
-            updateSettingsMenu();
+            mainManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
         }
-        else if (codeButton == CodeButton.BACK_TO_MENU)
+        else if (codeButton == CodeButton.CUSTOM)
         {
-            manager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-        }
-        else if (codeButton == CodeButton.RESET)
-        {
-            settings.setDefaultSettings();
-            updateSettingsMenu();
+            mainManager.switchToMenu(MenuManager.MenuCode.CUSTOM);
         }
     }
 
