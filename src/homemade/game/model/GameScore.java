@@ -33,7 +33,7 @@ class GameScore
             synchronized(this)
             {
                 int globalMultiplier = linker.lastGameState().globalMultiplier();
-                packScore *= packMultiplier * (globalMultiplier + packMultiplier / 2);
+                packScore *= packMultiplier * globalMultiplier;
 
                 score += packScore;
 
