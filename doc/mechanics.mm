@@ -8,7 +8,15 @@
 <node CREATED="1475848452270" ID="ID_169698650" MODIFIED="1475848470569" TEXT="when combopack is scored combo blocks are removed from the field"/>
 <node CREATED="1475848472549" ID="ID_1976563093" MODIFIED="1475848489457" TEXT="dead blocks are destroyed if combo block gets removed in a nearby cell"/>
 </node>
-<node CREATED="1475848513053" ID="ID_1931040274" MODIFIED="1475848516649" TEXT="comboEffects"/>
+<node CREATED="1475848513053" ID="ID_1931040274" MODIFIED="1475848516649" TEXT="comboEffects">
+<node CREATED="1475926781736" ID="ID_1627520430" MODIFIED="1475926788740" TEXT="CE are based on combopack tier"/>
+<node CREATED="1475926790015" ID="ID_827832475" MODIFIED="1475926803203" TEXT="each effect has value, eg 1 2 4"/>
+<node CREATED="1475926804519" ID="ID_7817001" MODIFIED="1475926874259" TEXT="you spend your tier on the effects from top to bottom"/>
+<node CREATED="1475926876303" ID="ID_453014733" MODIFIED="1475926908810" TEXT="e.g. 1 = 1, 2 = 2, 3 = 2 + 1, 4 = 4, 5 = 4 + 1, 6 = 4 + 2, 12 = 4 + 4 + 4"/>
+<node CREATED="1475926913119" ID="ID_334949823" MODIFIED="1475926931370" TEXT="atm only one is implemented, the bonus tier effect"/>
+<node CREATED="1475926937246" ID="ID_852892685" MODIFIED="1475926963538" TEXT="high tier effects can include lower tier effects to make them superior"/>
+<node CREATED="1475926970118" ID="ID_639625388" MODIFIED="1475926983378" TEXT="bonus tier is very strong in this state of the game"/>
+</node>
 </node>
 <node CREATED="1475710856622" ID="ID_1986167927" MODIFIED="1475710860114" POSITION="right" TEXT="scoring">
 <node CREATED="1475711365185" ID="ID_1033335223" MODIFIED="1475711369150" TEXT="comboScore">
@@ -38,9 +46,12 @@
 <node CREATED="1475712643904" ID="ID_1916159058" MODIFIED="1475712665964" TEXT="if you have multiplier &gt; 1, random blocks will be removed and multiplier will be consumed"/>
 <node CREATED="1475712666695" ID="ID_876062660" MODIFIED="1475712674283" TEXT="otherwise you will lose"/>
 </node>
-<node CREATED="1475787632153" ID="ID_762547524" MODIFIED="1475787635638" TEXT="denying">
+<node CREATED="1475787632153" ID="ID_762547524" MODIFIED="1475926482912" TEXT="denying">
 <node CREATED="1475787636481" ID="ID_396627455" MODIFIED="1475787739405" TEXT="if you have mult=1 and move a block on top of future spawn, you get dead block in the previous position of moved block"/>
+<node CREATED="1475926381092" ID="ID_564545309" MODIFIED="1475926403239" TEXT="i&apos;m pretty sure in realtime denying does not make spawn faster because you suffer anyway"/>
 </node>
+<node CREATED="1475926499674" ID="ID_1075488829" MODIFIED="1475926519291" TEXT="spawn occurs after comboless move in turn-based mode"/>
+<node CREATED="1475926612208" ID="ID_1793720603" MODIFIED="1475926654580" TEXT="or by the timer in realtime mode"/>
 </node>
 <node CREATED="1475787745504" ID="ID_576774394" MODIFIED="1475787747045" POSITION="right" TEXT="blocks">
 <node CREATED="1475787747728" ID="ID_1374051880" MODIFIED="1475787750628" TEXT="dead block"/>

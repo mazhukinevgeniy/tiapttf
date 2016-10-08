@@ -171,6 +171,8 @@ public class GameModelLinker
             if (settings.gameMode() == GameMode.TURN_BASED && !updater.hasCombos())
             {
                 requestSpawn();
+                //TODO: fix edge case when board is cleared in turn-based mode and the new move is impossible
+                //it'd make sense to give player a ton of points and fill the board like in the beginning
             }
             else
             {
