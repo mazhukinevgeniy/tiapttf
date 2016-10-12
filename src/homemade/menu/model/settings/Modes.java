@@ -1,6 +1,8 @@
 package homemade.menu.model.settings;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class Modes
@@ -21,98 +23,116 @@ public class Modes
     }
 
     //COMMON VALUES
-    private void setCommonValues (Map<String, Object> values)
+    private static void setCommonValues (List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.animatedLinks, false);
+        parameters.add(new Parameter<>(Boolean.class, Settings.Name.animatedLinks, false));
     }
 
     //TURN BASED EASY
-    private void initializeTurnBasedEasyMode(Map<String, Object> values)
+    private static void initializeTurnBasedEasyMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 3);
-        values.put(Settings.Name.spawnPeriod, 2000);
-        values.put(Settings.Name.comboLength, 3);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 3));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 2000));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 3));
     }
 
     //TURN BASED MEDIUM
-    private void initializeTurnBasedMediumMode(Map<String, Object> values)
+    private static void initializeTurnBasedMediumMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 4);
-        values.put(Settings.Name.spawnPeriod, 2000);
-        values.put(Settings.Name.comboLength, 5);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 4));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 2000));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
     }
 
     //TURN BASED HARD
-    private void initializeTurnBasedHardMode(Map<String, Object> values)
+    private static void initializeTurnBasedHardMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 5);
-        values.put(Settings.Name.spawnPeriod, 1500);
-        values.put(Settings.Name.comboLength, 6);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 5));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 1500));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 6));
     }
 
     //REALTIME EASY
-    private void initializeRealtimeEasyMode(Map<String, Object> values)
+    private static void initializeRealtimeEasyMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 3);
-        values.put(Settings.Name.spawnPeriod, 2000);
-        values.put(Settings.Name.comboLength, 3);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 3));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 2000));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 3));
     }
 
     //REALTIME MEDIUM
-    private void initializeRealtimeMediumMode(Map<String, Object> values)
+    private static void initializeRealtimeMediumMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 4);
-        values.put(Settings.Name.spawnPeriod, 2000);
-        values.put(Settings.Name.comboLength, 5);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 4));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 2000));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
     }
 
     //REALTIME HARD
-    private void initializeRealtimeHardMode(Map<String, Object> values)
+    private static void initializeRealtimeHardMode(List<Parameter<?>> parameters)
     {
-        values.put(Settings.Name.simultaneousSpawn, 5);
-        values.put(Settings.Name.spawnPeriod, 1500);
-        values.put(Settings.Name.comboLength, 6);
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 5));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 1500));
+        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 6));
     }
 
-    public Map<String, Object> getValues(GroupCode group, ModeCode mode)
+    public static List<Parameter<?>> getValues(GroupCode group, ModeCode mode)
     {
-        Map<String, Object> values = new HashMap<>();
+        //Map<String, Object> values = new HashMap<>();
+        List<Parameter<?>> parameters = new ArrayList<>();;
 
-        setCommonValues(values);
+        setCommonValues(parameters);
 
         if (group == GroupCode.TURN_BASED)
         {
-            values.put(Settings.Name.isRealTime, false);
+            parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, false));
             if (mode == ModeCode.EASY)
             {
-                initializeTurnBasedEasyMode(values);
+                initializeTurnBasedEasyMode(parameters);
             }
             else if (mode == ModeCode.MEDIUM)
             {
-                initializeTurnBasedMediumMode(values);
+                initializeTurnBasedMediumMode(parameters);
             }
             else if (mode == ModeCode.HARD)
             {
-                initializeTurnBasedHardMode(values);
+                initializeTurnBasedHardMode(parameters);
             }
         }
         else if (group == GroupCode.REALTIME)
         {
-            Object put = values.put(Settings.Name.isRealTime, true);
+            parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, true));
             if (mode == ModeCode.EASY)
             {
-                initializeRealtimeEasyMode(values);
+                initializeRealtimeEasyMode(parameters);
             }
             else if (mode == ModeCode.MEDIUM)
             {
-                initializeRealtimeMediumMode(values);
+                initializeRealtimeMediumMode(parameters);
             }
             else if (mode == ModeCode.HARD)
             {
-                initializeRealtimeHardMode(values);
+                initializeRealtimeHardMode(parameters);
             }
         }
 
-        return values;
+        return parameters;
+    }
+
+    private static Map<GroupCode, String> groupNames = new EnumMap<>(GroupCode.class);
+    {
+        groupNames.put(GroupCode.TURN_BASED, "Turn based");
+        groupNames.put(GroupCode.REALTIME, "Realtime");
+        groupNames.put(GroupCode.CUSTOM, "Custom");
+    }
+
+    public static String getGro
+
+    private static Map<ModeCode, String> modeNames = new EnumMap<>(ModeCode.class);
+    {
+        modeNames.put(ModeCode.EASY, "Easy");
+        modeNames.put(ModeCode.MEDIUM, "Medium");
+        modeNames.put(ModeCode.HARD, "Hard");
+        modeNames.put(ModeCode.CUSTOM, "Custom");
     }
 }

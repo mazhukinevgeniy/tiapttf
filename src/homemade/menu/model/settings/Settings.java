@@ -41,6 +41,9 @@ public class Settings
     private Map<String, ValidParameter<Boolean>> boolParameters = new HashMap<>();
     private Map<String, ValidParameter<Integer>> intParameters = new HashMap<>();
 
+    private Modes.GroupCode currentGroup;
+    private Modes.ModeCode currentMode;
+
     private SettingsSave save;
 
     public Settings(SettingsSave save)
@@ -185,6 +188,14 @@ public class Settings
         }
 
         return parameters;
+    }
+
+    public void setModeParameters(Modes.GroupCode group, Modes.ModeCode mode)
+    {
+        List<Parameter<?>> parameters = Modes.getValues(group, mode);
+        setParameters(parameters);
+        currentGroup = group;
+        currentMode = mode;
     }
 
     public void setParameters(List<Parameter<?>> parameters)
