@@ -1,9 +1,7 @@
 package homemade.menu.model.settings;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 public class Modes
 {
@@ -117,22 +115,5 @@ public class Modes
         }
 
         return parameters;
-    }
-
-    private static Map<GroupCode, String> groupNames = new EnumMap<>(GroupCode.class);
-    {
-        groupNames.put(GroupCode.TURN_BASED, "Turn based");
-        groupNames.put(GroupCode.REALTIME, "Realtime");
-        groupNames.put(GroupCode.CUSTOM, "Custom");
-    }
-
-    public static String getGro
-
-    private static Map<ModeCode, String> modeNames = new EnumMap<>(ModeCode.class);
-    {
-        modeNames.put(ModeCode.EASY, "Easy");
-        modeNames.put(ModeCode.MEDIUM, "Medium");
-        modeNames.put(ModeCode.HARD, "Hard");
-        modeNames.put(ModeCode.CUSTOM, "Custom");
     }
 }

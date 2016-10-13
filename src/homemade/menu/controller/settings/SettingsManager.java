@@ -3,11 +3,14 @@ package homemade.menu.controller.settings;
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
+import homemade.menu.model.settings.Modes;
 import homemade.menu.model.settings.Parameter;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
+import homemade.menu.view.settings.ModePanel;
 import homemade.menu.view.settings.SettingsMenu;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +19,6 @@ public class SettingsManager implements HandlerButtons
 {
     public enum CodeButton
     {
-        TURN_BASED_EASY,
-        TURN_BASED_MEDIUM,
-        TURN_BASED_HARD,
-        REALTIME_EASY,
-        REALTIME_MEDIUM,
-        REALTIME_HARD,
         BACK_TO_MENU,
         CUSTOM
     }
@@ -32,6 +29,8 @@ public class SettingsManager implements HandlerButtons
     private SettingsMenu settingsMenu;
 
     private CustomManager customManager;
+    private ModePanelManager turnBasedManager;
+    private ModePanelManager realtimeManager;
 
     private List<Parameter<?>> parameters;
 
@@ -44,19 +43,27 @@ public class SettingsManager implements HandlerButtons
         parameters = settings.getAllParameters();
         customManager = new CustomManager(this, parameters);
 
-        Map<CodeButton, String> buttons = createButtonsMap();
-        settingsMenu = new SettingsMenu(parameters, buttons, actionListener);
+        turnBasedManager = new ModePanelManager(this, Modes.GroupCode.TURN_BASED, "Turn based");
+        realtimeManager = new ModePanelManager(this, Modes.GroupCode.REALTIME, "Realtime");
+        List<ModePanel> panels = createPanelsList();
+
+        Map<CodeButton, String> buttons = createButtonMap();
+
+        settingsMenu = new SettingsMenu(buttons, actionListener, panels);
     }
 
-    private Map<CodeButton, String> createButtonsMap()
+    private List<ModePanel> createPanelsList()
+    {
+        List<ModePanel> panels = new ArrayList<>();
+        panels.add(turnBasedManager.getModePanel());
+        panels.add(realtimeManager.getModePanel());
+
+        return panels;
+    }
+
+    private Map<CodeButton, String> createButtonMap()
     {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
-        buttons.put(CodeButton.TURN_BASED_EASY, "Easy");
-        buttons.put(CodeButton.TURN_BASED_MEDIUM, "Medium");
-        buttons.put(CodeButton.TURN_BASED_HARD, "Hard");
-        buttons.put(CodeButton.REALTIME_EASY, "Easy");
-        buttons.put(CodeButton.REALTIME_MEDIUM, "Medium");
-        buttons.put(CodeButton.REALTIME_HARD, "Hard");
         buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
         buttons.put(CodeButton.CUSTOM, "Custom");
 
@@ -88,9 +95,17 @@ public class SettingsManager implements HandlerButtons
         }
     }
 
-    private void updateSettingsMenu()
+    public void switchToMode(Modes.GroupCode group, Modes.ModeCode mode)
+    {
+        if (mode != Modes.ModeCode.CUSTOM)
+        {
+            settings.setModeParameters(group, mode);
+        }
+    }
+
+    /*private void updateSettingsMenu()
     {
         parameters = settings.getAllParameters();
         settingsMenu.updateMenu(parameters);
-    }
+    }*/
 }
