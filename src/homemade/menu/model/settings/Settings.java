@@ -190,9 +190,12 @@ public class Settings
         return parameters;
     }
 
-    public void setModeParameters(Modes.GroupCode group, Modes.ModeCode mode)
+    public void setModeParameters(Modes.GroupCode group, Modes.ModeCode mode, List<Parameter<?>> parameters)
     {
-        List<Parameter<?>> parameters = Modes.getValues(group, mode);
+        if (mode != Modes.ModeCode.CUSTOM)
+        {
+            parameters = Modes.getValues(group, mode);
+        }
         setParameters(parameters);
         currentGroup = group;
         currentMode = mode;

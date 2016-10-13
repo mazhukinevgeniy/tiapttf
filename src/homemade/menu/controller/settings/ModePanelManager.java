@@ -39,7 +39,7 @@ public class ModePanelManager implements HandlerButtons
     public void handleButtonClick(int codeButton)
     {
         Modes.ModeCode modeCode = Modes.ModeCode.values()[codeButton];
-        mainManager.switchToMode(panelCode, modeCode);
+        mainManager.switchToMode(panelCode, modeCode, null);
     }
 
     public ModePanel getModePanel()

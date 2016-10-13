@@ -32,16 +32,13 @@ public class SettingsManager implements HandlerButtons
     private ModePanelManager turnBasedManager;
     private ModePanelManager realtimeManager;
 
-    private List<Parameter<?>> parameters;
-
     public SettingsManager(MenuManager mainManager, Settings settings)
     {
         this.mainManager = mainManager;
         this.settings = settings;
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
-        parameters = settings.getAllParameters();
-        customManager = new CustomManager(this, parameters);
+        customManager = new CustomManager(this, settings);
 
         turnBasedManager = new ModePanelManager(this, Modes.GroupCode.TURN_BASED, "Turn based");
         realtimeManager = new ModePanelManager(this, Modes.GroupCode.REALTIME, "Realtime");
@@ -95,17 +92,13 @@ public class SettingsManager implements HandlerButtons
         }
     }
 
-    public void switchToMode(Modes.GroupCode group, Modes.ModeCode mode)
+    public void returnToSettingsMenu()
     {
-        if (mode != Modes.ModeCode.CUSTOM)
-        {
-            settings.setModeParameters(group, mode);
-        }
+        mainManager.switchToMenu(MenuManager.MenuCode.SETTINGS);
     }
 
-    /*private void updateSettingsMenu()
+    public void switchToMode(Modes.GroupCode group, Modes.ModeCode mode, List<Parameter<?>> parameters)
     {
-        parameters = settings.getAllParameters();
-        settingsMenu.updateMenu(parameters);
-    }*/
+        settings.setModeParameters(group, mode, parameters);
+    }
 }
