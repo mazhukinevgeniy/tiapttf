@@ -2,85 +2,32 @@ package homemade.menu.view.settings;
 
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.settings.SettingsManager.CodeButton;
-import homemade.menu.model.settings.Parameter;
 import homemade.menu.view.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SettingsMenu extends MenuPanel
 {
-    private BoolParameter boolFactory = new BoolParameter();
-    private NumberParameter numberFactory = new NumberParameter();
-
-    private List<Parameter<?>> parameters;
-
-    private Vector<JCheckBox> checkBoxes = new Vector<>();
-    private Vector<JPanel> parameterPanels = new Vector<>();
-
-    private Map<CodeButton, String> buttons;
-    private ButtonActionListener actionListener;
-
-    public SettingsMenu(List<Parameter<?>> parameters, Map<CodeButton, String> buttons,
-                        ButtonActionListener actionListener)
+    public SettingsMenu( Map<CodeButton, String> buttons,
+                        ButtonActionListener actionListener, List<ModePanel> panels)
     {
         super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.parameters = parameters;
-        this.buttons = buttons;
-        this.actionListener = actionListener;
 
-        initializeUI();
-    }
-
-    private void initializeUI()
-    {
-        initializeParametersUI();
-        drawParametersUI();
+        initializeModePanels(panels);
         initializeButtonPanel(buttons, actionListener);
     }
 
-    private void initializeParametersUI()
+    private void initializeModePanels(List<ModePanel> panels)
     {
-        for(Parameter<?> param : parameters)
+        for (ModePanel panel : panels)
         {
-            if (param.getType() == Boolean.class)
-            {
-                createBoolSetting(param.getName(), (Boolean) param.getValue());
-            }
-            else if (param.getType() == Integer.class)
-            {
-                createNumberSetting(param.getName(), (Integer) param.getValue());
-            }
-        }
-    }
-
-    private void createBoolSetting(String parameterName, Boolean value)
-    {
-        JCheckBox checkBox = boolFactory.create(parameterName, value);
-        checkBoxes.add(checkBox);
-    }
-
-    private void createNumberSetting(String parameterName, Integer value)
-    {
-        JPanel panel = numberFactory.create(parameterName, value);
-        parameterPanels.add(panel);
-    }
-
-    private void drawParametersUI()
-    {
-        drawParametersUI(checkBoxes);
-        drawParametersUI(parameterPanels);
-    }
-
-    private <TypeUI extends JComponent> void drawParametersUI(Vector<TypeUI> parametersUI)
-    {
-        for (TypeUI parameter : parametersUI)
-        {
-            add(parameter);
+            add(panel);
         }
     }
 
@@ -97,54 +44,5 @@ public class SettingsMenu extends MenuPanel
             panel.add(button);
         }
         add(panel);
-    }
-
-    public List<Parameter<?>> getParameters()
-    {
-        List<Parameter<?>> newParameters = new ArrayList<>();
-        addValuesTo(newParameters, checkBoxes, boolFactory, Boolean.class);
-        addValuesTo(newParameters, parameterPanels, numberFactory, Integer.class);
-        parameters = newParameters;
-
-        return parameters;
-    }
-
-    private <TypeUI, TypeValue> List<Parameter<?>> addValuesTo(List<Parameter<?>> newParameters,
-                                                    Vector<TypeUI> parametersUI,
-                                                    ParameterFactory<TypeUI, ?> factory,
-                                                    Class<TypeValue> type)
-    {
-        for (TypeUI parameter : parametersUI)
-        {
-            String name = factory.getName(parameter);
-            TypeValue value = type.cast(factory.getValue(parameter));
-            newParameters.add(new Parameter<>(type, name, value));
-        }
-        return newParameters;
-    }
-
-    public void updateMenu(List<Parameter<?>> parameters)
-    {
-        this.parameters = parameters;
-
-        reinitializeParametersUI(checkBoxes, boolFactory);
-        reinitializeParametersUI(parameterPanels, numberFactory);
-    }
-
-    private <TypeUI, TypeValue> void reinitializeParametersUI(Vector<TypeUI> parametersUI,
-                                                              ParameterFactory<TypeUI, TypeValue> factory)
-    {
-        for (TypeUI parameterUI : parametersUI)
-        {
-            String name = factory.getName(parameterUI);
-            for (Parameter<?> param : parameters)
-            {
-                if (param.getName().equals(name))
-                {
-                    TypeValue newValue = (TypeValue) param.getValue();
-                    factory.setValue(parameterUI, newValue);
-                }
-            }
-        }
     }
 }

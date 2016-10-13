@@ -22,6 +22,7 @@ public class MenuManager implements HandlerButtons
     {
         GAME,
         SETTINGS,
+        CUSTOM,
         MAIN_MENU,
         RECORDS
     }
@@ -45,6 +46,7 @@ public class MenuManager implements HandlerButtons
 
         SettingsManager settingsManager = new SettingsManager(this, settings);
         MenuPanel settingsMenu = settingsManager.getSettingsMenu();
+        MenuPanel customMenu = settingsManager.getCustomMenu();
 
         RecordsManager recordsManager = new RecordsManager(this, records);
         MenuPanel recordsMenu = recordsManager.getRecordsMenu();
@@ -52,6 +54,7 @@ public class MenuManager implements HandlerButtons
         menus = new EnumMap<>(MenuCode.class);
         menus.put(MenuCode.MAIN_MENU, mainMenu);
         menus.put(MenuCode.SETTINGS, settingsMenu);
+        menus.put(MenuCode.CUSTOM, customMenu);
         menus.put(MenuCode.RECORDS, recordsMenu);
         menus.put(MenuCode.GAME, new GameMenu());
 

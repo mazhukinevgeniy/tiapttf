@@ -3,11 +3,14 @@ package homemade.menu.controller.settings;
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
+import homemade.menu.model.settings.Modes;
 import homemade.menu.model.settings.Parameter;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
+import homemade.menu.view.settings.ModePanel;
 import homemade.menu.view.settings.SettingsMenu;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -16,35 +19,50 @@ public class SettingsManager implements HandlerButtons
 {
     public enum CodeButton
     {
-        RESET,
         BACK_TO_MENU,
-        APPLY
+        CUSTOM
     }
 
-    private MenuManager manager;
+    private MenuManager mainManager;
 
     private Settings settings;
     private SettingsMenu settingsMenu;
 
-    private List<Parameter<?>> parameters;
+    private CustomManager customManager;
+    private ModePanelManager turnBasedManager;
+    private ModePanelManager realtimeManager;
 
-    public SettingsManager(MenuManager manager, Settings settings)
+    public SettingsManager(MenuManager mainManager, Settings settings)
     {
-        this.manager = manager;
+        this.mainManager = mainManager;
         this.settings = settings;
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
-        parameters = settings.getAllParameters();
-        Map<CodeButton, String> buttons = createButtonsMap();
-        settingsMenu = new SettingsMenu(parameters, buttons, actionListener);
+        customManager = new CustomManager(this, settings);
+
+        turnBasedManager = new ModePanelManager(this, Modes.GroupCode.TURN_BASED, "Turn based");
+        realtimeManager = new ModePanelManager(this, Modes.GroupCode.REALTIME, "Realtime");
+        List<ModePanel> panels = createPanelsList();
+
+        Map<CodeButton, String> buttons = createButtonMap();
+
+        settingsMenu = new SettingsMenu(buttons, actionListener, panels);
     }
 
-    private Map<CodeButton, String> createButtonsMap()
+    private List<ModePanel> createPanelsList()
+    {
+        List<ModePanel> panels = new ArrayList<>();
+        panels.add(turnBasedManager.getModePanel());
+        panels.add(realtimeManager.getModePanel());
+
+        return panels;
+    }
+
+    private Map<CodeButton, String> createButtonMap()
     {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
-        buttons.put(CodeButton.RESET, "Reset");
         buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
-        buttons.put(CodeButton.APPLY, "Apply");
+        buttons.put(CodeButton.CUSTOM, "Custom");
 
         return  buttons;
     }
@@ -54,30 +72,33 @@ public class SettingsManager implements HandlerButtons
         return this.settingsMenu;
     }
 
+    public MenuPanel getCustomMenu()
+    {
+        return customManager.getCustomMenu();
+    }
+
     @Override
     public void handleButtonClick(int code)
     {
         CodeButton codeButton = CodeButton.values()[code];
 
-        if(codeButton == CodeButton.APPLY)
+        if (codeButton == CodeButton.BACK_TO_MENU)
         {
-            settings.setParameters(settingsMenu.getParameters());
-            updateSettingsMenu();
+            mainManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
         }
-        else if (codeButton == CodeButton.BACK_TO_MENU)
+        else if (codeButton == CodeButton.CUSTOM)
         {
-            manager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-        }
-        else if (codeButton == CodeButton.RESET)
-        {
-            settings.setDefaultSettings();
-            updateSettingsMenu();
+            mainManager.switchToMenu(MenuManager.MenuCode.CUSTOM);
         }
     }
 
-    private void updateSettingsMenu()
+    public void returnToSettingsMenu()
     {
-        parameters = settings.getAllParameters();
-        settingsMenu.updateMenu(parameters);
+        mainManager.switchToMenu(MenuManager.MenuCode.SETTINGS);
+    }
+
+    public void switchToMode(Modes.GroupCode group, Modes.ModeCode mode, List<Parameter<?>> parameters)
+    {
+        settings.setModeParameters(group, mode, parameters);
     }
 }
