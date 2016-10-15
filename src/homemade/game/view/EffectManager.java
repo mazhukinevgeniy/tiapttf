@@ -9,26 +9,25 @@ import java.util.Map;
 
 public class EffectManager
 {
-    private static final int FADE_TIME = 400;
     private static final int BLINK_TIME = 80;
-
-    private Map<CellCode, Integer> fadingBlocks;
 
     private int blinkRemaining = 0;
     private boolean greenBlink = true;
 
     private long oldTime;
 
+    private Map<ShownEffect, EffectTracker> trackers;
+
     EffectManager()
     {
         oldTime = System.nanoTime();
 
-        fadingBlocks = new HashMap<>();
+        clearEffects();
     }
 
-    synchronized public void addFadingBlock(CellCode cell)
+    synchronized public void addEffect(CellCode cell, ShownEffect shownEffect)
     {
-        fadingBlocks.put(cell, FADE_TIME);
+        trackers.get(shownEffect).addFullEffect(cell);
     }
 
     synchronized public void blink(boolean isGreen)
@@ -39,7 +38,11 @@ public class EffectManager
 
     synchronized void clearEffects()
     {
-        fadingBlocks = new HashMap<>();
+        int FADE_TIME = 400;
+
+        trackers = new HashMap<>();
+        trackers.put(ShownEffect.FADEAWAY, new EffectTracker(FADE_TIME));
+
         blinkRemaining = 0;
     }
 
@@ -58,34 +61,13 @@ public class EffectManager
     {
         blinkRemaining = Math.max(0, blinkRemaining - differenceMS);
 
-        Iterator<Map.Entry<CellCode, Integer>> iterator = fadingBlocks.entrySet().iterator();
-
-        while (iterator.hasNext())
-        {
-            Map.Entry<CellCode, Integer> entry = iterator.next();
-
-            int oldTime = entry.getValue();
-            int newTime = oldTime - differenceMS;
-
-            if (newTime < 0)
-            {
-                iterator.remove();
-            }
-            else
-            {
-                fadingBlocks.replace(entry.getKey(), oldTime, newTime);
-            }
-        }
+        for (Map.Entry<ShownEffect, EffectTracker> entry : trackers.entrySet())
+            entry.getValue().updateEffects(differenceMS);
     }
 
-    synchronized public float getFadeTimeRemaining(CellCode cell)
+    synchronized public float getEffectTimeRemaining(CellCode cell, ShownEffect effect)
     {
-        float time = 0;
-
-        if (fadingBlocks.containsKey(cell))
-            time = (float)fadingBlocks.get(cell) / FADE_TIME;
-
-        return time;
+        return trackers.get(effect).getTimeRemaining(cell);
     }
 
     synchronized Color getBackgroundColor()
@@ -101,5 +83,53 @@ public class EffectManager
         int max = Math.max(Math.max(newR, newG), newB);
 
         return new Color(newR * 255 / max, newG * 255 / max, newB * 255 / max);
+    }
+
+    private static class EffectTracker
+    {
+        private Map<CellCode, Integer> effects;
+
+        private int fullTime;
+
+
+        private EffectTracker(int fullTime)
+        {
+            this.fullTime = fullTime;
+
+            effects = new HashMap<>();
+        }
+
+        private void addFullEffect(CellCode cell)
+        {
+            effects.put(cell, fullTime);
+        }
+
+        private float getTimeRemaining(CellCode cell)
+        {
+            float time = 0;
+
+            if (effects.containsKey(cell))
+                time = (float)effects.get(cell) / fullTime;
+
+            return time;
+        }
+
+        private void updateEffects(int differenceMS)
+        {
+            Iterator<Map.Entry<CellCode, Integer>> iterator = effects.entrySet().iterator();
+
+            while (iterator.hasNext())
+            {
+                Map.Entry<CellCode, Integer> entry = iterator.next();
+
+                int oldTime = entry.getValue();
+                int newTime = oldTime - differenceMS;
+
+                if (newTime < 0)
+                    iterator.remove();
+                else
+                    effects.replace(entry.getKey(), oldTime, newTime);
+            }
+        }
     }
 }

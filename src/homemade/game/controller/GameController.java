@@ -7,6 +7,7 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
+import homemade.game.view.ShownEffect;
 import homemade.menu.controller.MenuManager;
 import homemade.menu.model.records.Records;
 import homemade.utils.timer.QuickTimer;
@@ -83,7 +84,7 @@ public class GameController implements BlockRemovalHandler, MouseInputHandler
 
     public synchronized void blockRemoved(CellCode atCell)
     {
-        view.getEffectManager().addFadingBlock(atCell);
+        view.getEffectManager().addEffect(atCell, ShownEffect.FADEAWAY);
     }
 
     public synchronized void multiplierChanged(int change)

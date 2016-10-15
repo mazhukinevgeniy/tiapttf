@@ -4,6 +4,7 @@ import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.view.EffectManager;
+import homemade.game.view.ShownEffect;
 import homemade.resources.blocks.BlockAssets;
 
 import java.awt.*;
@@ -38,7 +39,7 @@ class BlockLayer extends RenderingLayer.Cells
 
         if (type == Cell.EMPTY)
         {
-            float time = effectManager.getFadeTimeRemaining(cellCode);
+            float time = effectManager.getEffectTimeRemaining(cellCode, ShownEffect.FADEAWAY);
 
             if (time > 0)
                 effects.renderFadingBlock(canvasX, canvasY, time, graphics);
