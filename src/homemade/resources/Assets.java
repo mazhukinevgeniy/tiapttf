@@ -1,6 +1,7 @@
 package homemade.resources;
 
 import homemade.resources.blocks.BlockAssets;
+import homemade.resources.effects.EffectAssets;
 import homemade.resources.links.LinkAssets;
 import homemade.utils.AssetLoader;
 
@@ -28,18 +29,18 @@ public class Assets extends AssetLoader
     private Image smallBlock;
     private Image placeToMove;
     private Image digit[];
-    private Image disappear[];
 
-    private LinkAssets linkAssets;
     private BlockAssets blockAssets;
+    private EffectAssets effectAssets;
+    private LinkAssets linkAssets;
 
     private Assets(LinkAssets.Variation variation)
     {
         digit = new Image[10];
-        disappear = new Image[3];
 
-        linkAssets = new LinkAssets(variation);
         blockAssets = new BlockAssets();
+        effectAssets = new EffectAssets();
+        linkAssets = new LinkAssets(variation);
 
         field = getImage("field.png");
 
@@ -49,11 +50,6 @@ public class Assets extends AssetLoader
         for (int i = 0; i < 10; i++)
         {
             digit[i] = getImage(i + ".png");
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            disappear[2 - i] = getImage("dis_" + (i + 1) + ".png");
         }
     }
 
@@ -77,16 +73,6 @@ public class Assets extends AssetLoader
         return digit[value];
     }
 
-    public int getDisappearanceLength()
-    {
-        return disappear.length;
-    }
-
-    public Image getDisappearanceSprite(int step)
-    {
-        return disappear[step];
-    }
-
     public LinkAssets getLinkAssets()
     {
         return linkAssets;
@@ -95,5 +81,10 @@ public class Assets extends AssetLoader
     public BlockAssets getBlockAssets()
     {
         return blockAssets;
+    }
+
+    public EffectAssets getEffectAssets()
+    {
+        return effectAssets;
     }
 }
