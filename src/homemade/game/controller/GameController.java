@@ -16,7 +16,7 @@ import homemade.utils.timer.TimerTaskPerformer;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class GameController implements BlockRemovalHandler, MouseInputHandler
+public class GameController implements BlockEventHandler, MouseInputHandler
 {
     private static final int TARGET_FPS = 60;
 
@@ -85,6 +85,11 @@ public class GameController implements BlockRemovalHandler, MouseInputHandler
     public synchronized void blockRemoved(CellCode atCell)
     {
         view.getEffectManager().addEffect(atCell, ShownEffect.FADEAWAY);
+    }
+
+    public synchronized void blockExploded(CellCode atCell)
+    {
+        view.getEffectManager().addEffect(atCell, ShownEffect.EXPLOSION);
     }
 
     public synchronized void multiplierChanged(int change)

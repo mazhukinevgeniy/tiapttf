@@ -6,7 +6,7 @@ public enum Cell
 
     public enum ComboEffect
     {
-        EXPLOSION, EXTRA_COMBO_TIER, IMMOVABLE
+        IMMOVABLE, JUST_EXTRA_TIER, EXPLOSION
     }
 
     public static final int DEFAULT_VALUE = 0;

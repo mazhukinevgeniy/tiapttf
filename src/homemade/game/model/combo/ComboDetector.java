@@ -2,7 +2,7 @@ package homemade.game.model.combo;
 
 import homemade.game.Cell;
 import homemade.game.Combo;
-import homemade.game.controller.BlockRemovalHandler;
+import homemade.game.controller.BlockEventHandler;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -10,7 +10,6 @@ import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,16 +17,16 @@ public class ComboDetector
 {
     private FieldStructure structure;
     private CellMapReader cellMap;
-    private BlockRemovalHandler blockRemovalHandler;
+    private BlockEventHandler blockEventHandler;
 
     private int minCombo;
 
-    public ComboDetector(GameModelLinker linker, BlockRemovalHandler blockRemovalHandler)
+    public ComboDetector(GameModelLinker linker, BlockEventHandler blockEventHandler)
     {
         structure = linker.getStructure();
         cellMap = linker.getMapReader();
 
-        this.blockRemovalHandler = blockRemovalHandler;
+        this.blockEventHandler = blockEventHandler;
 
         minCombo = linker.getSettings().minCombo();
     }
@@ -66,9 +65,6 @@ public class ComboDetector
      */
     private void iterateThroughTheLine(ComboPack pack, CellCode start, Direction mainDirection)
     {
-        Set<Cell.ComboEffect> extraTierEffects =
-                EnumSet.of(Cell.ComboEffect.EXTRA_COMBO_TIER, Cell.ComboEffect.IMMOVABLE);
-
         CellCode currentCell = start;
 
         while (currentCell != null)
@@ -92,11 +88,22 @@ public class ComboDetector
                         currentCell = lastCell;
                         nextCell = lastCell.neighbour(mainDirection);
 
-                        if (extraTierEffects.contains(cellMap.getCell(currentCell).effect()))
-                            comboTier++;
+                        Cell.ComboEffect comboEffect = cellMap.getCell(currentCell).effect();
+
+                        if (comboEffect != null)
+                        {
+                            comboTier++; //every effect is an extra tier effect
+
+                            if (comboEffect == Cell.ComboEffect.EXPLOSION)
+                            {
+                                //TODO: remove stuff in aoe
+
+                                blockEventHandler.blockExploded(currentCell);
+                            }
+                        }
 
                         comboCells.add(currentCell);
-                        blockRemovalHandler.blockRemoved(currentCell);
+                        blockEventHandler.blockRemoved(currentCell);
 
                         lastCell = nextCell;
                     }

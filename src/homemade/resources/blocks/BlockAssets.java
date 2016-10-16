@@ -24,12 +24,12 @@ public class BlockAssets extends AssetLoader
         assets.put(false, unselectedBlocks);
 
         selectedBlocks.put(null, getImage("normal_block_selected.png"));
-        selectedBlocks.put(ComboEffect.EXTRA_COMBO_TIER, getImage("special_block_selected.png"));
+        selectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, getImage("special_block_selected.png"));
         selectedBlocks.put(ComboEffect.EXPLOSION, getImage("normal_block_selected.png"));
 
         unselectedBlocks.put(null, getImage("normal_block.png"));
-        unselectedBlocks.put(ComboEffect.EXTRA_COMBO_TIER, getImage("special_block.png"));
-        unselectedBlocks.put(ComboEffect.EXPLOSION, getImage("normal_block.png"));
+        unselectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, getImage("special_block.png"));
+        unselectedBlocks.put(ComboEffect.EXPLOSION, getImage("normal_block.png"));//TODO: get more sprites
         unselectedBlocks.put(ComboEffect.IMMOVABLE, getImage("immovable_block.png"));
 
         deadBlock = getImage("gray_block.png");

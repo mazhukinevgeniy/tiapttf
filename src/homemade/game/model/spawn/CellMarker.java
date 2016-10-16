@@ -66,7 +66,7 @@ class CellMarker
             effects.add(Cell.ComboEffect.EXPLOSION);
 
         for (int i = 0; i < bonusTiers; i++)
-            effects.add(Cell.ComboEffect.EXTRA_COMBO_TIER);
+            effects.add(Cell.ComboEffect.JUST_EXTRA_TIER);
         //TODO: cellMarker has nothing to do with it, just pass the list from the linker
 
 
