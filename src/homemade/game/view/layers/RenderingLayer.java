@@ -27,7 +27,8 @@ abstract public class RenderingLayer
     {
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
-        list.add(new BlockLayer(effectManager));
+        list.add(new EffectLayer(effectManager));
+        list.add(new BlockLayer());
         list.add(new NumberLayer(structure));
         list.add(new LinkLayer(settings));
 

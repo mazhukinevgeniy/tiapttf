@@ -86,20 +86,4 @@ class LinkLayer extends RenderingLayer.Links
 
         counter = (counter + 1) % countCap;
     }
-
-    private static final class Offset
-    {
-        int x, y;
-
-        private Offset(Image image, int horizontalCells, int verticalCells)
-        {
-            x = (   GameView.CELL_WIDTH * horizontalCells +
-                    GameView.CELL_OFFSET * (horizontalCells - 1) -
-                    image.getWidth(null)) / 2;
-            y = (   GameView.CELL_WIDTH * verticalCells +
-                    GameView.CELL_OFFSET * (verticalCells - 1) -
-                    image.getHeight(null)) / 2;
-        }
-    }
-    //TODO: check if this class is useful elsewhere
 }

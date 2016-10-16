@@ -39,9 +39,11 @@ public class EffectManager
     synchronized void clearEffects()
     {
         int FADE_TIME = 400;
+        int EXPLOSION_TIME = 400;
 
         trackers = new HashMap<>();
         trackers.put(ShownEffect.FADEAWAY, new EffectTracker(FADE_TIME));
+        trackers.put(ShownEffect.EXPLOSION, new EffectTracker(EXPLOSION_TIME));
 
         blinkRemaining = 0;
     }

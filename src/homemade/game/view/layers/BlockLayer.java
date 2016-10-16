@@ -3,25 +3,17 @@ package homemade.game.view.layers;
 import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.view.EffectManager;
-import homemade.game.view.ShownEffect;
 import homemade.resources.blocks.BlockAssets;
 
 import java.awt.*;
 
 class BlockLayer extends RenderingLayer.Cells
 {
-    private EffectRenderer effects;
-    private EffectManager effectManager;
-
     private BlockAssets blockAssets;
 
-    BlockLayer(EffectManager effectManager)
+    BlockLayer()
     {
         super();
-
-        this.effectManager = effectManager;
-        effects = new EffectRenderer();
 
         blockAssets = assets.getBlockAssets();
     }
@@ -37,14 +29,7 @@ class BlockLayer extends RenderingLayer.Cells
         CellState cellState = state.getCellState(cellCode);
         Cell type = cellState.type();
 
-        if (type == Cell.EMPTY)
-        {
-            float time = effectManager.getEffectTimeRemaining(cellCode, ShownEffect.FADEAWAY);
-
-            if (time > 0)
-                effects.renderFadingBlock(canvasX, canvasY, time, graphics);
-        }
-        else
+        if (type != Cell.EMPTY)
         {
             Image sprite;
 
