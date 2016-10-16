@@ -1,6 +1,9 @@
 package homemade.game.fieldstructure;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class CellCode
 {
@@ -93,6 +96,42 @@ public final class CellCode
     public CellCode neighbour(Direction direction)
     {
         return neighbours.get(direction);
+    }
+
+    /**
+     * @return all non-null cellcodes from 3x3 square centered on the called cell
+     */
+    public Set<CellCode> getVicinity()
+    {
+        HashSet<CellCode> vicinity = new HashSet<>();
+
+        CellCode bot, top, left, right;
+
+        bot = neighbour(Direction.BOTTOM);
+        top = neighbour(Direction.TOP);
+        left = neighbour(Direction.LEFT);
+        right = neighbour(Direction.RIGHT);
+
+        if (top != null)
+        {
+            vicinity.add(top);
+            vicinity.add(top.neighbour(Direction.LEFT));
+            vicinity.add(top.neighbour(Direction.RIGHT));
+        }
+
+        if (bot != null)
+        {
+            vicinity.add(bot);
+            vicinity.add(bot.neighbour(Direction.LEFT));
+            vicinity.add(bot.neighbour(Direction.RIGHT));
+        }
+
+        vicinity.add(left);
+        vicinity.add(right);
+
+        vicinity.remove(null);
+
+        return vicinity;
     }
 
     public int distance(CellCode otherCell)

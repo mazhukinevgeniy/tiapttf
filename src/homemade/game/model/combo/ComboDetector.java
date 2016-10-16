@@ -78,7 +78,7 @@ public class ComboDetector
 
                 if (comboLength >= minCombo)
                 {
-                    Set<CellCode> comboCells = new HashSet<>(comboLength);
+                    Set<CellCode> comboCells = new HashSet<>();
                     int comboTier = comboLength - minCombo + 1;
 
                     CellCode lastCell = currentCell;
@@ -96,7 +96,12 @@ public class ComboDetector
 
                             if (comboEffect == Cell.ComboEffect.EXPLOSION)
                             {
-                                //TODO: remove stuff in aoe
+                                Set<CellCode> vicinity = currentCell.getVicinity();
+                                comboCells.addAll(vicinity);
+
+                                for (CellCode cell : vicinity)
+                                    if (cellMap.getCell(cell).isNormalBlock())
+                                        blockEventHandler.blockRemoved(cell);
 
                                 blockEventHandler.blockExploded(currentCell);
                             }

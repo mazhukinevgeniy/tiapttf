@@ -115,6 +115,7 @@ class Updater
                         cellMap.getCell(neighbour).type() == Cell.DEAD_BLOCK)
                     cellsToRemove.put(neighbour, empty);
             }
+            //TODO: check if this can or needs to be done more efficiently
         }
 
         return cellsToRemove;
