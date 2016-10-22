@@ -4,7 +4,6 @@ import homemade.game.GameSettings;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.view.GameView;
 import homemade.resources.links.LinkAssets;
 import homemade.utils.PiecewiseConstantFunction;
 

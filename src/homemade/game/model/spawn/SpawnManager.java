@@ -9,7 +9,6 @@ import homemade.game.model.BlockValuePool;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
-import java.util.Iterator;
 import java.util.Map;
 
 public class SpawnManager
