@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class AssetLoader
 {
@@ -58,5 +59,21 @@ public class AssetLoader
         graphics.dispose();
 
         return rotatedImage;
+    }
+
+    final protected Image stackSprites(ArrayList<Image> sprites)
+    {
+        assert !sprites.isEmpty();
+
+        Image base = createRotatedCopy(sprites.remove(0), 0);
+
+        Graphics graphics = base.getGraphics();
+
+        for (Image sprite : sprites)
+        {
+            graphics.drawImage(sprite, 0, 0, null);
+        }
+
+        return base;
     }
 }
