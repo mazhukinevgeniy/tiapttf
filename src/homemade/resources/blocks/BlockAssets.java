@@ -32,7 +32,7 @@ public class BlockAssets extends AssetLoader
                 {getImage("normal_block_selected.png"), getImage("expl.png")}));
 
         unselectedBlocks.put(null, getImage("normal_block.png"));
-        selectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
+        unselectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
                 {getImage("normal_block.png"), getImage("tria.png")}));
         unselectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, stackSprites(new Image[]
                 {getImage("normal_block.png"), getImage("square.png")}));
