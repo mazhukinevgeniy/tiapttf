@@ -56,9 +56,13 @@ class CellMarker
     {
         Map<CellCode, CellState> changes = new HashMap<>();
 
-        int explosions = tier / 2;
-        tier = tier - explosions * 2;
-        int bonusTiers = tier;
+        int explosions = tier / 4;
+        tier = tier - explosions * 4;
+
+        int bonusTiers = tier / 2;
+        tier = tier - bonusTiers * 2;
+
+        int bonusMultipliers = tier;
 
         LinkedList<Cell.ComboEffect> effects = new LinkedList<>();
 
@@ -67,6 +71,9 @@ class CellMarker
 
         for (int i = 0; i < bonusTiers; i++)
             effects.add(Cell.ComboEffect.JUST_EXTRA_TIER);
+
+        for (int i = 0; i < bonusMultipliers; i++)
+            effects.add(Cell.ComboEffect.EXTRA_MULTIPLIER);
         //TODO: cellMarker has nothing to do with it, just pass the list from the linker
 
 

@@ -18,11 +18,18 @@ public class ComboPack
     private ArrayList<Combo> combos;
 
     private int tier;
+    private int bonusMultiplier;
 
     public ComboPack()
     {
         combos = new ArrayList<>();
         tier = 0;
+        bonusMultiplier = 0;
+    }
+
+    void addMultiplier(int value)
+    {
+        bonusMultiplier += value;
     }
 
     void add(Combo combo)
@@ -35,6 +42,7 @@ public class ComboPack
     {
         combos.addAll(anotherPack.combos);
         tier += anotherPack.tier;
+        bonusMultiplier += anotherPack.bonusMultiplier;
     }
 
     public Set<CellCode> cellSet()
@@ -60,5 +68,10 @@ public class ComboPack
     public int packTier()
     {
         return tier;
+    }
+
+    public int multiplierIncrease()
+    {
+        return tier + bonusMultiplier;
     }
 }

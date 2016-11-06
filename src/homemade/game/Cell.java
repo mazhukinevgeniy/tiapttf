@@ -6,7 +6,17 @@ public enum Cell
 
     public enum ComboEffect
     {
-        IMMOVABLE, JUST_EXTRA_TIER, EXPLOSION
+        EXTRA_MULTIPLIER, IMMOVABLE, JUST_EXTRA_TIER, EXPLOSION;
+
+        public int tierBonus()
+        {
+            return this == EXTRA_MULTIPLIER ? 0 : 1;
+        }
+
+        public int multiplierBonus()
+        {
+            return this == EXTRA_MULTIPLIER ? 1 : 0;
+        }
     }
 
     public static final int DEFAULT_VALUE = 0;

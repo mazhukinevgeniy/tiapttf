@@ -92,7 +92,8 @@ public class ComboDetector
 
                         if (comboEffect != null)
                         {
-                            comboTier++; //every effect is an extra tier effect
+                            comboTier += comboEffect.tierBonus();
+                            pack.addMultiplier(comboEffect.multiplierBonus());
 
                             if (comboEffect == Cell.ComboEffect.EXPLOSION)
                             {

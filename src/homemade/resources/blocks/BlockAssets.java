@@ -24,12 +24,16 @@ public class BlockAssets extends AssetLoader
         assets.put(false, unselectedBlocks);
 
         selectedBlocks.put(null, getImage("normal_block_selected.png"));
+        selectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
+                {getImage("normal_block_selected.png"), getImage("tria.png")}));
         selectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, stackSprites(new Image[]
                 {getImage("normal_block_selected.png"), getImage("square.png")}));
         selectedBlocks.put(ComboEffect.EXPLOSION, stackSprites(new Image[]
                 {getImage("normal_block_selected.png"), getImage("expl.png")}));
 
         unselectedBlocks.put(null, getImage("normal_block.png"));
+        selectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
+                {getImage("normal_block.png"), getImage("tria.png")}));
         unselectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, stackSprites(new Image[]
                 {getImage("normal_block.png"), getImage("square.png")}));
         unselectedBlocks.put(ComboEffect.EXPLOSION, stackSprites(new Image[]
