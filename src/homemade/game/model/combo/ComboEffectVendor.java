@@ -2,32 +2,34 @@ package homemade.game.model.combo;
 
 import homemade.game.ComboEffect;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class ComboEffectVendor
 {
-    private int[] costs = new int[]{
-            4,
-            2,
-            1};
-    private ComboEffect[] pricedEffects = new ComboEffect[]{
-            ComboEffect.EXPLOSION,
-            ComboEffect.JUST_EXTRA_TIER,
-            ComboEffect.EXTRA_MULTIPLIER};
 
     public void addComboEffectsForTier(LinkedList<ComboEffect> effects, int tier)
     {
-        for (int i = 0; i < costs.length; i++)
+        ComboEffect[] pricedEffects = ComboEffect.values();
+        Comparator<ComboEffect> comparator = ComboEffect.getComparator();
+
+        Arrays.sort(pricedEffects, comparator);
+
+        for (int i = 0; i < pricedEffects.length && tier > 0; i++)
         {
-            int given = tier / costs[i];
-            tier -= given * costs[i];
+            ComboEffect effect = pricedEffects[i];
+            int price = effect.getPrice();
+
+            int given = tier / price;
+            tier -= given * price;
 
             for (int j = 0; j < given; j++)
             {
-                effects.add(pricedEffects[i]);
+                effects.add(effect);
             }
         }
 
-        effects.sort(ComboEffect.getComparator());
+        effects.sort(comparator);
     }
 }
