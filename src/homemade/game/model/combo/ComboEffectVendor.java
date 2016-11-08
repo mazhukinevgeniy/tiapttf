@@ -2,6 +2,7 @@ package homemade.game.model.combo;
 
 import homemade.game.Cell.ComboEffect;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ComboEffectVendor
@@ -28,6 +29,6 @@ public class ComboEffectVendor
             }
         }
 
-        //TODO: sort effects so that most powerful and expensive are first
+        effects.sort(ComboEffect.getComparator());
     }
 }

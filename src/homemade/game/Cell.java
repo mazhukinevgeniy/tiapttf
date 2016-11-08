@@ -1,12 +1,23 @@
 package homemade.game;
 
+import java.util.Comparator;
+
 public enum Cell
 {
     EMPTY, MARKED_FOR_SPAWN, OCCUPIED, DEAD_BLOCK;
 
+    //TODO: this enum is huge, get it out of here
     public enum ComboEffect
     {
-        EXTRA_MULTIPLIER, IMMOVABLE, JUST_EXTRA_TIER, EXPLOSION;
+        //care: all prices must be different
+        EXTRA_MULTIPLIER(1), IMMOVABLE(-1), JUST_EXTRA_TIER(2), EXPLOSION(4);
+
+        private int price;
+
+        private ComboEffect(int price)
+        {
+            this.price = price;
+        }
 
         public int tierBonus()
         {
@@ -16,6 +27,33 @@ public enum Cell
         public int multiplierBonus()
         {
             return this == EXTRA_MULTIPLIER ? 1 : 0;
+        }
+
+        public int getPrice()
+        {
+            return price;
+        }
+
+        /**
+         * Default sort with returned comparator will sort
+         * from the most expensive to the least expensive effects.
+         *
+         * null isn't supported
+         */
+        public static Comparator<ComboEffect> getComparator()
+        {
+            return new ComboEffectComparator();
+        }
+
+        private static class ComboEffectComparator implements Comparator<ComboEffect>
+        {
+            public int compare(ComboEffect o1, ComboEffect o2)
+            {
+                if (o1 == null || o2 == null)
+                    throw new NullPointerException();
+
+                return o2.getPrice() - o1.getPrice();
+            }
         }
     }
 
