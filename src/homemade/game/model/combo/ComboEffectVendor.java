@@ -1,34 +1,32 @@
 package homemade.game.model.combo;
 
-import homemade.game.Cell;
+import homemade.game.Cell.ComboEffect;
 
 import java.util.LinkedList;
 
 public class ComboEffectVendor
 {
-    private static final int EXPLOSION_COST = 4;
-    private static final int BONUS_TIER_COST = 2;
+    private int[] costs = new int[]{
+            4,
+            2,
+            1};
+    private ComboEffect[] pricedEffects = new ComboEffect[]{
+            ComboEffect.EXPLOSION,
+            ComboEffect.JUST_EXTRA_TIER,
+            ComboEffect.EXTRA_MULTIPLIER};
 
-    //TODO: make some kind of two arrays with costs and effects
-
-    public void addComboEffectsForTier(LinkedList<Cell.ComboEffect> effects, int tier)
+    public void addComboEffectsForTier(LinkedList<ComboEffect> effects, int tier)
     {
-        int explosions = tier / EXPLOSION_COST;
-        tier = tier - explosions * EXPLOSION_COST;
+        for (int i = 0; i < costs.length; i++)
+        {
+            int given = tier / costs[i];
+            tier -= given * costs[i];
 
-        int bonusTiers = tier / BONUS_TIER_COST;
-        tier = tier - bonusTiers * BONUS_TIER_COST;
-
-        int bonusMultipliers = tier;
-
-        for (int i = 0; i < explosions; i++)
-            effects.add(Cell.ComboEffect.EXPLOSION);
-
-        for (int i = 0; i < bonusTiers; i++)
-            effects.add(Cell.ComboEffect.JUST_EXTRA_TIER);
-
-        for (int i = 0; i < bonusMultipliers; i++)
-            effects.add(Cell.ComboEffect.EXTRA_MULTIPLIER);
+            for (int j = 0; j < given; j++)
+            {
+                effects.add(pricedEffects[i]);
+            }
+        }
 
         //TODO: sort effects so that most powerful and expensive are first
     }
