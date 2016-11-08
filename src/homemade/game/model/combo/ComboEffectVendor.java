@@ -1,8 +1,7 @@
 package homemade.game.model.combo;
 
-import homemade.game.Cell.ComboEffect;
+import homemade.game.ComboEffect;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ComboEffectVendor

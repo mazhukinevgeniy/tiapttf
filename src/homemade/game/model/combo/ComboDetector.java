@@ -1,7 +1,7 @@
 package homemade.game.model.combo;
 
-import homemade.game.Cell;
 import homemade.game.Combo;
+import homemade.game.ComboEffect;
 import homemade.game.controller.BlockEventHandler;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
@@ -88,14 +88,14 @@ public class ComboDetector
                         currentCell = lastCell;
                         nextCell = lastCell.neighbour(mainDirection);
 
-                        Cell.ComboEffect comboEffect = cellMap.getCell(currentCell).effect();
+                        ComboEffect comboEffect = cellMap.getCell(currentCell).effect();
 
                         if (comboEffect != null)
                         {
                             comboTier += comboEffect.tierBonus();
                             pack.addMultiplier(comboEffect.multiplierBonus());
 
-                            if (comboEffect == Cell.ComboEffect.EXPLOSION)
+                            if (comboEffect == ComboEffect.EXPLOSION)
                             {
                                 Set<CellCode> vicinity = currentCell.getVicinity();
                                 comboCells.addAll(vicinity);

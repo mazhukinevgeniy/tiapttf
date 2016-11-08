@@ -2,6 +2,7 @@ package homemade.game.model.spawn;
 
 import homemade.game.Cell;
 import homemade.game.CellState;
+import homemade.game.ComboEffect;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
@@ -42,7 +43,7 @@ class BlockSpawner
             changes.put(cells.remove(pos),
                         new CellState(Cell.OCCUPIED,
                                       blockValuePool.takeBlockValue(),
-                                      Cell.ComboEffect.IMMOVABLE));
+                                      ComboEffect.IMMOVABLE));
 
             blocksToImmobilize--;
             cSize--;

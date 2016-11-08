@@ -1,10 +1,7 @@
 package homemade.game.model;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
-import homemade.game.GameSettings;
+import homemade.game.*;
 import homemade.game.GameSettings.GameMode;
-import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
@@ -26,7 +23,7 @@ public class GameModelLinker
     private CellMap cellMap;
     private SpawnManager spawner;
     private ArrayBasedGameState state;
-    private LinkedList<Cell.ComboEffect> storedEffects;
+    private LinkedList<ComboEffect> storedEffects;
 
     private GameController controller;
 

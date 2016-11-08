@@ -2,6 +2,7 @@ package homemade.game.model.spawn;
 
 import homemade.game.Cell;
 import homemade.game.CellState;
+import homemade.game.ComboEffect;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
@@ -56,7 +57,7 @@ public class SpawnManager
         return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
     }
 
-    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<Cell.ComboEffect> effects)
+    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<ComboEffect> effects)
     {
         return cellMarker.markBlocks(structure.getCellCodeIterator(), effects);
     }

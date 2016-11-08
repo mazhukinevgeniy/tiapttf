@@ -1,7 +1,5 @@
 package homemade.game;
 
-import homemade.game.Cell.ComboEffect;
-
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;

@@ -2,6 +2,7 @@ package homemade.game.model.spawn;
 
 import homemade.game.Cell;
 import homemade.game.CellState;
+import homemade.game.ComboEffect;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
@@ -52,7 +53,7 @@ class CellMarker
         return changes;
     }
 
-    Map<CellCode, CellState> markBlocks(Iterator<CellCode> iterator, LinkedList<Cell.ComboEffect> effects)
+    Map<CellCode, CellState> markBlocks(Iterator<CellCode> iterator, LinkedList<ComboEffect> effects)
     {
         Map<CellCode, CellState> changes = new HashMap<>();
 
