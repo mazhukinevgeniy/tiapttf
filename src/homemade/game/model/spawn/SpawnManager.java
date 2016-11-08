@@ -9,6 +9,7 @@ import homemade.game.model.BlockValuePool;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
+import java.util.LinkedList;
 import java.util.Map;
 
 public class SpawnManager
@@ -55,9 +56,9 @@ public class SpawnManager
         return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
     }
 
-    public Map<CellCode, CellState> markBlocksWithEffects(int tier)
+    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<Cell.ComboEffect> effects)
     {
-        return cellMarker.markBlocks(structure.getCellCodeIterator(), tier);
+        return cellMarker.markBlocks(structure.getCellCodeIterator(), effects);
     }
 
     public Map<CellCode, CellState> spawnDeadBlocks()

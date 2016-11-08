@@ -52,30 +52,9 @@ class CellMarker
         return changes;
     }
 
-    Map<CellCode, CellState> markBlocks(Iterator<CellCode> iterator, int tier)
+    Map<CellCode, CellState> markBlocks(Iterator<CellCode> iterator, LinkedList<Cell.ComboEffect> effects)
     {
         Map<CellCode, CellState> changes = new HashMap<>();
-
-        int explosions = tier / 4;
-        tier = tier - explosions * 4;
-
-        int bonusTiers = tier / 2;
-        tier = tier - bonusTiers * 2;
-
-        int bonusMultipliers = tier;
-
-        LinkedList<Cell.ComboEffect> effects = new LinkedList<>();
-
-        for (int i = 0; i < explosions; i++)
-            effects.add(Cell.ComboEffect.EXPLOSION);
-
-        for (int i = 0; i < bonusTiers; i++)
-            effects.add(Cell.ComboEffect.JUST_EXTRA_TIER);
-
-        for (int i = 0; i < bonusMultipliers; i++)
-            effects.add(Cell.ComboEffect.EXTRA_MULTIPLIER);
-        //TODO: cellMarker has nothing to do with it, just pass the list from the linker
-
 
         LinkedList<CellCode> availableBlocks = new LinkedList<>();
         while (iterator.hasNext())

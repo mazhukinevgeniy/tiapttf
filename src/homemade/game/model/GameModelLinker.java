@@ -11,10 +11,12 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.combo.ComboDetector;
+import homemade.game.model.combo.ComboEffectVendor;
 import homemade.game.model.selection.BlockSelection;
 import homemade.game.model.spawn.SpawnManager;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class GameModelLinker
@@ -24,6 +26,7 @@ public class GameModelLinker
     private CellMap cellMap;
     private SpawnManager spawner;
     private ArrayBasedGameState state;
+    private LinkedList<Cell.ComboEffect> storedEffects;
 
     private GameController controller;
 
@@ -47,6 +50,8 @@ public class GameModelLinker
 
         BlockValuePool blockValuePool = new BlockValuePool(structure.getFieldSize());
         cellMap = new CellMap(structure, blockValuePool);
+
+        storedEffects = new LinkedList<>();
 
         state = new ArrayBasedGameState(structure);
         lastGameState = state.getImmutableCopy();
@@ -186,7 +191,9 @@ public class GameModelLinker
         if (updater.hasCellChanges())
         {
             int comboPackTier = updater.comboPackTier();
-            updater.takeChanges(spawner.markBlocksWithEffects(comboPackTier));
+            new ComboEffectVendor().addComboEffectsForTier(storedEffects, comboPackTier);
+
+            updater.takeChanges(spawner.markBlocksWithEffects(storedEffects));
 
             selection.updateSelectionState();
             updater.flush();
