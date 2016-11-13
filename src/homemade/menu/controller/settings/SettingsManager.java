@@ -3,8 +3,8 @@ package homemade.menu.controller.settings;
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.controller.MenuManager;
-import homemade.menu.model.settings.Modes;
 import homemade.menu.model.settings.Parameter;
+import homemade.menu.model.settings.Presets;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.ModePanel;
@@ -40,8 +40,8 @@ public class SettingsManager implements HandlerButtons
 
         customManager = new CustomManager(this, settings);
 
-        turnBasedManager = new ModePanelManager(this, Modes.GroupCode.TURN_BASED, "Turn based");
-        realtimeManager = new ModePanelManager(this, Modes.GroupCode.REALTIME, "Realtime");
+        turnBasedManager = new ModePanelManager(this, Presets.Mode.TURN_BASED, "Turn based");
+        realtimeManager = new ModePanelManager(this, Presets.Mode.REALTIME, "Realtime");
         List<ModePanel> panels = createPanelsList();
 
         Map<CodeButton, String> buttons = createButtonMap();
@@ -97,8 +97,8 @@ public class SettingsManager implements HandlerButtons
         mainManager.switchToMenu(MenuManager.MenuCode.SETTINGS);
     }
 
-    public void switchToMode(Modes.GroupCode group, Modes.ModeCode mode, List<Parameter<?>> parameters)
+    public void switchToMode(Presets.Mode mode, Presets.Difficulty difficulty, List<Parameter<?>> parameters)
     {
-        settings.setModeParameters(group, mode, parameters);
+        settings.setModeParameters(mode, difficulty, parameters);
     }
 }

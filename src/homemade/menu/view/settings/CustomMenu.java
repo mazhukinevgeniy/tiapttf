@@ -118,7 +118,7 @@ public class CustomMenu extends MenuPanel
         {
             String name = factory.getName(parameter);
             TypeValue value = type.cast(factory.getValue(parameter));
-            newParameters.add(new Parameter<>(type, name, value));
+            newParameters.add(new Parameter<>(name, value));
         }
         return newParameters;
     }

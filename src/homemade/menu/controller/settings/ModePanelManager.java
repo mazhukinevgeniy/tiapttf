@@ -2,7 +2,7 @@ package homemade.menu.controller.settings;
 
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
-import homemade.menu.model.settings.Modes;
+import homemade.menu.model.settings.Presets;
 import homemade.menu.view.settings.ModePanel;
 
 import java.util.EnumMap;
@@ -12,25 +12,25 @@ public class ModePanelManager implements HandlerButtons
 {
 
     private SettingsManager mainManager;
-    private Modes.GroupCode panelCode;
+    private Presets.Mode panelCode;
     private ModePanel panel;
 
-    public ModePanelManager(SettingsManager mainManager, Modes.GroupCode panelCode, String name)
+    public ModePanelManager(SettingsManager mainManager, Presets.Mode panelCode, String name)
     {
         this.mainManager = mainManager;
         this.panelCode = panelCode;
         ButtonActionListener actionListener = new ButtonActionListener(this);
 
-        Map<Modes.ModeCode, String> buttons = createButtonsMap();
+        Map<Presets.Difficulty, String> buttons = createButtonsMap();
         panel = new ModePanel(name, buttons, actionListener);
     }
 
-    private Map<Modes.ModeCode, String> createButtonsMap()
+    private Map<Presets.Difficulty, String> createButtonsMap()
     {
-        Map<Modes.ModeCode, String> buttons = new EnumMap<>(Modes.ModeCode.class);
-        buttons.put(Modes.ModeCode.EASY, "Easy");
-        buttons.put(Modes.ModeCode.MEDIUM, "Medium");
-        buttons.put(Modes.ModeCode.HARD, "Hard");
+        Map<Presets.Difficulty, String> buttons = new EnumMap<>(Presets.Difficulty.class);
+        buttons.put(Presets.Difficulty.EASY, "Easy");
+        buttons.put(Presets.Difficulty.MEDIUM, "Medium");
+        buttons.put(Presets.Difficulty.HARD, "Hard");
 
         return buttons;
     }
@@ -38,8 +38,8 @@ public class ModePanelManager implements HandlerButtons
     @Override
     public void handleButtonClick(int codeButton)
     {
-        Modes.ModeCode modeCode = Modes.ModeCode.values()[codeButton];
-        mainManager.switchToMode(panelCode, modeCode, null);
+        Presets.Difficulty difficultyCode = Presets.Difficulty.values()[codeButton];
+        mainManager.switchToMode(panelCode, difficultyCode, null);
     }
 
     public ModePanel getModePanel()
