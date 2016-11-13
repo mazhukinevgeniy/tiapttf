@@ -41,8 +41,9 @@ public class Settings
     private Map<String, ValidParameter<Boolean>> boolParameters = new HashMap<>();
     private Map<String, ValidParameter<Integer>> intParameters = new HashMap<>();
 
-    private Modes.GroupCode currentGroup;
-    private Modes.ModeCode currentMode;
+    private Presets presets = new Presets();
+    private Presets.Mode currentMode;
+    private Presets.Difficulty currentDifficutly;
 
     private SettingsSave save;
 
@@ -190,15 +191,15 @@ public class Settings
         return parameters;
     }
 
-    public void setModeParameters(Modes.GroupCode group, Modes.ModeCode mode, List<Parameter<?>> parameters)
+    public void setModeParameters(Presets.Mode mode, Presets.Difficulty difficulty, List<Parameter<?>> parameters)
     {
-        if (mode != Modes.ModeCode.CUSTOM)
+        if (mode != Presets.Mode.CUSTOM)
         {
-            parameters = Modes.getValues(group, mode);
+            parameters = presets.getPresets(mode, difficulty);
         }
         setParameters(parameters);
-        currentGroup = group;
         currentMode = mode;
+        currentDifficutly = difficulty;
     }
 
     public void setParameters(List<Parameter<?>> parameters)
