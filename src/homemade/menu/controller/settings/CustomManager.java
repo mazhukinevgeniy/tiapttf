@@ -2,8 +2,8 @@ package homemade.menu.controller.settings;
 
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
-import homemade.menu.model.settings.Presets;
 import homemade.menu.model.settings.Parameter;
+import homemade.menu.model.settings.Presets;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.CustomMenu;

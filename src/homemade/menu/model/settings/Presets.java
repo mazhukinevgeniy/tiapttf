@@ -46,10 +46,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 2));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 2));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
 
         return parameters;
     }
@@ -59,10 +59,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
 
         return parameters;
     }
@@ -72,10 +72,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 4));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 4));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
 
         return parameters;
     }
@@ -96,10 +96,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 20));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 200));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 3));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 20));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 200));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 3));
 
         return parameters;
     }
@@ -109,10 +109,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
 
         return parameters;
     }
@@ -122,10 +122,10 @@ public class Presets
     {
         List<Parameter<?>> parameters = getCommonParameters();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.spawnPeriod, 3500));
-        parameters.add(new Parameter<>(Integer.class, Settings.Name.comboLength, 5));
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
+        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
+        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 3500));
+        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
 
         return parameters;
     }
@@ -135,7 +135,7 @@ public class Presets
     {
         List<Parameter<?>> parameters = new ArrayList<>();
 
-        parameters.add(new Parameter<>(Boolean.class, Settings.Name.animatedLinks, false));
+        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
 
         return parameters;
     }

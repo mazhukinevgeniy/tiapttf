@@ -12,9 +12,9 @@ public class Parameter<Type>
         this.name = name;
     }
 
-    public Parameter(Class<Type> type, final String name, Type value)
+    public Parameter(final String name, Type value)
     {
-        this.type = type;
+        this.type = (Class<Type>) value.getClass();
         this.name = name;
         this.value = value;
     }
