@@ -1,6 +1,7 @@
 package homemade.menu.model.settings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -21,135 +22,51 @@ public class Presets
         CUSTOM
     }
 
-    private EnumMap<Mode, EnumMap<Difficulty, List<Parameter<?>>>> presetsLists;
+    private final static int SIMULATTANEOUS_SPAWN = 0;
+    private final static int SPAWN_PERIOD = 1;
+    private final static int COMBO_LENGTH = 2;
+
+    private EnumMap<Mode, EnumMap<Difficulty, List<Integer>>> presetsMap;
 
     public Presets()
     {
-        presetsLists = new EnumMap<>(Mode.class);
-        presetsLists.put(Mode.TURN_BASED, getTurnBasedMap());
-        presetsLists.put(Mode.REALTIME, getRealtimeMap());
-    }
+        presetsMap = new EnumMap<>(Mode.class);
+        presetsMap.put(Mode.TURN_BASED,  new EnumMap<>(Difficulty.class));
+        presetsMap.put(Mode.REALTIME, new EnumMap<>(Difficulty.class));
 
-    private EnumMap<Difficulty, List<Parameter<?>>> getTurnBasedMap()
-    {
-        EnumMap<Difficulty, List<Parameter<?>>> turnBasedMap = new EnumMap<>(Difficulty.class);
+        //...Arrays.asList(simultaneousSpawn, spawnPeriod, comboLength);
+        presetsMap.get(Mode.TURN_BASED).put(Difficulty.EASY, Arrays.asList(2, 6000, 5));
+        presetsMap.get(Mode.TURN_BASED).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5));
+        presetsMap.get(Mode.TURN_BASED).put(Difficulty.HARD, Arrays.asList(4, 6000, 5));
 
-        turnBasedMap.put(Difficulty.EASY, getTurnBasedEasy());
-        turnBasedMap.put(Difficulty.MEDIUM, getTurnBasedMedium());
-        turnBasedMap.put(Difficulty.HARD, getTurnBasedHard());
+        presetsMap.get(Mode.REALTIME).put(Difficulty.EASY, Arrays.asList(20, 200, 3));
+        presetsMap.get(Mode.REALTIME).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5));
+        presetsMap.get(Mode.REALTIME).put(Difficulty.HARD, Arrays.asList(3, 3500, 5));
 
-        return turnBasedMap;
-    }
-
-    //TURN BASED EASY
-    private List<Parameter<?>> getTurnBasedEasy()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 2));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
-
-        return parameters;
-    }
-
-    //TURN BASED MEDIUM
-    private List<Parameter<?>> getTurnBasedMedium()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
-
-        return parameters;
-    }
-
-    //TURN BASED HARD
-    private List<Parameter<?>> getTurnBasedHard()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, false));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 4));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
-
-        return parameters;
-    }
-
-    private EnumMap<Difficulty, List<Parameter<?>>> getRealtimeMap()
-    {
-        EnumMap<Difficulty, List<Parameter<?>>> realtimeMap = new EnumMap<>(Difficulty.class);
-
-        realtimeMap.put(Difficulty.EASY, getRealtimeEasy());
-        realtimeMap.put(Difficulty.MEDIUM, getRealtimeMedium());
-        realtimeMap.put(Difficulty.HARD, getRealtimeHard());
-
-        return realtimeMap;
-    }
-
-    //REALTIME EASY
-    private List<Parameter<?>> getRealtimeEasy()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 20));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 200));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 3));
-
-        return parameters;
-    }
-
-    //REALTIME MEDIUM
-    private List<Parameter<?>> getRealtimeMedium()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 6000));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
-
-        return parameters;
-    }
-
-    //REALTIME HARD
-    private List<Parameter<?>> getRealtimeHard()
-    {
-        List<Parameter<?>> parameters = getCommonParameters();
-
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, true));
-        parameters.add(new Parameter<>(Settings.Name.simultaneousSpawn, 3));
-        parameters.add(new Parameter<>(Settings.Name.spawnPeriod, 3500));
-        parameters.add(new Parameter<>(Settings.Name.comboLength, 5));
-
-        return parameters;
-    }
-
-    //COMMON VALUES
-    private List<Parameter<?>> getCommonParameters()
-    {
-        List<Parameter<?>> parameters = new ArrayList<>();
-
-        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
-
-        return parameters;
     }
 
     public List<Parameter<?>> getPresets(Mode mode, Difficulty difficulty)
     {
-        return presetsLists.get(mode).get(difficulty);
-    }
+        List<Parameter<?>> parameters = new ArrayList<>();
 
-    //TODO: just create lists
-    //store them in EnumMap<Mode, EnumMap<Difficulty, List<Parameter<?>>>
-    //in getPreset(..) return new ArrayList<>(lists.get(mode).get(difficulty))
-    //more readable initialization, 0 elseifs, 0 extra methods
-    //also nothing has to be static
-    //I'd also rename the whole class to Presets or something
-    //I'm so tempted to do it myself <_<
+        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
+        boolean isRealTime = false;
+        if (mode == Mode.REALTIME)
+        {
+            isRealTime = true;
+        }
+        parameters.add(new Parameter<>(Settings.Name.isRealTime, isRealTime));
+
+        String[] patametersName = new String[] {Settings.Name.simultaneousSpawn,
+                                                Settings.Name.spawnPeriod,
+                                                Settings.Name.comboLength};
+        List<Integer> values = presetsMap.get(mode).get(difficulty);
+
+        for (int index : new int[] {SIMULATTANEOUS_SPAWN, SPAWN_PERIOD, COMBO_LENGTH})
+        {
+            parameters.add(new Parameter<Object>(patametersName[index], values.get(index)));
+        }
+
+        return parameters;
+    }
 }
