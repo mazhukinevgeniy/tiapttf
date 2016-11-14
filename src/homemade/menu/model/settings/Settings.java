@@ -191,13 +191,12 @@ public class Settings
         return parameters;
     }
 
-    public void setModeParameters(Presets.Mode mode, Presets.Difficulty difficulty, List<Parameter<?>> parameters)
+    public void setPresetParameters(Presets.Mode mode, Presets.Difficulty difficulty)
     {
-        if (mode != Presets.Mode.CUSTOM)
-        {
-            parameters = presets.getPresets(mode, difficulty);
-        }
+        List<Parameter<?>> parameters = presets.getPresets(mode, difficulty);
+        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
         setParameters(parameters);
+
         currentMode = mode;
         currentDifficutly = difficulty;
     }

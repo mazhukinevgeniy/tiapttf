@@ -10,16 +10,14 @@ public class Presets
     public enum Mode
     {
         TURN_BASED,
-        REALTIME,
-        CUSTOM
+        REALTIME
     }
 
     public enum Difficulty
     {
         EASY,
         MEDIUM,
-        HARD,
-        CUSTOM
+        HARD
     }
 
     private final static int SIMULATTANEOUS_SPAWN = 0;
@@ -49,7 +47,6 @@ public class Presets
     {
         List<Parameter<?>> parameters = new ArrayList<>();
 
-        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
         boolean isRealTime = false;
         if (mode == Mode.REALTIME)
         {

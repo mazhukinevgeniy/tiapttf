@@ -3,7 +3,6 @@ package homemade.menu.controller.settings;
 import homemade.menu.controller.ButtonActionListener;
 import homemade.menu.controller.HandlerButtons;
 import homemade.menu.model.settings.Parameter;
-import homemade.menu.model.settings.Presets;
 import homemade.menu.model.settings.Settings;
 import homemade.menu.view.MenuPanel;
 import homemade.menu.view.settings.CustomMenu;
@@ -63,7 +62,7 @@ public class CustomManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.APPLY)
         {
-            mainManager.switchToMode(Presets.Mode.CUSTOM, Presets.Difficulty.CUSTOM, customMenu.getParameters());
+            mainManager.setNewParameters(customMenu.getParameters());
             updateSettingsMenu();
             mainManager.returnToSettingsMenu();
         }

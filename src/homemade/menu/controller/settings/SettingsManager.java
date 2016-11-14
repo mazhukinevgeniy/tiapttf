@@ -97,8 +97,13 @@ public class SettingsManager implements HandlerButtons
         mainManager.switchToMenu(MenuManager.MenuCode.SETTINGS);
     }
 
-    public void switchToMode(Presets.Mode mode, Presets.Difficulty difficulty, List<Parameter<?>> parameters)
+    public void switchToMode(Presets.Mode mode, Presets.Difficulty difficulty)
     {
-        settings.setModeParameters(mode, difficulty, parameters);
+        settings.setPresetParameters(mode, difficulty);
+    }
+
+    public void setNewParameters(List<Parameter<?>> parameters)
+    {
+        settings.setParameters(parameters);
     }
 }

@@ -39,7 +39,7 @@ public class ModePanelManager implements HandlerButtons
     public void handleButtonClick(int codeButton)
     {
         Presets.Difficulty difficultyCode = Presets.Difficulty.values()[codeButton];
-        mainManager.switchToMode(panelCode, difficultyCode, null);
+        mainManager.switchToMode(panelCode, difficultyCode);
     }
 
     public ModePanel getModePanel()
