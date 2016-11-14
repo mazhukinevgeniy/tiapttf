@@ -32,7 +32,7 @@ public class Presets
         presetsMap.put(Mode.TURN_BASED,  new EnumMap<>(Difficulty.class));
         presetsMap.put(Mode.REALTIME, new EnumMap<>(Difficulty.class));
 
-        //...Arrays.asList(simultaneousSpawn, spawnPeriod, comboLength);
+        //...Arrays.asList(simultaneousSpawn, spawnPeriod, comboLength); //see consts above
         presetsMap.get(Mode.TURN_BASED).put(Difficulty.EASY, Arrays.asList(2, 6000, 5));
         presetsMap.get(Mode.TURN_BASED).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5));
         presetsMap.get(Mode.TURN_BASED).put(Difficulty.HARD, Arrays.asList(4, 6000, 5));

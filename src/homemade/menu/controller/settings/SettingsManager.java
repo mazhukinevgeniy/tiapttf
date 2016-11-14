@@ -88,6 +88,7 @@ public class SettingsManager implements HandlerButtons
         }
         else if (codeButton == CodeButton.CUSTOM)
         {
+            customManager.updateSettingsMenu();
             mainManager.switchToMenu(MenuManager.MenuCode.CUSTOM);
         }
     }

@@ -255,6 +255,4 @@ public class Settings
             updateParameterInSave(parameter);
         }
     }
-
-    //TODO: fix issue: custom settings window doesn't show current parameters when opened
 }

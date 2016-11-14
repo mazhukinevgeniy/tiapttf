@@ -68,7 +68,7 @@ public class CustomManager implements HandlerButtons
         }
     }
 
-    private void updateSettingsMenu()
+    public void updateSettingsMenu()
     {
         parameters = settings.getAllParameters();
         customMenu.updateMenu(parameters);
