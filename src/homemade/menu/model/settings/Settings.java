@@ -14,6 +14,7 @@ public class Settings {
         public static final String simultaneousSpawn = "Simultaneous spawn";
         public static final String spawnPeriod = "Max spawn period (ms)";
         public static final String comboLength = "Min combo length";
+        public static final String maxBlockValue = "Max block value (9/27/81)";
     }
 
     //2) add parameter to eligible list with names
@@ -21,7 +22,8 @@ public class Settings {
 
     private List<String> nameListInt = Arrays.asList(Name.simultaneousSpawn,
             Name.spawnPeriod,
-            Name.comboLength);
+            Name.comboLength,
+            Name.maxBlockValue);
 
     //3) state default value and Range/Enum valid values
     private static Map<String, ValueChecker<?>> checkers = new HashMap<>();
@@ -32,6 +34,7 @@ public class Settings {
         checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 20));
         checkers.put(Name.spawnPeriod, new RangeChecker<>(2000, 100, 1000 * 60));
         checkers.put(Name.comboLength, new RangeChecker<>(5, 3, 9));
+        checkers.put(Name.maxBlockValue, new InSetChecker<>(9, 9, 27, 81));
     }
     //4) everything should work (=
 
