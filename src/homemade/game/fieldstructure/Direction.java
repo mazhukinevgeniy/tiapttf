@@ -3,30 +3,7 @@ package homemade.game.fieldstructure;
 import java.util.EnumMap;
 
 public enum Direction {
-    LEFT() {
-        @Override
-        public boolean isHorizontal() {
-            return true;
-        }
-    },
-    RIGHT() {
-        @Override
-        public boolean isHorizontal() {
-            return true;
-        }
-    },
-    TOP() {
-        @Override
-        public boolean isHorizontal() {
-            return false;
-        }
-    },
-    BOTTOM() {
-        @Override
-        public boolean isHorizontal() {
-            return false;
-        }
-    };
+    LEFT(true), RIGHT(true), TOP(false), BOTTOM(false);
 
     private static EnumMap<Direction, Direction> opposites = new EnumMap<>(Direction.class);
 
@@ -37,10 +14,17 @@ public enum Direction {
         opposites.put(TOP, BOTTOM);
     }
 
+    private boolean horizontal;
+
+    Direction(boolean isHorizontal) {
+        horizontal = isHorizontal;
+    }
 
     public Direction getOpposite() {
         return opposites.get(this);
     }
 
-    abstract public boolean isHorizontal();
+    public boolean isHorizontal() {
+        return horizontal;
+    }
 }
