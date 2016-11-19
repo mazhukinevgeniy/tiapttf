@@ -40,12 +40,12 @@ public class Presets {
 
     //4) add values to congruent maps
         //...Arrays.asList(simultaneousSpawn, spawnPeriod, comboLength, maxBlockValue); //see consts above
-        presetsMap.get(Mode.TURN_BASED).put(Difficulty.EASY, Arrays.asList(2, 6000, 5, 81));
-        presetsMap.get(Mode.TURN_BASED).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5, 27));
+        presetsMap.get(Mode.TURN_BASED).put(Difficulty.EASY, Arrays.asList(2, 6000, 5, 27));
+        presetsMap.get(Mode.TURN_BASED).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5, 9));
         presetsMap.get(Mode.TURN_BASED).put(Difficulty.HARD, Arrays.asList(4, 6000, 5, 9));
 
         presetsMap.get(Mode.REALTIME).put(Difficulty.EASY, Arrays.asList(20, 200, 3, 81));
-        presetsMap.get(Mode.REALTIME).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5, 27));
+        presetsMap.get(Mode.REALTIME).put(Difficulty.MEDIUM, Arrays.asList(3, 6000, 5, 9));
         presetsMap.get(Mode.REALTIME).put(Difficulty.HARD, Arrays.asList(3, 3500, 5, 9));
     }
 
