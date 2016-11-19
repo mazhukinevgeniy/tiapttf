@@ -39,16 +39,18 @@ public class FieldStructure
         linkCodes = LinkCode.createLinkCodes(this);
     }
 
-    public CellCode getCellCode(int x, int y)
-    {
+    public CellCode getCellCode(int x, int y) {
         assert x >= 0 && x < width && y >= 0 && y < height;
 
         return cellCodes[cellCodeAsInt(x, y)];
         //fun fact: can be calculated as x * rightshift + y * downshift
     }
 
-    public LinkCode getLinkCode(CellCode cellA, CellCode cellB)
-    {
+    public LinkCode getLinkCode(CellCodePair cellCodePair) {
+        return getLinkCode(cellCodePair.getLower(), cellCodePair.getHigher());
+    }
+
+    public LinkCode getLinkCode(CellCode cellA, CellCode cellB) {
         assert cellA.distance(cellB) == 1;
 
         return linkCodes[linkCodeAsInt(cellA, cellB)];
