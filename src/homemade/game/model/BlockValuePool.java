@@ -7,11 +7,15 @@ public class BlockValuePool {
     private LinkedList<Integer> available;
     private Random random;
 
-    BlockValuePool(int max) {
+    BlockValuePool(int max, int total) {
+        if (total % max != 0) {
+            throw new IllegalArgumentException("block value pool is supposed to have equal amount of all values");
+        }
+
         available = new LinkedList<>();
 
-        for (int i = 0; i < max; i++) {
-            available.add(Integer.valueOf(i + 1));
+        for (int i = 0; i < total; i++) {
+            available.add(i % max + 1);
         }
 
         random = new Random();
@@ -31,5 +35,4 @@ public class BlockValuePool {
     public int blocksAvailable() {
         return available.size();
     }
-
 }
