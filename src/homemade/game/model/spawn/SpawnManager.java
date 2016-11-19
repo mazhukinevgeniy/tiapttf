@@ -31,8 +31,8 @@ public class SpawnManager {
         cellMarker = new CellMarker(cellMap, blockValuePool);
 
         GameSettings settings = linker.getSettings();
-        GameSettings.GameMode mode = settings.gameMode();
-        simultaneousSpawn = settings.maxSpawn();
+        GameSettings.GameMode mode = settings.gameMode;
+        simultaneousSpawn = settings.spawn;
 
         if (mode == GameSettings.GameMode.TURN_BASED)
             timer = new SpawnTimer.EmptyTimer();

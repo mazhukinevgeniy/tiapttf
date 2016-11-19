@@ -24,7 +24,7 @@ class SpawnPeriod {
     private static final int MIN_PERIOD = 100;
 
     static SpawnPeriod newFastStart(GameModelLinker linker, GameSettings settings) {
-        int minCombo = settings.minCombo();
+        int minCombo = settings.minCombo;
 
         int saturationPoint = minCombo * 3;
         int size = linker.getStructure().getFieldSize();
@@ -39,8 +39,8 @@ class SpawnPeriod {
         separators.add((oversaturationPoint + saturationPoint) / 2);
         separators.add(oversaturationPoint);
 
-        int maxPeriod = settings.maxPeriod();
-        int spawnsToFill = Math.max(1, (size - oversaturationPoint) / settings.maxSpawn());
+        int maxPeriod = settings.period;
+        int spawnsToFill = Math.max(1, (size - oversaturationPoint) / settings.spawn);
 
         System.out.println("time to fill from oversaturation = " + maxPeriod * spawnsToFill);
 

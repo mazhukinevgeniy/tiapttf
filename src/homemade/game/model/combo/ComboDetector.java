@@ -26,7 +26,7 @@ public class ComboDetector {
 
         this.blockEventHandler = blockEventHandler;
 
-        minCombo = linker.getSettings().minCombo();
+        minCombo = linker.getSettings().minCombo;
     }
 
     public ComboPack findCombos(Set<CellCode> starts) {

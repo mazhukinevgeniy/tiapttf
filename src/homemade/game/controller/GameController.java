@@ -138,10 +138,11 @@ public class GameController implements BlockEventHandler, MouseInputHandler {
 
                 int score = model.copyGameState().gameScore();
                 String name = new StringBuilder()
-                        .append("sp").append(settings.maxSpawn())
-                        .append("c").append(settings.minCombo())
-                        .append("per").append(settings.maxPeriod())
-                        .append(settings.gameMode() == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
+                        .append("sp").append(settings.spawn)
+                        .append("c").append(settings.minCombo)
+                        .append("per").append(settings.period)
+                        .append("max").append(settings.maxBlockValue)
+                        .append(settings.gameMode == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
                         .toString();
 
                 records.add(score, name, LocalDateTime.now());

@@ -10,33 +10,19 @@ public class GameSettings {
         TURN_BASED, REAL_TIME
     }
 
-    private GameMode mode;
+    public final GameMode gameMode;
 
-    private int combo;
-    private int spawn;
-    private int period;
+    public final int minCombo;
+    public final int spawn;
+    public final int period;
+    public final int maxBlockValue;
 
     public GameSettings(Settings settings) {
-        combo = settings.get(Settings.Name.comboLength);
+        minCombo = settings.get(Settings.Name.comboLength);
         spawn = settings.get(Settings.Name.simultaneousSpawn);
         period = settings.get(Settings.Name.spawnPeriod);
+        maxBlockValue = settings.get(Settings.Name.maxBlockValue);
 
-        mode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
-    }
-
-    public GameMode gameMode() {
-        return mode;
-    }
-
-    public int minCombo() {
-        return combo;
-    }
-
-    public int maxSpawn() {
-        return spawn;
-    }
-
-    public int maxPeriod() {
-        return period;
+        gameMode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
     }
 }

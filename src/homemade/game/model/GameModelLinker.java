@@ -59,7 +59,7 @@ public class GameModelLinker {
         spawner = new SpawnManager(this, blockValuePool);
         selection = new BlockSelection(this);
 
-        GameMode mode = settings.gameMode();
+        GameMode mode = settings.gameMode;
         if (mode == GameMode.TURN_BASED) {
             for (int i = 0; i < 2; i++)
                 requestSpawn();
@@ -152,7 +152,7 @@ public class GameModelLinker {
 
             updater.takeComboChanges(tmpMap);
 
-            if (settings.gameMode() == GameMode.TURN_BASED && !updater.hasCombos()) {
+            if (settings.gameMode == GameMode.TURN_BASED && !updater.hasCombos()) {
                 requestSpawn();
                 //TODO: fix edge case when board is cleared in turn-based mode and the new move is impossible
                 //it'd make sense to give player a ton of points and fill the board like in the beginning
