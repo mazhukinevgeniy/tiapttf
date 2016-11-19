@@ -13,8 +13,7 @@ import homemade.game.model.cellmap.CellMapReader;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SpawnManager
-{
+public class SpawnManager {
     private SpawnTimer timer;
 
     private BlockSpawner spawner;
@@ -24,8 +23,7 @@ public class SpawnManager
 
     private FieldStructure structure;
 
-    public SpawnManager(GameModelLinker linker, BlockValuePool blockValuePool)
-    {
+    public SpawnManager(GameModelLinker linker, BlockValuePool blockValuePool) {
         structure = linker.getStructure();
 
         CellMapReader cellMap = linker.getMapReader();
@@ -44,36 +42,30 @@ public class SpawnManager
             throw new RuntimeException("unknown game mode");
     }
 
-    public Map<CellCode, CellState> spawnBlocks()
-    {
+    public Map<CellCode, CellState> spawnBlocks() {
         int blocksToImmobilize = 1; //let's say it's either 0 or 1
         //TODO: add mechanic to determine whether we immobilize blocks or not
 
         return spawner.spawnBlocks(structure.getCellCodeIterator(), blocksToImmobilize);
     }
 
-    public Map<CellCode, CellState> markCellsForSpawn()
-    {
+    public Map<CellCode, CellState> markCellsForSpawn() {
         return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
     }
 
-    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<ComboEffect> effects)
-    {
+    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<ComboEffect> effects) {
         return cellMarker.markBlocks(structure.getCellCodeIterator(), effects);
     }
 
-    public Map<CellCode, CellState> spawnDeadBlocks()
-    {
+    public Map<CellCode, CellState> spawnDeadBlocks() {
         return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.DEAD_BLOCK, 5);
     }
 
-    public Map<CellCode, CellState> removeRandomBlocks()
-    {
+    public Map<CellCode, CellState> removeRandomBlocks() {
         return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.EMPTY, 25);
     }
 
-    public SpawnTimer spawnTimer()
-    {
+    public SpawnTimer spawnTimer() {
         return timer;
     }
 }

@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockSelection
-{
+public class BlockSelection {
     private GameModelLinker linker;
     private CellMapReader cellMapReader;
 
@@ -22,8 +21,7 @@ public class BlockSelection
 
     private SelectionState state;
 
-    public BlockSelection(GameModelLinker linker)
-    {
+    public BlockSelection(GameModelLinker linker) {
         this.linker = linker;
         cellMapReader = linker.getMapReader();
 
@@ -35,17 +33,13 @@ public class BlockSelection
         updateSelectionState();
     }
 
-    public synchronized void activateCell(CellCode eventCell)
-    {
-        if (cellMapReader.getCell(eventCell).isMovable())
-        {
+    public synchronized void activateCell(CellCode eventCell) {
+        if (cellMapReader.getCell(eventCell).isMovable()) {
             selection.clear();
             selection.add(eventCell);
 
             updateSelectionState();
-        }
-        else if (selection.size() == 1 && state.canMoveTo(eventCell))
-        {
+        } else if (selection.size() == 1 && state.canMoveTo(eventCell)) {
             CellCode selectedCell = selection.get(0);
             tryMove(selectedCell, eventCell, true);
         }
@@ -53,14 +47,11 @@ public class BlockSelection
         System.out.println("apparently, mouse released at " + eventCell.x() + ", " + eventCell.y());
     }
 
-    public synchronized void tryToMoveSelectionIn(Direction direction)
-    {
-        if (this.selection.size() == 1)
-        {
+    public synchronized void tryToMoveSelectionIn(Direction direction) {
+        if (this.selection.size() == 1) {
             CellCode cellCode = selection.get(0);
 
-            if (!cellCode.onBorder(direction))
-            {
+            if (!cellCode.onBorder(direction)) {
                 CellCode eventCell = cellCode.neighbour(direction);
 
                 tryMove(cellCode, eventCell, false);
@@ -68,10 +59,8 @@ public class BlockSelection
         }
     }
 
-    private void tryMove(CellCode selectedCell, CellCode eventCell, boolean moveSelectionOnFail)
-    {
-        if (eventCell != selectedCell)
-        {
+    private void tryMove(CellCode selectedCell, CellCode eventCell, boolean moveSelectionOnFail) {
+        if (eventCell != selectedCell) {
             linker.tryMove(selectedCell, eventCell);
 
             selection.clear();
@@ -85,18 +74,15 @@ public class BlockSelection
                     selection.add(eventCell);
                 else
                     selection.add(selectedCell);
-            }
-            else if (eventCellOccupied)
+            } else if (eventCellOccupied)
                 selection.add(eventCell);
 
             updateSelectionState();
         }
     }
 
-    public synchronized void updateSelectionState()
-    {
-        for (Iterator<CellCode> iterator = selection.iterator(); iterator.hasNext(); )
-        {
+    public synchronized void updateSelectionState() {
+        for (Iterator<CellCode> iterator = selection.iterator(); iterator.hasNext(); ) {
             CellCode next = iterator.next();
 
             if (!cellMapReader.getCell(next).isNormalBlock())
@@ -109,35 +95,27 @@ public class BlockSelection
 
         if (selection.size() > 1)
             throw new RuntimeException("accessable cells are undefined");
-        else if (selection.size() == 1)
-        {
+        else if (selection.size() == 1) {
             HashSet<CellCode> unaccessableCells = new HashSet<>(fieldSize);
             HashSet<CellCode> borderCells = new HashSet<>(1);
             Direction[] directions = Direction.values();
 
             borderCells.add(selection.get(0));
 
-            while (!borderCells.isEmpty())
-            {
+            while (!borderCells.isEmpty()) {
                 HashSet<CellCode> newBorder = new HashSet<>(Math.min(borderCells.size() * 2, fieldSize / 2));
 
-                for (CellCode borderCell : borderCells)
-                {
+                for (CellCode borderCell : borderCells) {
                     unaccessableCells.add(borderCell);
 
-                    for (Direction direction : directions)
-                    {
+                    for (Direction direction : directions) {
                         CellCode neighbour = borderCell.neighbour(direction);
 
-                        if (neighbour != null && !unaccessableCells.contains(neighbour))
-                        {
-                            if (cellMapReader.getCell(neighbour).isFreeForMove())
-                            {
+                        if (neighbour != null && !unaccessableCells.contains(neighbour)) {
+                            if (cellMapReader.getCell(neighbour).isFreeForMove()) {
                                 newBorder.add(neighbour);
                                 cellsToMove.add(neighbour);
-                            }
-                            else
-                            {
+                            } else {
                                 unaccessableCells.add(neighbour);
                             }
                         }
@@ -151,8 +129,7 @@ public class BlockSelection
         state = new SelectionStateProvider(copy, cellsToMove);
     }
 
-    public SelectionState getSelectionState()
-    {
+    public SelectionState getSelectionState() {
         return state;
     }
 }

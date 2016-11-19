@@ -1,6 +1,5 @@
 package homemade.game.view;
 
-public enum ShownEffect
-{
+public enum ShownEffect {
     FADEAWAY, EXPLOSION
 }

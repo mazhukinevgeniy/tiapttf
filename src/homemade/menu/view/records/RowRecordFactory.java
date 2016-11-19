@@ -3,13 +3,11 @@ package homemade.menu.view.records;
 import javax.swing.*;
 import java.awt.*;
 
-class RowRecordFactory
-{
+class RowRecordFactory {
     private static final int ROW_WIDTH = 300;
     private static final int ROW_HEIGHT = 35;
 
-    public static JPanel create(String place, String playerName, String score)
-    {
+    public static JPanel create(String place, String playerName, String score) {
         JLabel placeLabel = createLabel(place, ROW_WIDTH / 4);
         JLabel playerNameLabel = createLabel(playerName, ROW_WIDTH / 2);
         JLabel scoreLabel = createLabel(score, ROW_WIDTH / 4);
@@ -26,8 +24,7 @@ class RowRecordFactory
         return rowRecord;
     }
 
-    private static JLabel createLabel(String text, int width)
-    {
+    private static JLabel createLabel(String text, int width) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setMaximumSize(new Dimension(width, ROW_HEIGHT));
 

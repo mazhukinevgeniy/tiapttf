@@ -16,8 +16,7 @@ import homemade.utils.timer.TimerTaskPerformer;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class GameController implements BlockEventHandler, MouseInputHandler
-{
+public class GameController implements BlockEventHandler, MouseInputHandler {
     private static final int TARGET_FPS = 60;
 
     private MenuManager menuManager;
@@ -34,13 +33,11 @@ public class GameController implements BlockEventHandler, MouseInputHandler
 
     private QuickTimer mainTimer;
 
-    public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records)
-    {
+    public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
         initialize(menuManager, mainFrame, container, settings, records);
     }
 
-    private synchronized void initialize(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records)
-    {
+    private synchronized void initialize(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
         this.menuManager = menuManager;
         this.records = records;
         this.settings = settings;
@@ -61,8 +58,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler
     }
 
     @Override
-    public synchronized void handleMouseRelease(int canvasX, int canvasY)
-    {
+    public synchronized void handleMouseRelease(int canvasX, int canvasY) {
         int gridX = canvasX - GameView.GRID_OFFSET_X;
         int gridY = canvasY - GameView.GRID_OFFSET_Y;
 
@@ -71,8 +67,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler
         int maxX = structure.getWidth() * fullCell;
         int maxY = structure.getHeight() * fullCell;
 
-        if (gridX >= 0 && gridX < maxX && gridY >= 0 && gridY < maxY)
-        {
+        if (gridX >= 0 && gridX < maxX && gridY >= 0 && gridY < maxY) {
             int cellX = gridX / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
             int cellY = gridY / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);
 
@@ -82,53 +77,43 @@ public class GameController implements BlockEventHandler, MouseInputHandler
         }
     }
 
-    public synchronized void blockRemoved(CellCode atCell)
-    {
+    public synchronized void blockRemoved(CellCode atCell) {
         view.getEffectManager().addEffect(atCell, ShownEffect.FADEAWAY);
     }
 
-    public synchronized void blockExploded(CellCode atCell)
-    {
+    public synchronized void blockExploded(CellCode atCell) {
         view.getEffectManager().addEffect(atCell, ShownEffect.EXPLOSION);
     }
 
-    public synchronized void multiplierChanged(int change)
-    {
+    public synchronized void multiplierChanged(int change) {
         view.getEffectManager().blink(change > 0);
     }
 
-    synchronized void requestPauseToggle()
-    {
+    synchronized void requestPauseToggle() {
         model.toggleSpawnPause();
     }
 
-    synchronized void requestQuit()
-    {
+    synchronized void requestQuit() {
         model.forceStop();
     }
 
-    public synchronized void gameOver()
-    {
+    public synchronized void gameOver() {
         new QuickTimer(new GameOverTimerTask(), GameOverTimerTask.PERIOD);
     }
 
-    private class ControllerTimerTask implements TimerTaskPerformer
-    {
+    private class ControllerTimerTask implements TimerTaskPerformer {
         private static final int FRAMES_BEFORE_KEY_INPUT = 6;
         private int frameCounter = 0;
 
         @Override
-        public void handleTimerTask()
-        {
-            if (frameCounter == FRAMES_BEFORE_KEY_INPUT)
-            {
+        public void handleTimerTask() {
+            if (frameCounter == FRAMES_BEFORE_KEY_INPUT) {
                 frameCounter = 0;
                 Direction direction = keyboard.extractDirection();
 
                 if (direction != null)
                     model.tryMove(direction);
-            }
-            else
+            } else
                 frameCounter++;
 
             GameState state = model.copyGameState();
@@ -138,18 +123,15 @@ public class GameController implements BlockEventHandler, MouseInputHandler
         }
     }
 
-    private class GameOverTimerTask extends TimerTaskPerformer.TimerAwarePerformer
-    {
+    private class GameOverTimerTask extends TimerTaskPerformer.TimerAwarePerformer {
         private static final int TASKS_BEFORE_QUIT = 5;
         private static final int PERIOD = 1000 / TASKS_BEFORE_QUIT;
 
         private int taskCounter = 0;
 
         @Override
-        public void handleTimerTask()
-        {
-            if (taskCounter == TASKS_BEFORE_QUIT)
-            {
+        public void handleTimerTask() {
+            if (taskCounter == TASKS_BEFORE_QUIT) {
                 mainTimer.stop();
                 timer.stop();
                 view.dispose();
@@ -164,9 +146,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler
 
                 records.add(score, name, LocalDateTime.now());
                 menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-            }
-            else
-            {
+            } else {
                 model.killRandomBlocks();
 
                 taskCounter++;

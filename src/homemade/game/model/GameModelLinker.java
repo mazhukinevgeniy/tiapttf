@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class GameModelLinker
-{
+public class GameModelLinker {
     private FieldStructure structure;
 
     private CellMap cellMap;
@@ -34,13 +33,11 @@ public class GameModelLinker
 
     private Updater updater;
 
-    GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller)
-    {
+    GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller) {
         initialize(structure, settings, controller);
     }
 
-    private synchronized void initialize(FieldStructure structure, GameSettings settings, GameController controller)
-    {
+    private synchronized void initialize(FieldStructure structure, GameSettings settings, GameController controller) {
         this.controller = controller;
         this.structure = structure;
         this.settings = settings;
@@ -62,68 +59,58 @@ public class GameModelLinker
         selection = new BlockSelection(this);
 
         GameMode mode = settings.gameMode();
-        if (mode == GameMode.TURN_BASED)
-        {
+        if (mode == GameMode.TURN_BASED) {
             for (int i = 0; i < 2; i++)
                 requestSpawn();
         }
     }
 
-    synchronized public FieldStructure getStructure()
-    {
+    synchronized public FieldStructure getStructure() {
         return structure;
     }
-    synchronized public GameSettings getSettings()
-    {
+
+    synchronized public GameSettings getSettings() {
         return settings;
     }
-    synchronized public CellMapReader getMapReader()
-    {
+
+    synchronized public CellMapReader getMapReader() {
         return cellMap;
     }
 
-    synchronized BlockSelection getSelection()
-    {
+    synchronized BlockSelection getSelection() {
         return selection;
     }
 
-    synchronized void stopAllFacilities()
-    {
+    synchronized void stopAllFacilities() {
         spawner.spawnTimer().stop();
         controller.gameOver();
     }
 
-    synchronized void togglePause()
-    {
+    synchronized void togglePause() {
         spawner.spawnTimer().toggleSpawnPause();
     }
 
-    synchronized void killRandomBlocks()
-    {
+    synchronized void killRandomBlocks() {
         updater.takeChanges(spawner.spawnDeadBlocks());
         updateStates();
     }
 
-    synchronized void updateScore(int newScore)
-    {
+    synchronized void updateScore(int newScore) {
         state.updateScore(newScore);
     }
 
-    synchronized void modifyGlobalMultiplier(int change)
-    {
+    synchronized void modifyGlobalMultiplier(int change) {
         int oldMultiplier = state.globalMultiplier();
         int rawMultiplier = oldMultiplier + change;
         int newMultiplier = Math.max(1, rawMultiplier);
 
-        if (oldMultiplier != newMultiplier)
-        {
+        if (oldMultiplier != newMultiplier) {
             state.updateMultiplier(newMultiplier);
             controller.multiplierChanged(change);
         }
     }
 
-    synchronized public void requestSpawn()
-    {
+    synchronized public void requestSpawn() {
         modifyGlobalMultiplier(-1);
 
         updater.takeComboChanges(spawner.spawnBlocks());
@@ -131,36 +118,30 @@ public class GameModelLinker
 
         updateStates();
 
-        if (state.numberOfBlocks() == structure.getFieldSize())
-        {
+        if (state.numberOfBlocks() == structure.getFieldSize()) {
             int multiplier = state.globalMultiplier();
 
-            if (multiplier > 1)
-            {
+            if (multiplier > 1) {
                 modifyGlobalMultiplier(-multiplier);
 
                 updater.takeChanges(spawner.removeRandomBlocks());
                 updateStates();
                 System.out.println("multiplier consumed");
-            }
-            else
-            {
+            } else {
                 stopAllFacilities();
                 System.out.println("no multiplier");
             }
         }
     }
 
-    synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell)
-    {
+    synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
         boolean repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
-                                state.globalMultiplier() == 1;
+                state.globalMultiplier() == 1;
 
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (cellTo.isFreeForMove() && cellFrom.isMovable())
-        {
+        if (cellTo.isFreeForMove() && cellFrom.isMovable()) {
             if (repercussions)
                 state.incrementDenyCounter();
 
@@ -170,23 +151,18 @@ public class GameModelLinker
 
             updater.takeComboChanges(tmpMap);
 
-            if (settings.gameMode() == GameMode.TURN_BASED && !updater.hasCombos())
-            {
+            if (settings.gameMode() == GameMode.TURN_BASED && !updater.hasCombos()) {
                 requestSpawn();
                 //TODO: fix edge case when board is cleared in turn-based mode and the new move is impossible
                 //it'd make sense to give player a ton of points and fill the board like in the beginning
-            }
-            else
-            {
+            } else {
                 updateStates();
             }
         }
     }
 
-    private void updateStates()
-    {
-        if (updater.hasCellChanges())
-        {
+    private void updateStates() {
+        if (updater.hasCellChanges()) {
             int comboPackTier = updater.comboPackTier();
             new ComboEffectVendor().addComboEffectsForTier(storedEffects, comboPackTier);
 
@@ -197,8 +173,7 @@ public class GameModelLinker
         }
     }
 
-    synchronized GameState copyGameState()
-    {
+    synchronized GameState copyGameState() {
         return lastGameState = state.getImmutableCopy();
     }
 
@@ -207,8 +182,7 @@ public class GameModelLinker
      * A) you want an immutable gamestate
      * B) you don't care if it's not updated since the last external use (e.g. rendering)
      */
-    synchronized public GameState lastGameState()
-    {
+    synchronized public GameState lastGameState() {
         return lastGameState;
     }
 }

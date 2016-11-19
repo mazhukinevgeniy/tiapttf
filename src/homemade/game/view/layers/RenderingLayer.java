@@ -17,14 +17,12 @@ import java.util.Iterator;
 /**
  * This class is meant to be extended.
  */
-abstract public class RenderingLayer
-{
+abstract public class RenderingLayer {
     private static final int fullCellWidth = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
     public static final ArrayList<RenderingLayer> getRenderingLayers(FieldStructure structure,
                                                                      GameSettings settings,
-                                                                     EffectManager effectManager)
-    {
+                                                                     EffectManager effectManager) {
         ArrayList<RenderingLayer> list = new ArrayList<RenderingLayer>();
 
         list.add(new EffectLayer(effectManager));
@@ -43,13 +41,11 @@ abstract public class RenderingLayer
 
     protected Assets assets;
 
-    RenderingLayer()
-    {
+    RenderingLayer() {
         assets = Assets.getAssets();
     }
 
-    final public void renderLayer(FieldStructure structure, GameState state, SelectionState selection, Graphics graphics)
-    {
+    final public void renderLayer(FieldStructure structure, GameState state, SelectionState selection, Graphics graphics) {
         this.state = state;
         this.selectionState = selection;
         this.graphics = graphics;
@@ -63,24 +59,23 @@ abstract public class RenderingLayer
 
     protected abstract void iterate(FieldStructure structure);
 
-    protected void renderForCell(CellCode cellCode) { }
-    protected void renderForLink(LinkCode linkCode) { }
+    protected void renderForCell(CellCode cellCode) {
+    }
 
-    final protected void setCanvasCoordinates(int i, int j)
-    {
+    protected void renderForLink(LinkCode linkCode) {
+    }
+
+    final protected void setCanvasCoordinates(int i, int j) {
         canvasX = GameView.GRID_OFFSET_X + fullCellWidth * i;
         canvasY = GameView.GRID_OFFSET_Y + fullCellWidth * j;
     }
 
-    static class Cells extends RenderingLayer
-    {
+    static class Cells extends RenderingLayer {
         @Override
-        protected void iterate(FieldStructure structure)
-        {
+        protected void iterate(FieldStructure structure) {
             Iterator<CellCode> cellCodeIterator = structure.getCellCodeIterator();
 
-            while (cellCodeIterator.hasNext())
-            {
+            while (cellCodeIterator.hasNext()) {
                 CellCode next = cellCodeIterator.next();
 
                 int x = next.x();
@@ -92,15 +87,12 @@ abstract public class RenderingLayer
         }
     }
 
-    static class Links extends RenderingLayer
-    {
+    static class Links extends RenderingLayer {
         @Override
-        protected void iterate(FieldStructure structure)
-        {
+        protected void iterate(FieldStructure structure) {
             Iterator<LinkCode> linkCodeIterator = structure.getLinkCodeIterator();
 
-            while (linkCodeIterator.hasNext())
-            {
+            while (linkCodeIterator.hasNext()) {
                 LinkCode next = linkCodeIterator.next();
 
                 CellCode lower = next.getLower();

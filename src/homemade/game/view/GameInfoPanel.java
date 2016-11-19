@@ -7,14 +7,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class GameInfoPanel
-{
+class GameInfoPanel {
     private JPanel container;
 
     private ViewListener listener;
 
-    GameInfoPanel(ViewListener listener, JLayeredPane layers, int width, int height)
-    {
+    GameInfoPanel(ViewListener listener, JLayeredPane layers, int width, int height) {
         this.listener = listener;
 
         container = new JPanel();
@@ -25,8 +23,7 @@ class GameInfoPanel
         layers.add(getButton(width, height), GameView.PANEL_LAYER);
     }
 
-    private JButton getButton(int panelWidth, int panelHeight)
-    {
+    private JButton getButton(int panelWidth, int panelHeight) {
         JButton button = new JButton("Quit");
 
         int width = 80;
@@ -42,12 +39,10 @@ class GameInfoPanel
         return button;
     }
 
-    private class QuitListener implements ActionListener
-    {
+    private class QuitListener implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e)
-        {
+        public void actionPerformed(ActionEvent e) {
             listener.quit();
         }
     }

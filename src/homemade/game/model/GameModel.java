@@ -11,49 +11,40 @@ import homemade.game.fieldstructure.FieldStructure;
 /**
  * GameModel handles commands from GameController.
  */
-public class GameModel
-{
+public class GameModel {
     private GameModelLinker linker;
 
-    public GameModel(GameController gameController, FieldStructure structure, GameSettings settings)
-    {
+    public GameModel(GameController gameController, FieldStructure structure, GameSettings settings) {
         linker = new GameModelLinker(structure, settings, gameController);
     }
 
-    public GameState copyGameState()
-    {
+    public GameState copyGameState() {
         return linker.copyGameState();
     }
 
-    public SelectionState copySelectionState()
-    {
+    public SelectionState copySelectionState() {
         return linker.getSelection().getSelectionState();
     }
 
 
-    public void toggleSpawnPause()
-    {
+    public void toggleSpawnPause() {
         linker.togglePause();
     }
 
-    public void forceStop()
-    {
+    public void forceStop() {
         linker.stopAllFacilities();
     }
 
-    public void killRandomBlocks()
-    {
+    public void killRandomBlocks() {
         linker.killRandomBlocks();
     }
 
 
-    public void tryToActivateCell(CellCode cell)
-    {
+    public void tryToActivateCell(CellCode cell) {
         linker.getSelection().activateCell(cell);
     }
 
-    public void tryMove(Direction direction)
-    {
+    public void tryMove(Direction direction) {
         linker.getSelection().tryToMoveSelectionIn(direction);
     }
 }

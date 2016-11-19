@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class EffectManager
-{
+public class EffectManager {
     private static final int BLINK_TIME = 80;
 
     private int blinkRemaining = 0;
@@ -18,26 +17,22 @@ public class EffectManager
 
     private Map<ShownEffect, EffectTracker> trackers;
 
-    EffectManager()
-    {
+    EffectManager() {
         oldTime = System.nanoTime();
 
         clearEffects();
     }
 
-    synchronized public void addEffect(CellCode cell, ShownEffect shownEffect)
-    {
+    synchronized public void addEffect(CellCode cell, ShownEffect shownEffect) {
         trackers.get(shownEffect).addFullEffect(cell);
     }
 
-    synchronized public void blink(boolean isGreen)
-    {
+    synchronized public void blink(boolean isGreen) {
         greenBlink = isGreen;
         blinkRemaining = BLINK_TIME;
     }
 
-    synchronized void clearEffects()
-    {
+    synchronized void clearEffects() {
         int FADE_TIME = 400;
         int EXPLOSION_TIME = 400;
 
@@ -48,80 +43,70 @@ public class EffectManager
         blinkRemaining = 0;
     }
 
-    synchronized void measureTimePassed()
-    {
+    synchronized void measureTimePassed() {
         long newTime = System.nanoTime();
         long difference = newTime - oldTime;
 
         long nanosecondsPerMillisecond = 1000 * 1000;
 
         oldTime = newTime;
-        updateEffects((int)(difference / nanosecondsPerMillisecond));
+        updateEffects((int) (difference / nanosecondsPerMillisecond));
     }
 
-    private synchronized void updateEffects(int differenceMS)
-    {
+    private synchronized void updateEffects(int differenceMS) {
         blinkRemaining = Math.max(0, blinkRemaining - differenceMS);
 
         for (Map.Entry<ShownEffect, EffectTracker> entry : trackers.entrySet())
             entry.getValue().updateEffects(differenceMS);
     }
 
-    synchronized public float getEffectTimeRemaining(CellCode cell, ShownEffect effect)
-    {
+    synchronized public float getEffectTimeRemaining(CellCode cell, ShownEffect effect) {
         return trackers.get(effect).getTimeRemaining(cell);
     }
 
-    synchronized Color getBackgroundColor()
-    {
+    synchronized Color getBackgroundColor() {
         Color base = Color.LIGHT_GRAY;
-        float shift = (float)blinkRemaining / BLINK_TIME;
+        float shift = (float) blinkRemaining / BLINK_TIME;
         Color farEnd = greenBlink ? Color.GREEN : Color.RED;
 
-        int newR = base.getRed() + (int)(shift * farEnd.getRed());
-        int newG = base.getGreen() + (int)(shift * farEnd.getGreen());
-        int newB = base.getBlue() + (int)(shift * farEnd.getBlue());
+        int newR = base.getRed() + (int) (shift * farEnd.getRed());
+        int newG = base.getGreen() + (int) (shift * farEnd.getGreen());
+        int newB = base.getBlue() + (int) (shift * farEnd.getBlue());
 
         int max = Math.max(Math.max(newR, newG), newB);
 
         return new Color(newR * 255 / max, newG * 255 / max, newB * 255 / max);
     }
 
-    private static class EffectTracker
-    {
+    private static class EffectTracker {
         private Map<CellCode, Integer> effects;
 
         private int fullTime;
 
 
-        private EffectTracker(int fullTime)
-        {
+        private EffectTracker(int fullTime) {
             this.fullTime = fullTime;
 
             effects = new HashMap<>();
         }
 
-        private void addFullEffect(CellCode cell)
-        {
+        private void addFullEffect(CellCode cell) {
             effects.put(cell, fullTime);
         }
 
-        private float getTimeRemaining(CellCode cell)
-        {
+        private float getTimeRemaining(CellCode cell) {
             float time = 0;
 
             if (effects.containsKey(cell))
-                time = (float)effects.get(cell) / fullTime;
+                time = (float) effects.get(cell) / fullTime;
 
             return time;
         }
 
-        private void updateEffects(int differenceMS)
-        {
+        private void updateEffects(int differenceMS) {
             Iterator<Map.Entry<CellCode, Integer>> iterator = effects.entrySet().iterator();
 
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 Map.Entry<CellCode, Integer> entry = iterator.next();
 
                 int oldTime = entry.getValue();

@@ -13,16 +13,14 @@ import homemade.game.model.cellmap.CellMapReader;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ComboDetector
-{
+public class ComboDetector {
     private FieldStructure structure;
     private CellMapReader cellMap;
     private BlockEventHandler blockEventHandler;
 
     private int minCombo;
 
-    public ComboDetector(GameModelLinker linker, BlockEventHandler blockEventHandler)
-    {
+    public ComboDetector(GameModelLinker linker, BlockEventHandler blockEventHandler) {
         structure = linker.getStructure();
         cellMap = linker.getMapReader();
 
@@ -31,28 +29,24 @@ public class ComboDetector
         minCombo = linker.getSettings().minCombo();
     }
 
-    public ComboPack findCombos(Set<CellCode> starts)
-    {
+    public ComboPack findCombos(Set<CellCode> starts) {
         int numberOfStarts = starts.size();
 
         Set<Integer> horizontals = new HashSet<Integer>(numberOfStarts);
         Set<Integer> verticals = new HashSet<Integer>(numberOfStarts);
 
-        for (CellCode cellCode : starts)
-        {
+        for (CellCode cellCode : starts) {
             horizontals.add(cellCode.y());
             verticals.add(cellCode.x());
         }
 
         ComboPack pack = new ComboPack();
 
-        for (int horizontal : horizontals)
-        {
+        for (int horizontal : horizontals) {
             iterateThroughTheLine(pack, structure.getCellCode(0, horizontal), Direction.RIGHT);
         }
 
-        for (int vertical : verticals)
-        {
+        for (int vertical : verticals) {
             iterateThroughTheLine(pack, structure.getCellCode(vertical, 0), Direction.BOTTOM);
         }
 
@@ -60,43 +54,36 @@ public class ComboDetector
     }
 
     /**
-     * @param start cellCode of the beginning
+     * @param start         cellCode of the beginning
      * @param mainDirection where to look for the next cell
      */
-    private void iterateThroughTheLine(ComboPack pack, CellCode start, Direction mainDirection)
-    {
+    private void iterateThroughTheLine(ComboPack pack, CellCode start, Direction mainDirection) {
         CellCode currentCell = start;
 
-        while (currentCell != null)
-        {
+        while (currentCell != null) {
             CellCode nextCell = currentCell.neighbour(mainDirection);
 
-            if (nextCell != null)
-            {
+            if (nextCell != null) {
                 LinkCode nextLink = structure.getLinkCode(currentCell, nextCell);
                 int comboLength = cellMap.getChainLength(nextLink);
 
-                if (comboLength >= minCombo)
-                {
+                if (comboLength >= minCombo) {
                     Set<CellCode> comboCells = new HashSet<>();
                     int comboTier = comboLength - minCombo + 1;
 
                     CellCode lastCell = currentCell;
 
-                    for (int i = 0; i < comboLength; i++)
-                    {
+                    for (int i = 0; i < comboLength; i++) {
                         currentCell = lastCell;
                         nextCell = lastCell.neighbour(mainDirection);
 
                         ComboEffect comboEffect = cellMap.getCell(currentCell).effect();
 
-                        if (comboEffect != null)
-                        {
+                        if (comboEffect != null) {
                             comboTier += comboEffect.tierBonus();
                             pack.addMultiplier(comboEffect.multiplierBonus());
 
-                            if (comboEffect == ComboEffect.EXPLOSION)
-                            {
+                            if (comboEffect == ComboEffect.EXPLOSION) {
                                 Set<CellCode> vicinity = currentCell.getVicinity();
                                 comboCells.addAll(vicinity);
 
@@ -118,14 +105,10 @@ public class ComboDetector
                     pack.add(new Combo(comboCells, comboTier));
 
                     //currentCell must be the last cell of combo after this block
-                }
-                else
-                {
+                } else {
                     currentCell = nextCell;
                 }
-            }
-            else
-            {
+            } else {
                 currentCell = null;
             }
         }

@@ -11,10 +11,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class CustomManager implements HandlerButtons
-{
-    public enum CodeButton
-    {
+public class CustomManager implements HandlerButtons {
+    public enum CodeButton {
         CANCEL,
         APPLY
     }
@@ -26,8 +24,7 @@ public class CustomManager implements HandlerButtons
 
     private List<Parameter<?>> parameters;
 
-    public CustomManager(SettingsManager mainManager, Settings settings)
-    {
+    public CustomManager(SettingsManager mainManager, Settings settings) {
         this.mainManager = mainManager;
         this.settings = settings;
         ButtonActionListener actionListener = new ButtonActionListener(this);
@@ -37,39 +34,32 @@ public class CustomManager implements HandlerButtons
         customMenu = new CustomMenu(parameters, buttons, actionListener);
     }
 
-    private Map<CodeButton, String> createButtonsMap()
-    {
+    private Map<CodeButton, String> createButtonsMap() {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
         buttons.put(CodeButton.CANCEL, "Cancel");
         buttons.put(CodeButton.APPLY, "Apply");
 
-        return  buttons;
+        return buttons;
     }
 
-    public MenuPanel getCustomMenu()
-    {
+    public MenuPanel getCustomMenu() {
         return this.customMenu;
     }
 
     @Override
-    public void handleButtonClick(int code)
-    {
+    public void handleButtonClick(int code) {
         CodeButton codeButton = CodeButton.values()[code];
 
-        if (codeButton == CodeButton.CANCEL)
-        {
+        if (codeButton == CodeButton.CANCEL) {
             mainManager.returnToSettingsMenu();
-        }
-        else if (codeButton == CodeButton.APPLY)
-        {
+        } else if (codeButton == CodeButton.APPLY) {
             mainManager.setNewParameters(customMenu.getParameters());
             updateSettingsMenu();
             mainManager.returnToSettingsMenu();
         }
     }
 
-    public void updateSettingsMenu()
-    {
+    public void updateSettingsMenu() {
         parameters = settings.getAllParameters();
         customMenu.updateMenu(parameters);
     }

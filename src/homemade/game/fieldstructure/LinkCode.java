@@ -3,33 +3,28 @@ package homemade.game.fieldstructure;
 /**
  * This class represents link as a part of the field structure.
  */
-public final class LinkCode
-{
+public final class LinkCode {
 
-    static LinkCode[] createLinkCodes(FieldStructure structure)
-    {
+    static LinkCode[] createLinkCodes(FieldStructure structure) {
         LinkCode codes[] = new LinkCode[structure.getNumberOfLinks()];
 
         int width = structure.getWidth();
         int height = structure.getHeight();
 
         for (int j = 0; j < height - 1; j++)
-            for (int i = 0; i < width; i++)
-            {
+            for (int i = 0; i < width; i++) {
                 createLinkCode(structure, structure.getCellCode(i, j), Direction.BOTTOM, codes);
             }
 
         for (int i = 0; i < width - 1; i++)
-            for (int j = 0; j < height; j++)
-            {
+            for (int j = 0; j < height; j++) {
                 createLinkCode(structure, structure.getCellCode(i, j), Direction.RIGHT, codes);
             }
 
         return codes;
     }
 
-    private static void createLinkCode(FieldStructure structure, CellCode lower, Direction direction, LinkCode codes[])
-    {
+    private static void createLinkCode(FieldStructure structure, CellCode lower, Direction direction, LinkCode codes[]) {
         CellCode higher = lower.neighbour(direction);
         int code = structure.linkCodeAsInt(lower, higher);
 
@@ -41,8 +36,7 @@ public final class LinkCode
 
     private int code;
 
-    private LinkCode(Direction direction, CellCode lower, CellCode higher, int code)
-    {
+    private LinkCode(Direction direction, CellCode lower, CellCode higher, int code) {
         this.direction = direction;
 
         this.lower = lower;
@@ -52,23 +46,19 @@ public final class LinkCode
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return code;
     }
 
-    public CellCode getLower()
-    {
+    public CellCode getLower() {
         return lower;
     }
 
-    public CellCode getHigher()
-    {
+    public CellCode getHigher() {
         return higher;
     }
 
-    public Direction getLowerToHigherDirection()
-    {
+    public Direction getLowerToHigherDirection() {
         return direction;
     }
 }

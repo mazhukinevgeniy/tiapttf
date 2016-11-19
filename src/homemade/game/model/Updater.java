@@ -17,11 +17,10 @@ import java.util.Set;
 
 /**
  * Used by GameModelLinker for tasks such as updating cellmap and gamestate
- *
+ * <p>
  * Must be synchronized externally
  */
-class Updater
-{
+class Updater {
     private FieldStructure structure;
 
     private ComboDetector comboDetector;
@@ -33,8 +32,7 @@ class Updater
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedGameState state)
-    {
+    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedGameState state) {
         structure = linker.getStructure();
 
         this.comboDetector = comboDetector;
@@ -47,14 +45,12 @@ class Updater
         storedCombos = new ComboPack();
     }
 
-    void takeChanges(Map<CellCode, CellState> changedCells)
-    {
+    void takeChanges(Map<CellCode, CellState> changedCells) {
         Set<CellCode> cellMapChanges = cellMap.applyCascadeChanges(changedCells);
         storedChanges.addAll(cellMapChanges);
     }
 
-    void takeComboChanges(Map<CellCode, CellState> changedCells)
-    {
+    void takeComboChanges(Map<CellCode, CellState> changedCells) {
         Set<CellCode> cellMapChanges = cellMap.applyCascadeChanges(changedCells);
         storedChanges.addAll(cellMapChanges);
 
@@ -65,8 +61,7 @@ class Updater
         storedChanges.addAll(comboCells);
     }
 
-    void flush()
-    {
+    void flush() {
         gameScore.handleCombos(storedCombos);
         storedCombos = new ComboPack();
 
@@ -74,43 +69,36 @@ class Updater
         storedChanges.clear();
     }
 
-    boolean hasCellChanges()
-    {
+    boolean hasCellChanges() {
         return !storedChanges.isEmpty();
     }
 
-    boolean hasCombos()
-    {
+    boolean hasCombos() {
         return storedCombos.numberOfCombos() > 0;
     }
 
-    int comboPackTier()
-    {
+    int comboPackTier() {
         return storedCombos.packTier();
     }
 
-    private Map<CellCode, CellState> removeCombos(ComboPack combos)
-    {
+    private Map<CellCode, CellState> removeCombos(ComboPack combos) {
         Map<CellCode, CellState> cellsToRemove = new HashMap<>();
 
         CellState empty = CellState.simpleState(Cell.EMPTY);
 
         Set<CellCode> comboCells = combos.cellSet();
 
-        for (CellCode cellCode : comboCells)
-        {
+        for (CellCode cellCode : comboCells) {
             cellsToRemove.put(cellCode, empty);
         }
 
         Direction[] directions = Direction.values();
 
-        for (CellCode cellCode : comboCells)
-        {
-            for (Direction direction : directions)
-            {
+        for (CellCode cellCode : comboCells) {
+            for (Direction direction : directions) {
                 CellCode neighbour = cellCode.neighbour(direction);
 
-                if (    neighbour != null &&
+                if (neighbour != null &&
                         !cellsToRemove.containsKey(neighbour) &&
                         cellMap.getCell(neighbour).type() == Cell.DEAD_BLOCK)
                     cellsToRemove.put(neighbour, empty);
@@ -121,31 +109,25 @@ class Updater
         return cellsToRemove;
     }
 
-    private void updateState(Set<CellCode> changedCells)
-    {
-        if (changedCells.size() > 0)
-        {
+    private void updateState(Set<CellCode> changedCells) {
+        if (changedCells.size() > 0) {
             Map<CellCode, CellState> updatedCells = new HashMap<>();
             Map<LinkCode, Direction> updatedLinks = new HashMap<>();
             Map<LinkCode, Integer> updatedChains = new HashMap<>();
 
-            for (CellCode cellCode : changedCells)
-            {
+            for (CellCode cellCode : changedCells) {
                 updatedCells.put(cellCode, cellMap.getCell(cellCode));
 
-                for (Direction direction : Direction.values())
-                {
+                for (Direction direction : Direction.values()) {
                     CellCode neighbour = cellCode.neighbour(direction);
 
-                    if (neighbour != null)
-                    {
+                    if (neighbour != null) {
                         LinkCode link = structure.getLinkCode(cellCode, neighbour);
                         updatedLinks.put(link, cellMap.getLinkDirection(link));
                     }
 
                     CellCode previousCell = cellCode;
-                    while (neighbour != null)
-                    {
+                    while (neighbour != null) {
                         LinkCode linkCode = structure.getLinkCode(previousCell, neighbour);
 
                         updatedChains.put(linkCode, cellMap.getChainLength(linkCode));

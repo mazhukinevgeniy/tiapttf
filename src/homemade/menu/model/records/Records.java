@@ -9,28 +9,23 @@ import java.util.List;
 import java.util.Random;
 
 //TODO: make sure it's synchronized and everything is saved when user closes application
-public class Records
-{
+public class Records {
     private static final int MAX_NUMBER_OF_RECORDS = 10;
 
     private List<Record> records = new ArrayList<>();
     private RecordsSave save;
 
-    public Records(RecordsSave save)
-    {
+    public Records(RecordsSave save) {
         this.save = save;
         initializeRecords();
     }
 
-    private void initializeRecords()
-    {
+    private void initializeRecords() {
         records = save.getRecords();
 
-        if(records.size() < MAX_NUMBER_OF_RECORDS)
-        {
+        if (records.size() < MAX_NUMBER_OF_RECORDS) {
             for (Record record : DefaultRecords.records)
-                if (!records.contains(record))
-                {
+                if (!records.contains(record)) {
                     records.add(record);
                 }
         }
@@ -40,23 +35,19 @@ public class Records
         rewriteSave();
     }
 
-    private void cullRecords()
-    {
+    private void cullRecords() {
         int size = records.size();
         records.subList(MAX_NUMBER_OF_RECORDS, size).clear();
     }
 
-    private void rewriteSave()
-    {
+    private void rewriteSave() {
         save.deleteAllRecords();
-        for (Record rec : records)
-        {
+        for (Record rec : records) {
             save.addRecord(rec);
         }
     }
 
-    public void add(int score, String playerName, LocalDateTime dateTime)
-    {
+    public void add(int score, String playerName, LocalDateTime dateTime) {
         Record record = new Record(score, playerName, dateTime);
 
         int index = Collections.binarySearch(records, record);
@@ -68,31 +59,25 @@ public class Records
         if (new Random().nextInt(10) < 1) //we don't want to rewrite save every time but we can't let it just grow
         {
             rewriteSave();
-        }
-        else
-        {
+        } else {
             save.addRecord(record);
         }
     }
 
-    public List<Record> getRecords()
-    {
+    public List<Record> getRecords() {
         return new ArrayList<>(records);
     }
 
-    public void setDefaultRecords()
-    {
+    public void setDefaultRecords() {
         records = new ArrayList<>(DefaultRecords.records);
         Collections.sort(records);
         rewriteSave();
     }
 
-    private static class DefaultRecords
-    {
+    private static class DefaultRecords {
         private static List<Record> records = new ArrayList<>();
 
-        static
-        {
+        static {
             LocalDateTime longTimeAgo = LocalDateTime.MIN;
 
             records.add(new Record(5, "Прохожий", longTimeAgo));

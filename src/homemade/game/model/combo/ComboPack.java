@@ -10,43 +10,37 @@ import java.util.Set;
 
 /**
  * Represents a set of combos, created "simultaneously".
- *
+ * <p>
  * Must be synchronized externally!
  */
-public class ComboPack
-{
+public class ComboPack {
     private ArrayList<Combo> combos;
 
     private int tier;
     private int bonusMultiplier;
 
-    public ComboPack()
-    {
+    public ComboPack() {
         combos = new ArrayList<>();
         tier = 0;
         bonusMultiplier = 0;
     }
 
-    void addMultiplier(int value)
-    {
+    void addMultiplier(int value) {
         bonusMultiplier += value;
     }
 
-    void add(Combo combo)
-    {
+    void add(Combo combo) {
         combos.add(combo);
         tier += combo.getTier();
     }
 
-    public void append(ComboPack anotherPack)
-    {
+    public void append(ComboPack anotherPack) {
         combos.addAll(anotherPack.combos);
         tier += anotherPack.tier;
         bonusMultiplier += anotherPack.bonusMultiplier;
     }
 
-    public Set<CellCode> cellSet()
-    {
+    public Set<CellCode> cellSet() {
         Set<CellCode> cells = new HashSet<>();
 
         for (Combo combo : combos)
@@ -55,23 +49,19 @@ public class ComboPack
         return cells;
     }
 
-    public Iterator<Combo> comboIterator()
-    {
+    public Iterator<Combo> comboIterator() {
         return combos.iterator();
     }
 
-    public int numberOfCombos()
-    {
+    public int numberOfCombos() {
         return combos.size();
     }
 
-    public int packTier()
-    {
+    public int packTier() {
         return tier;
     }
 
-    public int multiplierIncrease()
-    {
+    public int multiplierIncrease() {
         return tier + bonusMultiplier;
     }
 }

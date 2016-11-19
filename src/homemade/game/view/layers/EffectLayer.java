@@ -10,16 +10,14 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
-class EffectLayer extends RenderingLayer.Cells
-{
+class EffectLayer extends RenderingLayer.Cells {
     private EffectManager effectManager;
 
     private Map<ShownEffect, Integer> animationLength;
     private Map<ShownEffect, ArrayList<Image>> sprites;
     private Map<ShownEffect, ArrayList<Offset>> offsets;
 
-    EffectLayer(EffectManager effectManager)
-    {
+    EffectLayer(EffectManager effectManager) {
         this.effectManager = effectManager;
 
         EffectAssets effectAssets = assets.getEffectAssets();
@@ -41,8 +39,7 @@ class EffectLayer extends RenderingLayer.Cells
         sprites.put(ShownEffect.EXPLOSION, explosionSprites);
 
         offsets = new EnumMap<>(ShownEffect.class);
-        for (ShownEffect effect : ShownEffect.values())
-        {
+        for (ShownEffect effect : ShownEffect.values()) {
             int length = animationLength.get(effect);
 
             ArrayList<Offset> effectOffsets = new ArrayList<>(length);
@@ -56,14 +53,11 @@ class EffectLayer extends RenderingLayer.Cells
     }
 
     @Override
-    protected void renderForCell(CellCode cellCode)
-    {
-        for (ShownEffect effect : ShownEffect.values())
-        {
+    protected void renderForCell(CellCode cellCode) {
+        for (ShownEffect effect : ShownEffect.values()) {
             float time = effectManager.getEffectTimeRemaining(cellCode, effect);
 
-            if (time > 0)
-            {
+            if (time > 0) {
                 int numberOfFrames = animationLength.get(effect);
 
                 int frame = Math.min(numberOfFrames - 1, Math.round(numberOfFrames * time));

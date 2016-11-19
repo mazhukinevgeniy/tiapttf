@@ -12,20 +12,18 @@ import java.util.ArrayList;
  * field is saturated if it's not empty and there's plenty of blocks and some free space,
  * field is oversaturated if block percentage is above a certain threshold
  * and field is full if there's no free space.
- *
+ * <p>
  * The desirable period is like that:
  * 1) It's little when field is empty;
  * 2) It's manageable when field is saturated, ie you can set up huge combos in time;
  * 3) It will fill the field in the desirable time after the point of oversaturation.
- *
+ * <p>
  * Plus, it goes down a bit every time you deny a spawn.
  */
-class SpawnPeriod
-{
+class SpawnPeriod {
     private static final int MIN_PERIOD = 100;
 
-    static SpawnPeriod newFastStart(GameModelLinker linker, GameSettings settings)
-    {
+    static SpawnPeriod newFastStart(GameModelLinker linker, GameSettings settings) {
         int minCombo = settings.minCombo();
 
         int saturationPoint = minCombo * 3;
@@ -62,15 +60,13 @@ class SpawnPeriod
     private GameModelLinker linker;
     private PiecewiseConstantFunction<Integer, Integer> basePeriod;
 
-    private SpawnPeriod(GameModelLinker linker, PiecewiseConstantFunction<Integer, Integer> period)
-    {
+    private SpawnPeriod(GameModelLinker linker, PiecewiseConstantFunction<Integer, Integer> period) {
         basePeriod = period;
 
         this.linker = linker;
     }
 
-    long getSpawnPeriod()
-    {
+    long getSpawnPeriod() {
         GameState state = linker.lastGameState();
 
         int occupiedCells = state.numberOfBlocks();

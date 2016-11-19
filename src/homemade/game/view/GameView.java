@@ -13,8 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
-public class GameView
-{
+public class GameView {
     static final Integer CANVAS_LAYER = 0;
     static final Integer PANEL_LAYER = 1;
 
@@ -37,13 +36,11 @@ public class GameView
     private FpsTracker fpsTracker;
 
 
-    public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container)
-    {
+    public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container) {
         initialize(structure, settings, viewListener, container);
     }
 
-    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container)
-    {
+    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container) {
         effectManager = new EffectManager();
         fpsTracker = new FpsTracker();
 
@@ -76,13 +73,11 @@ public class GameView
         layers = RenderingLayer.getRenderingLayers(structure, settings, effectManager);
     }
 
-    public synchronized EffectManager getEffectManager()
-    {
+    public synchronized EffectManager getEffectManager() {
         return effectManager;
     }
 
-    public synchronized void dispose()
-    {
+    public synchronized void dispose() {
         strategy.dispose();
         strategy = null;
 
@@ -92,20 +87,17 @@ public class GameView
     /**
      * Would cause an exception if called after dispose()
      */
-    public synchronized void renderNextFrame(GameState state, SelectionState selection)
-    {
+    public synchronized void renderNextFrame(GameState state, SelectionState selection) {
         effectManager.measureTimePassed();
         fpsTracker.addTimestamp();
 
         container.setBackground(effectManager.getBackgroundColor());
 
         // Render single frame
-        do
-        {
+        do {
             // The following loop ensures that the contents of the drawing buffer
             // are consistent in case the underlying surface was recreated
-            do
-            {
+            do {
                 // Get a new graphics context every time through the loop
                 // to make sure the strategy is validated
                 Graphics graphics = strategy.getDrawGraphics();
@@ -114,8 +106,7 @@ public class GameView
 
                 graphics.drawImage(Assets.getAssets().getField(), GRID_OFFSET_X, GRID_OFFSET_Y, null);
 
-                for (RenderingLayer layer : layers)
-                {
+                for (RenderingLayer layer : layers) {
                     layer.renderLayer(structure, state, selection, graphics);
                 }
 

@@ -16,10 +16,8 @@ import homemade.resources.links.LinkAssets.Variation;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class MenuManager implements HandlerButtons
-{
-    public enum MenuCode
-    {
+public class MenuManager implements HandlerButtons {
+    public enum MenuCode {
         GAME,
         SETTINGS,
         CUSTOM,
@@ -35,8 +33,7 @@ public class MenuManager implements HandlerButtons
 
     private Records records;
 
-    public MenuManager(Window window, Settings settings, Records records)
-    {
+    public MenuManager(Window window, Settings settings, Records records) {
         this.window = window;
         this.settings = settings;
         this.records = records;
@@ -62,8 +59,7 @@ public class MenuManager implements HandlerButtons
         window.add(currentMenu);
     }
 
-    private Map<MenuCode, String> createMenuNamesMap()
-    {
+    private Map<MenuCode, String> createMenuNamesMap() {
         Map<MenuCode, String> menuNames = new EnumMap<>(MenuCode.class);
         menuNames.put(MenuCode.GAME, "Game");
         menuNames.put(MenuCode.SETTINGS, "Settings");
@@ -72,21 +68,18 @@ public class MenuManager implements HandlerButtons
         return menuNames;
     }
 
-    private void setCurrentMenu(MenuCode code)
-    {
+    private void setCurrentMenu(MenuCode code) {
         currentMenu = menus.get(code);
     }
 
     @Override
-    public void handleButtonClick(int code)
-    {
+    public void handleButtonClick(int code) {
         MenuCode menuCode = MenuCode.values()[code];
 
         switchToMenu(menuCode);
     }
 
-    public void switchToMenu(MenuCode code)
-    {
+    public void switchToMenu(MenuCode code) {
         window.setTitle("here we go again");
 
         if (currentMenu != null)
@@ -96,8 +89,7 @@ public class MenuManager implements HandlerButtons
         setCurrentMenu(code);
         window.add(currentMenu);
 
-        if (code == MenuCode.GAME)
-        {
+        if (code == MenuCode.GAME) {
             Variation assetType = settings.get(Settings.Name.animatedLinks) ? Variation.ANIMATED : Variation.COLORED;
             Assets.loadAssets(assetType);
 

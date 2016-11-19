@@ -8,28 +8,24 @@ import java.util.concurrent.TimeUnit;
 /**
  * Must be synchronized externally!
  */
-class FpsTracker
-{
+class FpsTracker {
     private static long nanosPerSecond = TimeUnit.MILLISECONDS.toNanos(1000);
 
     private List<Long> times;
 
-    FpsTracker()
-    {
+    FpsTracker() {
         times = new LinkedList<>();
     }
 
     /**
      * People say nanoTime could be unstable in multi-core environment, use this method with caution
      */
-    void addTimestamp()
-    {
+    void addTimestamp() {
         long newTime = System.nanoTime();
 
         times.add(newTime);
 
-        while (newTime - times.get(0) > nanosPerSecond)
-        {
+        while (newTime - times.get(0) > nanosPerSecond) {
             times.remove(0);
         }
 

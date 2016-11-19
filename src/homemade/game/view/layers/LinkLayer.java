@@ -11,8 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-class LinkLayer extends RenderingLayer.Links
-{
+class LinkLayer extends RenderingLayer.Links {
     private EnumMap<Direction, Offset> offsets;
     private PiecewiseConstantFunction<Double, Integer> chainLengthToSpriteTier;
 
@@ -22,16 +21,14 @@ class LinkLayer extends RenderingLayer.Links
 
     private LinkAssets linkAssets;
 
-    LinkLayer(GameSettings settings)
-    {
+    LinkLayer(GameSettings settings) {
         super();
 
         linkAssets = assets.getLinkAssets();
 
         offsets = new EnumMap<Direction, Offset>(Direction.class);
 
-        for (Direction direction : Direction.values())
-        {
+        for (Direction direction : Direction.values()) {
             Image img = linkAssets.getArrow(direction, 0, 0);
 
             int width = direction.isHorizontal() ? 2 : 1;
@@ -48,13 +45,11 @@ class LinkLayer extends RenderingLayer.Links
         ArrayList<Double> separators = new ArrayList<Double>(minSpriteTier - 1);
         ArrayList<Integer> spriteTier = new ArrayList<Integer>(minSpriteTier);
 
-        for (int i = 0; i < minSpriteTier - 1; i++)
-        {
+        for (int i = 0; i < minSpriteTier - 1; i++) {
             separators.add(minCombo - minSpriteTier + 0.5 + i);
         }
 
-        for (int i = 0; i < minSpriteTier; i++)
-        {
+        for (int i = 0; i < minSpriteTier; i++) {
             spriteTier.add(minSpriteTier - (i + 1));
         }
 
@@ -62,12 +57,10 @@ class LinkLayer extends RenderingLayer.Links
     }
 
     @Override
-    protected void renderForLink(LinkCode linkCode)
-    {
+    protected void renderForLink(LinkCode linkCode) {
         Direction linkDirection = state.getLinkBetweenCells(linkCode);
 
-        if (linkDirection != null)
-        {
+        if (linkDirection != null) {
             Double comboLength = (double) state.getChainLength(linkCode);
             int spriteTier = chainLengthToSpriteTier.getValueAt(comboLength);
 
@@ -79,8 +72,7 @@ class LinkLayer extends RenderingLayer.Links
     }
 
     @Override
-    protected void iterate(FieldStructure structure)
-    {
+    protected void iterate(FieldStructure structure) {
         super.iterate(structure);
 
         counter = (counter + 1) % countCap;

@@ -3,14 +3,12 @@ package homemade.menu.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window extends JFrame
-{
+public class Window extends JFrame {
     public static final String CAPTION = "there's a pattern there to follow";
     public static final int WIDTH = 480;
     public static final int HEIGHT = 640;
 
-    public Window()
-    {
+    public Window() {
         super(CAPTION);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,19 +16,16 @@ public class Window extends JFrame
     }
 
     @Override
-    public Component add(Component component)
-    {
+    public Component add(Component component) {
         return getContentPane().add(component);
     }
 
     @Override
-    public void remove(Component component)
-    {
+    public void remove(Component component) {
         getContentPane().remove(component);
     }
 
-    public void finaleInitialize()
-    {
+    public void finaleInitialize() {
         pack();
         setLocationRelativeTo(null);
     }

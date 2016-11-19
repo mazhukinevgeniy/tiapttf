@@ -2,10 +2,8 @@ package homemade.menu.view;
 
 import javax.swing.*;
 
-public class MenuPanel extends JPanel
-{
-    public MenuPanel()
-    {
+public class MenuPanel extends JPanel {
+    public MenuPanel() {
         super();
 
         setVisible(true);
@@ -14,16 +12,14 @@ public class MenuPanel extends JPanel
     /**
      * Called by MenuManager when swithing to another menu
      */
-    public void onQuit()
-    {
+    public void onQuit() {
 
     }
 
     /**
      * Called by MenuManager when swithing to current menu
      */
-    public void onShown()
-    {
+    public void onShown() {
 
     }
 }

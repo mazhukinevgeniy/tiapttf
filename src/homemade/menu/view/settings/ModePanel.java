@@ -8,11 +8,9 @@ import java.awt.*;
 import java.util.Map;
 import java.util.Set;
 
-public class ModePanel extends JPanel
-{
+public class ModePanel extends JPanel {
     public ModePanel(String name, Map<Presets.Difficulty, String> buttons,
-                     ButtonActionListener actionListener)
-    {
+                     ButtonActionListener actionListener) {
         super();
 
         initializeLabel(name);
@@ -21,19 +19,16 @@ public class ModePanel extends JPanel
         setVisible(true);
     }
 
-    private void initializeLabel(String name)
-    {
+    private void initializeLabel(String name) {
         JLabel label = new JLabel(name);
         add(label);
     }
 
-    private void initializeButtonPanel(Map<Presets.Difficulty, String> buttons, ButtonActionListener actionListener)
-    {
+    private void initializeButtonPanel(Map<Presets.Difficulty, String> buttons, ButtonActionListener actionListener) {
         JPanel panel = new JPanel(new FlowLayout());
 
         Set<Presets.Difficulty> keys = buttons.keySet();
-        for (Presets.Difficulty key : keys)
-        {
+        for (Presets.Difficulty key : keys) {
             String nameButton = buttons.get(key);
             JButton button = SettingsButtonFactory.createButton(nameButton, actionListener);
             button.setActionCommand(String.valueOf(key.ordinal()));

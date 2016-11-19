@@ -3,8 +3,7 @@ package homemade.game.fieldstructure;
 import java.util.EnumMap;
 import java.util.Iterator;
 
-public class FieldStructure
-{
+public class FieldStructure {
     private static final int FIELD_WIDTH = 9;
     private static final int FIELD_HEIGHT = 9;
 
@@ -16,13 +15,11 @@ public class FieldStructure
     private int width, height;
     private int fieldSize, numberOfLinks;
 
-    public FieldStructure()
-    {
+    public FieldStructure() {
         this(FIELD_WIDTH, FIELD_HEIGHT);
     }
 
-    public FieldStructure(int width, int height)
-    {
+    public FieldStructure(int width, int height) {
         this.width = width;
         this.height = height;
 
@@ -56,38 +53,31 @@ public class FieldStructure
         return linkCodes[linkCodeAsInt(cellA, cellB)];
     }
 
-    public Iterator<CellCode> getCellCodeIterator()
-    {
+    public Iterator<CellCode> getCellCodeIterator() {
         return SafeIterator.getForImmutableArray(cellCodes);
     }
 
-    public Iterator<LinkCode> getLinkCodeIterator()
-    {
+    public Iterator<LinkCode> getLinkCodeIterator() {
         return SafeIterator.getForImmutableArray(linkCodes);
     }
 
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
-    public int getMaxDimension()
-    {
+    public int getMaxDimension() {
         return Math.max(width, height);
     }
 
-    public int getFieldSize()
-    {
+    public int getFieldSize() {
         return fieldSize;
     }
 
-    public int getNumberOfLinks()
-    {
+    public int getNumberOfLinks() {
         return numberOfLinks;
     }
 
@@ -97,14 +87,12 @@ public class FieldStructure
 
     /**
      * If we enumerate vertical links, it's easily done.
-     *
+     * <p>
      * The idea of this enumeration is to numerate vertical links first,
      * and then horizontal, as if they were vertical.
      */
-    int linkCodeAsInt(CellCode lower, CellCode higher)
-    {
-        if (lower.hashCode() > higher.hashCode())
-        {
+    int linkCodeAsInt(CellCode lower, CellCode higher) {
+        if (lower.hashCode() > higher.hashCode()) {
             CellCode tmp = lower;
             lower = higher;
             higher = tmp;
@@ -112,29 +100,23 @@ public class FieldStructure
 
         int toReturn;
 
-        if (lower.neighbour(Direction.RIGHT) == higher)
-        {
+        if (lower.neighbour(Direction.RIGHT) == higher) {
             int numberOfVerticalLinks = width * (height - 1);
 
             toReturn = numberOfVerticalLinks + lower.rotatedCellCode;
-        }
-        else if (lower.neighbour(Direction.BOTTOM) == higher)
-        {
+        } else if (lower.neighbour(Direction.BOTTOM) == higher) {
             toReturn = lower.hashCode();
-        }
-        else
+        } else
             throw new RuntimeException("unresolvable linkCodeAsInt call");
 
         return toReturn;
     }
 
-    int cellCodeAsInt(int x, int y)
-    {
+    int cellCodeAsInt(int x, int y) {
         return x + y * width;
     }
 
-    int cellCodeAsInt(CellCode cell, Direction direction)
-    {
+    int cellCodeAsInt(CellCode cell, Direction direction) {
         return cell.hashCode() + shifts.get(direction);
     }
 }

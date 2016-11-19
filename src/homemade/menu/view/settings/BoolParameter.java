@@ -3,15 +3,14 @@ package homemade.menu.view.settings;
 import javax.swing.*;
 import java.awt.*;
 
-class BoolParameter implements ParameterFactory<JCheckBox, Boolean>
-{
+class BoolParameter implements ParameterFactory<JCheckBox, Boolean> {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);
 
-    public BoolParameter() {}
+    public BoolParameter() {
+    }
 
     @Override
-    public JCheckBox create(final String parameterName, Boolean value)
-    {
+    public JCheckBox create(final String parameterName, Boolean value) {
         JCheckBox checkBox = new JCheckBox(parameterName);
         checkBox.setSelected(value);
         checkBox.setHorizontalTextPosition(JCheckBox.LEFT);
@@ -20,20 +19,17 @@ class BoolParameter implements ParameterFactory<JCheckBox, Boolean>
     }
 
     @Override
-    public String getName(final JCheckBox parameter)
-    {
+    public String getName(final JCheckBox parameter) {
         return parameter.getText();
     }
 
     @Override
-    public Boolean getValue(final JCheckBox parameter)
-    {
+    public Boolean getValue(final JCheckBox parameter) {
         return parameter.isSelected();
     }
 
     @Override
-    public void setValue(JCheckBox parameter, Boolean value)
-    {
+    public void setValue(JCheckBox parameter, Boolean value) {
         parameter.setSelected(value);
     }
 }

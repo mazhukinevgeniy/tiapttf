@@ -5,12 +5,10 @@ import homemade.game.fieldstructure.Direction;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
-class GameKeyboard implements KeyboardInputHandler
-{
+class GameKeyboard implements KeyboardInputHandler {
     private static Map<Integer, Direction> keyToDirection;
 
-    static
-    {
+    static {
         keyToDirection = new HashMap<>(9);
 
         keyToDirection.put(KeyEvent.VK_UP, Direction.TOP);
@@ -49,8 +47,7 @@ class GameKeyboard implements KeyboardInputHandler
 
     private GameController controller;
 
-    GameKeyboard(GameController controller)
-    {
+    GameKeyboard(GameController controller) {
         this.controller = controller;
 
         pressableKeys = new HashSet<>(8);
@@ -71,13 +68,11 @@ class GameKeyboard implements KeyboardInputHandler
         releasedKeys = new HashSet<>(maxKeys);
     }
 
-    synchronized Direction extractDirection()
-    {
+    synchronized Direction extractDirection() {
         int size = keyCodesPressed.size();
         int key = KeyEvent.VK_UNDEFINED;
 
-        if (size != 0)
-        {
+        if (size != 0) {
             key = keyCodesPressed.get(size - 1);
         }
 
@@ -86,16 +81,13 @@ class GameKeyboard implements KeyboardInputHandler
         return keyToDirection.get(key);
     }
 
-    private void handleKeyExtraction()
-    {
+    private void handleKeyExtraction() {
         Iterator<Integer> iterator = keyCodesPressed.iterator();
 
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             int keyCode = iterator.next();
 
-            if (releasedKeys.contains(keyCode))
-            {
+            if (releasedKeys.contains(keyCode)) {
                 iterator.remove();
                 releasedKeys.remove(keyCode);
             }
@@ -105,10 +97,8 @@ class GameKeyboard implements KeyboardInputHandler
     }
 
     @Override
-    synchronized public void keyPressed(int keyCode)
-    {
-        if (pressableKeys.contains(keyCode))
-        {
+    synchronized public void keyPressed(int keyCode) {
+        if (pressableKeys.contains(keyCode)) {
             tryToRemoveFromPressed(keyCode);
 
             keyCodesPressed.add(keyCode);
@@ -117,26 +107,19 @@ class GameKeyboard implements KeyboardInputHandler
     }
 
     @Override
-    synchronized public void keyReleased(int keyCode)
-    {
-        if (pressableKeys.contains(keyCode))
-        {
-            if (readKeys.contains(keyCode))
-            {
+    synchronized public void keyReleased(int keyCode) {
+        if (pressableKeys.contains(keyCode)) {
+            if (readKeys.contains(keyCode)) {
                 tryToRemoveFromPressed(keyCode);
                 readKeys.remove(keyCode);
-            }
-            else
+            } else
                 releasedKeys.add(keyCode);
-        }
-        else if (keyCode == KeyEvent.VK_SPACE)
-        {
+        } else if (keyCode == KeyEvent.VK_SPACE) {
             controller.requestPauseToggle();
         }
     }
 
-    private void tryToRemoveFromPressed(int keyCode)
-    {
+    private void tryToRemoveFromPressed(int keyCode) {
         int keyCodePosition = keyCodesPressed.indexOf(keyCode);
 
         if (keyCodePosition != -1)

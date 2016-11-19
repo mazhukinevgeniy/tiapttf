@@ -5,8 +5,7 @@ import homemade.game.model.GameModelLinker;
 import homemade.utils.timer.QuickTimer;
 import homemade.utils.timer.TimerTaskPerformer;
 
-class DynamicPeriodTimer implements SpawnTimer
-{
+class DynamicPeriodTimer implements SpawnTimer {
     private SpawnPeriod period;
     private QuickTimer timer;
 
@@ -14,8 +13,7 @@ class DynamicPeriodTimer implements SpawnTimer
 
     private boolean paused = false;
 
-    DynamicPeriodTimer(GameModelLinker linker, GameSettings settings)
-    {
+    DynamicPeriodTimer(GameModelLinker linker, GameSettings settings) {
         this.linker = linker;
 
         period = SpawnPeriod.newFastStart(linker, settings);
@@ -26,28 +24,23 @@ class DynamicPeriodTimer implements SpawnTimer
     }
 
     @Override
-    public void stop()
-    {
+    public void stop() {
         paused = true;
 
         timer.stop();
     }
 
     @Override
-    public void toggleSpawnPause()
-    {
+    public void toggleSpawnPause() {
         paused = !paused;
     }
 
-    private class SpawnTimerTaskPerformer implements TimerTaskPerformer
-    {
+    private class SpawnTimerTaskPerformer implements TimerTaskPerformer {
         @Override
-        public void handleTimerTask()
-        {
+        public void handleTimerTask() {
             System.out.println("spawn timer task " + this.toString());
 
-            if (!paused)
-            {
+            if (!paused) {
                 timer.setPeriod(period.getSpawnPeriod());
 
                 linker.requestSpawn();

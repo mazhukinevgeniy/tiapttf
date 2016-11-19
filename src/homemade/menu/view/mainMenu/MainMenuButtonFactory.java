@@ -8,16 +8,14 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-class MainMenuButtonFactory
-{
+class MainMenuButtonFactory {
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 13);
     private static final int WIDTH = 200;
     private static final int HEIGHT = 30;
 
     private static final int SIZE_BORDER = 10;
 
-    public static JButton createButton(String caption, ButtonActionListener actionListener)
-    {
+    public static JButton createButton(String caption, ButtonActionListener actionListener) {
         JButton button = new JButton(caption);
 
         button.setMaximumSize(new Dimension(WIDTH + 2 * SIZE_BORDER, HEIGHT + 2 * SIZE_BORDER));

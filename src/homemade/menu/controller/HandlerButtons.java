@@ -1,6 +1,5 @@
 package homemade.menu.controller;
 
-public interface HandlerButtons
-{
+public interface HandlerButtons {
     void handleButtonClick(int codeButton);
 }

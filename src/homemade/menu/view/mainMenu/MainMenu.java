@@ -7,17 +7,14 @@ import homemade.menu.view.MenuPanel;
 import javax.swing.*;
 import java.util.Map;
 
-public class MainMenu extends MenuPanel
-{
+public class MainMenu extends MenuPanel {
 
-    public MainMenu(Map<MenuCode, String> menuNames, ButtonActionListener actionListener)
-    {
+    public MainMenu(Map<MenuCode, String> menuNames, ButtonActionListener actionListener) {
         super();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        for (Map.Entry<MenuCode, String> entry : menuNames.entrySet())
-        {
+        for (Map.Entry<MenuCode, String> entry : menuNames.entrySet()) {
             String nameButton = entry.getValue();
             JButton button = MainMenuButtonFactory.createButton(nameButton, actionListener);
             button.setActionCommand(String.valueOf(entry.getKey().ordinal()));

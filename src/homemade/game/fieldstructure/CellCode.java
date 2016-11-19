@@ -4,30 +4,25 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class CellCode
-{
+public final class CellCode {
 
-    static CellCode[] createCellCodes(FieldStructure structure)
-    {
+    static CellCode[] createCellCodes(FieldStructure structure) {
         int width = structure.getWidth();
         int height = structure.getHeight();
 
         CellCode[] cellCodes = new CellCode[structure.getFieldSize()];
 
         for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-            {
+            for (int j = 0; j < height; j++) {
                 int newCellCode = structure.cellCodeAsInt(i, j);
 
                 cellCodes[newCellCode] = new CellCode(i, j, width, height, newCellCode);
             }
 
-        for (int i = 0, size = structure.getFieldSize(); i < size; i++)
-        {
+        for (int i = 0, size = structure.getFieldSize(); i < size; i++) {
             CellCode cellCode = cellCodes[i];
 
-            for (Direction direction : Direction.values())
-            {
+            for (Direction direction : Direction.values()) {
                 if (!cellCode.onBorder(direction))
                     cellCode.neighbours.put(direction, cellCodes[structure.cellCodeAsInt(cellCode, direction)]);
             }
@@ -52,8 +47,7 @@ public final class CellCode
      */
     int rotatedCellCode;
 
-    private CellCode(int x, int y, int width, int height, int value)
-    {
+    private CellCode(int x, int y, int width, int height, int value) {
         cCValue = value;
         cX = x;
         cY = y;
@@ -79,29 +73,33 @@ public final class CellCode
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return cCValue;
     }
 
-    public int x() {return cX; }
-    public int y() { return cY; }
+    public int x() {
+        return cX;
+    }
 
-    public boolean onBorder(Direction direction) { return isOnBorder[direction.ordinal()]; }
+    public int y() {
+        return cY;
+    }
+
+    public boolean onBorder(Direction direction) {
+        return isOnBorder[direction.ordinal()];
+    }
 
     /**
      * @return null if there's no such neighbour
      */
-    public CellCode neighbour(Direction direction)
-    {
+    public CellCode neighbour(Direction direction) {
         return neighbours.get(direction);
     }
 
     /**
      * @return all non-null cellcodes from 3x3 square centered on the called cell
      */
-    public Set<CellCode> getVicinity()
-    {
+    public Set<CellCode> getVicinity() {
         HashSet<CellCode> vicinity = new HashSet<>();
 
         CellCode bot, top, left, right;
@@ -111,15 +109,13 @@ public final class CellCode
         left = neighbour(Direction.LEFT);
         right = neighbour(Direction.RIGHT);
 
-        if (top != null)
-        {
+        if (top != null) {
             vicinity.add(top);
             vicinity.add(top.neighbour(Direction.LEFT));
             vicinity.add(top.neighbour(Direction.RIGHT));
         }
 
-        if (bot != null)
-        {
+        if (bot != null) {
             vicinity.add(bot);
             vicinity.add(bot.neighbour(Direction.LEFT));
             vicinity.add(bot.neighbour(Direction.RIGHT));
@@ -133,8 +129,7 @@ public final class CellCode
         return vicinity;
     }
 
-    public int distance(CellCode otherCell)
-    {
+    public int distance(CellCode otherCell) {
         return Math.abs(cX - otherCell.cX) + Math.abs(cY - otherCell.cY);
     }
 }

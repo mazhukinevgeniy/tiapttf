@@ -7,14 +7,12 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockAssets extends AssetLoader
-{
+public class BlockAssets extends AssetLoader {
     private Map<Boolean, Map<ComboEffect, Image>> assets;
 
     private Image deadBlock;
 
-    public BlockAssets()
-    {
+    public BlockAssets() {
         assets = new HashMap<>();
 
         Map<ComboEffect, Image> selectedBlocks = new HashMap<>();
@@ -43,13 +41,11 @@ public class BlockAssets extends AssetLoader
         deadBlock = getImage("gray_block.png");
     }
 
-    public Image getDeadBlock()
-    {
+    public Image getDeadBlock() {
         return deadBlock;
     }
 
-    public Image getBlock(boolean selected, ComboEffect effect)
-    {
+    public Image getBlock(boolean selected, ComboEffect effect) {
         return assets.get(selected).get(effect);
     }
 

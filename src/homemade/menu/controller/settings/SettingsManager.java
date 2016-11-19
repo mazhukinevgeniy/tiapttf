@@ -15,10 +15,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class SettingsManager implements HandlerButtons
-{
-    public enum CodeButton
-    {
+public class SettingsManager implements HandlerButtons {
+    public enum CodeButton {
         BACK_TO_MENU,
         CUSTOM
     }
@@ -32,8 +30,7 @@ public class SettingsManager implements HandlerButtons
     private ModePanelManager turnBasedManager;
     private ModePanelManager realtimeManager;
 
-    public SettingsManager(MenuManager mainManager, Settings settings)
-    {
+    public SettingsManager(MenuManager mainManager, Settings settings) {
         this.mainManager = mainManager;
         this.settings = settings;
         ButtonActionListener actionListener = new ButtonActionListener(this);
@@ -49,8 +46,7 @@ public class SettingsManager implements HandlerButtons
         settingsMenu = new SettingsMenu(buttons, actionListener, panels);
     }
 
-    private List<ModePanel> createPanelsList()
-    {
+    private List<ModePanel> createPanelsList() {
         List<ModePanel> panels = new ArrayList<>();
         panels.add(turnBasedManager.getModePanel());
         panels.add(realtimeManager.getModePanel());
@@ -58,53 +54,43 @@ public class SettingsManager implements HandlerButtons
         return panels;
     }
 
-    private Map<CodeButton, String> createButtonMap()
-    {
+    private Map<CodeButton, String> createButtonMap() {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
         buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
         buttons.put(CodeButton.CUSTOM, "Custom");
 
-        return  buttons;
+        return buttons;
     }
 
-    public MenuPanel getSettingsMenu()
-    {
+    public MenuPanel getSettingsMenu() {
         return this.settingsMenu;
     }
 
-    public MenuPanel getCustomMenu()
-    {
+    public MenuPanel getCustomMenu() {
         return customManager.getCustomMenu();
     }
 
     @Override
-    public void handleButtonClick(int code)
-    {
+    public void handleButtonClick(int code) {
         CodeButton codeButton = CodeButton.values()[code];
 
-        if (codeButton == CodeButton.BACK_TO_MENU)
-        {
+        if (codeButton == CodeButton.BACK_TO_MENU) {
             mainManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-        }
-        else if (codeButton == CodeButton.CUSTOM)
-        {
+        } else if (codeButton == CodeButton.CUSTOM) {
             customManager.updateSettingsMenu();
             mainManager.switchToMenu(MenuManager.MenuCode.CUSTOM);
         }
     }
 
-    public void returnToSettingsMenu()
-    {
+    public void returnToSettingsMenu() {
         mainManager.switchToMenu(MenuManager.MenuCode.SETTINGS);
     }
 
-    public void switchToMode(Presets.Mode mode, Presets.Difficulty difficulty)
-    {
+    public void switchToMode(Presets.Mode mode, Presets.Difficulty difficulty) {
         settings.setPresetParameters(mode, difficulty);
     }
 
-    public void setNewParameters(List<Parameter<?>> parameters)
-    {
+    public void setNewParameters(List<Parameter<?>> parameters) {
         settings.setParameters(parameters);
     }
 }

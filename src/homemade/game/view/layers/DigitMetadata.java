@@ -4,16 +4,14 @@ import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
 
-class DigitMetadata
-{
+class DigitMetadata {
     int digitWidth[] = new int[10];
     int digitHeight = 22; //true while all assets share this quality
 
     private int offsetX[];
     int offsetY = (GameView.CELL_WIDTH - digitHeight) / 2;
 
-    DigitMetadata(FieldStructure structure, Assets assets)
-    {
+    DigitMetadata(FieldStructure structure, Assets assets) {
         int size = structure.getFieldSize();
 
         offsetX = new int[size];
@@ -21,20 +19,17 @@ class DigitMetadata
         if (size > 100)
             throw new RuntimeException("can't compose digit metadata");
 
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             this.digitWidth[i] = assets.getDigit(i).getWidth(null);
         }
 
         //we don't need offset for number 0
 
-        for (int i = 1; i < 10; i++)
-        {
+        for (int i = 1; i < 10; i++) {
             this.offsetX[i - 1] = (GameView.CELL_WIDTH - digitWidth[i]) / 2;
         }
 
-        for (int i = 10; i < size + 1; i++)
-        {
+        for (int i = 10; i < size + 1; i++) {
             int numberWidth = digitWidth[i / 10] + 1 + digitWidth[i % 10];
 
             this.offsetX[i - 1] = (GameView.CELL_WIDTH - numberWidth) / 2;

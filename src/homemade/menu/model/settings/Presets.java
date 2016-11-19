@@ -5,16 +5,13 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
-public class Presets
-{
-    public enum Mode
-    {
+public class Presets {
+    public enum Mode {
         TURN_BASED,
         REALTIME
     }
 
-    public enum Difficulty
-    {
+    public enum Difficulty {
         EASY,
         MEDIUM,
         HARD
@@ -26,10 +23,9 @@ public class Presets
 
     private EnumMap<Mode, EnumMap<Difficulty, List<Integer>>> presetsMap;
 
-    public Presets()
-    {
+    public Presets() {
         presetsMap = new EnumMap<>(Mode.class);
-        presetsMap.put(Mode.TURN_BASED,  new EnumMap<>(Difficulty.class));
+        presetsMap.put(Mode.TURN_BASED, new EnumMap<>(Difficulty.class));
         presetsMap.put(Mode.REALTIME, new EnumMap<>(Difficulty.class));
 
         //...Arrays.asList(simultaneousSpawn, spawnPeriod, comboLength); //see consts above
@@ -43,24 +39,21 @@ public class Presets
 
     }
 
-    public List<Parameter<?>> getPresets(Mode mode, Difficulty difficulty)
-    {
+    public List<Parameter<?>> getPresets(Mode mode, Difficulty difficulty) {
         List<Parameter<?>> parameters = new ArrayList<>();
 
         boolean isRealTime = false;
-        if (mode == Mode.REALTIME)
-        {
+        if (mode == Mode.REALTIME) {
             isRealTime = true;
         }
         parameters.add(new Parameter<>(Settings.Name.isRealTime, isRealTime));
 
-        String[] patametersName = new String[] {Settings.Name.simultaneousSpawn,
-                                                Settings.Name.spawnPeriod,
-                                                Settings.Name.comboLength};
+        String[] patametersName = new String[]{Settings.Name.simultaneousSpawn,
+                Settings.Name.spawnPeriod,
+                Settings.Name.comboLength};
         List<Integer> values = presetsMap.get(mode).get(difficulty);
 
-        for (int index : new int[] {SIMULATTANEOUS_SPAWN, SPAWN_PERIOD, COMBO_LENGTH})
-        {
+        for (int index : new int[]{SIMULATTANEOUS_SPAWN, SPAWN_PERIOD, COMBO_LENGTH}) {
             parameters.add(new Parameter<Object>(patametersName[index], values.get(index)));
         }
 

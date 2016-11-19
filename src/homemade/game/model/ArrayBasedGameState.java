@@ -13,8 +13,7 @@ import java.util.Map;
 /**
  * Must be synchronized externally!
  */
-class ArrayBasedGameState implements GameState
-{
+class ArrayBasedGameState implements GameState {
     private CellState[] field;
     private Direction[] links;
     private int[] chainLengths;
@@ -27,15 +26,13 @@ class ArrayBasedGameState implements GameState
     private int score;
     private int multiplier;
 
-    ArrayBasedGameState(FieldStructure structure)
-    {
+    ArrayBasedGameState(FieldStructure structure) {
         int fieldSize = structure.getFieldSize();
 
         field = new CellState[fieldSize];
 
         CellState empty = CellState.simpleState(Cell.EMPTY);
-        for (int i = 0; i < fieldSize; i++)
-        {
+        for (int i = 0; i < fieldSize; i++) {
             field[i] = empty;
         }
 
@@ -43,15 +40,13 @@ class ArrayBasedGameState implements GameState
 
         links = new Direction[numberOfLinks];
 
-        for (int i = 0; i < numberOfLinks; i++)
-        {
+        for (int i = 0; i < numberOfLinks; i++) {
             links[i] = null;
         }
 
         chainLengths = new int[numberOfLinks];
 
-        for (int i = 0; i < numberOfLinks; i++)
-        {
+        for (int i = 0; i < numberOfLinks; i++) {
             chainLengths[i] = 0;
         }
 
@@ -61,8 +56,7 @@ class ArrayBasedGameState implements GameState
         multiplier = 1;
     }
 
-    private ArrayBasedGameState(ArrayBasedGameState stateToCopy)
-    {
+    private ArrayBasedGameState(ArrayBasedGameState stateToCopy) {
         field = stateToCopy.field.clone();
         links = stateToCopy.links.clone();
         chainLengths = stateToCopy.chainLengths.clone();
@@ -74,31 +68,26 @@ class ArrayBasedGameState implements GameState
         multiplier = stateToCopy.multiplier;
     }
 
-    void incrementDenyCounter()
-    {
+    void incrementDenyCounter() {
         denies++;
     }
 
-    void updateScore(int newScore)
-    {
+    void updateScore(int newScore) {
         score = newScore;
     }
 
-    void updateMultiplier(int newMultiplier)
-    {
+    void updateMultiplier(int newMultiplier) {
         immutableCopy = null;
         multiplier = newMultiplier;
     }
 
 
-    void updateFieldSnapshot( Map<CellCode, CellState> cellUpdates,
-                              Map<LinkCode, Direction> linkUpdates,
-                              Map<LinkCode, Integer> chainUpdates)
-    {
+    void updateFieldSnapshot(Map<CellCode, CellState> cellUpdates,
+                             Map<LinkCode, Direction> linkUpdates,
+                             Map<LinkCode, Integer> chainUpdates) {
         immutableCopy = null;
 
-        for (Map.Entry<CellCode, CellState> entry : cellUpdates.entrySet())
-        {
+        for (Map.Entry<CellCode, CellState> entry : cellUpdates.entrySet()) {
             int pos = entry.getKey().hashCode();
             CellState newState = entry.getValue();
             CellState oldState = field[pos];
@@ -111,61 +100,51 @@ class ArrayBasedGameState implements GameState
             field[pos] = newState;
         }
 
-        for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet())
-        {
+        for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet()) {
             links[entry.getKey().hashCode()] = entry.getValue();
         }
 
-        for (Map.Entry<LinkCode, Integer> entry : chainUpdates.entrySet())
-        {
+        for (Map.Entry<LinkCode, Integer> entry : chainUpdates.entrySet()) {
             chainLengths[entry.getKey().hashCode()] = entry.getValue();
         }
     }
 
     @Override
-    public int spawnsDenied()
-    {
+    public int spawnsDenied() {
         return denies;
     }
 
     @Override
-    public int numberOfBlocks()
-    {
+    public int numberOfBlocks() {
         return numberOfBlocks;
     }
 
     @Override
-    public int gameScore()
-    {
+    public int gameScore() {
         return score;
     }
 
     @Override
-    public int globalMultiplier()
-    {
+    public int globalMultiplier() {
         return multiplier;
     }
 
     @Override
-    public CellState getCellState(CellCode cellCode)
-    {
+    public CellState getCellState(CellCode cellCode) {
         return this.field[cellCode.hashCode()];
     }
 
     @Override
-    public Direction getLinkBetweenCells(LinkCode linkCode)
-    {
+    public Direction getLinkBetweenCells(LinkCode linkCode) {
         return links[linkCode.hashCode()];
     }
 
     @Override
-    public int getChainLength(LinkCode linkCode)
-    {
+    public int getChainLength(LinkCode linkCode) {
         return chainLengths[linkCode.hashCode()];
     }
 
-    GameState getImmutableCopy()
-    {
+    GameState getImmutableCopy() {
         if (immutableCopy == null)
             immutableCopy = new ArrayBasedGameState(this);
 

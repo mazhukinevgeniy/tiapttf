@@ -7,17 +7,14 @@ import homemade.utils.AssetLoader;
 
 import java.awt.*;
 
-public class Assets extends AssetLoader
-{
+public class Assets extends AssetLoader {
     private static Assets instance;
 
-    synchronized public static void loadAssets(LinkAssets.Variation variation)
-    {
+    synchronized public static void loadAssets(LinkAssets.Variation variation) {
         instance = new Assets(variation);
     }
 
-    synchronized public static Assets getAssets()
-    {
+    synchronized public static Assets getAssets() {
         if (instance == null)
             throw new RuntimeException("must load assets");
         else
@@ -34,8 +31,7 @@ public class Assets extends AssetLoader
     private EffectAssets effectAssets;
     private LinkAssets linkAssets;
 
-    private Assets(LinkAssets.Variation variation)
-    {
+    private Assets(LinkAssets.Variation variation) {
         digit = new Image[10];
 
         blockAssets = new BlockAssets();
@@ -47,44 +43,36 @@ public class Assets extends AssetLoader
         smallBlock = getImage("small_block.png");
         placeToMove = getImage("place2move.png");
 
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             digit[i] = getImage(i + ".png");
         }
     }
 
-    public Image getField()
-    {
+    public Image getField() {
         return field;
     }
 
-    public Image getSmallBlock()
-    {
+    public Image getSmallBlock() {
         return smallBlock;
     }
 
-    public Image getPlaceToMove()
-    {
+    public Image getPlaceToMove() {
         return placeToMove;
     }
 
-    public Image getDigit(int value)
-    {
+    public Image getDigit(int value) {
         return digit[value];
     }
 
-    public LinkAssets getLinkAssets()
-    {
+    public LinkAssets getLinkAssets() {
         return linkAssets;
     }
 
-    public BlockAssets getBlockAssets()
-    {
+    public BlockAssets getBlockAssets() {
         return blockAssets;
     }
 
-    public EffectAssets getEffectAssets()
-    {
+    public EffectAssets getEffectAssets() {
         return effectAssets;
     }
 }

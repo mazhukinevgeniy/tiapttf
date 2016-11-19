@@ -5,10 +5,8 @@ import homemade.menu.model.settings.Settings;
 /**
  * Snapshot of settings which were used to create a game
  */
-public class GameSettings
-{
-    public enum GameMode
-    {
+public class GameSettings {
+    public enum GameMode {
         TURN_BASED, REAL_TIME
     }
 
@@ -18,8 +16,7 @@ public class GameSettings
     private int spawn;
     private int period;
 
-    public GameSettings(Settings settings)
-    {
+    public GameSettings(Settings settings) {
         combo = settings.get(Settings.Name.comboLength);
         spawn = settings.get(Settings.Name.simultaneousSpawn);
         period = settings.get(Settings.Name.spawnPeriod);
@@ -27,23 +24,19 @@ public class GameSettings
         mode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
     }
 
-    public GameMode gameMode()
-    {
+    public GameMode gameMode() {
         return mode;
     }
 
-    public int minCombo()
-    {
+    public int minCombo() {
         return combo;
     }
 
-    public int maxSpawn()
-    {
+    public int maxSpawn() {
         return spawn;
     }
 
-    public int maxPeriod()
-    {
+    public int maxPeriod() {
         return period;
     }
 }

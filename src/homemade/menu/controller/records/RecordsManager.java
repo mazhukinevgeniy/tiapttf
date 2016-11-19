@@ -10,10 +10,8 @@ import homemade.menu.view.records.RecordsMenu;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class RecordsManager implements HandlerButtons
-{
-    public enum CodeButton
-    {
+public class RecordsManager implements HandlerButtons {
+    public enum CodeButton {
         RESET,
         BACK_TO_MENU
     }
@@ -23,8 +21,7 @@ public class RecordsManager implements HandlerButtons
     private RecordsMenu recordsMenu;
     private Records records;
 
-    public RecordsManager(MenuManager manager, Records records)
-    {
+    public RecordsManager(MenuManager manager, Records records) {
         this.manager = manager;
         this.records = records;
         ButtonActionListener actionListener = new ButtonActionListener(this);
@@ -33,36 +30,29 @@ public class RecordsManager implements HandlerButtons
         recordsMenu = new RecordsMenu(this, records.getRecords(), buttons, actionListener);
     }
 
-    private Map<CodeButton, String> createButtonsMap()
-    {
+    private Map<CodeButton, String> createButtonsMap() {
         Map<CodeButton, String> buttons = new EnumMap<>(CodeButton.class);
         buttons.put(CodeButton.RESET, "Reset");
         buttons.put(CodeButton.BACK_TO_MENU, "Back to menu");
 
-        return  buttons;
+        return buttons;
     }
 
-    public MenuPanel getRecordsMenu()
-    {
+    public MenuPanel getRecordsMenu() {
         return recordsMenu;
     }
 
-    public void requestUpdate()
-    {
+    public void requestUpdate() {
         recordsMenu.updateMenu(records.getRecords());
     }
 
     @Override
-    public void handleButtonClick(int code)
-    {
+    public void handleButtonClick(int code) {
         CodeButton codeButton = CodeButton.values()[code];
 
-        if (codeButton == CodeButton.BACK_TO_MENU)
-        {
+        if (codeButton == CodeButton.BACK_TO_MENU) {
             manager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-        }
-        else if (codeButton == CodeButton.RESET)
-        {
+        } else if (codeButton == CodeButton.RESET) {
             records.setDefaultRecords();
             recordsMenu.updateMenu(records.getRecords());
         }

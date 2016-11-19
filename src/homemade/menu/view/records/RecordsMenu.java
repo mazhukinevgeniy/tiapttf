@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class RecordsMenu extends MenuPanel
-{
+public class RecordsMenu extends MenuPanel {
     private RecordsManager manager;
 
     private List<Record> records = null;
@@ -22,8 +21,7 @@ public class RecordsMenu extends MenuPanel
 
     public RecordsMenu(RecordsManager manager,
                        List<Record> records, Map<CodeButton, String> buttons,
-                       ButtonActionListener actionListener)
-    {
+                       ButtonActionListener actionListener) {
         super();
         this.manager = manager;
 
@@ -35,24 +33,20 @@ public class RecordsMenu extends MenuPanel
         initializeUI();
     }
 
-    private void initializeUI()
-    {
+    private void initializeUI() {
         drawCapTable();
         drawRecordsTable();
         initializeButtonPanel(buttons, actionListener);
     }
 
-    private void drawCapTable()
-    {
+    private void drawCapTable() {
         JPanel newRow = RowRecordFactory.create(CupTable.PLACE, CupTable.PLAYER_NAME, CupTable.SCORE);
         add(newRow);
     }
 
-    private void drawRecordsTable()
-    {
+    private void drawRecordsTable() {
         int size = records.size();
-        for (int i = 0; i < size; ++i)
-        {
+        for (int i = 0; i < size; ++i) {
             Record record = records.get(i);
             String placeNumber = String.valueOf(i + 1);
             String score = String.valueOf(record.getScore());
@@ -62,13 +56,11 @@ public class RecordsMenu extends MenuPanel
     }
 
     private void initializeButtonPanel(Map<CodeButton, String> buttons,
-                                       ButtonActionListener actionListener)
-    {
+                                       ButtonActionListener actionListener) {
         JPanel panel = new JPanel(new FlowLayout());
 
         Set<CodeButton> keys = buttons.keySet();
-        for (CodeButton key : keys)
-        {
+        for (CodeButton key : keys) {
             String nameButton = buttons.get(key);
             JButton button = RecordsButtonFactory.createButton(nameButton, actionListener);
             button.setActionCommand(String.valueOf(key.ordinal()));
@@ -77,8 +69,7 @@ public class RecordsMenu extends MenuPanel
         add(panel);
     }
 
-    public void updateMenu(List<Record> records)
-    {
+    public void updateMenu(List<Record> records) {
         this.records = records;
         removeAll();
         initializeUI();
@@ -86,13 +77,11 @@ public class RecordsMenu extends MenuPanel
     }
 
     @Override
-    public void onShown()
-    {
+    public void onShown() {
         manager.requestUpdate();
     }
 
-    private static class CupTable
-    {
+    private static class CupTable {
         private static String PLACE = "№";
         private static String PLAYER_NAME = "Player name";
         private static String SCORE = "Score";
