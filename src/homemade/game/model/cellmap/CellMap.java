@@ -105,13 +105,9 @@ public class CellMap implements CellMapReader {
         CellState cellA = cells[linkCode.getLower().hashCode()];
         CellState cellB = cells[linkCode.getHigher().hashCode()];
 
-        boolean bothAreOccupied = cellA.isNormalBlock() && cellB.isNormalBlock();
-
         Direction oldDirection = link.direction;
         Direction lowerToHigher = linkCode.getLowerToHigherDirection();
-        Direction newDirection = bothAreOccupied ?
-                (cellA.value() > cellB.value() ? lowerToHigher : lowerToHigher.getOpposite()) :
-                null;
+        Direction newDirection = linkDirection(cellA.value(), cellB.value(), lowerToHigher);
 
         if (oldDirection != newDirection) {
             link.direction = newDirection;
@@ -132,6 +128,20 @@ public class CellMap implements CellMapReader {
 
             assignLinkLengths(alignedLinks, newDirection);
         }
+    }
+
+    private Direction linkDirection(int lowerValue, int higherValue, Direction lowerToHigher) {
+        Direction direction;
+
+        if (lowerValue == Cell.DEFAULT_VALUE || higherValue == Cell.DEFAULT_VALUE || lowerValue == higherValue) {
+            direction = null;
+        } else if (lowerValue > higherValue) {
+            direction = lowerToHigher;
+        } else {
+            direction = lowerToHigher.getOpposite();
+        }
+
+        return direction;
     }
 
     private void collectLinks(Set<Link> linkSet, CellCodePair pair, Direction moveDirection, Direction chainDirection) {

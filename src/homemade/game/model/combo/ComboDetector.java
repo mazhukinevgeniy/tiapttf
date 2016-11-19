@@ -112,6 +112,6 @@ public class ComboDetector {
                 currentCell = null;
             }
         }
-
+        //TODO: reduce code complexity
     }
 }
