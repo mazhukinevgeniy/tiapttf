@@ -42,8 +42,7 @@ public class GameModelLinker {
         this.structure = structure;
         this.settings = settings;
 
-        BlockValuePool blockValuePool = new BlockValuePool(structure.getWidth(), structure.getFieldSize());
-        //TODO: make another method not called getWidth because it's not about width
+        BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.getFieldSize());
         cellMap = new CellMap(structure, blockValuePool);
 
         storedEffects = new LinkedList<>();
