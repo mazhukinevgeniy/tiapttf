@@ -109,25 +109,23 @@ public class CellMap implements CellMapReader {
         Direction lowerToHigher = linkCode.getLowerToHigherDirection();
         Direction newDirection = linkDirection(cellA.value(), cellB.value(), lowerToHigher);
 
-        if (oldDirection != newDirection) {
-            link.direction = newDirection;
+        link.direction = newDirection;
 
-            Set<Link> alignedLinks = new HashSet<>(structure.getMaxDimension());
+        Set<Link> alignedLinks = new HashSet<>(structure.getMaxDimension());
 
-            for (Direction direction : EnumSet.of(lowerToHigher, lowerToHigher.getOpposite())) {
-                CellCodePair pair = new CellCodePair(linkCode);
+        for (Direction direction : EnumSet.of(lowerToHigher, lowerToHigher.getOpposite())) {
+            CellCodePair pair = new CellCodePair(linkCode);
 
-                collectLinks(alignedLinks, pair, direction, newDirection);
+            collectLinks(alignedLinks, pair, direction, newDirection);
 
-                if (pair.isValid() && alignedLinks.size() == 1) {
-                    Set<Link> brokenChainLinks = new HashSet<>(structure.getMaxDimension());
-                    collectLinks(brokenChainLinks, pair, direction, oldDirection);
-                    assignLinkLengths(brokenChainLinks, oldDirection);
-                }
+            if (pair.isValid() && alignedLinks.size() == 1) {
+                Set<Link> brokenChainLinks = new HashSet<>(structure.getMaxDimension());
+                collectLinks(brokenChainLinks, pair, direction, oldDirection);
+                assignLinkLengths(brokenChainLinks, oldDirection);
             }
-
-            assignLinkLengths(alignedLinks, newDirection);
         }
+
+        assignLinkLengths(alignedLinks, newDirection);
     }
 
     private Direction linkDirection(int lowerValue, int higherValue, Direction lowerToHigher) {
