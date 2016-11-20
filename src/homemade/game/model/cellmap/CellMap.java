@@ -116,9 +116,9 @@ public class CellMap implements CellMapReader {
         for (Direction direction : EnumSet.of(lowerToHigher, lowerToHigher.getOpposite())) {
             CellCodePair pair = new CellCodePair(linkCode);
 
-            collectLinks(alignedLinks, pair, direction, newDirection);
+            int linksCollected = collectLinks(alignedLinks, pair, direction, newDirection);
 
-            if (pair.isValid() && alignedLinks.size() == 1) {
+            if (pair.isValid() && linksCollected == 1) {
                 Set<Link> brokenChainLinks = new HashSet<>(structure.getMaxDimension());
                 collectLinks(brokenChainLinks, pair, direction, oldDirection);
                 assignLinkLengths(brokenChainLinks, oldDirection);
@@ -142,11 +142,13 @@ public class CellMap implements CellMapReader {
         return direction;
     }
 
-    private void collectLinks(Set<Link> linkSet, CellCodePair pair, Direction moveDirection, Direction chainDirection) {
+    private int collectLinks(Set<Link> linkSet, CellCodePair pair, Direction moveDirection, Direction chainDirection) {
+        int count = 0;
         Link checkLink = links[structure.getLinkCode(pair).hashCode()];
 
         while (pair.isValid() && checkLink.direction == chainDirection) {
             linkSet.add(checkLink);
+            count++;
 
             pair.move(moveDirection);
 
@@ -155,6 +157,7 @@ public class CellMap implements CellMapReader {
             }
         }
         //TODO: just add reference to neighbouring LinkCodes to LinkCode, that would allow us to simplify code here
+        return count;
     }
 
     private void assignLinkLengths(Set<Link> links, Direction direction) {
