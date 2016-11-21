@@ -26,10 +26,11 @@ public class Presets {
     private int[] indexes = new int[] {SIMULATTANEOUS_SPAWN, SPAWN_PERIOD, COMBO_LENGTH, MAX_BLOCK_VALUE};
 
     //3) add name new settings (order is important)
-    private String[] patametersName = new String[]{Settings.Name.simultaneousSpawn,
-            Settings.Name.spawnPeriod,
-            Settings.Name.comboLength,
-            Settings.Name.maxBlockValue};
+    private Settings.Code[] patameterCodes = new Settings.Code[]{
+            Settings.Code.SIMULTANEOUS_SPAWN,
+            Settings.Code.SPAWN_PERIOD,
+            Settings.Code.COMBO_LENGTH,
+            Settings.Code.MAX_BLOCK_VALUE};
 
     private EnumMap<Mode, EnumMap<Difficulty, List<Integer>>> presetsMap;
 
@@ -56,12 +57,12 @@ public class Presets {
         if (mode == Mode.REALTIME) {
             isRealTime = true;
         }
-        parameters.add(new Parameter<>(Settings.Name.isRealTime, isRealTime));
+        parameters.add(new Parameter<>(Settings.Code.IS_REALTIME, isRealTime));
 
         List<Integer> values = presetsMap.get(mode).get(difficulty);
 
         for (int index : indexes) {
-            parameters.add(new Parameter<Object>(patametersName[index], values.get(index)));
+            parameters.add(new Parameter<Object>(patameterCodes[index], values.get(index)));
         }
 
         return parameters;

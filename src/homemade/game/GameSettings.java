@@ -18,11 +18,11 @@ public class GameSettings {
     public final int maxBlockValue;
 
     public GameSettings(Settings settings) {
-        minCombo = settings.get(Settings.Name.comboLength);
-        spawn = settings.get(Settings.Name.simultaneousSpawn);
-        period = settings.get(Settings.Name.spawnPeriod);
-        maxBlockValue = settings.get(Settings.Name.maxBlockValue);
+        minCombo = settings.get(Settings.Code.COMBO_LENGTH);
+        spawn = settings.get(Settings.Code.SIMULTANEOUS_SPAWN);
+        period = settings.get(Settings.Code.SPAWN_PERIOD);
+        maxBlockValue = settings.get(Settings.Code.MAX_BLOCK_VALUE);
 
-        gameMode = settings.get(Settings.Name.isRealTime) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
+        gameMode = settings.get(Settings.Code.IS_REALTIME) ? GameMode.REAL_TIME : GameMode.TURN_BASED;
     }
 }

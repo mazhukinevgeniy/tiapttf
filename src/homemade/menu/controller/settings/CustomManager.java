@@ -31,7 +31,7 @@ public class CustomManager implements HandlerButtons {
 
         this.parameters = settings.getAllParameters();
         Map<CodeButton, String> buttons = createButtonsMap();
-        customMenu = new CustomMenu(parameters, buttons, actionListener);
+        customMenu = new CustomMenu(parameters, settings.getParameterNames(), buttons, actionListener);
     }
 
     private Map<CodeButton, String> createButtonsMap() {

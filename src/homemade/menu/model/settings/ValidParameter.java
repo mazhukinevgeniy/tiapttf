@@ -3,17 +3,13 @@ package homemade.menu.model.settings;
 class ValidParameter<Type> extends Parameter<Type> {
     protected ValueChecker<Type> valueChecker = null;
 
-    public ValidParameter(final ValueChecker<Type> valueChecker, final String name) {
-        super(valueChecker.getType(), name);
+    public ValidParameter(ValueChecker<Type> valueChecker, Settings.Code parameterCode) {
+        super(valueChecker.getType(), parameterCode);
 
         this.valueChecker = valueChecker;
     }
 
-    public void setName(final String newName) {
-        name = newName;
-    }
-
-    public void setValue(final Type newValue) {
+    public void setValue(Type newValue) {
         if (valueChecker.isValidValue(newValue)) {
             value = newValue;
         }
@@ -27,7 +23,7 @@ class ValidParameter<Type> extends Parameter<Type> {
         value = valueChecker.getDefaultValue();
     }
 
-    public void setValidValue(final Type newValue) {
+    public void setValidValue(Type newValue) {
         value = valueChecker.getValidValue(newValue);
     }
 

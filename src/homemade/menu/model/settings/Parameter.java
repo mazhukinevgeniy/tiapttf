@@ -2,22 +2,22 @@ package homemade.menu.model.settings;
 
 public class Parameter<Type> {
     protected Class<Type> type;
-    protected String name = null;
+    protected Settings.Code code;
     protected Type value = null;
 
-    public Parameter(Class<Type> type, final String name) {
+    public Parameter(Class<Type> type, Settings.Code code) {
         this.type = type;
-        this.name = name;
+        this.code = code;
     }
 
-    public Parameter(final String name, Type value) {
+    public Parameter(Settings.Code code, Type value) {
         this.type = (Class<Type>) value.getClass();
-        this.name = name;
+        this.code = code;
         this.value = value;
     }
 
-    public String getName() {
-        return name;
+    public Settings.Code getCode() {
+        return code;
     }
 
     public Type getValue() {

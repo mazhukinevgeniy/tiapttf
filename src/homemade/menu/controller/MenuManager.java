@@ -82,15 +82,16 @@ public class MenuManager implements HandlerButtons {
     public void switchToMenu(MenuCode code) {
         window.setTitle("here we go again");
 
-        if (currentMenu != null)
+        if (currentMenu != null) {
             currentMenu.onQuit();
+        }
 
         window.remove(currentMenu);
         setCurrentMenu(code);
         window.add(currentMenu);
 
         if (code == MenuCode.GAME) {
-            Variation assetType = settings.get(Settings.Name.animatedLinks) ? Variation.ANIMATED : Variation.COLORED;
+            Variation assetType = settings.get(Settings.Code.ANIMATED_LINKS) ? Variation.ANIMATED : Variation.COLORED;
             Assets.loadAssets(assetType);
 
             new GameController(this, window, currentMenu, new GameSettings(settings), records);

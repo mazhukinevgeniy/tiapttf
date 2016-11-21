@@ -2,42 +2,47 @@ package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Settings {
-    //1) add name new parameter
-    public static final class Name {
-        public static final String animatedLinks = "Animated links";
-        public static final String isRealTime = "Real time";
-        public static final String simultaneousSpawn = "Simultaneous spawn";
-        public static final String spawnPeriod = "Max spawn period (ms)";
-        public static final String comboLength = "Min combo length";
-        public static final String maxBlockValue = "Max block value (9/27/81)";
+    //1) add nameMap new parameter
+    public enum Code {
+        ANIMATED_LINKS,
+        IS_REALTIME,
+        SIMULTANEOUS_SPAWN,
+        SPAWN_PERIOD,
+        COMBO_LENGTH,
+        MAX_BLOCK_VALUE
     }
 
-    //2) add parameter to list with names
-    private List<String> nameList = Arrays.asList(
-            Name.isRealTime,
-            Name.animatedLinks,
-            Name.simultaneousSpawn,
-            Name.spawnPeriod,
-            Name.comboLength,
-            Name.maxBlockValue);
-
-    //3) state default value and Range/Enum valid values
-    private static Map<String, ValueChecker<?>> checkers = new HashMap<>();
+    private static final Map<Code, String> nameMap = new HashMap<>();
 
     static {
-        checkers.put(Name.animatedLinks, new InSetChecker<>(false, true, false));
-        checkers.put(Name.isRealTime, new InSetChecker<>(true, true, false));
-        checkers.put(Name.simultaneousSpawn, new RangeChecker<>(3, 1, 20));
-        checkers.put(Name.spawnPeriod, new RangeChecker<>(2000, 100, 1000 * 60));
-        checkers.put(Name.comboLength, new RangeChecker<>(5, 3, 9));
-        checkers.put(Name.maxBlockValue, new InSetChecker<>(9, 9, 27, 81));
+        nameMap.put(Code.ANIMATED_LINKS, "Animated links");
+        nameMap.put(Code.IS_REALTIME, "Real time");
+        nameMap.put(Code.SIMULTANEOUS_SPAWN, "Simultaneous spawn");
+        nameMap.put(Code.SPAWN_PERIOD, "Max spawn period (ms)");
+        nameMap.put(Code.COMBO_LENGTH, "Min combo length");
+        nameMap.put(Code.MAX_BLOCK_VALUE, "Max block value (9/27/81)");
+    }
+
+    //3) state default value and Range/Enum valid values
+    private static final Map<Code, ValueChecker<?>> checkers = new HashMap<>();
+
+    static {
+        checkers.put(Code.ANIMATED_LINKS, new InSetChecker<>(false, true, false));
+        checkers.put(Code.IS_REALTIME, new InSetChecker<>(true, true, false));
+        checkers.put(Code.SIMULTANEOUS_SPAWN, new RangeChecker<>(3, 1, 20));
+        checkers.put(Code.SPAWN_PERIOD, new RangeChecker<>(2000, 100, 1000 * 60));
+        checkers.put(Code.COMBO_LENGTH, new RangeChecker<>(5, 3, 9));
+        checkers.put(Code.MAX_BLOCK_VALUE, new InSetChecker<>(9, 9, 27, 81));
     }
     //4) everything should work (=
 
-    private Map<String, ValidParameter<?>> parameters = new HashMap<>();
+    private Map<Code, ValidParameter<?>> parameters = new HashMap<>();
 
     private Presets presets = new Presets();
     private Presets.Mode currentMode;
@@ -48,41 +53,37 @@ public class Settings {
     public Settings(SettingsSave save) {
         this.save = save;
 
-        prepareParameters(nameList, parameters);
-
-        initializeValues();
+        prepareParameters(parameters);
+        setSavedValuesToMap(parameters);
         updateAllParametersInSave();
     }
 
-    private void prepareParameters(List<String> settingNames, Map<String, ValidParameter<?>> parameters) {
-        for (String name : settingNames) {
-            ValueChecker<?> checker = checkers.get(name);
-            ValidParameter<?> parameter = new ValidParameter<>(checker, name);
-            parameters.put(name, parameter);
+    private void prepareParameters(Map<Code, ValidParameter<?>> parameters) {
+        for (Code code : Code.values()) {
+            ValueChecker<?> checker = checkers.get(code);
+            ValidParameter<?> parameter = new ValidParameter<>(checker, code);
+            parameters.put(code, parameter);
         }
     }
 
-    private void initializeValues() {
-        setSavedValuesToMap(parameters);
-    }
-
-    private void setSavedValuesToMap(Map<String, ValidParameter<?>> parameters) {
-        for (Map.Entry<String, ValidParameter<?>> param : parameters.entrySet()) {
+    //TODO maybe better storage parameters in save also using parameter Codes
+    private void setSavedValuesToMap(Map<Code, ValidParameter<?>> parameters) {
+        for (Map.Entry<Code, ValidParameter<?>> param : parameters.entrySet()) {
             ValidParameter<?> parameter = param.getValue();
 
-            Object savedValue = save.getSettingsValue(param.getKey(), parameter.getType());
+            Object savedValue = save.getSettingsValue(nameMap.get(param.getKey()), parameter.getType());
 
             if (savedValue == null) {
                 parameter.setDefaultValue();
             } else {
-                parameter.setValueWithCast(save.getSettingsValue(param.getKey(), parameter.getType()));
+                parameter.setValueWithCast(save.getSettingsValue(nameMap.get(param.getKey()), parameter.getType()));
             }
         }
     }
 
-    public <Type> void set(String parameterName, Type value) {
-        if (parameters.containsKey(parameterName)) {
-            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterName);
+    public <Type> void set(Code parameterCode, Type value) {
+        if (parameters.containsKey(parameterCode)) {
+            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterCode);
             if (parameter != null) {
                 parameter.setValue(value);
                 updateParameterInSave(parameter);
@@ -90,19 +91,19 @@ public class Settings {
         }
     }
 
+    //TODO maybe better storage parameters in save also using parameter Codes
     private void updateParameterInSave(ValidParameter<?> parameter) {
-        save.setSettingsValue(parameter.getName(), parameter.getValue());
+        save.setSettingsValue(nameMap.get(parameter.getCode()), parameter.getValue());
     }
 
-    public <Type> Type get(String parameterName) {
+    public <Type> Type get(Code parameterCode) {
         Type value = null;
-        if (parameters.containsKey(parameterName)) {
-            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterName);
+        if (parameters.containsKey(parameterCode)) {
+            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterCode);
             if (parameter != null) {
                 value = parameter.getValue();
             }
         }
-
         return value;
     }
 
@@ -115,10 +116,14 @@ public class Settings {
         return type;
     }
 
+    public Map<Code, String> getParameterNames() {
+        return nameMap;
+    }
+
     public List<Parameter<?>> getAllParameters() {
         List<Parameter<?>> listParameters = new ArrayList<>();
-        for (String name : nameList) {
-            listParameters.add(parameters.get(name));
+        for (Code code : Code.values()) {
+            listParameters.add(parameters.get(code));
         }
 
         return listParameters;
@@ -126,7 +131,7 @@ public class Settings {
 
     public void setPresetParameters(Presets.Mode mode, Presets.Difficulty difficulty) {
         List<Parameter<?>> parameters = presets.getPresets(mode, difficulty);
-        parameters.add(new Parameter<>(Settings.Name.animatedLinks, false));
+        parameters.add(new Parameter<>(Code.ANIMATED_LINKS, false));
         setParameters(parameters);
 
         currentMode = mode;
@@ -135,9 +140,9 @@ public class Settings {
 
     public void setParameters(List<Parameter<?>> parameters) {
         for (Parameter<?> param : parameters) {
-            String name = param.getName();
-            if (nameList.contains(name)) {
-                set(name, param.getValue());
+            Code code = param.getCode();
+            if (code != null) {
+                set(code, param.getValue());
             }
         }
     }
@@ -148,16 +153,16 @@ public class Settings {
         updateAllParametersInSave();
     }
 
-    private void resetParameters(Map<String, ValidParameter<?>> parameters) {
-        for (Map.Entry<String, ValidParameter<?>> param : parameters.entrySet()) {
+    private void resetParameters(Map<Code, ValidParameter<?>> parameters) {
+        for (Map.Entry<Code, ValidParameter<?>> param : parameters.entrySet()) {
             ValidParameter<?> parameter = param.getValue();
             parameter.setDefaultValue();
         }
     }
 
     private void updateAllParametersInSave() {
-        for (String name : nameList) {
-            ValidParameter<?> parameter = parameters.get(name);
+        for (Code code : Code.values()) {
+            ValidParameter<?> parameter = parameters.get(code);
             updateParameterInSave(parameter);
         }
     }
