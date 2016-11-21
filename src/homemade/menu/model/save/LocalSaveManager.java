@@ -14,23 +14,14 @@ public class LocalSaveManager implements SettingsSave, RecordsSave {
     }
 
     @Override
-    public Integer getIntSettingsValue(String parameterName) {
-        return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
-    }
-
-    @Override
-    public Boolean getBoolSettingsValue(String parameterName) {
-        return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
-    }
-
-    @Override
     public <Type> Type getSettingsValue(String parameterName, Class<Type> type) {
+        Type value = null;
         if (type == Boolean.class) {
-            return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
+            value = getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
         } else if (type == Integer.class) {
-            return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
+            value = getValue(Block.SETTINGS, parameterName, Integer.TYPE);
         }
-        return null;
+        return value;
     }
 
     @Override
@@ -41,8 +32,6 @@ public class LocalSaveManager implements SettingsSave, RecordsSave {
 
     private <T> T getValue(String blockName, String parameterName, Type type) {
         String value = save.getParameterValue(blockName, parameterName);
-        /*Class<Integer> t = Integer.TYPE;
-        Integer integer = t.cast(value);*/
         T parameterValue = convertStrValue(value, type);
 
         return parameterValue;

@@ -31,10 +31,6 @@ class ValidParameter<Type> extends Parameter<Type> {
         value = valueChecker.getValidValue(newValue);
     }
 
-    /*public void setValueChecker(final ValueChecker<Type> valueChecker) {
-        this.valueChecker = valueChecker;
-    }*/
-
     public Diapason<Type> getDiapason() {
         return valueChecker.getDiapason();
     }

@@ -1,7 +1,6 @@
 package homemade.menu.model.settings;
 
 abstract class ValueChecker<Type> {
-
     private Class<Type> type;
 
     ValueChecker(Type exampleValue) {
