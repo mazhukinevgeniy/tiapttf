@@ -1,11 +1,13 @@
 package homemade.menu.model.settings;
 
-class RangeChecker<Type extends Comparable<Type>> implements ValueChecker<Type> {
+class RangeChecker<Type extends Comparable<Type>> extends ValueChecker<Type> {
     private Type defaultValue = null;
     private Type begin = null;
     private Type end = null;
 
     public RangeChecker(final Type defaultValue, final Type begin, final Type end) {
+        super(defaultValue);
+
         if (begin.compareTo(end) < 0) {
             this.begin = begin;
             this.end = end;

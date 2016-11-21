@@ -2,7 +2,6 @@ package homemade.menu.model.settings;
 
 import homemade.menu.model.save.SettingsSave;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
 
@@ -25,6 +24,14 @@ public class Settings {
             Name.comboLength,
             Name.maxBlockValue);
 
+    private List<String> nameList = Arrays.asList(
+            Name.isRealTime,
+            Name.animatedLinks,
+            Name.simultaneousSpawn,
+            Name.spawnPeriod,
+            Name.comboLength,
+            Name.maxBlockValue);
+
     //3) state default value and Range/Enum valid values
     private static Map<String, ValueChecker<?>> checkers = new HashMap<>();
 
@@ -41,6 +48,8 @@ public class Settings {
     private Map<String, ValidParameter<Boolean>> boolParameters = new HashMap<>();
     private Map<String, ValidParameter<Integer>> intParameters = new HashMap<>();
 
+    private Map<String, ValidParameter<?>> parameters = new HashMap<>();
+
     private Presets presets = new Presets();
     private Presets.Mode currentMode;
     private Presets.Difficulty currentDifficutly;
@@ -50,14 +59,16 @@ public class Settings {
     public Settings(SettingsSave save) {
         this.save = save;
 
-        prepareParameters(nameListBool, boolParameters, Boolean.class);
-        prepareParameters(nameListInt, intParameters, Integer.class);
+        //prepareParameters(nameListBool, boolParameters, Boolean.class);
+        //prepareParameters(nameListInt, intParameters, Integer.class);
+
+        prepareParameters(nameList, parameters);
 
         initializeValues();
         updateAllParametersInSave();
     }
 
-    private <Type> void prepareParameters(List<String> settingNames, Map<String, ValidParameter<Type>> parametersMap, Class<Type> type) {
+    /*private <Type> void prepareParameters(List<String> settingNames, Map<String, ValidParameter<Type>> parametersMap, Class<Type> type) {
         for (String name : settingNames) {
             ValidParameter<Type> parameter = new ValidParameter<>(type, name);
             parametersMap.put(name, parameter);
@@ -65,17 +76,27 @@ public class Settings {
             ValueChecker<Type> checker = (ValueChecker<Type>) checkers.get(name);
             parameter.setValueChecker(checker);
         }
+    }*/
+
+    private void prepareParameters(List<String> settingNames, Map<String, ValidParameter<?>> parameters) {
+        for (String name : settingNames) {
+            ValueChecker<?> checker = checkers.get(name);
+            ValidParameter<?> parameter = new ValidParameter<>(checker, name);
+            parameters.put(name, parameter);
+        }
     }
 
     private void initializeValues() {
         Function<String, Boolean> boolSettingsValue = name -> save.getBoolSettingsValue(name);
         Function<String, Integer> intSettingsValue = name -> save.getIntSettingsValue(name);
+        //Function<String, ?> settingsValue = (name, type) -> save.getSettingsValue(name, type);
 
-        setSavedValuesToMap(boolParameters, boolSettingsValue);
-        setSavedValuesToMap(intParameters, intSettingsValue);
+        //setSavedValuesToMap(parameters, boolSettingsValue);
+        //setSavedValuesToMap(parameters, intSettingsValue);
+        setSavedValuesToMap(parameters);
     }
 
-    private <Type> void setSavedValuesToMap(Map<String, ValidParameter<Type>> parameters,
+    /*private <Type> void setSavedValuesToMap(Map<String, ValidParameter<Type>> parameters,
                                             Function<String, Type> saveGetSettingsValue) {
         for (Map.Entry<String, ValidParameter<Type>> param : parameters.entrySet()) {
             Type savedValue = saveGetSettingsValue.apply(param.getKey());
@@ -87,10 +108,24 @@ public class Settings {
                 parameter.setValue(savedValue);
             }
         }
+    }*/
+
+    private void setSavedValuesToMap(Map<String, ValidParameter<?>> parameters) {
+        for (Map.Entry<String, ValidParameter<?>> param : parameters.entrySet()) {
+            ValidParameter<?> parameter = param.getValue();
+
+            Object savedValue = save.getSettingsValue(param.getKey(), parameter.getType());
+
+            if (savedValue == null) {
+                parameter.setDefaultValue();
+            } else {
+                parameter.setValueWithCast(save.getSettingsValue(param.getKey(), parameter.getType()));
+            }
+        }
     }
 
     //parameterName take from Settings.Name
-    public <Type> void set(String parameterName, Type value) {
+    /*public <Type> void set(String parameterName, Type value) {
         ValidParameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName)) {
             parameter = (ValidParameter<Type>) boolParameters.get(parameterName);
@@ -102,6 +137,16 @@ public class Settings {
             parameter.setValue(value);
             updateParameterInSave(parameter);
         }
+    }*/
+
+    public <Type> void set(String parameterName, Type value) {
+        if (parameters.containsKey(parameterName)) {
+            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterName);
+            if (parameter != null) {
+                parameter.setValue(value);
+                updateParameterInSave(parameter);
+            }
+        }
     }
 
     private void updateParameterInSave(ValidParameter<?> parameter) {
@@ -109,7 +154,7 @@ public class Settings {
     }
 
     //parameterName take from Settings.Name
-    public <Type> Type get(String parameterName) {
+    /*public <Type> Type get(String parameterName) {
         ValidParameter<Type> parameter = null;
         if (boolParameters.containsKey(parameterName)) {
             parameter = (ValidParameter<Type>) boolParameters.get(parameterName);
@@ -123,21 +168,30 @@ public class Settings {
         }
 
         return value;
+    }*/
+
+    public <Type> Type get(String parameterName) {
+        Type value = null;
+        if (parameters.containsKey(parameterName)) {
+            ValidParameter<Type> parameter = (ValidParameter<Type>) parameters.get(parameterName);
+            if (parameter != null) {
+                value = parameter.getValue();
+            }
+        }
+
+        return value;
     }
 
     //parameterName take from Settings.Name
-    public Type getType(String parameterName) {
-        Type type = null;
-        if (boolParameters.containsKey(parameterName)) {
-            type = Boolean.TYPE;
-        } else if (intParameters.containsKey(parameterName)) {
-            type = Integer.TYPE;
+    public <Type> Class<Type> getType(String parameterName) {
+        Class<Type> type = null;
+        if (parameters.containsKey(parameterName)) {
+            type = (Class<Type>) parameters.get(parameterName).getType();
         }
-
         return type;
     }
 
-    public Map<String, Type> getParameterNamesMap() {
+    /*public Map<String, Type> getParameterNamesMap() {
         Map<String, Type> namesMap = new HashMap<>();
         for (String name : nameListBool) {
             namesMap.put(name, Boolean.TYPE);
@@ -147,9 +201,9 @@ public class Settings {
         }
 
         return namesMap;
-    }
+    }*/
 
-    public List<Parameter<?>> getAllParameters() {
+    /*public List<Parameter<?>> getAllParameters() {
         List<Parameter<?>> parameters = new ArrayList<>();
         for (String name : nameListBool) {
             parameters.add(boolParameters.get(name));
@@ -159,6 +213,15 @@ public class Settings {
         }
 
         return parameters;
+    }*/
+
+    public List<Parameter<?>> getAllParameters() {
+        List<Parameter<?>> listParameters = new ArrayList<>();
+        for (String name : nameList) {
+            listParameters.add(parameters.get(name));
+        }
+
+        return listParameters;
     }
 
     public void setPresetParameters(Presets.Mode mode, Presets.Difficulty difficulty) {
@@ -170,7 +233,7 @@ public class Settings {
         currentDifficutly = difficulty;
     }
 
-    public void setParameters(List<Parameter<?>> parameters) {
+    /*public void setParameters(List<Parameter<?>> parameters) {
         for (Parameter<?> param : parameters) {
             String name = param.getName();
             if (nameListBool.contains(name)) {
@@ -185,24 +248,42 @@ public class Settings {
                 set(name, value);
             }
         }
+    }*/
+
+    public void setParameters(List<Parameter<?>> parameters) {
+        for (Parameter<?> param : parameters) {
+            String name = param.getName();
+            if (nameList.contains(name)) {
+                set(name, param.getValue());
+            }
+        }
     }
 
+
     public void setDefaultSettings() {
-        resetParameters(intParameters);
-        resetParameters(boolParameters);
+        //resetParameters(intParameters);
+        //resetParameters(boolParameters);
+        resetParameters(parameters);
 
         updateAllParametersInSave();
     }
 
-    private <Type> void resetParameters(Map<String, ValidParameter<Type>> parameters) {
+    /*private <Type> void resetParameters(Map<String, ValidParameter<Type>> parameters) {
         for (Map.Entry<String, ValidParameter<Type>> param : parameters.entrySet()) {
             ValidParameter<Type> parameter = param.getValue();
+            parameter.setDefaultValue();
+        }
+    }*/
+
+    private void resetParameters(Map<String, ValidParameter<?>> parameters) {
+        for (Map.Entry<String, ValidParameter<?>> param : parameters.entrySet()) {
+            ValidParameter<?> parameter = param.getValue();
             parameter.setDefaultValue();
         }
     }
 
 
-    private void updateAllParametersInSave() {
+    /*private void updateAllParametersInSave() {
         ValidParameter<?> parameter;
         for (String name : nameListBool) {
             parameter = boolParameters.get(name);
@@ -210,6 +291,13 @@ public class Settings {
         }
         for (String name : nameListInt) {
             parameter = intParameters.get(name);
+            updateParameterInSave(parameter);
+        }
+    }*/
+
+    private void updateAllParametersInSave() {
+        for (String name : nameList) {
+            ValidParameter<?> parameter = parameters.get(name);
             updateParameterInSave(parameter);
         }
     }

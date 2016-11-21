@@ -5,5 +5,7 @@ public interface SettingsSave {
 
     Boolean getBoolSettingsValue(String parameterName);
 
+    <Type> Type getSettingsValue(String parameterName, Class<Type> type);
+
     void setSettingsValue(String parameterName, Object value);
 }

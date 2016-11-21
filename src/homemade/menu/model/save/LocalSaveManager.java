@@ -24,6 +24,16 @@ public class LocalSaveManager implements SettingsSave, RecordsSave {
     }
 
     @Override
+    public <Type> Type getSettingsValue(String parameterName, Class<Type> type) {
+        if (type == Boolean.class) {
+            return getValue(Block.SETTINGS, parameterName, Boolean.TYPE);
+        } else if (type == Integer.class) {
+            return getValue(Block.SETTINGS, parameterName, Integer.TYPE);
+        }
+        return null;
+    }
+
+    @Override
     public void setSettingsValue(String parameterName, Object value) {
         String stringValue = value.toString();
         save.setParameterValue(Block.SETTINGS, parameterName, stringValue);
@@ -31,6 +41,8 @@ public class LocalSaveManager implements SettingsSave, RecordsSave {
 
     private <T> T getValue(String blockName, String parameterName, Type type) {
         String value = save.getParameterValue(blockName, parameterName);
+        /*Class<Integer> t = Integer.TYPE;
+        Integer integer = t.cast(value);*/
         T parameterValue = convertStrValue(value, type);
 
         return parameterValue;

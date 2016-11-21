@@ -1,13 +1,24 @@
 package homemade.menu.model.settings;
 
-interface ValueChecker<Type> {
-    Type getDefaultValue();
+abstract class ValueChecker<Type> {
 
-    Type getValidValue(final Type uncheckedValue);
+    private Class<Type> type;
 
-    boolean isValidValue(final Type value);
+    ValueChecker(Type exampleValue) {
+        type = (Class<Type>) exampleValue.getClass();
+    }
 
-    default Diapason<Type> getDiapason() {
+    public Class<Type> getType() {
+        return type;
+    }
+
+    abstract public Type getDefaultValue();
+
+    abstract Type getValidValue(final Type uncheckedValue);
+
+    abstract boolean isValidValue(final Type value);
+
+    public Diapason<Type> getDiapason() {
         return null;
     }
 }

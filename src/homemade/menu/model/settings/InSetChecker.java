@@ -3,11 +3,13 @@ package homemade.menu.model.settings;
 import java.util.HashSet;
 import java.util.Set;
 
-class InSetChecker<Type extends Comparable<Type>> implements ValueChecker<Type> {
+class InSetChecker<Type extends Comparable<Type>> extends ValueChecker<Type> {
     private Type defaultValue = null;
     private Set<Type> elements = null;
 
     public InSetChecker(final Type defaultValue, final Type... elements) {
+        super(defaultValue);
+
         this.elements = new HashSet<>();
         for (Type element : elements) {
             this.elements.add(element);
