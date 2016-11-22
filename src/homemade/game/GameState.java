@@ -5,6 +5,8 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
 
 public interface GameState {
+    int numberOfMovableBlocks();
+
     int numberOfBlocks();
 
     int spawnsDenied();

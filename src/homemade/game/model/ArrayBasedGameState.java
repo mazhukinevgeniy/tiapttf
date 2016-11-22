@@ -2,6 +2,7 @@ package homemade.game.model;
 
 import homemade.game.Cell;
 import homemade.game.CellState;
+import homemade.game.ComboEffect;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
@@ -20,11 +21,12 @@ class ArrayBasedGameState implements GameState {
 
     private GameState immutableCopy;
 
-    private int numberOfBlocks;
-    private int denies;
+    private int numberOfBlocks = 0;
+    private int numberOfImmovableBlocks = 0;
+    private int denies = 0;
 
-    private int score;
-    private int multiplier;
+    private int score = 0;
+    private int multiplier = 1;
 
     ArrayBasedGameState(FieldStructure structure) {
         int fieldSize = structure.getFieldSize();
@@ -49,11 +51,6 @@ class ArrayBasedGameState implements GameState {
         for (int i = 0; i < numberOfLinks; i++) {
             chainLengths[i] = 0;
         }
-
-        numberOfBlocks = 0;
-        denies = 0;
-        score = 0;
-        multiplier = 1;
     }
 
     private ArrayBasedGameState(ArrayBasedGameState stateToCopy) {
@@ -62,6 +59,7 @@ class ArrayBasedGameState implements GameState {
         chainLengths = stateToCopy.chainLengths.clone();
 
         numberOfBlocks = stateToCopy.numberOfBlocks;
+        numberOfImmovableBlocks = stateToCopy.numberOfImmovableBlocks;
         denies = stateToCopy.denies;
 
         score = stateToCopy.score;
@@ -92,10 +90,17 @@ class ArrayBasedGameState implements GameState {
             CellState newState = entry.getValue();
             CellState oldState = field[pos];
 
-            if (!oldState.isAnyBlock() && newState.isAnyBlock())
+            if (!oldState.isAnyBlock() && newState.isAnyBlock()) {
                 numberOfBlocks++;
-            else if (oldState.isAnyBlock() && !newState.isAnyBlock())
+            } else if (oldState.isAnyBlock() && !newState.isAnyBlock()) {
                 numberOfBlocks--;
+            }
+
+            if (oldState.effect() != ComboEffect.IMMOVABLE && newState.effect() == ComboEffect.IMMOVABLE) {
+                numberOfImmovableBlocks++;
+            } else if (oldState.effect() == ComboEffect.IMMOVABLE && newState.effect() != ComboEffect.IMMOVABLE) {
+                numberOfImmovableBlocks--;
+            }
 
             field[pos] = newState;
         }
@@ -117,6 +122,11 @@ class ArrayBasedGameState implements GameState {
     @Override
     public int numberOfBlocks() {
         return numberOfBlocks;
+    }
+
+    @Override
+    public int numberOfMovableBlocks() {
+        return numberOfBlocks - numberOfImmovableBlocks;
     }
 
     @Override

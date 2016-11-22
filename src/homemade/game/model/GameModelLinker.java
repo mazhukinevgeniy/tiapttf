@@ -17,6 +17,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class GameModelLinker {
+    private static final int BONUS_MULTIPLIER_FOR_BOARD_CLEAR = 50;
+    private static final int INITIAL_SPAWNS = 2;
+
     private FieldStructure structure;
 
     private CellMap cellMap;
@@ -60,7 +63,7 @@ public class GameModelLinker {
 
         GameMode mode = settings.gameMode;
         if (mode == GameMode.TURN_BASED) {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < INITIAL_SPAWNS; i++)
                 requestSpawn();
         }
     }
@@ -117,21 +120,6 @@ public class GameModelLinker {
         updater.takeChanges(spawner.markCellsForSpawn());
 
         updateStates();
-
-        if (state.numberOfBlocks() == structure.getFieldSize()) {
-            int multiplier = state.globalMultiplier();
-
-            if (multiplier > 1) {
-                modifyGlobalMultiplier(-multiplier);
-
-                updater.takeChanges(spawner.removeRandomBlocks());
-                updateStates();
-                System.out.println("multiplier consumed");
-            } else {
-                stopAllFacilities();
-                System.out.println("no multiplier");
-            }
-        }
     }
 
     synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
@@ -153,8 +141,6 @@ public class GameModelLinker {
 
             if (settings.gameMode == GameMode.TURN_BASED && !updater.hasCombos()) {
                 requestSpawn();
-                //TODO: fix edge case when board is cleared in turn-based mode and the new move is impossible
-                //it'd make sense to give player a ton of points and fill the board like in the beginning
             } else {
                 updateStates();
             }
@@ -170,6 +156,27 @@ public class GameModelLinker {
 
             selection.updateSelectionState();
             updater.flush();
+        }
+
+        if (state.numberOfBlocks() == structure.getFieldSize()) {
+            int multiplier = state.globalMultiplier();
+
+            if (multiplier > 1) {
+                modifyGlobalMultiplier(-multiplier);
+
+                updater.takeChanges(spawner.removeRandomBlocks());
+                updateStates();
+                System.out.println("multiplier consumed");
+            } else {
+                stopAllFacilities();
+                System.out.println("no multiplier");
+            }
+        } else if (state.numberOfMovableBlocks() == 0) {
+            modifyGlobalMultiplier(BONUS_MULTIPLIER_FOR_BOARD_CLEAR + INITIAL_SPAWNS);
+
+            for (int i = 0; i < INITIAL_SPAWNS; i++) {
+                requestSpawn();
+            }
         }
     }
 

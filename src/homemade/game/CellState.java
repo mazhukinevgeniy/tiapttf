@@ -72,6 +72,7 @@ public class CellState {
     public boolean isMovable() {
         return isNormalBlock() && effect != ComboEffect.IMMOVABLE;
     }
+    //TODO: rework, this method might cause confusion
 
     public boolean isAnyBlock() {
         return blocks.contains(cellType);
