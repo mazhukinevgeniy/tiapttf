@@ -11,18 +11,6 @@ import java.util.Map;
 public class BlockAssets extends AssetLoader {
     private static enum SelectionType {
         NOT_SELECTED, SELECTED, NOT_SELECTABLE;
-
-        public static SelectionType getType(boolean movable, boolean selected) {
-            if (movable && selected) {
-                return SELECTED;
-            } else if (movable && !selected) {
-                return NOT_SELECTED;
-            } else if (!movable && !selected) {
-                return NOT_SELECTABLE;
-            } else {
-                throw new IllegalArgumentException("if block is not movable it must not be selected");
-            }
-        }
     }
 
     private Map<SelectionType, Map<ComboEffect, Image>> assets;
@@ -65,6 +53,18 @@ public class BlockAssets extends AssetLoader {
     }
 
     public Image getBlock(boolean movable, boolean selected, ComboEffect effect) {
-        return assets.get(SelectionType.getType(movable, selected)).get(effect);
+        return assets.get(getSelectionType(movable, selected)).get(effect);
+    }
+
+    private SelectionType getSelectionType(boolean movable, boolean selected) {
+        if (movable && selected) {
+            return SelectionType.SELECTED;
+        } else if (movable) {
+            return SelectionType.NOT_SELECTED;
+        } else if (!selected) {
+            return SelectionType.NOT_SELECTABLE;
+        } else {
+            throw new IllegalArgumentException("if block is not movable it must not be selected");
+        }
     }
 }
