@@ -31,7 +31,7 @@ class BlockLayer extends RenderingLayer.Cells {
             if (type == Cell.MARKED_FOR_SPAWN) {
                 sprite = assets.getSmallBlock();
             } else if (type == Cell.OCCUPIED) {
-                sprite = blockAssets.getBlock(selectionState.isSelected(cellCode), cellState.effect());
+                sprite = blockAssets.getBlock(cellState.isMovableBlock(), selectionState.isSelected(cellCode), cellState.effect());
             } else if (type == Cell.DEAD_BLOCK) {
                 sprite = blockAssets.getDeadBlock();
             } else

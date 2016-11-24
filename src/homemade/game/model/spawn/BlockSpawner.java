@@ -2,10 +2,10 @@ package homemade.game.model.spawn;
 
 import homemade.game.Cell;
 import homemade.game.CellState;
-import homemade.game.ComboEffect;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.model.cellstates.BlockState;
 
 import java.util.*;
 
@@ -36,16 +36,14 @@ class BlockSpawner {
             int pos = random.nextInt(cSize);
 
             changes.put(cells.remove(pos),
-                    new CellState(Cell.OCCUPIED,
-                            blockValuePool.takeBlockValue(),
-                            ComboEffect.IMMOVABLE));
+                    new BlockState(blockValuePool.takeBlockValue(), false, null));
 
             blocksToImmobilize--;
             cSize--;
         }
 
         for (int i = 0, size = cells.size(); i < size; i++) {
-            changes.put(cells.get(i), new CellState(blockValuePool.takeBlockValue()));
+            changes.put(cells.get(i), new BlockState(blockValuePool.takeBlockValue(), true, null));
         }
 
         return changes;

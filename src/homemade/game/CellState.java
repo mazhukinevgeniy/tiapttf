@@ -1,89 +1,57 @@
 package homemade.game;
 
-import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
- * Immutable
+ * Extensions of this class must be immutable
  */
-public class CellState {
-    private static Map<Cell, CellState> simpleStates = new EnumMap<>(Cell.class);
-
-    static {
-        for (Cell type : EnumSet.of(Cell.EMPTY, Cell.MARKED_FOR_SPAWN, Cell.DEAD_BLOCK)) {
-            simpleStates.put(type, new CellState(type, Cell.DEFAULT_VALUE, null));
-        }
-    }
-
-    public static CellState simpleState(Cell type) {
-        return simpleStates.get(type);
-    }
-
-
+public abstract class CellState {
     private static Set<Cell> cellFreeToMove = EnumSet.of(Cell.EMPTY, Cell.MARKED_FOR_SPAWN);
     private static Set<Cell> blocks = EnumSet.of(Cell.OCCUPIED, Cell.DEAD_BLOCK);
 
+    public final static int UNDEFINED_VALUE = -1;
+    public final static ComboEffect UNDEFINED_COMBO_EFFECT = null;
+    public final static boolean UNDEFINED_PROPERTY = false;
 
-    private Cell cellType;
-    private int cellValue;
-    private ComboEffect effect;
+    private final Cell cellType;
 
-    public CellState(int value) {
-        this(Cell.OCCUPIED, value, null);
-
-        if (value == Cell.DEFAULT_VALUE)
-            throw new RuntimeException("incorrect creation of cellState");
-    }
-
-    public CellState(CellState baseState, ComboEffect effect) {
-        this(Cell.OCCUPIED, baseState.cellValue, effect);
-
-        if (!baseState.isNormalBlock())
-            throw new RuntimeException("incorrect creation of cellState with effect");
-    }
-
-    public CellState(Cell type, int code, ComboEffect effect) {
-        cellType = type;
-        cellValue = code;
-        this.effect = effect;
+    protected CellState(Cell cellType) {
+        this.cellType = cellType;
     }
 
     public int value() {
-        return cellValue;
+        return UNDEFINED_VALUE;
     }
 
     public ComboEffect effect() {
-        return effect;
+        return UNDEFINED_COMBO_EFFECT;
+    }
+
+    public boolean isMovableBlock() {
+        return UNDEFINED_PROPERTY;
     }
 
     /**
      * I think we need this method for view
      */
-    public Cell type() {
+    public final Cell type() {
         return cellType;
     }
 
-    public boolean isNormalBlock() {
+    public final boolean isAliveBlock() { //TODO: find a better method name
         return cellType == Cell.OCCUPIED;
     }
 
-    public boolean isMovable() {
-        return isNormalBlock() && effect != ComboEffect.IMMOVABLE;
-    }
-    //TODO: rework, this method might cause confusion
-
-    public boolean isAnyBlock() {
+    public final boolean isAnyBlock() {
         return blocks.contains(cellType);
     }
 
-
-    public boolean isFreeForMove() {
+    public final boolean isFreeForMove() {
         return cellFreeToMove.contains(cellType);
     }
 
-    public boolean isFreeForSpawn() {
+    public final boolean isFreeForSpawn() {
         return cellType == Cell.EMPTY;
     }
 }

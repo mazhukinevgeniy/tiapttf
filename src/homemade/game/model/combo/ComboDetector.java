@@ -88,7 +88,7 @@ public class ComboDetector {
                                 comboCells.addAll(vicinity);
 
                                 for (CellCode cell : vicinity)
-                                    if (cellMap.getCell(cell).isNormalBlock())
+                                    if (cellMap.getCell(cell).isAliveBlock())
                                         blockEventHandler.blockRemoved(cell);
 
                                 blockEventHandler.blockExploded(currentCell);

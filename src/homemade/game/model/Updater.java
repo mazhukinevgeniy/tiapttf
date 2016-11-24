@@ -7,6 +7,7 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellmap.CellMap;
+import homemade.game.model.cellstates.SimpleState;
 import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.combo.ComboPack;
 
@@ -84,7 +85,7 @@ class Updater {
     private Map<CellCode, CellState> removeCombos(ComboPack combos) {
         Map<CellCode, CellState> cellsToRemove = new HashMap<>();
 
-        CellState empty = CellState.simpleState(Cell.EMPTY);
+        CellState empty = SimpleState.getSimpleState(Cell.EMPTY);
 
         Set<CellCode> comboCells = combos.cellSet();
 

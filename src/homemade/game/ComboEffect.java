@@ -4,8 +4,7 @@ import java.util.Comparator;
 
 public enum ComboEffect {
     //care: all prices must be different
-    EXTRA_MULTIPLIER(1), IMMOVABLE(-1), JUST_EXTRA_TIER(2), EXPLOSION(4);
-    //TODO: get immovable out of here or rework the concept of this enum
+    EXTRA_MULTIPLIER(1), JUST_EXTRA_TIER(2), EXPLOSION(4);
 
     private int price;
 

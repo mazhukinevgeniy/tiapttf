@@ -4,39 +4,58 @@ import homemade.game.ComboEffect;
 import homemade.utils.AssetLoader;
 
 import java.awt.*;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BlockAssets extends AssetLoader {
-    private Map<Boolean, Map<ComboEffect, Image>> assets;
+    private static enum SelectionType {
+        NOT_SELECTED, SELECTED, NOT_SELECTABLE;
+
+        public static SelectionType getType(boolean movable, boolean selected) {
+            if (movable && selected) {
+                return SELECTED;
+            } else if (movable && !selected) {
+                return NOT_SELECTED;
+            } else if (!movable && !selected) {
+                return NOT_SELECTABLE;
+            } else {
+                throw new IllegalArgumentException("if block is not movable it must not be selected");
+            }
+        }
+    }
+
+    private Map<SelectionType, Map<ComboEffect, Image>> assets;
 
     private Image deadBlock;
 
     public BlockAssets() {
-        assets = new HashMap<>();
+        assets = new EnumMap<>(SelectionType.class);
 
-        Map<ComboEffect, Image> selectedBlocks = new HashMap<>();
-        Map<ComboEffect, Image> unselectedBlocks = new HashMap<>();
+        String[] baseSprites = new String[3];
+        baseSprites[SelectionType.SELECTED.ordinal()] = "normal_block_selected.png";
+        baseSprites[SelectionType.NOT_SELECTED.ordinal()] = "normal_block.png";
+        baseSprites[SelectionType.NOT_SELECTABLE.ordinal()] = "immovable_block.png";
 
-        assets.put(true, selectedBlocks);
-        assets.put(false, unselectedBlocks);
+        String[] effectSprites = new String[3];
+        effectSprites[ComboEffect.EXTRA_MULTIPLIER.ordinal()] = "tria.png";
+        effectSprites[ComboEffect.JUST_EXTRA_TIER.ordinal()] = "square.png";
+        effectSprites[ComboEffect.EXPLOSION.ordinal()] = "expl.png";
 
-        selectedBlocks.put(null, getImage("normal_block_selected.png"));
-        selectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
-                {getImage("normal_block_selected.png"), getImage("tria.png")}));
-        selectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, stackSprites(new Image[]
-                {getImage("normal_block_selected.png"), getImage("square.png")}));
-        selectedBlocks.put(ComboEffect.EXPLOSION, stackSprites(new Image[]
-                {getImage("normal_block_selected.png"), getImage("expl.png")}));
+        for (SelectionType type : SelectionType.values()) {
+            Map<ComboEffect, Image> map = new HashMap<>();
+            assets.put(type, map);
 
-        unselectedBlocks.put(null, getImage("normal_block.png"));
-        unselectedBlocks.put(ComboEffect.EXTRA_MULTIPLIER, stackSprites(new Image[]
-                {getImage("normal_block.png"), getImage("tria.png")}));
-        unselectedBlocks.put(ComboEffect.JUST_EXTRA_TIER, stackSprites(new Image[]
-                {getImage("normal_block.png"), getImage("square.png")}));
-        unselectedBlocks.put(ComboEffect.EXPLOSION, stackSprites(new Image[]
-                {getImage("normal_block.png"), getImage("expl.png")}));
-        unselectedBlocks.put(ComboEffect.IMMOVABLE, getImage("immovable_block.png"));
+            String base = baseSprites[type.ordinal()];
+            map.put(null, getImage(base));
+
+            for (ComboEffect effect : ComboEffect.values()) {
+                map.put(effect, stackSprites(new Image[]{
+                        getImage(base),
+                        getImage(effectSprites[effect.ordinal()])
+                }));
+            }
+        }
 
         deadBlock = getImage("gray_block.png");
     }
@@ -45,8 +64,7 @@ public class BlockAssets extends AssetLoader {
         return deadBlock;
     }
 
-    public Image getBlock(boolean selected, ComboEffect effect) {
-        return assets.get(selected).get(effect);
+    public Image getBlock(boolean movable, boolean selected, ComboEffect effect) {
+        return assets.get(SelectionType.getType(movable, selected)).get(effect);
     }
-
 }

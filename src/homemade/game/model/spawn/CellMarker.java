@@ -6,6 +6,8 @@ import homemade.game.ComboEffect;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.model.BlockValuePool;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.model.cellstates.BlockState;
+import homemade.game.model.cellstates.SimpleState;
 
 import java.util.*;
 
@@ -33,7 +35,7 @@ class CellMarker {
     Map<CellCode, CellState> markAnyCell(Iterator<CellCode> iterator, Cell type, int percentage) {
         Map<CellCode, CellState> changes = new HashMap<>();
 
-        CellState state = CellState.simpleState(type);
+        CellState state = SimpleState.getSimpleState(type);
 
         if (state == null)
             throw new RuntimeException("not a simple type");
@@ -57,7 +59,7 @@ class CellMarker {
             CellCode cellCode = iterator.next();
             CellState cellState = cellMap.getCell(cellCode);
 
-            if (cellState.isNormalBlock() && cellState.effect() == null)
+            if (cellState.isAliveBlock() && cellState.effect() == null)
                 availableBlocks.add(cellCode);
         }
 
@@ -65,7 +67,8 @@ class CellMarker {
             int position = random.nextInt(availableBlocks.size());
 
             CellCode cellCode = availableBlocks.remove(position);
-            CellState newCellState = new CellState(cellMap.getCell(cellCode), effects.removeFirst());
+            CellState oldState = cellMap.getCell(cellCode);
+            CellState newCellState = new BlockState(oldState.value(), oldState.isMovableBlock(), effects.removeFirst());
 
             System.out.println("marked block: " + newCellState.value() + ", " + newCellState.effect().toString());
 
@@ -92,7 +95,7 @@ class CellMarker {
 
             int cellsToMark = Math.min(freeCells.size(), Math.min(targetAmount, canMark));
 
-            CellState marked = CellState.simpleState(Cell.MARKED_FOR_SPAWN);
+            CellState marked = SimpleState.getSimpleState(Cell.MARKED_FOR_SPAWN);
             for (int i = 0; i < cellsToMark; i++) {
                 int position = random.nextInt(freeCells.size());
 

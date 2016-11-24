@@ -4,6 +4,7 @@ import homemade.game.Cell;
 import homemade.game.CellState;
 import homemade.game.fieldstructure.*;
 import homemade.game.model.BlockValuePool;
+import homemade.game.model.cellstates.SimpleState;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class CellMap implements CellMapReader {
 
         cells = new CellState[structure.getFieldSize()];
 
-        CellState emptyState = CellState.simpleState(Cell.EMPTY);
+        CellState emptyState = SimpleState.getSimpleState(Cell.EMPTY);
 
         for (int j = 0, height = structure.getHeight(); j < height; j++)
             for (int i = 0, width = structure.getWidth(); i < width; i++) {
@@ -79,9 +80,9 @@ public class CellMap implements CellMapReader {
                 }
             }
 
-            if (oldState.isNormalBlock())
+            if (oldState.isAliveBlock())
                 removedBlocks.add(oldState);
-            if (newState.isNormalBlock())
+            if (newState.isAliveBlock())
                 addedBlockNumbers.add(newState.value());
         }
 
@@ -131,7 +132,8 @@ public class CellMap implements CellMapReader {
     private Direction linkDirection(int lowerValue, int higherValue, Direction lowerToHigher) {
         Direction direction;
 
-        if (lowerValue == Cell.DEFAULT_VALUE || higherValue == Cell.DEFAULT_VALUE || lowerValue == higherValue) {
+        if (lowerValue == CellState.UNDEFINED_VALUE || higherValue == CellState.UNDEFINED_VALUE ||
+                lowerValue == higherValue) {
             direction = null;
         } else if (lowerValue > higherValue) {
             direction = lowerToHigher;

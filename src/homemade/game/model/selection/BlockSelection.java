@@ -34,7 +34,7 @@ public class BlockSelection {
     }
 
     public synchronized void activateCell(CellCode eventCell) {
-        if (cellMapReader.getCell(eventCell).isMovable()) {
+        if (cellMapReader.getCell(eventCell).isMovableBlock()) {
             selection.clear();
             selection.add(eventCell);
 
@@ -65,8 +65,8 @@ public class BlockSelection {
 
             selection.clear();
 
-            boolean selectedCellOccupied = cellMapReader.getCell(selectedCell).isNormalBlock();
-            boolean eventCellOccupied = cellMapReader.getCell(eventCell).isNormalBlock();
+            boolean selectedCellOccupied = cellMapReader.getCell(selectedCell).isAliveBlock();
+            boolean eventCellOccupied = cellMapReader.getCell(eventCell).isAliveBlock();
 
             if (selectedCellOccupied) //I think that means move failed
             {
@@ -85,7 +85,7 @@ public class BlockSelection {
         for (Iterator<CellCode> iterator = selection.iterator(); iterator.hasNext(); ) {
             CellCode next = iterator.next();
 
-            if (!cellMapReader.getCell(next).isNormalBlock())
+            if (!cellMapReader.getCell(next).isAliveBlock())
                 iterator.remove();
         }
 

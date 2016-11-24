@@ -17,7 +17,7 @@ class NumberLayer extends RenderingLayer.Cells {
     @Override
     protected void renderForCell(CellCode cellCode) {
         CellState cell = state.getCellState(cellCode);
-        if (cell.isNormalBlock()) {
+        if (cell.isAliveBlock()) {
             int value = cell.value();
 
             String numberToDraw = String.valueOf(value);

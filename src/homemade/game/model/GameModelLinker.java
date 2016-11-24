@@ -7,6 +7,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.model.cellstates.SimpleState;
 import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.combo.ComboEffectVendor;
 import homemade.game.model.selection.BlockSelection;
@@ -63,6 +64,8 @@ public class GameModelLinker {
 
         GameMode mode = settings.gameMode;
         if (mode == GameMode.TURN_BASED) {
+            updater.takeChanges(spawner.markCellsForSpawn());
+
             for (int i = 0; i < INITIAL_SPAWNS; i++)
                 requestSpawn();
         }
@@ -129,12 +132,12 @@ public class GameModelLinker {
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
 
-        if (cellTo.isFreeForMove() && cellFrom.isMovable()) {
+        if (cellTo.isFreeForMove() && cellFrom.isMovableBlock()) {
             if (repercussions)
                 state.incrementDenyCounter();
 
             Map<CellCode, CellState> tmpMap = new HashMap<>();
-            tmpMap.put(moveFromCell, CellState.simpleState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
+            tmpMap.put(moveFromCell, SimpleState.getSimpleState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
             tmpMap.put(moveToCell, cellFrom);
 
             updater.takeComboChanges(tmpMap);
