@@ -26,7 +26,7 @@ class NumberLayer extends RenderingLayer.Cells {
 
 
             canvasX += digitMetadata.getOffsetXForNumber(value);
-            canvasY += digitMetadata.offsetY;
+            canvasY += digitMetadata.getOffsetYForNumber(value);
 
 
             for (int k = 0; k < numberLength; k++) {
