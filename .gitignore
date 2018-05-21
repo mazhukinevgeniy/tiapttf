@@ -1,6 +1,6 @@
-.idea/workspace.xml
-.idea/uiDesigner.xml
-.idea/dictionaries/
+workspace.xml
+uiDesigner.xml
+dictionaries/
 out/
 .classpath
 .project
@@ -9,3 +9,13 @@ theres-a-pattern-there-to-follow.userlibraries
 bin/
 sh.exe.stackdump
 save.xml
+*.iml
+.gradle
+local.properties
+.idea/libraries
+.idea/modules.xml
+.DS_Store
+build/
+captures/
+caches/
+.externalNativeBuild
