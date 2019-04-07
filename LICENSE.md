@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2019 Evgeniy Mazhukin, Leon-999
+Copyright (c) 2019 art by Quadrinaros, code by Evgeniy Mazhukin, Leon-999
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
