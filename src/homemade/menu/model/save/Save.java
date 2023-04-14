@@ -1,6 +1,5 @@
 package homemade.menu.model.save;
 
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -21,20 +20,24 @@ class Save {
 
     public Save(String path) {
         pathToFile = path;
-        xmlDocument = getXMLDocument();
+        try {
+            xmlDocument = getXMLDocument();
+        } catch (ParserConfigurationException exception) {
+            System.err.print("ParserConfigurationException: " + exception.getMessage());
+            System.exit(0);
+        }
     }
 
-    private Document getXMLDocument() {
+    private Document getXMLDocument() throws ParserConfigurationException {
         Document document = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setValidating(false);
+        DocumentBuilder builder = factory.newDocumentBuilder();
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setValidating(false);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
             File file = new File(pathToFile);
             document = builder.parse(file);
-        } catch (ParserConfigurationException | SAXException | IOException exception) {
-            document = new DocumentImpl();
+        } catch (SAXException | IOException exception) {
+            document = builder.newDocument();
             createRootNode(document);
             saveDocument();
         }
