@@ -3,20 +3,22 @@ package homemade.game.controller;
 import homemade.game.GameSettings;
 import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.loop.*;
 import homemade.game.model.GameModel;
 import homemade.game.view.GameView;
 import homemade.game.view.ShownEffect;
 import homemade.menu.controller.MenuManager;
 import homemade.menu.model.records.Records;
-import homemade.utils.timer.QuickTimer;
-import homemade.utils.timer.TimerTaskPerformer;
+import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 
-public class GameController implements BlockEventHandler, MouseInputHandler {
+public class GameController implements BlockEventHandler, MouseInputHandler, GameEventHandler<UIEvent> {
     private static final int TARGET_FPS = 60;
 
     private MenuManager menuManager;
@@ -28,10 +30,11 @@ public class GameController implements BlockEventHandler, MouseInputHandler {
 
     private GameModel model;
     private GameView view;
+    private GameLoop gameLoop;
+
+    private Timer mainTimer;
 
     private GameKeyboard keyboard;
-
-    private QuickTimer mainTimer;
 
     public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
         initialize(menuManager, mainFrame, container, settings, records);
@@ -49,12 +52,63 @@ public class GameController implements BlockEventHandler, MouseInputHandler {
         keyboard = new GameKeyboard(this);
         ViewListener viewListener = new ViewListener(this, this, keyboard);
 
+        gameLoop = new GameLoop(this);//TODO convert to kotlin to subscribe normally
+
         view = new GameView(structure, settings, viewListener, container);
-        model = new GameModel(this, structure, settings);
+        model = new GameModel(this, structure, settings, gameLoop);
         //model must be initialized after view because there could be combos in initialization
 
-        long period = 1000 / TARGET_FPS;
-        mainTimer = new QuickTimer(new ControllerTimerTask(), period);
+        mainTimer = new Timer(5, new ActionListener() {
+            long previousTime = 0;
+            long sum = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                long newTime = System.currentTimeMillis();
+                if (previousTime > 0 && newTime > previousTime) {
+                    long diff = newTime - previousTime;
+                    gameLoop.getModel().post(new TimeElapsed((int) diff));
+                    sum += diff;
+                    if (sum >= 1000 / TARGET_FPS) {
+                        gameLoop.getModel().post(CreateSnapshot.INSTANCE);
+                        sum = sum % (1000 / TARGET_FPS);
+                    }
+                }
+                previousTime = newTime;
+                gameLoop.getUi().tryPropagateEvents();
+            }
+        });
+        mainTimer.start();
+    }
+
+    @Override
+    synchronized public void handle(@NotNull UIEvent event) {
+        if (event instanceof ShutDown) {
+            view.dispose();
+            mainTimer.stop();
+
+            int score = model.copyGameState().gameScore();
+            String name = new StringBuilder()
+                    .append("sp").append(settings.spawn)
+                    .append("c").append(settings.minCombo)
+                    .append("per").append(settings.period)
+                    .append("max").append(settings.maxBlockValue)
+                    .append(settings.gameMode == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
+                    .toString();
+
+            records.add(score, name, LocalDateTime.now());
+
+            //need to post this on UI thread channel
+            menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
+        } else if (event instanceof SnapshotReady) {
+            GameState state = model.copyGameState();
+
+            frame.setTitle("score: " + state.gameScore() + ", multiplier: " + state.globalMultiplier());
+            view.renderNextFrame(state, model.copySelectionState());
+        } else {
+            System.err.println("unexpected event " + event);
+            System.exit(1);
+        }
     }
 
     @Override
@@ -94,64 +148,6 @@ public class GameController implements BlockEventHandler, MouseInputHandler {
     }
 
     synchronized void requestQuit() {
-        model.forceStop();
-    }
-
-    public synchronized void gameOver() {
-        new QuickTimer(new GameOverTimerTask(), GameOverTimerTask.PERIOD);
-    }
-
-    private class ControllerTimerTask implements TimerTaskPerformer {
-        private static final int FRAMES_BEFORE_KEY_INPUT = 6;
-        private int frameCounter = 0;
-
-        @Override
-        public void handleTimerTask() {
-            if (frameCounter == FRAMES_BEFORE_KEY_INPUT) {
-                frameCounter = 0;
-                Direction direction = keyboard.extractDirection();
-
-                if (direction != null)
-                    model.tryMove(direction);
-            } else
-                frameCounter++;
-
-            GameState state = model.copyGameState();
-
-            frame.setTitle("score: " + state.gameScore() + ", multiplier: " + state.globalMultiplier());
-            view.renderNextFrame(state, model.copySelectionState());
-        }
-    }
-
-    private class GameOverTimerTask extends TimerTaskPerformer.TimerAwarePerformer {
-        private static final int TASKS_BEFORE_QUIT = 5;
-        private static final int PERIOD = 1000 / TASKS_BEFORE_QUIT;
-
-        private int taskCounter = 0;
-
-        @Override
-        public void handleTimerTask() {
-            if (taskCounter == TASKS_BEFORE_QUIT) {
-                mainTimer.stop();
-                timer.stop();
-                view.dispose();
-
-                int score = model.copyGameState().gameScore();
-                String name = new StringBuilder()
-                        .append("sp").append(settings.spawn)
-                        .append("c").append(settings.minCombo)
-                        .append("per").append(settings.period)
-                        .append("max").append(settings.maxBlockValue)
-                        .append(settings.gameMode == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
-                        .toString();
-
-                records.add(score, name, LocalDateTime.now());
-                menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
-            } else {
-                model.killRandomBlocks();
-
-                taskCounter++;
-            }
-        }
+        gameLoop.getModel().post(new GameOver());
     }
 }

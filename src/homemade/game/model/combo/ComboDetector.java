@@ -1,12 +1,12 @@
 package homemade.game.model.combo;
 
 import homemade.game.Combo;
-import homemade.game.ComboEffect;
 import homemade.game.controller.BlockEventHandler;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.ComboEffect;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 

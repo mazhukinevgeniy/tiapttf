@@ -1,10 +1,13 @@
 package homemade.game.model;
 
-import homemade.game.*;
+import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
+import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.loop.GameLoop;
+import homemade.game.loop.GameOver;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.cellstates.SimpleState;
@@ -12,6 +15,8 @@ import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.combo.ComboEffectVendor;
 import homemade.game.model.selection.BlockSelection;
 import homemade.game.model.spawn.SpawnManager;
+import homemade.game.scenarios.GameOverScenario;
+import homemade.game.scenarios.SnapshotRequestScenario;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,6 +34,7 @@ public class GameModelLinker {
     private LinkedList<ComboEffect> storedEffects;
 
     private GameController controller;
+    private GameLoop gameLoop;
 
     private GameState lastGameState;
     private BlockSelection selection;
@@ -37,14 +43,14 @@ public class GameModelLinker {
 
     private Updater updater;
 
-    GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller) {
-        initialize(structure, settings, controller);
-    }
-
-    private synchronized void initialize(FieldStructure structure, GameSettings settings, GameController controller) {
+    GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
         this.controller = controller;
         this.structure = structure;
         this.settings = settings;
+        this.gameLoop = gameLoop;
+
+        new GameOverScenario(gameLoop, this);
+        new SnapshotRequestScenario(gameLoop);
 
         BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.getFieldSize());
         cellMap = new CellMap(structure, blockValuePool);
@@ -87,16 +93,11 @@ public class GameModelLinker {
         return selection;
     }
 
-    synchronized void stopAllFacilities() {
-        spawner.spawnTimer().stop();
-        controller.gameOver();
-    }
-
     synchronized void togglePause() {
         spawner.spawnTimer().toggleSpawnPause();
     }
 
-    synchronized void killRandomBlocks() {
+    public synchronized void killRandomBlocks() {
         updater.takeChanges(spawner.spawnDeadBlocks());
         updateStates();
     }
@@ -171,8 +172,8 @@ public class GameModelLinker {
                 updateStates();
                 System.out.println("multiplier consumed");
             } else {
-                stopAllFacilities();
-                System.out.println("no multiplier");
+                gameLoop.getModel().post(new GameOver());
+                System.out.println("can't trade multiplier for blocks");
             }
         } else if (state.numberOfMovableBlocks() == 0) {
             modifyGlobalMultiplier(BONUS_MULTIPLIER_FOR_BOARD_CLEAR + INITIAL_SPAWNS);

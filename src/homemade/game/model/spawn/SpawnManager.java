@@ -1,19 +1,19 @@
 package homemade.game.model.spawn;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
-import homemade.game.ComboEffect;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.BlockValuePool;
-import homemade.game.model.GameModelLinker;
+import homemade.game.loop.GameEvent;
+import homemade.game.loop.GameEventHandler;
+import homemade.game.loop.GameOver;
+import homemade.game.loop.TimeElapsed;
+import homemade.game.model.*;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SpawnManager {
+public class SpawnManager implements GameEventHandler<GameEvent> {
     private SpawnTimer timer;
 
     private BlockSpawner spawner;
@@ -40,6 +40,15 @@ public class SpawnManager {
             timer = new DynamicPeriodTimer(linker, settings);
         else
             throw new RuntimeException("unknown game mode");
+    }
+
+    @Override
+    public void handle(GameEvent event) {
+        if (event instanceof GameOver) {
+            timer.stop();
+        } else if (event instanceof TimeElapsed) {
+            timer.timeElapsed(((TimeElapsed) event).getDiffMs());
+        }
     }
 
     public Map<CellCode, CellState> spawnBlocks() {

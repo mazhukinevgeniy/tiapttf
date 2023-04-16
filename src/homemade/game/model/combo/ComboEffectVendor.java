@@ -1,6 +1,6 @@
 package homemade.game.model.combo;
 
-import homemade.game.ComboEffect;
+import homemade.game.model.ComboEffect;
 
 import java.util.Arrays;
 import java.util.Comparator;

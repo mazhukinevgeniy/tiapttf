@@ -1,8 +1,8 @@
 package homemade.game.view.layers;
 
-import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.model.CellState;
 
 class NumberLayer extends RenderingLayer.Cells {
     private DigitMetadata digitMetadata;

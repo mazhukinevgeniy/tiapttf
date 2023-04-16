@@ -1,7 +1,7 @@
 package homemade.game.model.cellstates;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
+import homemade.game.model.Cell;
+import homemade.game.model.CellState;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

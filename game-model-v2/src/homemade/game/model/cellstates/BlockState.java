@@ -1,8 +1,8 @@
 package homemade.game.model.cellstates;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
-import homemade.game.ComboEffect;
+import homemade.game.model.Cell;
+import homemade.game.model.CellState;
+import homemade.game.model.ComboEffect;
 
 public class BlockState extends CellState {
     private final boolean movable;

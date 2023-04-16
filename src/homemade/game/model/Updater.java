@@ -1,7 +1,5 @@
 package homemade.game.model;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;

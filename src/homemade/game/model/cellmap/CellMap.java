@@ -1,9 +1,9 @@
 package homemade.game.model.cellmap;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
 import homemade.game.fieldstructure.*;
 import homemade.game.model.BlockValuePool;
+import homemade.game.model.Cell;
+import homemade.game.model.CellState;
 import homemade.game.model.cellstates.SimpleState;
 
 import java.util.*;

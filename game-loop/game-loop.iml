@@ -7,7 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="game-loop" />
     <orderEntry type="library" name="jetbrains.kotlinx.coroutines.core" level="project" />
+    <orderEntry type="module" module-name="game-model-v2" exported="" />
+    <orderEntry type="library" name="jetbrains.kotlinx.coroutines.core.common" level="project" />
+    <orderEntry type="library" name="jetbrains.kotlin.reflect" level="project" />
   </component>
 </module>

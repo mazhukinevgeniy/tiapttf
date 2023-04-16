@@ -7,15 +7,17 @@ import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.loop.GameLoop;
 
 /**
  * GameModel handles commands from GameController.
+ * //TODO remove
  */
 public class GameModel {
-    private GameModelLinker linker;
+    private GameModelLinker linker; // todo: obsoleted by gameloop
 
-    public GameModel(GameController gameController, FieldStructure structure, GameSettings settings) {
-        linker = new GameModelLinker(structure, settings, gameController);
+    public GameModel(GameController gameController, FieldStructure structure, GameSettings settings, GameLoop gameLoop) {
+        linker = new GameModelLinker(structure, settings, gameController, gameLoop);
     }
 
     public GameState copyGameState() {
@@ -29,14 +31,6 @@ public class GameModel {
 
     public void toggleSpawnPause() {
         linker.togglePause();
-    }
-
-    public void forceStop() {
-        linker.stopAllFacilities();
-    }
-
-    public void killRandomBlocks() {
-        linker.killRandomBlocks();
     }
 
 

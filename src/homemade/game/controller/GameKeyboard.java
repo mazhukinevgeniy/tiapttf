@@ -69,6 +69,7 @@ class GameKeyboard implements KeyboardInputHandler {
     }
 
     synchronized Direction extractDirection() {
+        //TODO remove
         int size = keyCodesPressed.size();
         int key = KeyEvent.VK_UNDEFINED;
 

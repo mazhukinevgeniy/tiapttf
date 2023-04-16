@@ -5,6 +5,8 @@ public interface SpawnTimer {
 
     void stop();
 
+    void timeElapsed(int time);
+
     /**
      * Can be used to handle pause calls in turn-based mode until we need them for something
      */
@@ -17,6 +19,11 @@ public interface SpawnTimer {
         @Override
         public void stop() {
 
+        }
+
+        @Override
+        public void timeElapsed(int time) {
+            
         }
     }
 }
