@@ -132,8 +132,7 @@ public class GameModelLinker {
         CellState cellTo = cellMap.getCell(moveToCell);
 
         if (cellTo.isFreeForMove() && cellFrom.isMovableBlock()) {
-            if (repercussions)
-                state.incrementDenyCounter();
+            state.incrementDenyCounter();
 
             Map<CellCode, CellState> tmpMap = new HashMap<>();
             tmpMap.put(moveFromCell, SimpleState.getSimpleState(repercussions ? Cell.DEAD_BLOCK : Cell.EMPTY));
