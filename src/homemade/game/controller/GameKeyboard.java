@@ -1,13 +1,17 @@
 package homemade.game.controller;
 
+import homemade.game.loop.EventPoster;
+import homemade.game.loop.GameEvent;
+import homemade.game.loop.PauseToggle;
+
 import java.awt.event.KeyEvent;
 
 class GameKeyboard implements KeyboardInputHandler {
 
-    private GameController controller;
+    private EventPoster<GameEvent> eventPoster;
 
-    GameKeyboard(GameController controller) {
-        this.controller = controller;
+    GameKeyboard(EventPoster<GameEvent> eventPoster) {
+        this.eventPoster = eventPoster;
     }
 
     @Override
@@ -17,7 +21,7 @@ class GameKeyboard implements KeyboardInputHandler {
     @Override
     synchronized public void keyReleased(int keyCode) {
         if (keyCode == KeyEvent.VK_SPACE) {
-            controller.requestPauseToggle();
+            eventPoster.post(PauseToggle.INSTANCE);
         }
     }
 }

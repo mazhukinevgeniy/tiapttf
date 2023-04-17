@@ -73,10 +73,11 @@ public class GameModelLinker {
         if (mode == GameMode.TURN_BASED) {
             updater.takeChanges(spawner.markCellsForSpawn());
 
-            for (int i = 0; i < INITIAL_SPAWNS; i++)
+            for (int i = 0; i < INITIAL_SPAWNS; i++) {
                 requestSpawn();
+            }
         } else {
-            new RealtimeSpawningScenario(spawner, gameLoop);
+            new RealtimeSpawningScenario(this, settings, gameLoop);
         }
     }
 
@@ -94,10 +95,6 @@ public class GameModelLinker {
 
     synchronized BlockSelection getSelection() {
         return selection;
-    }
-
-    synchronized void togglePause() {
-        spawner.spawnTimer().toggleSpawnPause();
     }
 
     public synchronized void killRandomBlocks() {

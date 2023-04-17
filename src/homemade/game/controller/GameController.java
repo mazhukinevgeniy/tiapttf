@@ -49,10 +49,9 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
 
         structure = new FieldStructure();
 
-        keyboard = new GameKeyboard(this);
-        ViewListener viewListener = new ViewListener(this, this, keyboard);
-
         gameLoop = new GameLoop(this);//TODO convert to kotlin to subscribe normally
+        keyboard = new GameKeyboard(gameLoop.getModel());
+        ViewListener viewListener = new ViewListener(this, this, keyboard);
 
         view = new GameView(structure, settings, viewListener, container);
         model = new GameModel(this, structure, settings, gameLoop);
@@ -139,10 +138,6 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
 
     public synchronized void blockExploded(CellCode atCell) {
         view.getEffectManager().addEffect(atCell, ShownEffect.EXPLOSION);
-    }
-
-    synchronized void requestPauseToggle() {
-        model.toggleSpawnPause();
     }
 
     synchronized void requestQuit() {
