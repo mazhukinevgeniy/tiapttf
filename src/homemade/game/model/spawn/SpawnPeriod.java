@@ -1,8 +1,8 @@
 package homemade.game.model.spawn;
 
 import homemade.game.GameSettings;
-import homemade.game.GameState;
 import homemade.game.model.GameModelLinker;
+import homemade.game.state.GameState;
 import homemade.utils.PiecewiseConstantFunction;
 
 import java.util.ArrayList;
@@ -69,8 +69,8 @@ class SpawnPeriod {
     long getSpawnPeriod() {
         GameState state = linker.lastGameState.getGameState();
 
-        int occupiedCells = state.numberOfBlocks();
-        int spawnsDenied = state.spawnsDenied();
+        int occupiedCells = state.getNumberOfBlocks();
+        int spawnsDenied = state.getSpawnsDenied();
 
         int base = basePeriod.getValueAt(occupiedCells);
         int decrementFromDenies = 15 * spawnsDenied;

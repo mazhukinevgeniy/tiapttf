@@ -1,11 +1,11 @@
 package homemade.game.model;
 
-import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellstates.SimpleState;
+import homemade.game.state.GameState;
 
 import java.util.Map;
 
@@ -110,27 +110,27 @@ public class ArrayBasedGameState implements GameState {
     }
 
     @Override
-    public int spawnsDenied() {
+    public int getSpawnsDenied() {
         return denies;
     }
 
     @Override
-    public int numberOfBlocks() {
+    public int getNumberOfBlocks() {
         return numberOfBlocks;
     }
 
     @Override
-    public int numberOfMovableBlocks() {
+    public int getNumberOfMovableBlocks() {
         return numberOfMovableBlocks;
     }
 
     @Override
-    public int gameScore() {
+    public int getGameScore() {
         return score;
     }
 
     @Override
-    public int globalMultiplier() {
+    public int getGlobalMultiplier() {
         return multiplier;
     }
 

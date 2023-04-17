@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="game-loop" />
     <orderEntry type="library" name="jetbrains.kotlinx.coroutines.core" level="project" />
     <orderEntry type="module" module-name="field-structure" />
+    <orderEntry type="module" module-name="game-model-v2" />
   </component>
 </module>

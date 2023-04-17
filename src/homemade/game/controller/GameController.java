@@ -83,7 +83,7 @@ public class GameController implements MouseInputHandler, GameEventHandler<UIEve
             view.dispose();
             mainTimer.stop();
 
-            int score = model.lastGameState.getGameState().gameScore();
+            int score = model.lastGameState.getGameState().getGameScore();
 
             records.add(score, settings.toString(), LocalDateTime.now());
 
@@ -92,7 +92,7 @@ public class GameController implements MouseInputHandler, GameEventHandler<UIEve
         } else if (event instanceof SnapshotReady) {
             ExtendedGameState state = model.lastGameState;
 
-            frame.setTitle("score: " + state.getGameState().gameScore() + ", multiplier: " + state.getGameState().globalMultiplier());
+            frame.setTitle("score: " + state.getGameState().getGameScore() + ", multiplier: " + state.getGameState().getGlobalMultiplier());
             view.renderNextFrame(state.getGameState(), state.getSelectionState());
         } else if (event instanceof MultiplierChanged) {
             view.getEffectManager().blink(((MultiplierChanged) event).getDiff() > 0);

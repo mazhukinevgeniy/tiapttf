@@ -1,6 +1,7 @@
 package homemade.game.pipeline
 
 import homemade.game.loop.*
+import homemade.game.state.MutableGameState
 
 /**
  * |----
@@ -32,6 +33,19 @@ class FieldUpdatePipeline(val uiLoop: UILoop) : GameEventHandler<GameEvent> {
         //don't necessarily post to ui loop, but next snapshot must be aware of the results
         //does it mean that we're the one who makes them?
         TODO("impl")
+
+        val mutableGameState = MutableGameState() // prolly just a member?
+
+        val processingInfo = ProcessingInfo(emptySet(), event.reason)
+        do {
+            BlockProcessingStage().process(mutableGameState, processingInfo)
+            LinkProcessingStage().process(mutableGameState, processingInfo)
+            ComboProcessingStage().process(mutableGameState, processingInfo)
+        } while ("combo processing generated extra block updates" == "yea")
+        SelectionProcessingStage().process(mutableGameState, processingInfo)
+
+        // prolly just leave it at that
+        // and send the current mutable state through gamestateencoder, if snapshot is requested
     }
 
     private fun handleCreateSnapshot(event: CreateSnapshot) {

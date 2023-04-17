@@ -1,11 +1,11 @@
 package homemade.game.view.layers;
 
 import homemade.game.GameSettings;
-import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.state.GameState;
 import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;

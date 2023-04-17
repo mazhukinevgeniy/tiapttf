@@ -105,7 +105,7 @@ public class GameModelLinker {
     }
 
     synchronized void modifyGlobalMultiplier(int change) {
-        int oldMultiplier = state.globalMultiplier();
+        int oldMultiplier = state.getGlobalMultiplier();
         int rawMultiplier = oldMultiplier + change;
         int newMultiplier = Math.max(1, rawMultiplier);
 
@@ -126,7 +126,7 @@ public class GameModelLinker {
 
     public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
         boolean repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
-                state.globalMultiplier() == 1;
+                state.getGlobalMultiplier() == 1;
 
         CellState cellFrom = cellMap.getCell(moveFromCell);
         CellState cellTo = cellMap.getCell(moveToCell);
@@ -160,8 +160,8 @@ public class GameModelLinker {
             updater.flush();
         }
 
-        if (state.numberOfBlocks() == structure.fieldSize) {
-            int multiplier = state.globalMultiplier();
+        if (state.getNumberOfBlocks() == structure.fieldSize) {
+            int multiplier = state.getGlobalMultiplier();
 
             if (multiplier > 1) {
                 modifyGlobalMultiplier(-multiplier);
@@ -173,7 +173,7 @@ public class GameModelLinker {
                 gameLoop.getModel().post(new GameOver(1));
                 System.out.println("can't trade multiplier for blocks");
             }
-        } else if (state.numberOfMovableBlocks() == 0) {
+        } else if (state.getNumberOfMovableBlocks() == 0) {
             modifyGlobalMultiplier(BONUS_MULTIPLIER_FOR_BOARD_CLEAR + INITIAL_SPAWNS);
 
             for (int i = 0; i < INITIAL_SPAWNS; i++) {

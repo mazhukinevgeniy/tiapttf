@@ -1,10 +1,10 @@
 package homemade.game.view;
 
 import homemade.game.GameSettings;
-import homemade.game.GameState;
 import homemade.game.SelectionState;
 import homemade.game.controller.ViewListener;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.state.GameState;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 
