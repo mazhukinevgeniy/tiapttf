@@ -78,8 +78,8 @@ abstract public class RenderingLayer {
             while (cellCodeIterator.hasNext()) {
                 CellCode next = cellCodeIterator.next();
 
-                int x = next.x();
-                int y = next.y();
+                int x = next.getX();
+                int y = next.getY();
 
                 setCanvasCoordinates(x, y);
                 renderForCell(next);
@@ -95,9 +95,9 @@ abstract public class RenderingLayer {
             while (linkCodeIterator.hasNext()) {
                 LinkCode next = linkCodeIterator.next();
 
-                CellCode lower = next.getLower();
-                int x = lower.x();
-                int y = lower.y();
+                CellCode lower = next.lower;
+                int x = lower.getX();
+                int y = lower.getY();
 
                 setCanvasCoordinates(x, y);
                 renderForLink(next);

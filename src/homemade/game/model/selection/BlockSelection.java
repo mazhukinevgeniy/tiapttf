@@ -26,7 +26,7 @@ public class BlockSelection {
         cellMapReader = linker.getMapReader();
 
         FieldStructure structure = linker.getStructure();
-        fieldSize = structure.getFieldSize();
+        fieldSize = structure.fieldSize;
 
         selection = new ArrayList<>(structure.getMaxDimension());
 
@@ -44,7 +44,7 @@ public class BlockSelection {
             tryMove(selectedCell, eventCell, true);
         }
 
-        System.out.println("apparently, mouse released at " + eventCell.x() + ", " + eventCell.y());
+        System.out.println("apparently, mouse released at " + eventCell.getX() + ", " + eventCell.getY());
     }
 
     public synchronized void tryToMoveSelectionIn(Direction direction) {

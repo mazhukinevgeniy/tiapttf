@@ -119,8 +119,8 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
 
         int fullCell = GameView.CELL_WIDTH + GameView.CELL_OFFSET;
 
-        int maxX = structure.getWidth() * fullCell;
-        int maxY = structure.getHeight() * fullCell;
+        int maxX = structure.width * fullCell;
+        int maxY = structure.height * fullCell;
 
         if (gridX >= 0 && gridX < maxX && gridY >= 0 && gridY < maxY) {
             int cellX = gridX / (GameView.CELL_WIDTH + GameView.CELL_OFFSET);

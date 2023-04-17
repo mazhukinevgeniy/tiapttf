@@ -23,16 +23,16 @@ public class CellMap implements CellMapReader {
         this.structure = structure;
         this.blockValuePool = blockValuePool;
 
-        cells = new CellState[structure.getFieldSize()];
+        cells = new CellState[structure.fieldSize];
 
         CellState emptyState = SimpleState.getSimpleState(Cell.EMPTY);
 
-        for (int j = 0, height = structure.getHeight(); j < height; j++)
-            for (int i = 0, width = structure.getWidth(); i < width; i++) {
+        for (int j = 0, height = structure.height; j < height; j++)
+            for (int i = 0, width = structure.width; i < width; i++) {
                 cells[structure.getCellCode(i, j).hashCode()] = emptyState;
             }
 
-        int maxLinkCode = structure.getNumberOfLinks();
+        int maxLinkCode = structure.numberOfLinks;
         links = new Link[maxLinkCode];
 
         for (Iterator<LinkCode> iterator = structure.getLinkCodeIterator(); iterator.hasNext(); ) {
@@ -103,8 +103,8 @@ public class CellMap implements CellMapReader {
     private void updateLinkValue(LinkCode linkCode) {
         Link link = links[linkCode.hashCode()];
 
-        CellState cellA = cells[linkCode.getLower().hashCode()];
-        CellState cellB = cells[linkCode.getHigher().hashCode()];
+        CellState cellA = cells[linkCode.lower.hashCode()];
+        CellState cellB = cells[linkCode.higher.hashCode()];
 
         Direction oldDirection = link.direction;
         Direction lowerToHigher = linkCode.getLowerToHigherDirection();
