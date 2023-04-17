@@ -1,14 +1,13 @@
-package homemade.game.model.cellmap;
+package homemade.game.state.impl;
 
 import homemade.game.fieldstructure.*;
-import homemade.game.model.BlockValuePool;
 import homemade.game.model.Cell;
 import homemade.game.model.CellState;
 import homemade.game.model.cellstates.SimpleState;
 
 import java.util.*;
 
-public class CellMap implements CellMapReader {
+public class CellMap {
     private CellState cells[];
     private Link links[];
 
@@ -23,11 +22,9 @@ public class CellMap implements CellMapReader {
         cells = new CellState[structure.fieldSize];
 
         CellState emptyState = SimpleState.getSimpleState(Cell.EMPTY);
-
-        for (int j = 0, height = structure.height; j < height; j++)
-            for (int i = 0, width = structure.width; i < width; i++) {
-                cells[structure.getCellCode(i, j).hashCode()] = emptyState;
-            }
+        for (int i = 0; i < structure.fieldSize; ++i) {
+            cells[i] = emptyState;
+        }
 
         int maxLinkCode = structure.numberOfLinks;
         links = new Link[maxLinkCode];
@@ -73,10 +70,12 @@ public class CellMap implements CellMapReader {
                 }
             }
 
-            if (oldState.isAliveBlock())
+            if (oldState.isAliveBlock()) {
                 removedBlocks.add(oldState);
-            if (newState.isAliveBlock())
+            }
+            if (newState.isAliveBlock()) {
                 addedBlockNumbers.add(newState.value());
+            }
         }
 
         for (CellState removedBlock : removedBlocks) {

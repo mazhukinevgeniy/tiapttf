@@ -1,11 +1,11 @@
-package homemade.game.model;
+package homemade.game.state.impl;
 
 import java.util.LinkedList;
 import java.util.Random;
 
 public class BlockValuePool {
     private LinkedList<Integer> available;
-    private Random random;
+    private Random random; // TODO : tests, fixed random, you know the drill
 
     BlockValuePool(int max, int total) {
         if (total % max != 0) {

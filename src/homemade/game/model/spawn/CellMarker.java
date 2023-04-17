@@ -1,13 +1,13 @@
 package homemade.game.model.spawn;
 
 import homemade.game.fieldstructure.CellCode;
-import homemade.game.model.BlockValuePool;
 import homemade.game.model.Cell;
 import homemade.game.model.CellState;
 import homemade.game.model.ComboEffect;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.cellstates.BlockState;
 import homemade.game.model.cellstates.SimpleState;
+import homemade.game.state.impl.BlockValuePool;
 
 import java.util.*;
 

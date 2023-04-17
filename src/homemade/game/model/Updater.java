@@ -4,10 +4,10 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellstates.SimpleState;
 import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.combo.ComboPack;
+import homemade.game.state.impl.CellMap;
 
 import java.util.HashMap;
 import java.util.HashSet;

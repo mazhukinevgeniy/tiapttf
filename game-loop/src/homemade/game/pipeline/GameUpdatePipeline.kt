@@ -62,7 +62,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         //does it mean that we're the one who makes them?
         val previousStats = mutableGameState.configState.copyConfigState()
 
-        val processingInfo = ProcessingInfo(emptySet())
+        val processingInfo = ProcessingInfo()
         do {
             BlockProcessingStage().process(mutableGameState, processingInfo)
             LinkProcessingStage().process(mutableGameState, processingInfo)

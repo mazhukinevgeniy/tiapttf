@@ -4,14 +4,13 @@ import homemade.game.fieldstructure.CellCode
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
 import homemade.game.model.GameSettings.GameMode
-import homemade.game.model.cellmap.CellMap
+import homemade.game.state.impl.CellMap
 import homemade.game.model.cellmap.CellMapReader
 import homemade.game.model.cellstates.SimpleState
 import homemade.game.model.combo.ComboDetector
 import homemade.game.model.combo.ComboEffectVendor
 import homemade.game.model.spawn.SpawnManager
 import homemade.game.scenarios.GameOverScenario
-import homemade.game.scenarios.RealtimeSpawningScenario
 import homemade.game.scenarios.UserInputScenario
 import homemade.game.state.ConfigState
 import homemade.game.state.GameState
@@ -19,6 +18,7 @@ import homemade.game.state.MutableFieldState
 import homemade.game.state.MutableGameState
 import homemade.game.state.immutable.GameStateEncoder
 import homemade.game.state.impl.BlockSelection
+import homemade.game.state.impl.BlockValuePool
 import java.util.*
 
 class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) : GameEventHandler<GameEvent> {

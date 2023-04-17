@@ -5,8 +5,8 @@ import homemade.game.fieldstructure.LinkCode
 import homemade.game.state.MutableGameState
 
 data class ProcessingInfo(
-        var triggeredCells: Set<CellCode>,
-        var triggeredLinks: Set<LinkCode>
+        var triggeredCells: Set<CellCode> = emptySet(),
+        var triggeredLinks: Set<LinkCode> = emptySet()
 )
 
 abstract class PipelineStage {

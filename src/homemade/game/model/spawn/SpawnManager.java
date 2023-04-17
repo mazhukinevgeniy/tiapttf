@@ -4,6 +4,7 @@ import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.*;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.state.impl.BlockValuePool;
 
 import java.util.LinkedList;
 import java.util.Map;

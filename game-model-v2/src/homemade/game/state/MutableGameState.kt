@@ -8,8 +8,8 @@ class MutableGameState(
         override var selectionState: MutableSelectionState,
         override var configState: MutableConfigState
 ) : GameState() {
-    private var isDirtyField = false
-    private var isDirtySelection = false
+    var isDirtyField = false
+    var isDirtySelection = false
     private var lastSnapshot: GameState = createImmutable()
 
     private val spawnPeriod = SpawnPeriod.newFastStart(fieldState.structure, configState.settings)
