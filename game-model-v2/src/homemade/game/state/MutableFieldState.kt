@@ -1,25 +1,29 @@
 package homemade.game.state
 
-import homemade.game.fieldstructure.CellCode
-import homemade.game.fieldstructure.Direction
 import homemade.game.fieldstructure.FieldStructure
-import homemade.game.fieldstructure.LinkCode
-import homemade.game.model.CellState
+import homemade.game.state.impl.BlockValuePool
+import homemade.game.state.impl.CellMap
 
-class MutableFieldState(structure: FieldStructure) : FieldState(structure) {
+class MutableFieldState(
+        override val structure: FieldStructure,
+        blockValuePool: BlockValuePool
+) : CellMap(structure, blockValuePool)
 
-    override fun getCellState(cellCode: CellCode): CellState? {
-        //TODO("Not yet implemented")
-        return null
-    }
+/*
+    void updateFieldSnapshot(Map<CellCode, CellState> cellUpdates,
+                             Map<LinkCode, Direction> linkUpdates,
+                             Map<LinkCode, Integer> chainUpdates) {
+        immutableCopy = null;
 
-    override fun getLinkBetweenCells(linkCode: LinkCode): Direction? {
-        //TODO("Not yet implemented")
-        return null
-    }
+        for (Map.Entry<CellCode, CellState> entry : cellUpdates.entrySet()) {
+            field[entry.getKey().hashCode()] = entry.getValue();
+        }
 
-    override fun getChainLength(linkCode: LinkCode): Int {
-        //TODO("Not yet implemented")
-        return 0
-    }
-}
+        for (Map.Entry<LinkCode, Direction> entry : linkUpdates.entrySet()) {
+            links[entry.getKey().hashCode()] = entry.getValue();
+        }
+
+        for (Map.Entry<LinkCode, Integer> entry : chainUpdates.entrySet()) {
+            chainLengths[entry.getKey().hashCode()] = entry.getValue();
+        }
+    }*/

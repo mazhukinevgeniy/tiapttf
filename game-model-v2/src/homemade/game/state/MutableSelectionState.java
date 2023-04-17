@@ -8,7 +8,7 @@ public class MutableSelectionState implements SelectionState {
     public HashSet<CellCode> selection;
     public HashSet<CellCode> cellsToMove;
 
-    MutableSelectionState(HashSet<CellCode> selectionData, HashSet<CellCode> cellsToMove) {
+    public MutableSelectionState(HashSet<CellCode> selectionData, HashSet<CellCode> cellsToMove) {
         this.selection = selectionData;
         this.cellsToMove = cellsToMove;
     }

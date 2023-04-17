@@ -41,4 +41,24 @@ class UserInputProcessingStage : PipelineStage() {
             updateSelectionState()
         }
     }
+
+    /*
+    fun tryMove(moveFromCell: CellCode, moveToCell: CellCode) {
+        val repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
+                trueState.configState.globalMultiplier == 1
+        val cellFrom = cellMap.getCell(moveFromCell)
+        val cellTo = cellMap.getCell(moveToCell)
+        if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
+            state.incrementDenyCounter()
+            val tmpMap: MutableMap<CellCode, CellState> = HashMap()
+            tmpMap[moveFromCell] = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
+            tmpMap[moveToCell] = cellFrom
+            updater.takeComboChanges(tmpMap)
+            if (settings.gameMode === GameMode.TURN_BASED && !updater.hasCombos()) {
+                requestSpawn()
+            } else {
+                updateStates()
+            }
+        }
+    }*/
 }

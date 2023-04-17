@@ -2,6 +2,7 @@ package homemade.game.state.immutable
 
 import homemade.game.fieldstructure.CellCode
 import homemade.game.fieldstructure.Direction
+import homemade.game.fieldstructure.FieldStructure
 import homemade.game.fieldstructure.LinkCode
 import homemade.game.model.CellState
 import homemade.game.state.FieldState
@@ -18,7 +19,8 @@ class GameStateEncoder {
     /**
      * Uses assumption that cellstate/linkstate types are immutable
      */
-    private class PlainFieldState(source: FieldState) : FieldState(source.structure) {
+    private class PlainFieldState(source: FieldState) : FieldState {
+        override val structure: FieldStructure = source.structure
         val cellStates = structure.cellCodeIterator.asSequence().map { source.getCellState(it) }.toList()
         val linkState = structure.linkCodeIterator.asSequence().map { source.getLinkBetweenCells(it) }.toList()
         val lengths = structure.linkCodeIterator.asSequence().map { source.getChainLength(it) }.toList()

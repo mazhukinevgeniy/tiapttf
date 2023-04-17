@@ -108,9 +108,7 @@ class Updater {
 
     private void updateState(Set<CellCode> changedCells) {
         if (changedCells.size() > 0) {
-            Map<CellCode, CellState> updatedCells = new HashMap<>();
-            Map<LinkCode, Direction> updatedLinks = new HashMap<>();
-            Map<LinkCode, Integer> updatedChains = new HashMap<>();
+            //maps in ProcessingInfo
 
             for (CellCode cellCode : changedCells) {
                 updatedCells.put(cellCode, cellMap.getCell(cellCode));

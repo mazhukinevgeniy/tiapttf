@@ -2,10 +2,7 @@ package homemade.game.pipeline
 
 import homemade.game.loop.*
 import homemade.game.model.GameSettings
-import homemade.game.pipeline.stages.BlockProcessingStage
-import homemade.game.pipeline.stages.ComboProcessingStage
-import homemade.game.pipeline.stages.LinkProcessingStage
-import homemade.game.pipeline.stages.SelectionProcessingStage
+import homemade.game.pipeline.stages.*
 import homemade.game.state.MutableGameState
 
 /**
@@ -30,17 +27,9 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         gameLoop.model.subscribe<CreateSnapshot>(this)
         gameLoop.model.subscribe<UserClick>(this)
 
-        if (mutableGameState.configState.settings.gameMode == GameSettings.GameMode.REAL_TIME) {
-            RegularSpawnPipeline(mutableGameState, gameLoop.model)
-        } else {
-            /*
-        if (mode === GameMode.TURN_BASED) {
-            updater.takeChanges(spawner.markCellsForSpawn())
-            for (i in 0 until INITIAL_SPAWNS) {
-                requestSpawn()
-            }
-        }*/
-            //TODO: ?
+        when (mutableGameState.configState.settings.gameMode) {
+            GameSettings.GameMode.REAL_TIME -> RegularSpawnPipeline(mutableGameState, gameLoop.model)
+            GameSettings.GameMode.TURN_BASED -> TurnBasedInitPipeline(gameLoop.model)
         }
     }
 
@@ -54,7 +43,8 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     }
 
     private fun handleUserInput(event: UserClick) {
-        TODO("impl")
+        val processingInfo = ProcessingInfo(event)
+        UserInputProcessingStage().process(mutableGameState, processingInfo)
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {
@@ -62,7 +52,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         //does it mean that we're the one who makes them?
         val previousStats = mutableGameState.configState.copyConfigState()
 
-        val processingInfo = ProcessingInfo()
+        val processingInfo = ProcessingInfo(event)
         do {
             BlockProcessingStage().process(mutableGameState, processingInfo)
             LinkProcessingStage().process(mutableGameState, processingInfo)

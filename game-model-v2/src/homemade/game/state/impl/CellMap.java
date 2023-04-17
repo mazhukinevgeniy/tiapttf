@@ -4,10 +4,13 @@ import homemade.game.fieldstructure.*;
 import homemade.game.model.Cell;
 import homemade.game.model.CellState;
 import homemade.game.model.cellstates.SimpleState;
+import homemade.game.state.FieldState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CellMap {
+abstract public class CellMap implements FieldState {
     private CellState cells[];
     private Link links[];
 
@@ -35,15 +38,26 @@ public class CellMap {
         }
     }
 
-    public CellState getCell(CellCode cellCode) {
+    @NotNull
+    @Override
+    public FieldStructure getStructure() {
+        return structure;
+    }
+
+    @Nullable
+    @Override
+    public CellState getCellState(@NotNull CellCode cellCode) {
         return cells[cellCode.hashCode()];
     }
 
-    public Direction getLinkDirection(LinkCode linkCode) {
+    @Nullable
+    @Override
+    public Direction getLinkBetweenCells(@NotNull LinkCode linkCode) {
         return links[linkCode.hashCode()].direction;
     }
 
-    public int getChainLength(LinkCode linkCode) {
+    @Override
+    public int getChainLength(@NotNull LinkCode linkCode) {
         return links[linkCode.hashCode()].chainLength;
     }
 
@@ -81,8 +95,9 @@ public class CellMap {
         for (CellState removedBlock : removedBlocks) {
             Integer val = Integer.valueOf(removedBlock.value());
 
-            if (!addedBlockNumbers.contains(val))
+            if (!addedBlockNumbers.contains(val)) {
                 blockValuePool.freeBlockValue(val);
+            }
         }
 
         for (LinkCode linkCode : linksToUpdate) {
@@ -150,7 +165,6 @@ public class CellMap {
                 checkLink = links[structure.getLinkCode(pair).hashCode()];
             }
         }
-        //TODO: just add reference to neighbouring LinkCodes to LinkCode, that would allow us to simplify code here
         return count;
     }
 

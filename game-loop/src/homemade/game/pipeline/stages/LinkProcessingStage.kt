@@ -6,6 +6,7 @@ import homemade.game.state.MutableGameState
 
 class LinkProcessingStage : PipelineStage() {
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
-        TODO("Not yet implemented")
+        // no-op, because CellMap does everything. supposedly
+        // TODO: would be nice to have a dumber model
     }
 }

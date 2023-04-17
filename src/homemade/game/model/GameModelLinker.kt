@@ -1,75 +1,44 @@
 package homemade.game.model
 
-import homemade.game.fieldstructure.CellCode
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
-import homemade.game.model.GameSettings.GameMode
-import homemade.game.state.impl.CellMap
-import homemade.game.model.cellmap.CellMapReader
-import homemade.game.model.cellstates.SimpleState
 import homemade.game.model.combo.ComboDetector
 import homemade.game.model.combo.ComboEffectVendor
 import homemade.game.model.spawn.SpawnManager
+import homemade.game.pipeline.GameUpdatePipeline
 import homemade.game.scenarios.GameOverScenario
-import homemade.game.scenarios.UserInputScenario
-import homemade.game.state.ConfigState
-import homemade.game.state.GameState
-import homemade.game.state.MutableFieldState
-import homemade.game.state.MutableGameState
+import homemade.game.state.*
 import homemade.game.state.immutable.GameStateEncoder
-import homemade.game.state.impl.BlockSelection
 import homemade.game.state.impl.BlockValuePool
 import java.util.*
 
 class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) : GameEventHandler<GameEvent> {
-    private val cellMap: CellMap
     private val spawner: SpawnManager
-    var state: ArrayBasedFieldState
     private val storedEffects: LinkedList<ComboEffect>
-    var selection: BlockSelection
     private val updater: Updater
-    private var lastGameState: GameState
-    private val trueState = MutableGameState(MutableFieldState(), selection, ConfigState())
 
     init {
-        new FieldUpdatePipeline(gameLoop, trueState)
-        val blockValuePool = BlockValuePool(settings.maxBlockValue, structure.fieldSize)
-        cellMap = CellMap(structure, blockValuePool)
+        GameUpdatePipeline(
+                gameLoop,
+                MutableGameState(
+                        MutableFieldState(structure, BlockValuePool(settings.maxBlockValue, structure.fieldSize)),
+                        MutableSelectionState(),
+                        MutableConfigState(settings, 0, 0, 1)
+                )
+        )
         storedEffects = LinkedList()
-        state = ArrayBasedFieldState(structure)
         val comboDetector = ComboDetector(this, gameLoop.ui)
         val gameScore = GameScore(this)
         updater = Updater(this, comboDetector, cellMap, gameScore, state)
         spawner = SpawnManager(this, blockValuePool)
-        selection = BlockSelection(this)
         lastGameState = GameState(GameStateEncoder().encode(state), selection.copySelectionState())
-        val mode = settings.gameMode
         GameOverScenario(gameLoop, this)
-        UserInputScenario(gameLoop, selection)
-        gameLoop.model.subscribe<CreateSnapshot>(this)
     }
-
-    override fun handle(event: GameEvent) {
-        if (event is CreateSnapshot) {
-            gameLoop.ui.post(SnapshotReady(trueState.createImmutable()))
-        } else {
-            throw RuntimeException("unknown $event")
-        }
-    }
-
-    @get:Synchronized
-    val mapReader: CellMapReader
-        get() = cellMap
 
     @Synchronized
     fun killRandomBlocks() {
         updater.takeChanges(spawner.spawnDeadBlocks())
         updateStates()
-    }
-
-    @Synchronized
-    fun updateScore(newScore: Int) {
-        state.updateScore(newScore)
     }
 
     @Synchronized
@@ -91,24 +60,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         updateStates()
     }
 
-    fun tryMove(moveFromCell: CellCode, moveToCell: CellCode) {
-        val repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
-                trueState.configState.globalMultiplier == 1
-        val cellFrom = cellMap.getCell(moveFromCell)
-        val cellTo = cellMap.getCell(moveToCell)
-        if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
-            state.incrementDenyCounter()
-            val tmpMap: MutableMap<CellCode, CellState> = HashMap()
-            tmpMap[moveFromCell] = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
-            tmpMap[moveToCell] = cellFrom
-            updater.takeComboChanges(tmpMap)
-            if (settings.gameMode === GameMode.TURN_BASED && !updater.hasCombos()) {
-                requestSpawn()
-            } else {
-                updateStates()
-            }
-        }
-    }
 
     private fun updateStates() {
         if (updater.hasCellChanges()) {
