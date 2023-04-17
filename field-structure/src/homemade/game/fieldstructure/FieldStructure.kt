@@ -78,7 +78,9 @@ class FieldStructure @JvmOverloads constructor(@JvmField val width: Int = DEFAUL
     val linkCodeIterator: Iterator<LinkCode>
         get() = linkCodes.listIterator()
     val maxDimension: Int
-        get() = Math.max(width, height)
+        get() = width.coerceAtLeast(height)
+    private val numberOfVerticalLinks: Int
+        get() = width * (height - 1)
 
     /**
      * If we enumerate vertical links, it's easily done.
@@ -87,23 +89,23 @@ class FieldStructure @JvmOverloads constructor(@JvmField val width: Int = DEFAUL
      * The idea of this enumeration is to numerate vertical links first,
      * and then horizontal, as if they were vertical.
      */
-    private fun linkCodeAsInt(lower: CellCode?, higher: CellCode?): Int {
-        var lower = lower
-        var higher = higher
+    private fun linkCodeAsInt(lower: CellCode, higher: CellCode): Int {
         if (lower.hashCode() > higher.hashCode()) {
-            val tmp = lower
-            lower = higher
-            higher = tmp
+            return linkCodeAsInt(higher, lower)
         }
-        val toReturn: Int = if (lower!!.neighbour(Direction.RIGHT) == higher) {
-            val numberOfVerticalLinks = width * (height - 1)
-            numberOfVerticalLinks + lower.rotatedCellCode
-        } else if (lower.neighbour(Direction.BOTTOM) == higher) {
-            lower.hashCode()
-        } else {
-            throw RuntimeException("unresolvable linkCodeAsInt call")
+        return when (higher) {
+            lower.neighbour(Direction.RIGHT) -> {
+                numberOfVerticalLinks + lower.rotatedCellCode
+            }
+
+            lower.neighbour(Direction.BOTTOM) -> {
+                lower.hashCode()
+            }
+
+            else -> {
+                throw RuntimeException("unresolvable linkCodeAsInt call")
+            }
         }
-        return toReturn
     }
 
     companion object {

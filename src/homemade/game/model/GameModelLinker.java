@@ -19,6 +19,7 @@ import homemade.game.model.spawn.SpawnManager;
 import homemade.game.scenarios.GameOverScenario;
 import homemade.game.scenarios.RealtimeSpawningScenario;
 import homemade.game.scenarios.SnapshotRequestScenario;
+import homemade.game.scenarios.UserInputScenario;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,13 +45,11 @@ public class GameModelLinker {
 
     private Updater updater;
 
-    GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
+    public GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
         this.structure = structure;
         this.settings = settings;
         this.gameLoop = gameLoop;
 
-        new GameOverScenario(gameLoop, this);
-        new SnapshotRequestScenario(gameLoop, this);
 
         BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.fieldSize);
         cellMap = new CellMap(structure, blockValuePool);
@@ -79,6 +78,10 @@ public class GameModelLinker {
         } else {
             new RealtimeSpawningScenario(this, settings, gameLoop);
         }
+
+        new GameOverScenario(gameLoop, this);
+        new SnapshotRequestScenario(gameLoop, this);
+        new UserInputScenario(gameLoop, selection);
     }
 
     synchronized public FieldStructure getStructure() {

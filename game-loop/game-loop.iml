@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="game-model-v2" exported="" />
     <orderEntry type="library" name="jetbrains.kotlinx.coroutines.core.common" level="project" />
     <orderEntry type="library" name="jetbrains.kotlin.reflect" level="project" />
+    <orderEntry type="module" module-name="field-structure" exported="" />
   </component>
 </module>
