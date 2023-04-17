@@ -37,10 +37,6 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
     private GameKeyboard keyboard;
 
     public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
-        initialize(menuManager, mainFrame, container, settings, records);
-    }
-
-    private synchronized void initialize(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
         this.menuManager = menuManager;
         this.records = records;
         this.settings = settings;
@@ -88,15 +84,8 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             mainTimer.stop();
 
             int score = model.lastGameState.getGameState().gameScore();
-            String name = new StringBuilder()
-                    .append("sp").append(settings.spawn)
-                    .append("c").append(settings.minCombo)
-                    .append("per").append(settings.period)
-                    .append("max").append(settings.maxBlockValue)
-                    .append(settings.gameMode == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
-                    .toString();
 
-            records.add(score, name, LocalDateTime.now());
+            records.add(score, settings.toString(), LocalDateTime.now());
 
             //need to post this on UI thread channel
             menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);

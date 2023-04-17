@@ -20,4 +20,8 @@ class GameSettings(settings: Settings) {
     val period: Int = settings.get(Settings.Code.SPAWN_PERIOD)
 
     val maxBlockValue: Int = settings.get(Settings.Code.MAX_BLOCK_VALUE)
+
+    override fun toString(): String {
+        return "sp${spawn}c${minCombo}per${period}max${maxBlockValue}${if (gameMode == GameMode.TURN_BASED) "tb" else "rt"}"
+    }
 }

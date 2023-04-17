@@ -19,7 +19,7 @@ class GameKeyboard implements KeyboardInputHandler {
     }
 
     @Override
-    synchronized public void keyReleased(int keyCode) {
+    public void keyReleased(int keyCode) {
         if (keyCode == KeyEvent.VK_SPACE) {
             eventPoster.post(PauseToggle.INSTANCE);
         }
