@@ -44,14 +44,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         selection = BlockSelection(this)
         lastGameState = GameState(GameStateEncoder().encode(state), selection.copySelectionState())
         val mode = settings.gameMode
-        if (mode === GameMode.TURN_BASED) {
-            updater.takeChanges(spawner.markCellsForSpawn())
-            for (i in 0 until INITIAL_SPAWNS) {
-                requestSpawn()
-            }
-        } else {
-            RealtimeSpawningScenario(this, settings, gameLoop)
-        }
         GameOverScenario(gameLoop, this)
         UserInputScenario(gameLoop, selection)
         gameLoop.model.subscribe<CreateSnapshot>(this)

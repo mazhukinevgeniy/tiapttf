@@ -17,6 +17,7 @@ class MutableGameState(
         return spawnPeriod.getSpawnPeriod(fieldState, configState)
     }
 
+    //todo handle initial spawns/start somehow
     fun createImmutable(): GameState {
         val field = if (isDirtyField) {
             isDirtyField = false

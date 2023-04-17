@@ -61,7 +61,7 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
             is ShutDown -> {
                 view.dispose()
                 mainTimer.stop()
-                val score = currentSnapshot?.fieldState?.gameScore ?: 0
+                val score = currentSnapshot?.configState?.gameScore ?: 0
                 records.add(score, settings.toString(), LocalDateTime.now())
 
                 menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU)
@@ -70,7 +70,7 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
             is SnapshotReady -> {
                 val state = event.snapshot
                 currentSnapshot = state
-                frame.title = "score: " + state.fieldState.gameScore + ", multiplier: " + state.fieldState.globalMultiplier
+                frame.title = "score: " + state.configState.gameScore + ", multiplier: " + state.configState.globalMultiplier
                 view.renderNextFrame(state.fieldState, state.selectionState)
             }
 

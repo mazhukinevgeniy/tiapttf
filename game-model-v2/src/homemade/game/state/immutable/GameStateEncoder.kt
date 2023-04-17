@@ -18,11 +18,7 @@ class GameStateEncoder {
     /**
      * Uses assumption that cellstate/linkstate types are immutable
      */
-    private class PlainFieldState(source: FieldState) : FieldState(
-            source.structure, source.spawnsDenied,
-            source.gameScore, source.globalMultiplier,
-            source.spawnPeriod
-    ) {
+    private class PlainFieldState(source: FieldState) : FieldState(source.structure) {
         val cellStates = structure.cellCodeIterator.asSequence().map { source.getCellState(it) }.toList()
         val linkState = structure.linkCodeIterator.asSequence().map { source.getLinkBetweenCells(it) }.toList()
         val lengths = structure.linkCodeIterator.asSequence().map { source.getChainLength(it) }.toList()

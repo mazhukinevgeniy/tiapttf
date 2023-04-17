@@ -1,12 +1,12 @@
 package homemade.game.pipeline
 
 import homemade.game.loop.*
+import homemade.game.model.GameSettings
 import homemade.game.pipeline.stages.BlockProcessingStage
 import homemade.game.pipeline.stages.ComboProcessingStage
 import homemade.game.pipeline.stages.LinkProcessingStage
 import homemade.game.pipeline.stages.SelectionProcessingStage
-import homemade.game.state.*
-import homemade.game.state.immutable.GameStateEncoder
+import homemade.game.state.MutableGameState
 
 /**
  * |----
@@ -26,14 +26,27 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     private val uiLoop = gameLoop.ui
 
     init {
-        gameLoop.model.subscribe<BatchedBlockChange>(this)
+        gameLoop.model.subscribe<RequestBlockSpawning>(this)
         gameLoop.model.subscribe<CreateSnapshot>(this)
         gameLoop.model.subscribe<UserClick>(this)
+
+        if (mutableGameState.configState.settings.gameMode == GameSettings.GameMode.REAL_TIME) {
+            RegularSpawnPipeline(mutableGameState, gameLoop.model)
+        } else {
+            /*
+        if (mode === GameMode.TURN_BASED) {
+            updater.takeChanges(spawner.markCellsForSpawn())
+            for (i in 0 until INITIAL_SPAWNS) {
+                requestSpawn()
+            }
+        }*/
+            //TODO: ?
+        }
     }
 
     override fun handle(event: GameEvent) {
         when (event) {
-            is BatchedBlockChange -> handleBatchedBlockChange(event)
+            is RequestBlockSpawning -> handleBlockSpawning(event)
             is CreateSnapshot -> handleCreateSnapshot(event)
             is UserClick -> handleUserInput(event)
             else -> throw RuntimeException("bad subscription $event")
@@ -44,14 +57,12 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         TODO("impl")
     }
 
-    private fun handleBatchedBlockChange(event: BatchedBlockChange) {
+    private fun handleBlockSpawning(event: RequestBlockSpawning) {
         //don't necessarily post to ui loop, but next snapshot must be aware of the results
         //does it mean that we're the one who makes them?
-        isDirty = true
-        val previous = GameStateEncoder().encode(mutableGameState)
-        TODO("impl")
+        val previousStats = mutableGameState.configState.copyConfigState()
 
-        val processingInfo = ProcessingInfo(emptySet(), event.reason)
+        val processingInfo = ProcessingInfo(emptySet())
         do {
             BlockProcessingStage().process(mutableGameState, processingInfo)
             LinkProcessingStage().process(mutableGameState, processingInfo)
@@ -62,8 +73,8 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         // prolly just leave it at that
         // and send the current mutable state through gamestateencoder, if snapshot is requested
 
-        if (previous.globalMultiplier != mutableGameState.globalMultiplier) {
-            uiLoop.post(MultiplierChanged(mutableGameState.globalMultiplier - previous.globalMultiplier))
+        if (previousStats.globalMultiplier != mutableGameState.configState.globalMultiplier) {
+            uiLoop.post(MultiplierChanged(mutableGameState.configState.globalMultiplier - previousStats.globalMultiplier))
         }
     }
 
