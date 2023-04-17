@@ -51,7 +51,7 @@ public class GameModelLinker {
         this.gameLoop = gameLoop;
 
 
-        BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.fieldSize);
+        BlockValuePool blockValuePool = new BlockValuePool(settings.getMaxBlockValue(), structure.fieldSize);
         cellMap = new CellMap(structure, blockValuePool);
 
         storedEffects = new LinkedList<>();
@@ -68,7 +68,7 @@ public class GameModelLinker {
 
         lastGameState = new ExtendedGameState(state.createImmutableCopy(), selection.copySelectionState());
 
-        GameMode mode = settings.gameMode;
+        GameMode mode = settings.getGameMode();
         if (mode == GameMode.TURN_BASED) {
             updater.takeChanges(spawner.markCellsForSpawn());
 
@@ -84,20 +84,16 @@ public class GameModelLinker {
         new UserInputScenario(gameLoop, selection);
     }
 
-    synchronized public FieldStructure getStructure() {
+    public FieldStructure getStructure() {
         return structure;
     }
 
-    synchronized public GameSettings getSettings() {
+    public GameSettings getSettings() {
         return settings;
     }
 
     synchronized public CellMapReader getMapReader() {
         return cellMap;
-    }
-
-    synchronized BlockSelection getSelection() {
-        return selection;
     }
 
     public synchronized void killRandomBlocks() {
@@ -146,7 +142,7 @@ public class GameModelLinker {
 
             updater.takeComboChanges(tmpMap);
 
-            if (settings.gameMode == GameMode.TURN_BASED && !updater.hasCombos()) {
+            if (settings.getGameMode() == GameMode.TURN_BASED && !updater.hasCombos()) {
                 requestSpawn();
             } else {
                 updateStates();
