@@ -6,37 +6,12 @@ import java.util.Set;
 
 public final class CellCode {
 
-    static CellCode[] createCellCodes(FieldStructure structure) {
-        int width = structure.getWidth();
-        int height = structure.getHeight();
-
-        CellCode[] cellCodes = new CellCode[structure.getFieldSize()];
-
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++) {
-                int newCellCode = structure.cellCodeAsInt(i, j);
-
-                cellCodes[newCellCode] = new CellCode(i, j, width, height, newCellCode);
-            }
-
-        for (int i = 0, size = structure.getFieldSize(); i < size; i++) {
-            CellCode cellCode = cellCodes[i];
-
-            for (Direction direction : Direction.values()) {
-                if (!cellCode.onBorder(direction))
-                    cellCode.neighbours.put(direction, cellCodes[structure.cellCodeAsInt(cellCode, direction)]);
-            }
-        }
-
-        return cellCodes;
-    }
-
     private int cCValue;
 
     private int cX, cY;
 
     private boolean[] isOnBorder;
-    private EnumMap<Direction, CellCode> neighbours;
+    EnumMap<Direction, CellCode> neighbours;
 
     /**
      * Calculated as if the field was rotated at -PI/2;
@@ -47,7 +22,7 @@ public final class CellCode {
      */
     int rotatedCellCode;
 
-    private CellCode(int x, int y, int width, int height, int value) {
+    CellCode(int x, int y, int width, int height, int value) {
         cCValue = value;
         cX = x;
         cY = y;
