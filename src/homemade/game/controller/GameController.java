@@ -1,7 +1,7 @@
 package homemade.game.controller;
 
+import homemade.game.ExtendedGameState;
 import homemade.game.GameSettings;
-import homemade.game.GameState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.loop.*;
@@ -87,7 +87,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             view.dispose();
             mainTimer.stop();
 
-            int score = model.copyGameState().gameScore();
+            int score = model.copyGameState().getGameState().gameScore();
             String name = new StringBuilder()
                     .append("sp").append(settings.spawn)
                     .append("c").append(settings.minCombo)
@@ -101,10 +101,12 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             //need to post this on UI thread channel
             menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
         } else if (event instanceof SnapshotReady) {
-            GameState state = model.copyGameState();
+            ExtendedGameState state = model.copyGameState();
 
-            frame.setTitle("score: " + state.gameScore() + ", multiplier: " + state.globalMultiplier());
-            view.renderNextFrame(state, model.copySelectionState());
+            frame.setTitle("score: " + state.getGameState().gameScore() + ", multiplier: " + state.getGameState().globalMultiplier());
+            view.renderNextFrame(state.getGameState(), state.getSelectionState());
+        } else if (event instanceof MultiplierChanged) {
+            view.getEffectManager().blink(((MultiplierChanged) event).getDiff() > 0);
         } else {
             System.err.println("unexpected event " + event);
             System.exit(1);
@@ -137,10 +139,6 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
 
     public synchronized void blockExploded(CellCode atCell) {
         view.getEffectManager().addEffect(atCell, ShownEffect.EXPLOSION);
-    }
-
-    public synchronized void multiplierChanged(int change) {
-        view.getEffectManager().blink(change > 0);
     }
 
     synchronized void requestPauseToggle() {

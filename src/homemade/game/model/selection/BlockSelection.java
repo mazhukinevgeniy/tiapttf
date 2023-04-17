@@ -129,7 +129,7 @@ public class BlockSelection {
         state = new SelectionStateProvider(copy, cellsToMove);
     }
 
-    public SelectionState getSelectionState() {
+    public SelectionState copySelectionState() {
         return state;
     }
 }

@@ -34,9 +34,10 @@ class DynamicPeriodTimer implements SpawnTimer {
             return;
         }
         timeElapsed += time;
-        if (timeElapsed > period.getSpawnPeriod()) {
+        int timeRequired = (int) period.getSpawnPeriod();
+        if (timeElapsed > timeRequired) {
+            timeElapsed = 0;
             linker.requestSpawn();
-            timeElapsed = timeElapsed % (int) period.getSpawnPeriod();
         }
     }
 }

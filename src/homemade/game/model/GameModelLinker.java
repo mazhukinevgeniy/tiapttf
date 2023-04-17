@@ -1,13 +1,14 @@
 package homemade.game.model;
 
+import homemade.game.ExtendedGameState;
 import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
-import homemade.game.GameState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.loop.GameLoop;
 import homemade.game.loop.GameOver;
+import homemade.game.loop.MultiplierChanged;
 import homemade.game.model.cellmap.CellMap;
 import homemade.game.model.cellmap.CellMapReader;
 import homemade.game.model.cellstates.SimpleState;
@@ -16,6 +17,7 @@ import homemade.game.model.combo.ComboEffectVendor;
 import homemade.game.model.selection.BlockSelection;
 import homemade.game.model.spawn.SpawnManager;
 import homemade.game.scenarios.GameOverScenario;
+import homemade.game.scenarios.RealtimeSpawningScenario;
 import homemade.game.scenarios.SnapshotRequestScenario;
 
 import java.util.HashMap;
@@ -30,27 +32,25 @@ public class GameModelLinker {
 
     private CellMap cellMap;
     private SpawnManager spawner;
-    private ArrayBasedGameState state;
+    public ArrayBasedGameState state;
     private LinkedList<ComboEffect> storedEffects;
 
-    private GameController controller;
     private GameLoop gameLoop;
 
-    private GameState lastGameState;
-    private BlockSelection selection;
+    public ExtendedGameState lastGameState;
+    public BlockSelection selection;
 
     private GameSettings settings;
 
     private Updater updater;
 
     GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
-        this.controller = controller;
         this.structure = structure;
         this.settings = settings;
         this.gameLoop = gameLoop;
 
         new GameOverScenario(gameLoop, this);
-        new SnapshotRequestScenario(gameLoop);
+        new SnapshotRequestScenario(gameLoop, this);
 
         BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.getFieldSize());
         cellMap = new CellMap(structure, blockValuePool);
@@ -58,7 +58,6 @@ public class GameModelLinker {
         storedEffects = new LinkedList<>();
 
         state = new ArrayBasedGameState(structure);
-        lastGameState = state.getImmutableCopy();
 
         ComboDetector comboDetector = new ComboDetector(this, controller);
         GameScore gameScore = new GameScore(this);
@@ -68,12 +67,16 @@ public class GameModelLinker {
         spawner = new SpawnManager(this, blockValuePool);
         selection = new BlockSelection(this);
 
+        lastGameState = new ExtendedGameState(state.createImmutableCopy(), selection.copySelectionState());
+
         GameMode mode = settings.gameMode;
         if (mode == GameMode.TURN_BASED) {
             updater.takeChanges(spawner.markCellsForSpawn());
 
             for (int i = 0; i < INITIAL_SPAWNS; i++)
                 requestSpawn();
+        } else {
+            new RealtimeSpawningScenario(spawner, gameLoop);
         }
     }
 
@@ -113,7 +116,7 @@ public class GameModelLinker {
 
         if (oldMultiplier != newMultiplier) {
             state.updateMultiplier(newMultiplier);
-            controller.multiplierChanged(change);
+            gameLoop.getUi().post(new MultiplierChanged(change));
         }
     }
 
@@ -172,7 +175,7 @@ public class GameModelLinker {
                 updateStates();
                 System.out.println("multiplier consumed");
             } else {
-                gameLoop.getModel().post(new GameOver());
+                gameLoop.getModel().post(new GameOver(1));
                 System.out.println("can't trade multiplier for blocks");
             }
         } else if (state.numberOfMovableBlocks() == 0) {
@@ -184,16 +187,7 @@ public class GameModelLinker {
         }
     }
 
-    synchronized GameState copyGameState() {
-        return lastGameState = state.getImmutableCopy();
-    }
-
-    /**
-     * Use this if
-     * A) you want an immutable gamestate
-     * B) you don't care if it's not updated since the last external use (e.g. rendering)
-     */
-    synchronized public GameState lastGameState() {
+    ExtendedGameState copyGameState() {
         return lastGameState;
     }
 }

@@ -67,16 +67,13 @@ class SpawnPeriod {
     }
 
     long getSpawnPeriod() {
-        GameState state = linker.lastGameState();
+        GameState state = linker.lastGameState.getGameState();
 
         int occupiedCells = state.numberOfBlocks();
         int spawnsDenied = state.spawnsDenied();
 
-
         int base = basePeriod.getValueAt(occupiedCells);
         int decrementFromDenies = 15 * spawnsDenied;
-
-        System.out.println("base period " + base + ", decrement " + decrementFromDenies);
 
         return Math.max(MIN_PERIOD, base - decrementFromDenies);
     }

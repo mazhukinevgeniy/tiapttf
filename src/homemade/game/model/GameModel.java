@@ -1,8 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.ExtendedGameState;
 import homemade.game.GameSettings;
-import homemade.game.GameState;
-import homemade.game.SelectionState;
 import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
@@ -20,12 +19,8 @@ public class GameModel {
         linker = new GameModelLinker(structure, settings, gameController, gameLoop);
     }
 
-    public GameState copyGameState() {
+    public ExtendedGameState copyGameState() {
         return linker.copyGameState();
-    }
-
-    public SelectionState copySelectionState() {
-        return linker.getSelection().getSelectionState();
     }
 
 

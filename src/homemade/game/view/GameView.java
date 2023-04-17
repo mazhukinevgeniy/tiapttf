@@ -78,8 +78,10 @@ public class GameView {
     }
 
     public synchronized void dispose() {
-        strategy.dispose();
-        strategy = null;
+        if (strategy != null) {
+            strategy.dispose();
+            strategy = null;
+        }
 
         effectManager.clearEffects();
     }
@@ -90,6 +92,10 @@ public class GameView {
     public synchronized void renderNextFrame(GameState state, SelectionState selection) {
         effectManager.measureTimePassed();
         fpsTracker.addTimestamp();
+
+        if (strategy == null) {
+            return;
+        }
 
         container.setBackground(effectManager.getBackgroundColor());
 

@@ -39,7 +39,8 @@ class FpsTracker {
 
         long fps = ((frames - 1) * nanosPerSecond) / divider;
 
-        if (new Random().nextInt(100) < 10)
+        if (new Random().nextInt(100) < 2) {
             System.out.println("fps is " + fps);
+        }
     }
 }

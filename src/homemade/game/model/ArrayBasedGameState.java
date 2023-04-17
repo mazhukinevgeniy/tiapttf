@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Must be synchronized externally!
  */
-class ArrayBasedGameState implements GameState {
+public class ArrayBasedGameState implements GameState {
     private CellState[] field;
     private Direction[] links;
     private int[] chainLengths;
@@ -152,9 +152,10 @@ class ArrayBasedGameState implements GameState {
         return chainLengths[linkCode.hashCode()];
     }
 
-    GameState getImmutableCopy() {
-        if (immutableCopy == null)
+    public GameState createImmutableCopy() {
+        if (immutableCopy == null) {
             immutableCopy = new ArrayBasedGameState(this);
+        }
 
         return immutableCopy;
     }
