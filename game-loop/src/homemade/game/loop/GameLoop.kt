@@ -4,15 +4,27 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
 class BackgroundLoop : GameLoopBase<GameEvent>(GameEvent::class.sealedSubclasses) {
     private val context = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
+    private var maxCountdown = 40
+
     init {
-        runBlocking {
-            launch(context) {
-                for (event in channel) {
-                    propagateEvent(event)
+        thread {
+            runBlocking {
+                launch(context) {
+                    for (event in channel) {
+                        if (event is GameOver) {
+                            if (event.countdown >= maxCountdown) {
+                                continue
+                            } else {
+                                maxCountdown = event.countdown
+                            }
+                        }
+                        propagateEvent(event)
+                    }
                 }
             }
         }
@@ -57,6 +69,7 @@ class GameLoop(uiHandler: GameEventHandler<UIEvent>) {
         })
         ui.subscribe<ShutDown>(uiHandler)
         ui.subscribe<SnapshotReady>(uiHandler)
+        ui.subscribe<MultiplierChanged>(uiHandler)
 
         model.subscribe<TimeElapsed>(object : GameEventHandler<GameEvent> {
             override fun handle(event: GameEvent) {
