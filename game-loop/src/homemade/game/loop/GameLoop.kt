@@ -53,7 +53,7 @@ class UILoop : GameLoopBase<UIEvent>(UIEvent::class.sealedSubclasses) {
 /**
  * Twin channels are necessary for communicating with the UI thread (although we could have just used polling)
  */
-class GameLoop(uiHandler: GameEventHandler<UIEvent>) {
+class GameLoop() {
 
     val model = BackgroundLoop()
     val ui = UILoop()
@@ -67,9 +67,6 @@ class GameLoop(uiHandler: GameEventHandler<UIEvent>) {
                 model.channel.close()
             }
         })
-        ui.subscribe<ShutDown>(uiHandler)
-        ui.subscribe<SnapshotReady>(uiHandler)
-        ui.subscribe<MultiplierChanged>(uiHandler)
 
         model.subscribe<TimeElapsed>(object : GameEventHandler<GameEvent> {
             override fun handle(event: GameEvent) {
