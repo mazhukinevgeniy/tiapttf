@@ -29,8 +29,7 @@ public class DynamicPeriodTimer implements GameEventHandler<GameEvent> {
         } else if (event instanceof PauseToggle) {
             paused = !paused;
         } else {
-            System.err.println("unexpected event " + event);
-            System.exit(1);
+            throw new RuntimeException("unexpected event " + event);
         }
     }
 

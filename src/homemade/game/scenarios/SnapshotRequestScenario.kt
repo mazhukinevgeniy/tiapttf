@@ -4,7 +4,7 @@ import homemade.game.ExtendedGameState
 import homemade.game.loop.*
 import homemade.game.model.GameModelLinker
 
-class SnapshotRequestScenario(val gameLoop: GameLoop, val gameModelLinker: GameModelLinker) : GameEventHandler<GameEvent> {
+class SnapshotRequestScenario(private val gameLoop: GameLoop, private val gameModelLinker: GameModelLinker) : GameEventHandler<GameEvent> {
 
     init {
         System.out.println("subscribing to create snapshots")

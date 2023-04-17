@@ -124,7 +124,7 @@ public class GameModelLinker {
         updateStates();
     }
 
-    synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
+    public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
         boolean repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
                 state.globalMultiplier() == 1;
 
