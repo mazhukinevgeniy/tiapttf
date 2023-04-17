@@ -1,4 +1,4 @@
-package homemade.utils;
+package homemade.util;
 
 import java.util.ArrayList;
 import java.util.List;

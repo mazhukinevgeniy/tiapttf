@@ -1,6 +1,5 @@
 package homemade.menu.controller;
 
-import homemade.game.GameSettings;
 import homemade.game.controller.GameController;
 import homemade.menu.controller.records.RecordsManager;
 import homemade.menu.controller.settings.SettingsManager;
@@ -94,7 +93,7 @@ public class MenuManager implements HandlerButtons {
             Variation assetType = settings.get(Settings.Code.ANIMATED_LINKS) ? Variation.ANIMATED : Variation.COLORED;
             Assets.loadAssets(assetType);
 
-            new GameController(this, window, currentMenu, new GameSettings(settings), records);
+            new GameController(this, window, currentMenu, settings.generateSettings(), records);
         }
 
         currentMenu.onShown();

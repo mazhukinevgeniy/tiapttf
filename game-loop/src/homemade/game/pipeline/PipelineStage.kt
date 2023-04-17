@@ -2,7 +2,7 @@ package homemade.game.pipeline
 
 import homemade.game.fieldstructure.CellCode
 import homemade.game.loop.ChangeReason
-import homemade.game.state.GameState
+import homemade.game.state.FieldState
 
 data class ProcessingInfo(
         var triggeredCells: Set<CellCode>,
@@ -10,5 +10,5 @@ data class ProcessingInfo(
 )
 
 abstract class PipelineStage {
-    abstract fun process(state: GameState, processingInfo: ProcessingInfo)
+    abstract fun process(state: FieldState, processingInfo: ProcessingInfo)
 }

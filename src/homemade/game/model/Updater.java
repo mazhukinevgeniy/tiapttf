@@ -24,12 +24,12 @@ class Updater {
 
     private CellMap cellMap;
     private GameScore gameScore;
-    private ArrayBasedGameState state;
+    private ArrayBasedFieldState state;
 
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedGameState state) {
+    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedFieldState state) {
         structure = linker.getStructure();
 
         this.comboDetector = comboDetector;
@@ -58,8 +58,8 @@ class Updater {
         storedChanges.addAll(comboCells);
     }
 
-    void flush() {
-        gameScore.handleCombos(storedCombos);
+    void flush(int multiplier) {
+        gameScore.handleCombos(storedCombos, multiplier);
         storedCombos = new ComboPack();
 
         updateState(storedChanges);

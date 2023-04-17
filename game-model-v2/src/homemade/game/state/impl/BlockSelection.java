@@ -1,6 +1,5 @@
-package homemade.game.model.selection;
+package homemade.game.state.impl;
 
-import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
@@ -9,12 +8,14 @@ import homemade.game.loop.GameEventHandler;
 import homemade.game.loop.UserClick;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.state.SelectionState;
+import homemade.game.state.immutable.SelectionStateProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockSelection implements GameEventHandler<GameEvent> {
+public class BlockSelection implements GameEventHandler<GameEvent>, SelectionState {
     private GameModelLinker linker;
     private CellMapReader cellMapReader;
 

@@ -1,9 +1,10 @@
 package homemade.game.controller
 
-import homemade.game.GameSettings
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
 import homemade.game.model.GameModelLinker
+import homemade.game.model.GameSettings
+import homemade.game.state.GameState
 import homemade.game.view.GameView
 import homemade.game.view.ShownEffect
 import homemade.menu.controller.MenuManager
@@ -22,6 +23,7 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
     private val model: GameModelLinker
     private val view: GameView
     private val mainTimer: Timer
+    private var currentSnapshot: GameState? = null
 
     init {
         gameLoop.ui.subscribe<ShutDown>(this)
@@ -59,16 +61,17 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
             is ShutDown -> {
                 view.dispose()
                 mainTimer.stop()
-                val score = model.lastGameState.gameState.gameScore
+                val score = currentSnapshot?.fieldState?.gameScore ?: 0
                 records.add(score, settings.toString(), LocalDateTime.now())
 
                 menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU)
             }
 
             is SnapshotReady -> {
-                val state = model.lastGameState
-                frame.title = "score: " + state.gameState.gameScore + ", multiplier: " + state.gameState.globalMultiplier
-                view.renderNextFrame(state.gameState, state.selectionState)
+                val state = event.snapshot
+                currentSnapshot = state
+                frame.title = "score: " + state.fieldState.gameScore + ", multiplier: " + state.fieldState.globalMultiplier
+                view.renderNextFrame(state.fieldState, state.selectionState)
             }
 
             is MultiplierChanged -> {

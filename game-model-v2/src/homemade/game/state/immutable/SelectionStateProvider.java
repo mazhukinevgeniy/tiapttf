@@ -1,7 +1,7 @@
-package homemade.game.model.selection;
+package homemade.game.state.immutable;
 
-import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.state.SelectionState;
 
 import java.util.HashSet;
 

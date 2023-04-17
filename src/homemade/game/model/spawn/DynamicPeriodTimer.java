@@ -1,8 +1,9 @@
 package homemade.game.model.spawn;
 
-import homemade.game.GameSettings;
 import homemade.game.loop.*;
 import homemade.game.model.GameModelLinker;
+import homemade.game.model.GameSettings;
+import homemade.game.pipeline.SpawnPeriod;
 
 public class DynamicPeriodTimer implements GameEventHandler<GameEvent> {
     private SpawnPeriod period;

@@ -1,11 +1,11 @@
 package homemade.game.scenarios
 
-import homemade.game.GameSettings
 import homemade.game.loop.GameLoop
 import homemade.game.loop.GameOver
 import homemade.game.loop.PauseToggle
 import homemade.game.loop.TimeElapsed
 import homemade.game.model.GameModelLinker
+import homemade.game.model.GameSettings
 import homemade.game.model.spawn.DynamicPeriodTimer
 
 class RealtimeSpawningScenario(linker: GameModelLinker, settings: GameSettings, loop: GameLoop) {

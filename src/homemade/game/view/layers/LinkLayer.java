@@ -1,11 +1,11 @@
 package homemade.game.view.layers;
 
-import homemade.game.GameSettings;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.GameSettings;
 import homemade.resources.links.LinkAssets;
-import homemade.utils.PiecewiseConstantFunction;
+import homemade.util.PiecewiseConstantFunction;
 
 import java.awt.*;
 import java.util.ArrayList;

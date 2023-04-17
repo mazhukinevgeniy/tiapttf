@@ -1,9 +1,9 @@
 package homemade.game.pipeline
 
+import homemade.game.fieldstructure.CellCode
 import homemade.game.loop.*
-import homemade.game.state.GameState
-import homemade.game.state.GameStateEncoder
-import homemade.game.state.MutableGameState
+import homemade.game.state.*
+import homemade.game.state.immutable.GameStateEncoder
 
 /**
  * |----
@@ -19,10 +19,10 @@ import homemade.game.state.MutableGameState
  * | lesser parts of state change: multiplier, state
  * |----
  */
-class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: MutableGameState) : GameEventHandler<GameEvent> {
+class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: MutableFieldState) : GameEventHandler<GameEvent> {
     private var isDirty = false
     private val uiLoop = gameLoop.ui
-    private var snapshot: GameState = GameStateEncoder().encode(mutableGameState)
+    private var snapshot: FieldState = GameStateEncoder().encode(mutableGameState)
 
     init {
         gameLoop.model.subscribe<BatchedBlockChange>(this)
@@ -65,6 +65,14 @@ class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Muta
             isDirty = false
             snapshot = GameStateEncoder().encode(mutableGameState)
         }
-        uiLoop.post(SnapshotReady)
+        uiLoop.post(SnapshotReady(GameState(snapshot, object : SelectionState {
+            override fun canMoveTo(cellCode: CellCode?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun isSelected(cellCode: CellCode?): Boolean {
+                TODO("Not yet implemented")
+            }
+        })))
     }
 }

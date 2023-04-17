@@ -15,7 +15,7 @@ class GameScore {
         linker.updateScore(score = 0);
     }
 
-    void handleCombos(ComboPack pack) {
+    void handleCombos(ComboPack pack, int globalMultiplier) {
         int packScore = 0;
 
         for (Iterator<Combo> iterator = pack.comboIterator(); iterator.hasNext(); ) {
@@ -26,7 +26,6 @@ class GameScore {
 
         if (packScore != 0)
             synchronized (this) {
-                int globalMultiplier = linker.copyGameState().getGameState().getGlobalMultiplier();
                 packScore *= pack.packTier() * globalMultiplier;
 
                 score += packScore;

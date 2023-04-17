@@ -1,4 +1,4 @@
-class GameStateEncodingTest {
+class FieldStateEncodingTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {

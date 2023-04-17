@@ -1,9 +1,10 @@
-package homemade.game.model.spawn;
+package homemade.game.state.impl;
 
-import homemade.game.GameSettings;
-import homemade.game.model.GameModelLinker;
-import homemade.game.state.GameState;
-import homemade.utils.PiecewiseConstantFunction;
+import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.model.GameSettings;
+import homemade.game.state.ConfigState;
+import homemade.game.state.FieldState;
+import homemade.util.PiecewiseConstantFunction;
 
 import java.util.ArrayList;
 
@@ -20,14 +21,14 @@ import java.util.ArrayList;
  * <p>
  * Plus, it goes down a bit every time you deny a spawn.
  */
-class SpawnPeriod {
+public class SpawnPeriod {
     private static final int MIN_PERIOD = 100;
 
-    static SpawnPeriod newFastStart(GameModelLinker linker, GameSettings settings) {
+    public static SpawnPeriod newFastStart(FieldStructure fieldStructure, GameSettings settings) {
         int minCombo = settings.getMinCombo();
 
         int saturationPoint = minCombo * 3;
-        int size = linker.getStructure().fieldSize;
+        int size = fieldStructure.fieldSize;
         int oversaturationPoint = size - minCombo * 2;
 
         if (saturationPoint >= oversaturationPoint)
@@ -54,23 +55,18 @@ class SpawnPeriod {
         PiecewiseConstantFunction<Integer, Integer> period =
                 new PiecewiseConstantFunction<>(separators, periods);
 
-        return new SpawnPeriod(linker, period);
+        return new SpawnPeriod(period);
     }
 
-    private GameModelLinker linker;
     private PiecewiseConstantFunction<Integer, Integer> basePeriod;
 
-    private SpawnPeriod(GameModelLinker linker, PiecewiseConstantFunction<Integer, Integer> period) {
+    private SpawnPeriod(PiecewiseConstantFunction<Integer, Integer> period) {
         basePeriod = period;
-
-        this.linker = linker;
     }
 
-    long getSpawnPeriod() {
-        GameState state = linker.lastGameState.getGameState();
-
-        int occupiedCells = state.getNumberOfBlocks();
-        int spawnsDenied = state.getSpawnsDenied();
+    public int getSpawnPeriod(FieldState fieldState, ConfigState configState) {
+        int occupiedCells = fieldState.getNumberOfBlocks();
+        int spawnsDenied = configState.getSpawnsDenied();
 
         int base = basePeriod.getValueAt(occupiedCells);
         int decrementFromDenies = 15 * spawnsDenied;

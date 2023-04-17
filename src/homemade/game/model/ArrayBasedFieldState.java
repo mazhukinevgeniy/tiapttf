@@ -5,20 +5,20 @@ import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellstates.SimpleState;
-import homemade.game.state.GameState;
-import homemade.game.state.GameStateEncoder;
+import homemade.game.state.FieldState;
+import homemade.game.state.immutable.GameStateEncoder;
 
 import java.util.Map;
 
-public class ArrayBasedGameState extends GameState {
+public class ArrayBasedFieldState extends FieldState {
     private CellState[] field;
     private Direction[] links;
     private int[] chainLengths;
 
-    private GameState immutableCopy;
+    private FieldState immutableCopy;
 
-    ArrayBasedGameState(FieldStructure structure) {
-        super(structure, 0, 0, 1);
+    ArrayBasedFieldState(FieldStructure structure) {
+        super(structure, 0, 0, 1, 1000);
         int fieldSize = structure.fieldSize;
 
         field = new CellState[fieldSize];
@@ -90,7 +90,7 @@ public class ArrayBasedGameState extends GameState {
         return chainLengths[linkCode.hashCode()];
     }
 
-    public GameState createImmutableCopy() {
+    public FieldState createImmutableCopy() {
         if (immutableCopy == null) {
             immutableCopy = new GameStateEncoder().encode(this);
         }

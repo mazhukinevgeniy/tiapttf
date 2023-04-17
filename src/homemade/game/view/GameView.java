@@ -1,10 +1,10 @@
 package homemade.game.view;
 
-import homemade.game.GameSettings;
-import homemade.game.SelectionState;
 import homemade.game.controller.ViewListener;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.state.GameState;
+import homemade.game.model.GameSettings;
+import homemade.game.state.FieldState;
+import homemade.game.state.SelectionState;
 import homemade.game.view.layers.RenderingLayer;
 import homemade.resources.Assets;
 
@@ -85,7 +85,7 @@ public class GameView {
     /**
      * Would cause an exception if called after dispose()
      */
-    public synchronized void renderNextFrame(GameState state, SelectionState selection) {
+    public synchronized void renderNextFrame(FieldState state, SelectionState selection) {
         effectManager.measureTimePassed();
         fpsTracker.addTimestamp();
 

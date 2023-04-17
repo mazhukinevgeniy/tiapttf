@@ -1,6 +1,5 @@
 package homemade.game.model.spawn;
 
-import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.model.*;
