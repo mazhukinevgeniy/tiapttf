@@ -52,7 +52,7 @@ public class GameModelLinker {
         new GameOverScenario(gameLoop, this);
         new SnapshotRequestScenario(gameLoop, this);
 
-        BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.getFieldSize());
+        BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.fieldSize);
         cellMap = new CellMap(structure, blockValuePool);
 
         storedEffects = new LinkedList<>();
@@ -162,7 +162,7 @@ public class GameModelLinker {
             updater.flush();
         }
 
-        if (state.numberOfBlocks() == structure.getFieldSize()) {
+        if (state.numberOfBlocks() == structure.fieldSize) {
             int multiplier = state.globalMultiplier();
 
             if (multiplier > 1) {

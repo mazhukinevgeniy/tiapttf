@@ -27,7 +27,7 @@ public class ArrayBasedGameState implements GameState {
     private int multiplier = 1;
 
     ArrayBasedGameState(FieldStructure structure) {
-        int fieldSize = structure.getFieldSize();
+        int fieldSize = structure.fieldSize;
 
         field = new CellState[fieldSize];
 
@@ -36,7 +36,7 @@ public class ArrayBasedGameState implements GameState {
             field[i] = empty;
         }
 
-        int numberOfLinks = structure.getNumberOfLinks();
+        int numberOfLinks = structure.numberOfLinks;
 
         links = new Direction[numberOfLinks];
 

@@ -36,8 +36,8 @@ public class ComboDetector {
         Set<Integer> verticals = new HashSet<Integer>(numberOfStarts);
 
         for (CellCode cellCode : starts) {
-            horizontals.add(cellCode.y());
-            verticals.add(cellCode.x());
+            horizontals.add(cellCode.getY());
+            verticals.add(cellCode.getX());
         }
 
         ComboPack pack = new ComboPack();

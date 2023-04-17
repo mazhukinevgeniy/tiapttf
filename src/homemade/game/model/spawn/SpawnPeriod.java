@@ -27,7 +27,7 @@ class SpawnPeriod {
         int minCombo = settings.minCombo;
 
         int saturationPoint = minCombo * 3;
-        int size = linker.getStructure().getFieldSize();
+        int size = linker.getStructure().fieldSize;
         int oversaturationPoint = size - minCombo * 2;
 
         if (saturationPoint >= oversaturationPoint)
