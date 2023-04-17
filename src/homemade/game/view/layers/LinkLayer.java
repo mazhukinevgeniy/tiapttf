@@ -39,7 +39,7 @@ class LinkLayer extends RenderingLayer.Links {
 
         countCap = rendersPerLinkFrame * linkAssets.getNumberOfArrowFrames();
 
-        double minCombo = (double) settings.minCombo;
+        double minCombo = (double) settings.getMinCombo();
         int minSpriteTier = linkAssets.getNumberOfArrowTiers();
 
         ArrayList<Double> separators = new ArrayList<Double>(minSpriteTier - 1);

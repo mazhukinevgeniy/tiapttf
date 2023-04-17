@@ -3,7 +3,6 @@ package homemade.game.model;
 import homemade.game.ExtendedGameState;
 import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
-import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.loop.GameLoop;
@@ -45,20 +44,20 @@ public class GameModelLinker {
 
     private Updater updater;
 
-    public GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
+    public GameModelLinker(FieldStructure structure, GameSettings settings, GameLoop gameLoop) {
         this.structure = structure;
         this.settings = settings;
         this.gameLoop = gameLoop;
 
 
-        BlockValuePool blockValuePool = new BlockValuePool(settings.maxBlockValue, structure.fieldSize);
+        BlockValuePool blockValuePool = new BlockValuePool(settings.getMaxBlockValue(), structure.fieldSize);
         cellMap = new CellMap(structure, blockValuePool);
 
         storedEffects = new LinkedList<>();
 
         state = new ArrayBasedGameState(structure);
 
-        ComboDetector comboDetector = new ComboDetector(this, controller);
+        ComboDetector comboDetector = new ComboDetector(this, gameLoop.getUi());
         GameScore gameScore = new GameScore(this);
 
         updater = new Updater(this, comboDetector, cellMap, gameScore, state);
@@ -68,7 +67,7 @@ public class GameModelLinker {
 
         lastGameState = new ExtendedGameState(state.createImmutableCopy(), selection.copySelectionState());
 
-        GameMode mode = settings.gameMode;
+        GameMode mode = settings.getGameMode();
         if (mode == GameMode.TURN_BASED) {
             updater.takeChanges(spawner.markCellsForSpawn());
 
@@ -84,20 +83,16 @@ public class GameModelLinker {
         new UserInputScenario(gameLoop, selection);
     }
 
-    synchronized public FieldStructure getStructure() {
+    public FieldStructure getStructure() {
         return structure;
     }
 
-    synchronized public GameSettings getSettings() {
+    public GameSettings getSettings() {
         return settings;
     }
 
     synchronized public CellMapReader getMapReader() {
         return cellMap;
-    }
-
-    synchronized BlockSelection getSelection() {
-        return selection;
     }
 
     public synchronized void killRandomBlocks() {
@@ -129,7 +124,7 @@ public class GameModelLinker {
         updateStates();
     }
 
-    synchronized public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
+    public void tryMove(CellCode moveFromCell, CellCode moveToCell) {
         boolean repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
                 state.globalMultiplier() == 1;
 
@@ -146,7 +141,7 @@ public class GameModelLinker {
 
             updater.takeComboChanges(tmpMap);
 
-            if (settings.gameMode == GameMode.TURN_BASED && !updater.hasCombos()) {
+            if (settings.getGameMode() == GameMode.TURN_BASED && !updater.hasCombos()) {
                 requestSpawn();
             } else {
                 updateStates();

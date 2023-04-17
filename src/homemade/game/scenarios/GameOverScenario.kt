@@ -3,7 +3,7 @@ package homemade.game.scenarios
 import homemade.game.loop.*
 import homemade.game.model.GameModelLinker
 
-class GameOverScenario(val gameLoop: GameLoop, val model: GameModelLinker) : GameEventHandler<GameEvent> {
+class GameOverScenario(private val gameLoop: GameLoop, val model: GameModelLinker) : GameEventHandler<GameEvent> {
     init {
         gameLoop.model.subscribe<GameOver>(this)
     }

@@ -8,9 +8,6 @@ import homemade.game.model.cellstates.SimpleState;
 
 import java.util.*;
 
-/**
- * Must be synchronized externally!
- */
 public class CellMap implements CellMapReader {
     private CellState cells[];
     private Link links[];

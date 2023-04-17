@@ -25,8 +25,7 @@ public class SpawnManager {
         cellMarker = new CellMarker(cellMap, blockValuePool);
 
         GameSettings settings = linker.getSettings();
-        GameSettings.GameMode mode = settings.gameMode;
-        simultaneousSpawn = settings.spawn;
+        simultaneousSpawn = settings.getSpawn();
     }
 
     public Map<CellCode, CellState> spawnBlocks() {

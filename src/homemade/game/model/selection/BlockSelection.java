@@ -77,17 +77,18 @@ public class BlockSelection implements GameEventHandler<GameEvent> {
         for (Iterator<CellCode> iterator = selection.iterator(); iterator.hasNext(); ) {
             CellCode next = iterator.next();
 
-            if (!cellMapReader.getCell(next).isAliveBlock())
+            if (!cellMapReader.getCell(next).isAliveBlock()) {
                 iterator.remove();
+            }
         }
 
         HashSet<CellCode> copy = new HashSet<CellCode>(selection);
 
         HashSet<CellCode> cellsToMove = new HashSet<CellCode>(fieldSize);
 
-        if (selection.size() > 1)
-            throw new RuntimeException("accessable cells are undefined");
-        else if (selection.size() == 1) {
+        if (selection.size() > 1) {
+            throw new RuntimeException("accessible cells are undefined");
+        } else if (selection.size() == 1) {
             HashSet<CellCode> unaccessableCells = new HashSet<>(fieldSize);
             HashSet<CellCode> borderCells = new HashSet<>(1);
             Direction[] directions = Direction.values();

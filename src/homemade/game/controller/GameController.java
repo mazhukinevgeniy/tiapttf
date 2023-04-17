@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 
-public class GameController implements BlockEventHandler, MouseInputHandler, GameEventHandler<UIEvent> {
+public class GameController implements MouseInputHandler, GameEventHandler<UIEvent> {
     private static final int TARGET_FPS = 60;
 
     private MenuManager menuManager;
@@ -37,10 +37,6 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
     private GameKeyboard keyboard;
 
     public GameController(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
-        initialize(menuManager, mainFrame, container, settings, records);
-    }
-
-    private synchronized void initialize(MenuManager menuManager, Frame mainFrame, Container container, GameSettings settings, Records records) {
         this.menuManager = menuManager;
         this.records = records;
         this.settings = settings;
@@ -54,7 +50,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
         ViewListener viewListener = new ViewListener(this, this, keyboard);
 
         view = new GameView(structure, settings, viewListener, container);
-        model = new GameModelLinker(structure, settings, this, gameLoop);
+        model = new GameModelLinker(structure, settings, gameLoop);
         //model must be initialized after view because there could be combos in initialization
         //TODO: if everything is done with eventLoop channels, this observation is invalid
 
@@ -82,21 +78,14 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
     }
 
     @Override
-    synchronized public void handle(@NotNull UIEvent event) {
+    public void handle(@NotNull UIEvent event) {
         if (event instanceof ShutDown) {
             view.dispose();
             mainTimer.stop();
 
             int score = model.lastGameState.getGameState().gameScore();
-            String name = new StringBuilder()
-                    .append("sp").append(settings.spawn)
-                    .append("c").append(settings.minCombo)
-                    .append("per").append(settings.period)
-                    .append("max").append(settings.maxBlockValue)
-                    .append(settings.gameMode == GameSettings.GameMode.TURN_BASED ? "tb" : "rt")
-                    .toString();
 
-            records.add(score, name, LocalDateTime.now());
+            records.add(score, settings.toString(), LocalDateTime.now());
 
             //need to post this on UI thread channel
             menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
@@ -107,14 +96,17 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             view.renderNextFrame(state.getGameState(), state.getSelectionState());
         } else if (event instanceof MultiplierChanged) {
             view.getEffectManager().blink(((MultiplierChanged) event).getDiff() > 0);
+        } else if (event instanceof BlockRemoved) {
+            view.getEffectManager().addEffect(((BlockRemoved) event).getCell(), ShownEffect.FADEAWAY);
+        } else if (event instanceof BlockExploded) {
+            view.getEffectManager().addEffect(((BlockExploded) event).getCell(), ShownEffect.EXPLOSION);
         } else {
-            System.err.println("unexpected event " + event);
-            System.exit(1);
+            throw new RuntimeException("unexpected event " + event);
         }
     }
 
     @Override
-    public synchronized void handleMouseRelease(int canvasX, int canvasY) {
+    public void handleMouseRelease(int canvasX, int canvasY) {
         int gridX = canvasX - GameView.GRID_OFFSET_X;
         int gridY = canvasY - GameView.GRID_OFFSET_Y;
 
@@ -133,15 +125,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
         }
     }
 
-    public synchronized void blockRemoved(CellCode atCell) {
-        view.getEffectManager().addEffect(atCell, ShownEffect.FADEAWAY);
-    }
-
-    public synchronized void blockExploded(CellCode atCell) {
-        view.getEffectManager().addEffect(atCell, ShownEffect.EXPLOSION);
-    }
-
-    synchronized void requestQuit() {
+    void requestQuit() {
         gameLoop.getModel().post(new GameOver());
     }
 }

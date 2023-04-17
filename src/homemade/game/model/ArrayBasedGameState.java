@@ -9,9 +9,6 @@ import homemade.game.model.cellstates.SimpleState;
 
 import java.util.Map;
 
-/**
- * Must be synchronized externally!
- */
 public class ArrayBasedGameState implements GameState {
     private CellState[] field;
     private Direction[] links;

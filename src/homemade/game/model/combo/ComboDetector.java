@@ -1,11 +1,14 @@
 package homemade.game.model.combo;
 
 import homemade.game.Combo;
-import homemade.game.controller.BlockEventHandler;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.loop.BlockExploded;
+import homemade.game.loop.BlockRemoved;
+import homemade.game.loop.EventPoster;
+import homemade.game.loop.UIEvent;
 import homemade.game.model.ComboEffect;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
@@ -16,17 +19,17 @@ import java.util.Set;
 public class ComboDetector {
     private FieldStructure structure;
     private CellMapReader cellMap;
-    private BlockEventHandler blockEventHandler;
+    private EventPoster<UIEvent> blockEventPoster;
 
     private int minCombo;
 
-    public ComboDetector(GameModelLinker linker, BlockEventHandler blockEventHandler) {
+    public ComboDetector(GameModelLinker linker, EventPoster<UIEvent> blockEventPoster) {
         structure = linker.getStructure();
         cellMap = linker.getMapReader();
 
-        this.blockEventHandler = blockEventHandler;
+        this.blockEventPoster = blockEventPoster;
 
-        minCombo = linker.getSettings().minCombo;
+        minCombo = linker.getSettings().getMinCombo();
     }
 
     public ComboPack findCombos(Set<CellCode> starts) {
@@ -87,16 +90,18 @@ public class ComboDetector {
                                 Set<CellCode> vicinity = currentCell.getVicinity();
                                 comboCells.addAll(vicinity);
 
-                                for (CellCode cell : vicinity)
-                                    if (cellMap.getCell(cell).isAliveBlock())
-                                        blockEventHandler.blockRemoved(cell);
+                                for (CellCode cell : vicinity) {
+                                    if (cellMap.getCell(cell).isAliveBlock()) {
+                                        blockEventPoster.post(new BlockRemoved(cell));
+                                    }
+                                }
 
-                                blockEventHandler.blockExploded(currentCell);
+                                blockEventPoster.post(new BlockExploded(currentCell));
                             }
                         }
 
                         comboCells.add(currentCell);
-                        blockEventHandler.blockRemoved(currentCell);
+                        blockEventPoster.post(new BlockRemoved(currentCell));
 
                         lastCell = nextCell;
                     }

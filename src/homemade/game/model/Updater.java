@@ -16,8 +16,6 @@ import java.util.Set;
 
 /**
  * Used by GameModelLinker for tasks such as updating cellmap and gamestate
- * <p>
- * Must be synchronized externally
  */
 class Updater {
     private FieldStructure structure;
