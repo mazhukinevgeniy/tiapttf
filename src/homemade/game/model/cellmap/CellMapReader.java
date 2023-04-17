@@ -11,8 +11,6 @@ import homemade.game.model.CellState;
 public interface CellMapReader {
     CellState getCell(CellCode cellCode);
 
-    Direction getLinkDirection(CellCode cellA, CellCode cellB);
-
     Direction getLinkDirection(LinkCode linkCode);
 
     int getChainLength(LinkCode linkCode);

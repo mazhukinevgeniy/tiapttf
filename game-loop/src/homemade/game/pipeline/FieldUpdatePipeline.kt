@@ -17,7 +17,7 @@ import homemade.game.state.MutableGameState
  * | lesser parts of state change: multiplier, state
  * |----
  */
-class FieldUpdatePipeline(val uiLoop: UILoop) : GameEventHandler<GameEvent> {
+class FieldUpdatePipeline(val uiLoop: UILoop, private val mutableGameState: MutableGameState) : GameEventHandler<GameEvent> {
 
     override fun handle(event: GameEvent) {
         when (event) {
@@ -28,13 +28,9 @@ class FieldUpdatePipeline(val uiLoop: UILoop) : GameEventHandler<GameEvent> {
     }
 
     private fun handleBatchedBlockChange(event: BatchedBlockChange) {
-        val updateSummary = null
-
         //don't necessarily post to ui loop, but next snapshot must be aware of the results
         //does it mean that we're the one who makes them?
         TODO("impl")
-
-        val mutableGameState = MutableGameState() // prolly just a member?
 
         val processingInfo = ProcessingInfo(emptySet(), event.reason)
         do {

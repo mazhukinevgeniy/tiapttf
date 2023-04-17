@@ -42,10 +42,6 @@ public class CellMap implements CellMapReader {
         return cells[cellCode.hashCode()];
     }
 
-    public Direction getLinkDirection(CellCode cellA, CellCode cellB) {
-        return getLinkDirection(structure.getLinkCode(cellA, cellB));
-    }
-
     public Direction getLinkDirection(LinkCode linkCode) {
         return links[linkCode.hashCode()].direction;
     }
