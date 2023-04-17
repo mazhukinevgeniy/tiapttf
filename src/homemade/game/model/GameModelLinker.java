@@ -3,7 +3,6 @@ package homemade.game.model;
 import homemade.game.ExtendedGameState;
 import homemade.game.GameSettings;
 import homemade.game.GameSettings.GameMode;
-import homemade.game.controller.GameController;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.loop.GameLoop;
@@ -45,7 +44,7 @@ public class GameModelLinker {
 
     private Updater updater;
 
-    public GameModelLinker(FieldStructure structure, GameSettings settings, GameController controller, GameLoop gameLoop) {
+    public GameModelLinker(FieldStructure structure, GameSettings settings, GameLoop gameLoop) {
         this.structure = structure;
         this.settings = settings;
         this.gameLoop = gameLoop;
@@ -58,7 +57,7 @@ public class GameModelLinker {
 
         state = new ArrayBasedGameState(structure);
 
-        ComboDetector comboDetector = new ComboDetector(this, controller);
+        ComboDetector comboDetector = new ComboDetector(this, gameLoop.getUi());
         GameScore gameScore = new GameScore(this);
 
         updater = new Updater(this, comboDetector, cellMap, gameScore, state);

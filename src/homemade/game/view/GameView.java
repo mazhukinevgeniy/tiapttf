@@ -37,10 +37,6 @@ public class GameView {
 
 
     public GameView(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container) {
-        initialize(structure, settings, viewListener, container);
-    }
-
-    private synchronized void initialize(FieldStructure structure, GameSettings settings, ViewListener viewListener, Container container) {
         effectManager = new EffectManager();
         fpsTracker = new FpsTracker();
 

@@ -10,8 +10,6 @@ import java.util.Set;
 
 /**
  * Represents a set of combos, created "simultaneously".
- * <p>
- * Must be synchronized externally!
  */
 public class ComboPack {
     private ArrayList<Combo> combos;
