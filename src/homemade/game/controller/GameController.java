@@ -5,7 +5,7 @@ import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.loop.*;
-import homemade.game.model.GameModel;
+import homemade.game.model.GameModelLinker;
 import homemade.game.view.GameView;
 import homemade.game.view.ShownEffect;
 import homemade.menu.controller.MenuManager;
@@ -28,7 +28,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
     private Frame frame;
     private FieldStructure structure;
 
-    private GameModel model;
+    private GameModelLinker model;
     private GameView view;
     private GameLoop gameLoop;
 
@@ -54,8 +54,9 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
         ViewListener viewListener = new ViewListener(this, this, keyboard);
 
         view = new GameView(structure, settings, viewListener, container);
-        model = new GameModel(this, structure, settings, gameLoop);
+        model = new GameModelLinker(structure, settings, this, gameLoop);
         //model must be initialized after view because there could be combos in initialization
+        //TODO: if everything is done with eventLoop channels, this observation is invalid
 
         mainTimer = new Timer(5, new ActionListener() {
             long previousTime = 0;
@@ -86,7 +87,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             view.dispose();
             mainTimer.stop();
 
-            int score = model.copyGameState().getGameState().gameScore();
+            int score = model.lastGameState.getGameState().gameScore();
             String name = new StringBuilder()
                     .append("sp").append(settings.spawn)
                     .append("c").append(settings.minCombo)
@@ -100,7 +101,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
             //need to post this on UI thread channel
             menuManager.switchToMenu(MenuManager.MenuCode.MAIN_MENU);
         } else if (event instanceof SnapshotReady) {
-            ExtendedGameState state = model.copyGameState();
+            ExtendedGameState state = model.lastGameState;
 
             frame.setTitle("score: " + state.getGameState().gameScore() + ", multiplier: " + state.getGameState().globalMultiplier());
             view.renderNextFrame(state.getGameState(), state.getSelectionState());
@@ -128,7 +129,7 @@ public class GameController implements BlockEventHandler, MouseInputHandler, Gam
 
             CellCode eventCell = structure.getCellCode(cellX, cellY);
 
-            model.tryToActivateCell(eventCell);
+            gameLoop.getModel().post(new UserClick(eventCell));
         }
     }
 

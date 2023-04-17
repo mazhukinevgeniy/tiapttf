@@ -4,6 +4,9 @@ import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.FieldStructure;
+import homemade.game.loop.GameEvent;
+import homemade.game.loop.GameEventHandler;
+import homemade.game.loop.UserClick;
 import homemade.game.model.GameModelLinker;
 import homemade.game.model.cellmap.CellMapReader;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockSelection {
+public class BlockSelection implements GameEventHandler<GameEvent> {
     private GameModelLinker linker;
     private CellMapReader cellMapReader;
 
@@ -33,7 +36,13 @@ public class BlockSelection {
         updateSelectionState();
     }
 
-    public synchronized void activateCell(CellCode eventCell) {
+    @Override
+    public void handle(GameEvent event) {
+        if (!(event instanceof UserClick)) {
+            return;
+        }
+        CellCode eventCell = ((UserClick) event).getCellCode();
+
         if (cellMapReader.getCell(eventCell).isMovableBlock()) {
             selection.clear();
             selection.add(eventCell);
@@ -41,25 +50,11 @@ public class BlockSelection {
             updateSelectionState();
         } else if (selection.size() == 1 && state.canMoveTo(eventCell)) {
             CellCode selectedCell = selection.get(0);
-            tryMove(selectedCell, eventCell, true);
-        }
-
-        System.out.println("apparently, mouse released at " + eventCell.getX() + ", " + eventCell.getY());
-    }
-
-    public synchronized void tryToMoveSelectionIn(Direction direction) {
-        if (this.selection.size() == 1) {
-            CellCode cellCode = selection.get(0);
-
-            if (!cellCode.onBorder(direction)) {
-                CellCode eventCell = cellCode.neighbour(direction);
-
-                tryMove(cellCode, eventCell, false);
-            }
+            tryMove(selectedCell, eventCell);
         }
     }
 
-    private void tryMove(CellCode selectedCell, CellCode eventCell, boolean moveSelectionOnFail) {
+    private void tryMove(CellCode selectedCell, CellCode eventCell) {
         if (eventCell != selectedCell) {
             linker.tryMove(selectedCell, eventCell);
 
@@ -68,14 +63,11 @@ public class BlockSelection {
             boolean selectedCellOccupied = cellMapReader.getCell(selectedCell).isAliveBlock();
             boolean eventCellOccupied = cellMapReader.getCell(eventCell).isAliveBlock();
 
-            if (selectedCellOccupied) //I think that means move failed
-            {
-                if (moveSelectionOnFail)
-                    selection.add(eventCell);
-                else
-                    selection.add(selectedCell);
-            } else if (eventCellOccupied)
+            if (selectedCellOccupied) {
                 selection.add(eventCell);
+            } else if (eventCellOccupied) {
+                selection.add(eventCell);
+            }
 
             updateSelectionState();
         }
