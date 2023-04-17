@@ -13,7 +13,10 @@ import homemade.game.model.spawn.SpawnManager
 import homemade.game.scenarios.GameOverScenario
 import homemade.game.scenarios.RealtimeSpawningScenario
 import homemade.game.scenarios.UserInputScenario
+import homemade.game.state.ConfigState
 import homemade.game.state.GameState
+import homemade.game.state.MutableFieldState
+import homemade.game.state.MutableGameState
 import homemade.game.state.immutable.GameStateEncoder
 import homemade.game.state.impl.BlockSelection
 import java.util.*
@@ -26,9 +29,10 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
     var selection: BlockSelection
     private val updater: Updater
     private var lastGameState: GameState
+    private val trueState = MutableGameState(MutableFieldState(), selection, ConfigState())
 
     init {
-        //new FieldUpdatePipeline(gameLoop, new MutableGameState(structure));
+        new FieldUpdatePipeline(gameLoop, trueState)
         val blockValuePool = BlockValuePool(settings.maxBlockValue, structure.fieldSize)
         cellMap = CellMap(structure, blockValuePool)
         storedEffects = LinkedList()
@@ -55,10 +59,9 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
 
     override fun handle(event: GameEvent) {
         if (event is CreateSnapshot) {
-            lastGameState = GameState(
-                    state.createImmutableCopy(), selection.copySelectionState()
-            )
-            gameLoop.ui.post(SnapshotReady(lastGameState))
+            gameLoop.ui.post(SnapshotReady(trueState.createImmutable()))
+        } else {
+            throw RuntimeException("unknown $event")
         }
     }
 
@@ -79,7 +82,7 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
 
     @Synchronized
     fun modifyGlobalMultiplier(change: Int) {
-        val oldMultiplier = state.globalMultiplier
+        val oldMultiplier = trueState.configState.globalMultiplier
         val rawMultiplier = oldMultiplier + change
         val newMultiplier = Math.max(1, rawMultiplier)
         if (oldMultiplier != newMultiplier) {
@@ -98,7 +101,7 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
 
     fun tryMove(moveFromCell: CellCode, moveToCell: CellCode) {
         val repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
-                state.globalMultiplier == 1
+                trueState.configState.globalMultiplier == 1
         val cellFrom = cellMap.getCell(moveFromCell)
         val cellTo = cellMap.getCell(moveToCell)
         if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
@@ -120,11 +123,11 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
             val comboPackTier = updater.comboPackTier()
             ComboEffectVendor().addComboEffectsForTier(storedEffects, comboPackTier)
             updater.takeChanges(spawner.markBlocksWithEffects(storedEffects))
-            selection.updateSelectionState()
-            updater.flush(state.globalMultiplier)
+            trueState.selectionState.updateSelectionState()
+            updater.flush(trueState.configState.globalMultiplier)
         }
         if (state.getNumberOfBlocks() == structure.fieldSize) {
-            val multiplier = state.globalMultiplier
+            val multiplier = trueState.configState.globalMultiplier
             if (multiplier > 1) {
                 modifyGlobalMultiplier(-multiplier)
                 updater.takeChanges(spawner.removeRandomBlocks())

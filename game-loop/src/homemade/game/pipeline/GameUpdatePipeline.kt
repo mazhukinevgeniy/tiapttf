@@ -1,7 +1,10 @@
 package homemade.game.pipeline
 
-import homemade.game.fieldstructure.CellCode
 import homemade.game.loop.*
+import homemade.game.pipeline.stages.BlockProcessingStage
+import homemade.game.pipeline.stages.ComboProcessingStage
+import homemade.game.pipeline.stages.LinkProcessingStage
+import homemade.game.pipeline.stages.SelectionProcessingStage
 import homemade.game.state.*
 import homemade.game.state.immutable.GameStateEncoder
 
@@ -19,22 +22,26 @@ import homemade.game.state.immutable.GameStateEncoder
  * | lesser parts of state change: multiplier, state
  * |----
  */
-class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: MutableFieldState) : GameEventHandler<GameEvent> {
-    private var isDirty = false
+class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: MutableGameState) : GameEventHandler<GameEvent> {
     private val uiLoop = gameLoop.ui
-    private var snapshot: FieldState = GameStateEncoder().encode(mutableGameState)
 
     init {
         gameLoop.model.subscribe<BatchedBlockChange>(this)
         gameLoop.model.subscribe<CreateSnapshot>(this)
+        gameLoop.model.subscribe<UserClick>(this)
     }
 
     override fun handle(event: GameEvent) {
         when (event) {
             is BatchedBlockChange -> handleBatchedBlockChange(event)
             is CreateSnapshot -> handleCreateSnapshot(event)
+            is UserClick -> handleUserInput(event)
             else -> throw RuntimeException("bad subscription $event")
         }
+    }
+
+    private fun handleUserInput(event: UserClick) {
+        TODO("impl")
     }
 
     private fun handleBatchedBlockChange(event: BatchedBlockChange) {
@@ -61,18 +68,6 @@ class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Muta
     }
 
     private fun handleCreateSnapshot(event: CreateSnapshot) {
-        if (isDirty) {
-            isDirty = false
-            snapshot = GameStateEncoder().encode(mutableGameState)
-        }
-        uiLoop.post(SnapshotReady(GameState(snapshot, object : SelectionState {
-            override fun canMoveTo(cellCode: CellCode?): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun isSelected(cellCode: CellCode?): Boolean {
-                TODO("Not yet implemented")
-            }
-        })))
+        uiLoop.post(SnapshotReady(mutableGameState.createImmutable()))
     }
 }

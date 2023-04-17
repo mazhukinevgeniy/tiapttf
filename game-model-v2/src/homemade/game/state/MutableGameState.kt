@@ -5,8 +5,8 @@ import homemade.game.state.impl.SpawnPeriod
 
 class MutableGameState(
         override var fieldState: MutableFieldState,
-        override var selectionState: SelectionState,
-        override var configState: ConfigState
+        override var selectionState: MutableSelectionState,
+        override var configState: MutableConfigState
 ) : GameState() {
     private var isDirtyField = false
     private var isDirtySelection = false
@@ -24,9 +24,9 @@ class MutableGameState(
         } else lastSnapshot.fieldState
         val selectionState = if (isDirtySelection) {
             isDirtySelection = false
-            selectionState.createcopy()
+            selectionState.copySelectionState()
         } else lastSnapshot.selectionState
-        val config = configState.createcopy()
+        val config = configState.copyConfigState()
 
         lastSnapshot = object : GameState() {
             val currentSpawnPeriod = this@MutableGameState.currentSpawnPeriod()
