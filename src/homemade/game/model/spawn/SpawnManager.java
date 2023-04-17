@@ -3,19 +3,13 @@ package homemade.game.model.spawn;
 import homemade.game.GameSettings;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.loop.GameEvent;
-import homemade.game.loop.GameEventHandler;
-import homemade.game.loop.GameOver;
-import homemade.game.loop.TimeElapsed;
 import homemade.game.model.*;
 import homemade.game.model.cellmap.CellMapReader;
 
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SpawnManager implements GameEventHandler<GameEvent> {
-    private SpawnTimer timer;
-
+public class SpawnManager {
     private BlockSpawner spawner;
     private CellMarker cellMarker;
 
@@ -33,22 +27,6 @@ public class SpawnManager implements GameEventHandler<GameEvent> {
         GameSettings settings = linker.getSettings();
         GameSettings.GameMode mode = settings.gameMode;
         simultaneousSpawn = settings.spawn;
-
-        if (mode == GameSettings.GameMode.TURN_BASED)
-            timer = new SpawnTimer.EmptyTimer();
-        else if (mode == GameSettings.GameMode.REAL_TIME)
-            timer = new DynamicPeriodTimer(linker, settings);
-        else
-            throw new RuntimeException("unknown game mode");
-    }
-
-    @Override
-    public void handle(GameEvent event) {
-        if (event instanceof GameOver) {
-            timer.stop();
-        } else if (event instanceof TimeElapsed) {
-            timer.timeElapsed(((TimeElapsed) event).getDiffMs());
-        }
     }
 
     public Map<CellCode, CellState> spawnBlocks() {
@@ -72,9 +50,5 @@ public class SpawnManager implements GameEventHandler<GameEvent> {
 
     public Map<CellCode, CellState> removeRandomBlocks() {
         return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.EMPTY, 25);
-    }
-
-    public SpawnTimer spawnTimer() {
-        return timer;
     }
 }

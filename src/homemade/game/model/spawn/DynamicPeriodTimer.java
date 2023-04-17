@@ -1,36 +1,41 @@
 package homemade.game.model.spawn;
 
 import homemade.game.GameSettings;
+import homemade.game.loop.*;
 import homemade.game.model.GameModelLinker;
 
-class DynamicPeriodTimer implements SpawnTimer {
+public class DynamicPeriodTimer implements GameEventHandler<GameEvent> {
     private SpawnPeriod period;
 
     private GameModelLinker linker;
 
     private boolean paused = false;
+    private boolean stopped = false;
 
     private int timeElapsed = 0;
 
-    DynamicPeriodTimer(GameModelLinker linker, GameSettings settings) {
+    public DynamicPeriodTimer(GameModelLinker linker, GameSettings settings) {
         this.linker = linker;
 
         period = SpawnPeriod.newFastStart(linker, settings);
     }
 
     @Override
-    public void stop() {
-        paused = true;
+    public void handle(GameEvent event) {
+        if (event instanceof GameOver) {
+            stopped = true;
+        } else if (event instanceof TimeElapsed) {
+            timeElapsed(((TimeElapsed) event).getDiffMs());
+        } else if (event instanceof PauseToggle) {
+            paused = !paused;
+        } else {
+            System.err.println("unexpected event " + event);
+            System.exit(1);
+        }
     }
 
-    @Override
-    public void toggleSpawnPause() {
-        paused = !paused;
-    }
-
-    @Override
-    public void timeElapsed(int time) {
-        if (paused) {
+    private void timeElapsed(int time) {
+        if (paused || stopped) {
             return;
         }
         timeElapsed += time;
