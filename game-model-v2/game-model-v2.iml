@@ -25,5 +25,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="jetbrains.kotlinx.coroutines.core" level="project" />
+    <orderEntry type="module" module-name="field-structure" />
   </component>
 </module>

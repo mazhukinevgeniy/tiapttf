@@ -1,7 +1,12 @@
 package homemade.game.loop
 
 import homemade.game.fieldstructure.CellCode
-import homemade.game.model.cellstates.BlockState
+import homemade.game.model.CellState
+
+enum class ChangeReason {
+    UserInput,
+    BlockSpawn
+}
 
 sealed class GameEvent
 
@@ -11,8 +16,8 @@ object SaveAndQuit : GameEvent()
 object PauseToggle : GameEvent()
 
 // rules-generated
-class ItemSpawn(val cellCode: CellCode, val block: BlockState) : GameEvent()
 class DelayedEvent(var delayMs: Int, val event: GameEvent) : GameEvent()
+class BatchedBlockChange(val map: Map<CellCode, CellState>, val reason: ChangeReason) : GameEvent()
 class GameOver(val countdown: Int = 5) : GameEvent()
 
 // reality-generated
