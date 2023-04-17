@@ -17,7 +17,7 @@ import javax.swing.Timer
 
 class GameController(private val menuManager: MenuManager, private val frame: Frame, container: Container?, private val settings: GameSettings, private val records: Records) : MouseInputHandler, GameEventHandler<UIEvent> {
     private val structure: FieldStructure = FieldStructure()
-    private val gameLoop: GameLoop = GameLoop() //TODO convert to kotlin to subscribe normally
+    private val gameLoop: GameLoop = GameLoop()
     private val keyboard: GameKeyboard = GameKeyboard(gameLoop.model)
     private val model: GameModelLinker
     private val view: GameView

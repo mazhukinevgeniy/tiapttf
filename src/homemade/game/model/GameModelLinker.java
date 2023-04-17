@@ -49,6 +49,8 @@ public class GameModelLinker {
         this.settings = settings;
         this.gameLoop = gameLoop;
 
+        //new FieldUpdatePipeline(gameLoop, new MutableGameState(structure));
+
 
         BlockValuePool blockValuePool = new BlockValuePool(settings.getMaxBlockValue(), structure.fieldSize);
         cellMap = new CellMap(structure, blockValuePool);

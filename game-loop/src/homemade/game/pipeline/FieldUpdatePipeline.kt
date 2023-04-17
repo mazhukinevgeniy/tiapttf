@@ -1,6 +1,7 @@
 package homemade.game.pipeline
 
 import homemade.game.loop.*
+import homemade.game.state.GameState
 import homemade.game.state.GameStateEncoder
 import homemade.game.state.MutableGameState
 
@@ -18,7 +19,15 @@ import homemade.game.state.MutableGameState
  * | lesser parts of state change: multiplier, state
  * |----
  */
-class FieldUpdatePipeline(val uiLoop: UILoop, private val mutableGameState: MutableGameState) : GameEventHandler<GameEvent> {
+class FieldUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: MutableGameState) : GameEventHandler<GameEvent> {
+    private var isDirty = false
+    private val uiLoop = gameLoop.ui
+    private var snapshot: GameState = GameStateEncoder().encode(mutableGameState)
+
+    init {
+        gameLoop.model.subscribe<BatchedBlockChange>(this)
+        gameLoop.model.subscribe<CreateSnapshot>(this)
+    }
 
     override fun handle(event: GameEvent) {
         when (event) {
@@ -31,6 +40,7 @@ class FieldUpdatePipeline(val uiLoop: UILoop, private val mutableGameState: Muta
     private fun handleBatchedBlockChange(event: BatchedBlockChange) {
         //don't necessarily post to ui loop, but next snapshot must be aware of the results
         //does it mean that we're the one who makes them?
+        isDirty = true
         val previous = GameStateEncoder().encode(mutableGameState)
         TODO("impl")
 
@@ -51,6 +61,10 @@ class FieldUpdatePipeline(val uiLoop: UILoop, private val mutableGameState: Muta
     }
 
     private fun handleCreateSnapshot(event: CreateSnapshot) {
-        TODO("impl")
+        if (isDirty) {
+            isDirty = false
+            snapshot = GameStateEncoder().encode(mutableGameState)
+        }
+        uiLoop.post(SnapshotReady)
     }
 }
