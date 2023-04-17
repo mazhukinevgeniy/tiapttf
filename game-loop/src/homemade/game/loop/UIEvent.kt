@@ -9,3 +9,5 @@ object SnapshotReady : UIEvent()
 
 class BlockRemoved(val x: Int, val y: Int) : UIEvent()
 class BlockExploded(val x: Int, val y: Int) : UIEvent()
+
+class MultiplierChanged(val diff: Int) : UIEvent()
