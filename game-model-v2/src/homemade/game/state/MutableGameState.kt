@@ -2,20 +2,11 @@ package homemade.game.state
 
 import homemade.game.fieldstructure.CellCode
 import homemade.game.fieldstructure.Direction
+import homemade.game.fieldstructure.FieldStructure
 import homemade.game.fieldstructure.LinkCode
 import homemade.game.model.CellState
 
-class MutableGameState : GameState {
-    override val gameScore: Int
-        get() = TODO("Not yet implemented")
-    override val numberOfMovableBlocks: Int
-        get() = TODO("Not yet implemented")
-    override val numberOfBlocks: Int
-        get() = TODO("Not yet implemented")
-    override val spawnsDenied: Int
-        get() = TODO("Not yet implemented")
-    override val globalMultiplier: Int
-        get() = TODO("Not yet implemented")
+class MutableGameState(structure: FieldStructure) : GameState(structure) {
 
     override fun getCellState(cellCode: CellCode): CellState? {
         TODO("Not yet implemented")
