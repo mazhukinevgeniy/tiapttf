@@ -1,4 +1,4 @@
-package homemade.game;
+package homemade.game.model;
 
 import java.util.EnumSet;
 import java.util.Set;

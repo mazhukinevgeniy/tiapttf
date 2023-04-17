@@ -1,8 +1,8 @@
 package homemade.game.view.layers;
 
-import homemade.game.Cell;
-import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
+import homemade.game.model.Cell;
+import homemade.game.model.CellState;
 import homemade.resources.blocks.BlockAssets;
 
 import java.awt.*;

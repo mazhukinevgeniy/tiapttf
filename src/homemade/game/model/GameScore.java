@@ -26,7 +26,7 @@ class GameScore {
 
         if (packScore != 0)
             synchronized (this) {
-                int globalMultiplier = linker.lastGameState().globalMultiplier();
+                int globalMultiplier = linker.copyGameState().getGameState().globalMultiplier();
                 packScore *= pack.packTier() * globalMultiplier;
 
                 score += packScore;

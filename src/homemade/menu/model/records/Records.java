@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 //TODO: make sure it's synchronized and everything is saved when user closes application
 public class Records {
@@ -47,7 +46,7 @@ public class Records {
         }
     }
 
-    public void add(int score, String playerName, LocalDateTime dateTime) {
+    synchronized public void add(int score, String playerName, LocalDateTime dateTime) {
         Record record = new Record(score, playerName, dateTime);
 
         int index = Collections.binarySearch(records, record);
@@ -56,12 +55,7 @@ public class Records {
         records.add(index, record);
         cullRecords();
 
-        if (new Random().nextInt(10) < 1) //we don't want to rewrite save every time but we can't let it just grow
-        {
-            rewriteSave();
-        } else {
-            save.addRecord(record);
-        }
+        save.addRecord(record);
     }
 
     public List<Record> getRecords() {

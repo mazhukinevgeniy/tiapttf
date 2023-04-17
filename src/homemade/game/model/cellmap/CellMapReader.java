@@ -1,9 +1,9 @@
 package homemade.game.model.cellmap;
 
-import homemade.game.CellState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.CellState;
 
 /**
  * Use it to be sure your class has read-only access to CellMap
