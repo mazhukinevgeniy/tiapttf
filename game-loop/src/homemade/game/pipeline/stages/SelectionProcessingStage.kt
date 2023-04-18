@@ -1,15 +1,12 @@
 package homemade.game.pipeline.stages
 
 import homemade.game.fieldstructure.CellCode
-import homemade.game.pipeline.ChangedData
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.MutableGameState
 
 class SelectionProcessingStage : PipelineStage() {
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
-        processingInfo.changedData.remove(ChangedData.SELECTION)
-
         val currentSelection = state.selectionState.selection
         val currentCellsToMove = state.selectionState.cellsToMove
 
@@ -19,9 +16,9 @@ class SelectionProcessingStage : PipelineStage() {
         }
 
         if (!state.fieldState.getCellState(currentSelection).isAliveBlock) {
-            state.isDirtySelection = true
-            state.selectionState.selection = null
-            state.selectionState.cellsToMove = HashSet()
+            val mutableSelection = state.changeSelection()
+            mutableSelection.selection = null
+            mutableSelection.cellsToMove = HashSet()
             return
         }
 
@@ -43,8 +40,8 @@ class SelectionProcessingStage : PipelineStage() {
             }
         }
         if (accessible != currentCellsToMove) {
-            state.isDirtySelection = true
-            state.selectionState.cellsToMove = accessible
+            val mutableSelection = state.changeSelection()
+            mutableSelection.cellsToMove = accessible
         }
     }
 }

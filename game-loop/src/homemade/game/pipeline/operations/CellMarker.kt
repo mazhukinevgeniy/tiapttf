@@ -77,8 +77,8 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
     }
 }
 
-class CellMarker(blockValuePool: BlockValuePool, private val state: MutableGameState) {
-    private val impl = CellMarkerImpl(blockValuePool, state.fieldState)
+class CellMarker(private val state: MutableGameState) {
+    private val impl = CellMarkerImpl(state.changeField().blockValuePool, state.fieldState)
 
     private val simultaneousSpawn = state.configState.settings.spawn
     private fun getCellIterator(): Iterator<CellCode> {

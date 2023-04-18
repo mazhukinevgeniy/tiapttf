@@ -45,13 +45,10 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     }
 
     private fun handleUserInput(event: UserClick) {
-        val processingInfo = ProcessingInfo(event, mutableGameState.configState.copyConfigState())
+        val processingInfo = ProcessingInfo(event, mutableGameState.changeConfig().copyConfigState())
         UserInputProcessingStage().process(mutableGameState, processingInfo)
 
         //???
-        if (ChangedData.SELECTION in processingInfo.changedData) {
-            //TODO dont care, just run processing?
-        }
         SelectionProcessingStage().process(mutableGameState, processingInfo)
 
 
@@ -60,7 +57,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {
-        val processingInfo = ProcessingInfo(event, mutableGameState.configState.copyConfigState())
+        val processingInfo = ProcessingInfo(event, mutableGameState.changeConfig().copyConfigState())
         do {
             SpawnProcessingStage().process(mutableGameState, processingInfo)
             LinkProcessingStage().process(mutableGameState, processingInfo)

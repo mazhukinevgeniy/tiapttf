@@ -4,7 +4,6 @@ import homemade.game.fieldstructure.CellCode
 import homemade.game.loop.UserClick
 import homemade.game.model.Cell
 import homemade.game.model.cellstates.SimpleState
-import homemade.game.pipeline.ChangedData
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.MutableGameState
@@ -15,8 +14,7 @@ class UserInputProcessingStage : PipelineStage() {
 
         val eventCell = event.cellCode
         if (state.fieldState.getCellState(eventCell).isMovableBlock) {
-            state.selectionState.selection = eventCell
-            processingInfo.changedData.add(ChangedData.SELECTION)
+            state.changeSelection().selection = eventCell
         } else {
             val currentSelection = state.selectionState.selection
             if (currentSelection?.let { it in state.selectionState.cellsToMove } == true) {
@@ -32,20 +30,19 @@ class UserInputProcessingStage : PipelineStage() {
         val cellTo = state.fieldState.getCellState(moveToCell)
 
         if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
-            processingInfo.changedData.add(ChangedData.SELECTION)
-
             val repercussions = cellTo.type() == Cell.MARKED_FOR_SPAWN && state.configState.globalMultiplier == 1
             if (repercussions) {
-                state.configState.spawnsDenied++
+                state.changeConfig().spawnsDenied++
             }
             val stateBehind = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
 
-            processingInfo.updatedCells[moveToCell] = cellFrom
-            processingInfo.updatedCells[moveFromCell] = stateBehind
-
+            state.changeField().applyCascadeChanges(mapOf(
+                    moveToCell to cellFrom,
+                    moveFromCell to stateBehind
+            ))
             // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick, I guess
             // TODO make sure that it's invalidated properly if cell is consumed in combo
-            state.selectionState.selection = moveToCell
+            state.changeSelection().selection = moveToCell
 
             //TODO takeComboChanges whatever it means
         }

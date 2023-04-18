@@ -60,9 +60,8 @@ abstract public class CellMap implements FieldState {
         return links[linkCode.hashCode()].chainLength;
     }
 
-    public Set<CellCode> applyCascadeChanges(Map<CellCode, CellState> changes) {
+    public void applyCascadeChanges(Map<CellCode, CellState> changes) {
         Set<CellCode> keys = changes.keySet();
-        Set<CellCode> changedCells = new HashSet<CellCode>(keys);
 
         Set<LinkCode> linksToUpdate = new HashSet<>(keys.size() * 4);
 
@@ -92,9 +91,11 @@ abstract public class CellMap implements FieldState {
         }
 
         for (CellState removedBlock : removedBlocks) {
-            Integer val = Integer.valueOf(removedBlock.value());
+            Integer val = removedBlock.value();
 
             if (!addedBlockNumbers.contains(val)) {
+                // so, this is correct, if we process move as single update,
+                // and it basically means, that we shouldn't stack removals/additions from different sources
                 blockValuePool.freeBlockValue(val);
             }
         }
@@ -102,8 +103,6 @@ abstract public class CellMap implements FieldState {
         for (LinkCode linkCode : linksToUpdate) {
             updateLinkValue(linkCode);
         }
-
-        return changedCells;
     }
 
     private void updateLinkValue(LinkCode linkCode) {
