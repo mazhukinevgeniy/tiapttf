@@ -1,11 +1,11 @@
 package homemade.game.view.layers;
 
-import homemade.game.GameSettings;
-import homemade.game.GameState;
-import homemade.game.SelectionState;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
+import homemade.game.model.GameSettings;
+import homemade.game.state.FieldState;
+import homemade.game.state.SelectionState;
 import homemade.game.view.EffectManager;
 import homemade.game.view.GameView;
 import homemade.resources.Assets;
@@ -33,7 +33,7 @@ abstract public class RenderingLayer {
         return list;
     }
 
-    protected GameState state;
+    protected FieldState state;
     protected SelectionState selectionState;
     protected Graphics graphics;
     protected int canvasX;
@@ -45,7 +45,7 @@ abstract public class RenderingLayer {
         assets = Assets.getAssets();
     }
 
-    final public void renderLayer(FieldStructure structure, GameState state, SelectionState selection, Graphics graphics) {
+    final public void renderLayer(FieldStructure structure, FieldState state, SelectionState selection, Graphics graphics) {
         this.state = state;
         this.selectionState = selection;
         this.graphics = graphics;

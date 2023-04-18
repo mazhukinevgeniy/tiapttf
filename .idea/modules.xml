@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/field-structure/field-structure.iml" filepath="$PROJECT_DIR$/field-structure/field-structure.iml" />
       <module fileurl="file://$PROJECT_DIR$/game-loop/game-loop.iml" filepath="$PROJECT_DIR$/game-loop/game-loop.iml" />
       <module fileurl="file://$PROJECT_DIR$/game-model-v2/game-model-v2.iml" filepath="$PROJECT_DIR$/game-model-v2/game-model-v2.iml" />

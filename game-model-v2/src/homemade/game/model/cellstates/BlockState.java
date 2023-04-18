@@ -2,7 +2,7 @@ package homemade.game.model.cellstates;
 
 import homemade.game.model.Cell;
 import homemade.game.model.CellState;
-import homemade.game.model.ComboEffect;
+import homemade.game.model.combo.ComboEffect;
 
 public class BlockState extends CellState {
     private final boolean movable;

@@ -1,5 +1,6 @@
 package homemade.menu.model.settings;
 
+import homemade.game.model.GameSettings;
 import homemade.menu.model.save.SettingsSave;
 
 import java.util.ArrayList;
@@ -147,23 +148,20 @@ public class Settings {
         }
     }
 
-    public void setDefaultSettings() {
-        resetParameters(parameters);
-
-        updateAllParametersInSave();
-    }
-
-    private void resetParameters(Map<Code, ValidParameter<?>> parameters) {
-        for (Map.Entry<Code, ValidParameter<?>> param : parameters.entrySet()) {
-            ValidParameter<?> parameter = param.getValue();
-            parameter.setDefaultValue();
-        }
-    }
-
     private void updateAllParametersInSave() {
         for (Code code : Code.values()) {
             ValidParameter<?> parameter = parameters.get(code);
             updateParameterInSave(parameter);
         }
+    }
+
+    public GameSettings generateSettings() {
+        return new GameSettings(
+                get(Settings.Code.IS_REALTIME) ? GameSettings.GameMode.REAL_TIME : GameSettings.GameMode.TURN_BASED,
+                get(Settings.Code.COMBO_LENGTH),
+                get(Settings.Code.SIMULTANEOUS_SPAWN),
+                get(Settings.Code.SPAWN_PERIOD),
+                get(Settings.Code.MAX_BLOCK_VALUE)
+        );
     }
 }

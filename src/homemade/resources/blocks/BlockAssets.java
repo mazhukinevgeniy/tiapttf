@@ -1,6 +1,6 @@
 package homemade.resources.blocks;
 
-import homemade.game.model.ComboEffect;
+import homemade.game.model.combo.ComboEffect;
 import homemade.utils.AssetLoader;
 
 import java.awt.*;
@@ -25,22 +25,25 @@ public class BlockAssets extends AssetLoader {
         baseSprites[SelectionType.NOT_SELECTED.ordinal()] = "normal_block.png";
         baseSprites[SelectionType.NOT_SELECTABLE.ordinal()] = "immovable_block.png";
 
-        String[] effectSprites = new String[3];
-        effectSprites[ComboEffect.EXTRA_MULTIPLIER.ordinal()] = "tria.png";
-        effectSprites[ComboEffect.JUST_EXTRA_TIER.ordinal()] = "square.png";
-        effectSprites[ComboEffect.EXPLOSION.ordinal()] = "expl.png";
+        EnumMap<ComboEffect, String> comboSprites = new EnumMap<>(ComboEffect.class);
+        comboSprites.put(ComboEffect.EXTRA_MULTIPLIER, "tria.png");
+        comboSprites.put(ComboEffect.JUST_EXTRA_TIER, "square.png");
+        comboSprites.put(ComboEffect.EXPLOSION, "expl.png");
 
         for (SelectionType type : SelectionType.values()) {
             Map<ComboEffect, Image> map = new HashMap<>();
             assets.put(type, map);
 
             String base = baseSprites[type.ordinal()];
-            map.put(null, getImage(base));
+            map.put(ComboEffect.UNDEFINED_COMBO_EFFECT, getImage(base));
 
             for (ComboEffect effect : ComboEffect.values()) {
+                if (effect == ComboEffect.UNDEFINED_COMBO_EFFECT) {
+                    continue;
+                }
                 map.put(effect, stackSprites(new Image[]{
                         getImage(base),
-                        getImage(effectSprites[effect.ordinal()])
+                        getImage(comboSprites.get(effect))
                 }));
             }
         }
