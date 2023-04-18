@@ -27,10 +27,4 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         GameOverScenario(gameLoop, this)
     }
 
-    @Synchronized
-    fun killRandomBlocks() {
-        updater.takeChanges(spawner.spawnDeadBlocks())
-        updateStates()
-    }
-
 }

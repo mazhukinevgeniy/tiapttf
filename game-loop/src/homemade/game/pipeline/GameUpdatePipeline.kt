@@ -2,6 +2,7 @@ package homemade.game.pipeline
 
 import homemade.game.loop.*
 import homemade.game.model.GameSettings
+import homemade.game.pipeline.operations.CellMarker
 import homemade.game.pipeline.stages.*
 import homemade.game.pipeline.starters.RegularSpawnPipeline
 import homemade.game.pipeline.starters.TurnBasedInitPipeline
@@ -29,6 +30,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         gameLoop.model.subscribe<RequestBlockSpawning>(this)
         gameLoop.model.subscribe<CreateSnapshot>(this)
         gameLoop.model.subscribe<UserClick>(this)
+        gameLoop.model.subscribe<GameOver>(this)
 
         when (mutableGameState.configState.settings.gameMode) {
             GameSettings.GameMode.REAL_TIME -> RegularSpawnPipeline(mutableGameState, gameLoop.model)
@@ -41,6 +43,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
             is RequestBlockSpawning -> handleBlockSpawning(event)
             is CreateSnapshot -> handleCreateSnapshot(event)
             is UserClick -> handleUserInput(event)
+            is GameOver -> handleGameOver(event)
             else -> throw RuntimeException("bad subscription $event")
         }
     }
@@ -83,6 +86,16 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
 
         if (multiplierBefore != multiplierNow) {
             uiLoop.post(MultiplierChanged(multiplierNow - multiplierBefore))
+        }
+    }
+
+    private fun handleGameOver(gameOver: GameOver) {
+        if (gameOver.countdown == 0) {
+            uiLoop.post(ShutDown)
+        } else {
+            val info = ProcessingInfo(gameOver, mutableGameState.changeConfig().copyConfigState())
+            CellMarker(mutableGameState, info).spawnDeadBlocks()
+            gameEventPoster.post(DelayedEvent(200, GameOver(gameOver.countdown - 1)))
         }
     }
 
