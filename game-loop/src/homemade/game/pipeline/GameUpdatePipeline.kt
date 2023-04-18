@@ -45,6 +45,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     private fun handleUserInput(event: UserClick) {
         val processingInfo = ProcessingInfo(event)
         UserInputProcessingStage().process(mutableGameState, processingInfo)
+        
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {

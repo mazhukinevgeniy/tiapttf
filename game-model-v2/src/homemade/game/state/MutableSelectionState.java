@@ -1,21 +1,23 @@
 package homemade.game.state;
 
 import homemade.game.fieldstructure.CellCode;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 
 public class MutableSelectionState implements SelectionState {
-    public HashSet<CellCode> selection;
+    @Nullable
+    public CellCode selection;
     public HashSet<CellCode> cellsToMove;
 
-    public MutableSelectionState(HashSet<CellCode> selectionData, HashSet<CellCode> cellsToMove) {
-        this.selection = selectionData;
+    public MutableSelectionState(@Nullable CellCode selection, HashSet<CellCode> cellsToMove) {
+        this.selection = selection;
         this.cellsToMove = cellsToMove;
     }
 
     @Override
     public boolean isSelected(CellCode cellCode) {
-        return selection.contains(cellCode);
+        return selection == cellCode;
     }
 
     @Override
@@ -24,6 +26,6 @@ public class MutableSelectionState implements SelectionState {
     }
 
     public SelectionState copySelectionState() {
-        return new MutableSelectionState((HashSet<CellCode>) selection.clone(), (HashSet<CellCode>) cellsToMove.clone());
+        return new MutableSelectionState(selection, (HashSet<CellCode>) cellsToMove.clone());
     }
 }

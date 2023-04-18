@@ -25,22 +25,22 @@ class GameStateEncoder {
         val linkState = structure.linkCodeIterator.asSequence().map { source.getLinkBetweenCells(it) }.toList()
         val lengths = structure.linkCodeIterator.asSequence().map { source.getChainLength(it) }.toList()
 
-        override fun getCellState(cellCode: CellCode): CellState? {
-            if (cellCode.hashCode() in 0 until cellStates.size) {
+        override fun getCellState(cellCode: CellCode): CellState {
+            if (cellCode.hashCode() in cellStates.indices) {
                 return cellStates[cellCode.hashCode()]
             }
             throw RuntimeException("bad cell $cellCode in structure ${structure.width}x${structure.height}")
         }
 
         override fun getLinkBetweenCells(linkCode: LinkCode): Direction? {
-            if (linkCode.hashCode() in 0 until linkState.size) {
+            if (linkCode.hashCode() in linkState.indices) {
                 return linkState[linkCode.hashCode()]
             }
             throw RuntimeException("bad link $linkCode in structure ${structure.width}x${structure.height}")
         }
 
         override fun getChainLength(linkCode: LinkCode): Int {
-            if (linkCode.hashCode() in 0 until lengths.size) {
+            if (linkCode.hashCode() in lengths.indices) {
                 return lengths[linkCode.hashCode()]
             }
             throw RuntimeException("bad link $linkCode in structure ${structure.width}x${structure.height}")

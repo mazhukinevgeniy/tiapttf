@@ -1,32 +1,38 @@
 package homemade.game.pipeline.stages
 
 import homemade.game.fieldstructure.CellCode
+import homemade.game.pipeline.ChangedData
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.MutableGameState
 
 class SelectionProcessingStage : PipelineStage() {
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
+        processingInfo.changedData.remove(ChangedData.SELECTION)
+
         val currentSelection = state.selectionState.selection
         val currentCellsToMove = state.selectionState.cellsToMove
 
-        val leftoverList = currentSelection.filter { state.fieldState.getCellState(it)?.isAliveBlock ?: false }
-        if (leftoverList.size < currentSelection.size) {
-            state.isDirtySelection = true
-            state.selectionState.selection = leftoverList.toHashSet()
-        }
-        if (leftoverList.size > 1) {
-            throw RuntimeException("broken selection $leftoverList")
+        if (currentSelection == null) {
+            check(currentCellsToMove.isEmpty()) { "can't have possible moves if nothing is selected" }
+            return
         }
 
-        val visited = HashSet<CellCode>()
+        if (!state.fieldState.getCellState(currentSelection).isAliveBlock) {
+            state.isDirtySelection = true
+            state.selectionState.selection = null
+            state.selectionState.cellsToMove = HashSet()
+            return
+        }
+
+        val visited = hashSetOf(currentSelection)
         val accessible = HashSet<CellCode>()
-        val toCheck = leftoverList.elementAtOrNull(0)?.vicinity?.toMutableList() ?: ArrayList(0)
+        val toCheck = currentSelection.vicinity.toMutableList()
         while (toCheck.isNotEmpty()) {
             val next = toCheck.removeAt(toCheck.size - 1)
             if (next !in visited) {
                 visited.add(next)
-                if (state.fieldState.getCellState(next)?.isFreeForMove == true) {
+                if (state.fieldState.getCellState(next).isFreeForMove) {
                     accessible.add(next)
                     for (item in next.vicinity) {
                         if (item !in visited) {

@@ -8,7 +8,6 @@ import homemade.game.model.spawn.SpawnManager
 import homemade.game.pipeline.GameUpdatePipeline
 import homemade.game.scenarios.GameOverScenario
 import homemade.game.state.*
-import homemade.game.state.immutable.GameStateEncoder
 import homemade.game.state.impl.BlockValuePool
 import java.util.*
 
@@ -31,7 +30,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         val gameScore = GameScore(this)
         updater = Updater(this, comboDetector, cellMap, gameScore, state)
         spawner = SpawnManager(this, blockValuePool)
-        lastGameState = GameState(GameStateEncoder().encode(state), selection.copySelectionState())
         GameOverScenario(gameLoop, this)
     }
 

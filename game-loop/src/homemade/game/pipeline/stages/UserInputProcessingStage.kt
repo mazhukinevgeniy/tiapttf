@@ -1,49 +1,32 @@
 package homemade.game.pipeline.stages
 
 import homemade.game.fieldstructure.CellCode
-import homemade.game.loop.GameEvent
 import homemade.game.loop.UserClick
+import homemade.game.model.cellstates.SimpleState
+import homemade.game.pipeline.ChangedData
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.MutableGameState
 
 class UserInputProcessingStage : PipelineStage() {
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
-        TODO("Not yet implemented")
-    }
+        val event = processingInfo.sourceEvent as UserClick? ?: return
 
-    fun handle(event: GameEvent?) {
-        if (event !is UserClick) {
-            return
-        }
         val eventCell = event.cellCode
-        if (cellMapReader.getCell(eventCell).isMovableBlock()) {
-            selection.clear()
-            selection.add(eventCell)
-            updateSelectionState()
-        } else if (selection.size == 1 && state.canMoveTo(eventCell)) {
-            val selectedCell: CellCode = selection.get(0)
-            tryMove(selectedCell, eventCell)
-        }
-    }
-
-    private fun tryMove(selectedCell: CellCode, eventCell: CellCode) {
-        if (eventCell !== selectedCell) {
-            linker.tryMove(selectedCell, eventCell)
-            selection.clear()
-            val selectedCellOccupied: Boolean = cellMapReader.getCell(selectedCell).isAliveBlock()
-            val eventCellOccupied: Boolean = cellMapReader.getCell(eventCell).isAliveBlock()
-            if (selectedCellOccupied) {
-                selection.add(eventCell)
-            } else if (eventCellOccupied) {
-                selection.add(eventCell)
+        if (state.fieldState.getCellState(eventCell).isMovableBlock) {
+            state.selectionState.selection = eventCell
+            processingInfo.changedData.add(ChangedData.SELECTION)
+        } else {
+            val currentSelection = state.selectionState.selection
+            if (currentSelection?.let { it in state.selectionState.cellsToMove } == true) {
+                tryMove(currentSelection, eventCell, state, processingInfo)
             }
-            updateSelectionState()
         }
     }
 
-    /*
-    fun tryMove(moveFromCell: CellCode, moveToCell: CellCode) {
+    private fun tryMove(moveFromCell: CellCode, moveToCell: CellCode, state: MutableGameState, processingInfo: ProcessingInfo) {
+        check(moveFromCell != moveToCell)
+
         val repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
                 trueState.configState.globalMultiplier == 1
         val cellFrom = cellMap.getCell(moveFromCell)
@@ -60,5 +43,11 @@ class UserInputProcessingStage : PipelineStage() {
                 updateStates()
             }
         }
-    }*/
+
+        // after move is resolved.
+        // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick, I guess
+        if (state.fieldState.getCellState(moveToCell).isAliveBlock) {
+            state.selectionState.selection = moveToCell
+        }
+    }
 }

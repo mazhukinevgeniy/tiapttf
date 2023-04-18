@@ -44,7 +44,6 @@ abstract public class CellMap implements FieldState {
         return structure;
     }
 
-    @Nullable
     @Override
     public CellState getCellState(@NotNull CellCode cellCode) {
         return cells[cellCode.hashCode()];

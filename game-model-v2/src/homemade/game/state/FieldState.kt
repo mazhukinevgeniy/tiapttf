@@ -9,7 +9,7 @@ import homemade.game.model.CellState
 interface FieldState {
     val structure: FieldStructure
 
-    fun getCellState(cellCode: CellCode): CellState?
+    fun getCellState(cellCode: CellCode): CellState
     fun getLinkBetweenCells(linkCode: LinkCode): Direction?
     fun getChainLength(linkCode: LinkCode): Int
 

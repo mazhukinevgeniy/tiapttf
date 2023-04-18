@@ -31,6 +31,7 @@ public abstract class CellState {
     public boolean isMovableBlock() {
         return UNDEFINED_PROPERTY;
     }
+    //TODO somethings wrong with isMovableBlock and isAliveBlock
 
     /**
      * I think we need this method for view
