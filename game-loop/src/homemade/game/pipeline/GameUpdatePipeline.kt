@@ -74,6 +74,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     private fun commonCleanup(processingInfo: ProcessingInfo) {
 
         SelectionProcessingStage().process(mutableGameState, processingInfo)
+        CleanupProcessingStage().process(mutableGameState, processingInfo)
 
         val multiplierBefore = processingInfo.initialConfigState.globalMultiplier
         val multiplierNow = mutableGameState.configState.globalMultiplier

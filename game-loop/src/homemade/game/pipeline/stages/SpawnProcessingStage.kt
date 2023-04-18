@@ -12,12 +12,11 @@ class SpawnProcessingStage : PipelineStage() {
 
         state.changeConfig().globalMultiplier--
 
-        val marker = CellMarker(state)
-        val mutableField = state.changeField()
+        val marker = CellMarker(state, processingInfo)
 
         repeat(event.weight) {
-            mutableField.applyCascadeChanges(marker.spawnBlocks())
-            mutableField.applyCascadeChanges(marker.markCellsForSpawn())
+            marker.spawnBlocks()
+            marker.markCellsForSpawn()
         }
         //TODO updateStates() huh
         //TODO combo changes!!

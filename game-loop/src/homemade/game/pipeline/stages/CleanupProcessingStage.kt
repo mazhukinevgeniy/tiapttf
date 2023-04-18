@@ -3,13 +3,15 @@ package homemade.game.pipeline.stages
 import homemade.game.loop.GameOver
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
+import homemade.game.pipeline.operations.GameScore
 import homemade.game.state.MutableGameState
 
 class CleanupProcessingStage : PipelineStage() {
 
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
 
+        GameScore().handleCombos(processingInfo.storedCombos, state.changeConfig())
         // declaring game over, filling empty field, this stuff goes here
 
 

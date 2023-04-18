@@ -6,6 +6,7 @@ import homemade.game.model.CellState
 import homemade.game.model.cellstates.BlockState
 import homemade.game.model.cellstates.SimpleState
 import homemade.game.model.combo.ComboEffect
+import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.FieldState
 import homemade.game.state.MutableGameState
 import homemade.game.state.impl.BlockValuePool
@@ -77,7 +78,7 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
     }
 }
 
-class CellMarker(private val state: MutableGameState) {
+class CellMarker(private val state: MutableGameState, private val processingInfo: ProcessingInfo) {
     private val impl = CellMarkerImpl(state.changeField().blockValuePool, state.fieldState)
 
     private val simultaneousSpawn = state.configState.settings.spawn
@@ -85,14 +86,22 @@ class CellMarker(private val state: MutableGameState) {
         return state.fieldState.structure.cellCodeIterator
     }
 
-    fun spawnBlocks(): Map<CellCode, CellState> {
+    fun spawnBlocks() {
         val blocksToImmobilize = 1 //let's say it's either 0 or 1
         //TODO: add mechanic to determine whether we immobilize blocks or not
-        return impl.spawnBlocks(getCellIterator(), blocksToImmobilize)
+        execute(impl.spawnBlocks(getCellIterator(), blocksToImmobilize))
     }
 
-    fun markCellsForSpawn(): Map<CellCode, CellState> {
-        return impl.markForSpawn(getCellIterator(), simultaneousSpawn)
+    fun markCellsForSpawn() {
+        execute(impl.markForSpawn(getCellIterator(), simultaneousSpawn))
+    }
+
+    fun execute(changes: Map<CellCode, CellState>) {
+        if (changes.isEmpty()) {
+            return
+        }
+        processingInfo.comboStarts.addAll(changes.keys)
+        state.changeField().applyCascadeChanges(changes)
     }
 
     fun markBlocksWithEffects(effects: LinkedList<ComboEffect>): Map<CellCode, CellState> {

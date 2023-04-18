@@ -6,6 +6,7 @@ import homemade.game.model.Cell
 import homemade.game.model.cellstates.SimpleState
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
+import homemade.game.pipeline.operations.CellMarker
 import homemade.game.state.MutableGameState
 
 class UserInputProcessingStage : PipelineStage() {
@@ -36,7 +37,7 @@ class UserInputProcessingStage : PipelineStage() {
             }
             val stateBehind = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
 
-            state.changeField().applyCascadeChanges(mapOf(
+            CellMarker(state, processingInfo).execute(mapOf(
                     moveToCell to cellFrom,
                     moveFromCell to stateBehind
             ))

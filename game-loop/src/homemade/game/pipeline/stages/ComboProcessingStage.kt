@@ -16,6 +16,7 @@ import homemade.game.model.combo.ComboEffect
 import homemade.game.model.combo.ComboPack
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
+import homemade.game.pipeline.operations.CellMarker
 import homemade.game.state.FieldState
 import homemade.game.state.MutableGameState
 
@@ -31,11 +32,9 @@ class ComboProcessingStage(private val uiLoop: EventPoster<UIEvent>) : PipelineS
         minCombo = state.configState.settings.minCombo
 
         val combos = findCombos(processingInfo.comboStarts)
-        val changeList = removeCombos(combos)
+        processingInfo.storedCombos.append(combos)
 
-        if (changeList.isNotEmpty()) {
-            state.changeField().applyCascadeChanges(changeList)
-        }
+        CellMarker(state, processingInfo).execute(removeCombos(combos))
     }
 
     fun findCombos(starts: Set<CellCode>): ComboPack {
