@@ -18,8 +18,6 @@ class SpawnProcessingStage : PipelineStage() {
             marker.spawnBlocks()
             marker.markCellsForSpawn()
         }
-        //TODO updateStates() huh
-        //TODO combo changes!!
 
         //note: else if (state.getNumberOfMovableBlocks() == 0) might happen if a) field is empty or b) field is stuck
         //TODO where does this note belong huh?

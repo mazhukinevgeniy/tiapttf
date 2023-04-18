@@ -33,7 +33,7 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
         return changes
     }
 
-    fun markBlocks(iterator: Iterator<CellCode>, effects: LinkedList<ComboEffect>): Map<CellCode, CellState> {
+    fun markBlocks(iterator: Iterator<CellCode>, effects: ArrayList<ComboEffect>): Map<CellCode, CellState> {
         val changes: MutableMap<CellCode, CellState> = HashMap()
         val availableBlocks = iterator.asSequence().filter {
             val cellState = fieldState.getCellState(it)
@@ -104,15 +104,15 @@ class CellMarker(private val state: MutableGameState, private val processingInfo
         state.changeField().applyCascadeChanges(changes)
     }
 
-    fun markBlocksWithEffects(effects: LinkedList<ComboEffect>): Map<CellCode, CellState> {
-        return impl.markBlocks(getCellIterator(), effects)
+    fun markBlocksWithEffects(effects: ArrayList<ComboEffect>) {
+        state.changeField().applyCascadeChanges(impl.markBlocks(getCellIterator(), effects))
     }
 
-    fun spawnDeadBlocks(): Map<CellCode, CellState> {
-        return impl.markAnyCell(getCellIterator(), Cell.DEAD_BLOCK, 5)
+    fun spawnDeadBlocks() {
+        state.changeField().applyCascadeChanges(impl.markAnyCell(getCellIterator(), Cell.DEAD_BLOCK, 5))
     }
 
-    fun removeRandomBlocks(): Map<CellCode, CellState> {
-        return impl.markAnyCell(getCellIterator(), Cell.EMPTY, 25)
+    fun removeRandomBlocks() {
+        state.changeField().applyCascadeChanges(impl.markAnyCell(getCellIterator(), Cell.EMPTY, 25))
     }
 }

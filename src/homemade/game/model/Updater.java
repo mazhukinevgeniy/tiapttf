@@ -41,14 +41,6 @@ class Updater {
         storedChanges.addAll(comboCells);
     }
 
-    void flush(int multiplier) {
-        gameScore.handleCombos(storedCombos, multiplier);
-        storedCombos = new ComboPack();
-
-        updateState(storedChanges);
-        storedChanges.clear();
-    }
-
     boolean hasCellChanges() {
         return !storedChanges.isEmpty();
     }
@@ -57,8 +49,5 @@ class Updater {
         return storedCombos.numberOfCombos() > 0;
     }
 
-    int comboPackTier() {
-        return storedCombos.packTier();
-    }
 
 }

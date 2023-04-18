@@ -1,5 +1,6 @@
 package homemade.game.state
 
+import homemade.game.model.combo.ComboEffect
 import homemade.game.state.immutable.GameStateEncoder
 import homemade.game.state.impl.SpawnPeriod
 
@@ -11,6 +12,10 @@ class MutableGameState(
     private var isDirtyField = false
     private var isDirtySelection = false
     private var lastSnapshot: GameState = createImmutable()
+
+    // scenario: user created some nice combos, and earned a lot of good combo effects,
+    // but there aren't enough blocks to mark with them. so the effects persist until the time comes
+    val storedEffects = ArrayList<ComboEffect>()
 
     override val fieldState: FieldState
         get() = mutableFieldState

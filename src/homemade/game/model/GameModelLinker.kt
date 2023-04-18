@@ -2,7 +2,6 @@ package homemade.game.model
 
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
-import homemade.game.model.combo.ComboEffect
 import homemade.game.model.spawn.SpawnManager
 import homemade.game.pipeline.GameUpdatePipeline
 import homemade.game.pipeline.operations.GameScore
@@ -13,7 +12,6 @@ import java.util.*
 
 class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) {
     private val spawner: SpawnManager
-    private val storedEffects: LinkedList<ComboEffect>
 
     init {
         GameUpdatePipeline(
@@ -24,7 +22,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
                         MutableConfigState(settings, 0, 0, 1)
                 )
         )
-        storedEffects = LinkedList()
         val gameScore = GameScore(this)
         spawner = SpawnManager(this, blockValuePool)
         GameOverScenario(gameLoop, this)
@@ -34,21 +31,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
     fun killRandomBlocks() {
         updater.takeChanges(spawner.spawnDeadBlocks())
         updateStates()
-    }
-
-    @Synchronized
-    fun modifyGlobalMultiplier(change: Int) {
-        val oldMultiplier = trueState.configState.globalMultiplier
-        val rawMultiplier = oldMultiplier + change
-        val newMultiplier = Math.max(1, rawMultiplier)
-        if (oldMultiplier != newMultiplier) {
-            state.updateMultiplier(newMultiplier)
-            gameLoop.ui.post(MultiplierChanged(change))
-        }
-    }
-
-    private fun updateStates() {
-        //cleanup processing stage
     }
 
 }
