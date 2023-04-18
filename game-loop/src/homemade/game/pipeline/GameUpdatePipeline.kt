@@ -3,6 +3,8 @@ package homemade.game.pipeline
 import homemade.game.loop.*
 import homemade.game.model.GameSettings
 import homemade.game.pipeline.stages.*
+import homemade.game.pipeline.starters.RegularSpawnPipeline
+import homemade.game.pipeline.starters.TurnBasedInitPipeline
 import homemade.game.state.MutableGameState
 
 /**
@@ -43,7 +45,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     }
 
     private fun handleUserInput(event: UserClick) {
-        val processingInfo = ProcessingInfo(event)
+        val processingInfo = ProcessingInfo(event, mutableGameState.configState.copyConfigState())
         UserInputProcessingStage().process(mutableGameState, processingInfo)
 
         //???
@@ -54,28 +56,35 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
 
 
         //TODO (must) if turn-based & made no combo: requestSpawn()
-        //updateStates()
+        commonCleanup(processingInfo)
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {
-        //don't necessarily post to ui loop, but next snapshot must be aware of the results
-        //does it mean that we're the one who makes them?
-        val previousStats = mutableGameState.configState.copyConfigState()
-
-        val processingInfo = ProcessingInfo(event)
+        val processingInfo = ProcessingInfo(event, mutableGameState.configState.copyConfigState())
         do {
-            BlockProcessingStage().process(mutableGameState, processingInfo)
+            SpawnProcessingStage().process(mutableGameState, processingInfo)
             LinkProcessingStage().process(mutableGameState, processingInfo)
             ComboProcessingStage().process(mutableGameState, processingInfo)
         } while ("combo processing generated extra block updates" == "yea")
-        SelectionProcessingStage().process(mutableGameState, processingInfo)
+
+        commonCleanup(processingInfo)
 
         // prolly just leave it at that
         // and send the current mutable state through gamestateencoder, if snapshot is requested
 
-        if (previousStats.globalMultiplier != mutableGameState.configState.globalMultiplier) {
-            uiLoop.post(MultiplierChanged(mutableGameState.configState.globalMultiplier - previousStats.globalMultiplier))
+    }
+
+    private fun commonCleanup(processingInfo: ProcessingInfo) {
+
+        SelectionProcessingStage().process(mutableGameState, processingInfo)
+
+        val multiplierBefore = processingInfo.initialConfigState.globalMultiplier
+        val multiplierNow = mutableGameState.configState.globalMultiplier
+
+        if (multiplierBefore != multiplierNow) {
+            uiLoop.post(MultiplierChanged(multiplierNow - multiplierBefore))
         }
+        //updateStates()
     }
 
     private fun handleCreateSnapshot(event: CreateSnapshot) {

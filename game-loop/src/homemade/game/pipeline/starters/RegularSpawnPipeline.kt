@@ -1,11 +1,11 @@
-package homemade.game.pipeline
+package homemade.game.pipeline.starters
 
 import homemade.game.loop.*
-import homemade.game.state.MutableGameState
+import homemade.game.state.GameState
 
 class RegularSpawnPipeline(
-        val mutableState: MutableGameState,
-        val backgroundLoop: BackgroundLoop
+        private val gameState: GameState,
+        private val backgroundLoop: BackgroundLoop
 ) : GameEventHandler<GameEvent> {
 
     private var paused = false
@@ -20,14 +20,11 @@ class RegularSpawnPipeline(
     }
 
     override fun handle(event: GameEvent) {
-        if (event is GameOver) {
-            stopped = true
-        } else if (event is TimeElapsed) {
-            timeElapsed(event.diffMs)
-        } else if (event is PauseToggle) {
-            paused = !paused
-        } else {
-            throw RuntimeException("unexpected event $event")
+        when (event) {
+            is GameOver -> stopped = true
+            is TimeElapsed -> timeElapsed(event.diffMs)
+            is PauseToggle -> paused = !paused
+            else -> throw RuntimeException("unexpected event $event")
         }
     }
 
@@ -36,10 +33,10 @@ class RegularSpawnPipeline(
             return
         }
         timeElapsed += time
-        val timeRequired = mutableState.currentSpawnPeriod()
+        val timeRequired = gameState.currentSpawnPeriod()
         if (timeElapsed > timeRequired) {
             timeElapsed = 0
-            backgroundLoop.post(RequestBlockSpawning)
+            backgroundLoop.post(RequestBlockSpawning(1))
         }
     }
 }

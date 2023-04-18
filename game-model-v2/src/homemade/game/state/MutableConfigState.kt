@@ -7,7 +7,7 @@ class MutableConfigState(
         override var spawnsDenied: Int,
         override var gameScore: Int,
         multiplier: Int
-) : ConfigState(settings, spawnsDenied, gameScore, multiplier) {
+) : ConfigState(settings) {
     override var globalMultiplier: Int = multiplier
         set(value) {
             field = maxOf(value, 1)

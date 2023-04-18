@@ -1,13 +1,11 @@
 package homemade.game.model.spawn;
 
-import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.FieldStructure;
-import homemade.game.model.*;
+import homemade.game.model.GameModelLinker;
+import homemade.game.model.GameSettings;
 import homemade.game.model.cellmap.CellMapReader;
+import homemade.game.pipeline.operations.CellMarker;
 import homemade.game.state.impl.BlockValuePool;
-
-import java.util.LinkedList;
-import java.util.Map;
 
 public class SpawnManager {
     private BlockSpawner spawner;
@@ -28,26 +26,4 @@ public class SpawnManager {
         simultaneousSpawn = settings.getSpawn();
     }
 
-    public Map<CellCode, CellState> spawnBlocks() {
-        int blocksToImmobilize = 1; //let's say it's either 0 or 1
-        //TODO: add mechanic to determine whether we immobilize blocks or not
-
-        return spawner.spawnBlocks(structure.getCellCodeIterator(), blocksToImmobilize);
-    }
-
-    public Map<CellCode, CellState> markCellsForSpawn() {
-        return cellMarker.markForSpawn(structure.getCellCodeIterator(), simultaneousSpawn);
-    }
-
-    public Map<CellCode, CellState> markBlocksWithEffects(LinkedList<ComboEffect> effects) {
-        return cellMarker.markBlocks(structure.getCellCodeIterator(), effects);
-    }
-
-    public Map<CellCode, CellState> spawnDeadBlocks() {
-        return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.DEAD_BLOCK, 5);
-    }
-
-    public Map<CellCode, CellState> removeRandomBlocks() {
-        return cellMarker.markAnyCell(structure.getCellCodeIterator(), Cell.EMPTY, 25);
-    }
 }

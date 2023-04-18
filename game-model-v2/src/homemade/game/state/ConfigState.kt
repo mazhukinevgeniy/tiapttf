@@ -2,10 +2,10 @@ package homemade.game.state
 
 import homemade.game.model.GameSettings
 
-abstract class ConfigState(val settings: GameSettings, denies: Int = 0, score: Int = 0, multiplier: Int = 1) {
-    open val spawnsDenied: Int = denies
+abstract class ConfigState(val settings: GameSettings) {
+    abstract val spawnsDenied: Int
 
-    open val gameScore: Int = score
+    abstract val gameScore: Int
 
-    open val globalMultiplier: Int = multiplier
+    abstract val globalMultiplier: Int
 }

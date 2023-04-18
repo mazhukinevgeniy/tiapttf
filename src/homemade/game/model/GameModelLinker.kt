@@ -28,7 +28,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         storedEffects = LinkedList()
         val comboDetector = ComboDetector(this, gameLoop.ui)
         val gameScore = GameScore(this)
-        updater = Updater(this, comboDetector, cellMap, gameScore, state)
         spawner = SpawnManager(this, blockValuePool)
         GameOverScenario(gameLoop, this)
     }
@@ -49,15 +48,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
             gameLoop.ui.post(MultiplierChanged(change))
         }
     }
-
-    @Synchronized
-    fun requestSpawn() {
-        modifyGlobalMultiplier(-1)
-        updater.takeComboChanges(spawner.spawnBlocks())
-        updater.takeChanges(spawner.markCellsForSpawn())
-        updateStates()
-    }
-
 
     private fun updateStates() {
         if (updater.hasCellChanges()) {
@@ -81,7 +71,7 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
         } else if (state.getNumberOfMovableBlocks() == 0) {
             modifyGlobalMultiplier(BONUS_MULTIPLIER_FOR_BOARD_CLEAR + INITIAL_SPAWNS)
             for (i in 0 until INITIAL_SPAWNS) {
-                requestSpawn()
+                ///requestSpawn()
             }
         }
     }

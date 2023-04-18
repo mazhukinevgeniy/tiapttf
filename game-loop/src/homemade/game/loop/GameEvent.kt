@@ -11,7 +11,7 @@ object PauseToggle : GameEvent()
 
 // rules-generated
 class DelayedEvent(var delayMs: Int, val event: GameEvent) : GameEvent()
-object RequestBlockSpawning : GameEvent()
+class RequestBlockSpawning(val weight: Int) : GameEvent()
 class GameOver(val countdown: Int = 5) : GameEvent()
 
 // reality-generated

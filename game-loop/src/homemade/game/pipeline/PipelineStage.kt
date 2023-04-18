@@ -5,6 +5,7 @@ import homemade.game.fieldstructure.Direction
 import homemade.game.fieldstructure.LinkCode
 import homemade.game.loop.GameEvent
 import homemade.game.model.CellState
+import homemade.game.state.ConfigState
 import homemade.game.state.MutableGameState
 import java.util.*
 
@@ -16,6 +17,7 @@ enum class ChangedData {
 
 data class ProcessingInfo(
         var sourceEvent: GameEvent,
+        val initialConfigState: ConfigState,
         var updatedCells: HashMap<CellCode, CellState> = HashMap(),
         var updatedLinks: HashMap<LinkCode, Direction> = HashMap(),
         var updatedChains: HashMap<LinkCode, Int> = HashMap(),

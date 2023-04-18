@@ -6,9 +6,11 @@ import homemade.game.state.impl.CellMap
 
 class MutableFieldState(
         override val structure: FieldStructure,
-        blockValuePool: BlockValuePool
-) : CellMap(structure, blockValuePool)
+        val blockValuePool: BlockValuePool
+) : CellMap(structure, blockValuePool) {
 
+}
+//TODO whats with this
 /*
     void updateFieldSnapshot(Map<CellCode, CellState> cellUpdates,
                              Map<LinkCode, Direction> linkUpdates,
