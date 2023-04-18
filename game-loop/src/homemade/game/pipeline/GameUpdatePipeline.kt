@@ -45,7 +45,16 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     private fun handleUserInput(event: UserClick) {
         val processingInfo = ProcessingInfo(event)
         UserInputProcessingStage().process(mutableGameState, processingInfo)
-        
+
+        //???
+        if (ChangedData.SELECTION in processingInfo.changedData) {
+            //TODO dont care, just run processing?
+        }
+        SelectionProcessingStage().process(mutableGameState, processingInfo)
+
+
+        //TODO (must) if turn-based & made no combo: requestSpawn()
+        //updateStates()
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {

@@ -2,6 +2,7 @@ package homemade.game.pipeline.stages
 
 import homemade.game.fieldstructure.CellCode
 import homemade.game.loop.UserClick
+import homemade.game.model.Cell
 import homemade.game.model.cellstates.SimpleState
 import homemade.game.pipeline.ChangedData
 import homemade.game.pipeline.PipelineStage
@@ -27,27 +28,26 @@ class UserInputProcessingStage : PipelineStage() {
     private fun tryMove(moveFromCell: CellCode, moveToCell: CellCode, state: MutableGameState, processingInfo: ProcessingInfo) {
         check(moveFromCell != moveToCell)
 
-        val repercussions = cellMap.getCell(moveToCell).type() == Cell.MARKED_FOR_SPAWN &&
-                trueState.configState.globalMultiplier == 1
-        val cellFrom = cellMap.getCell(moveFromCell)
-        val cellTo = cellMap.getCell(moveToCell)
-        if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
-            state.incrementDenyCounter()
-            val tmpMap: MutableMap<CellCode, CellState> = HashMap()
-            tmpMap[moveFromCell] = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
-            tmpMap[moveToCell] = cellFrom
-            updater.takeComboChanges(tmpMap)
-            if (settings.gameMode === GameMode.TURN_BASED && !updater.hasCombos()) {
-                requestSpawn()
-            } else {
-                updateStates()
-            }
-        }
+        val cellFrom = state.fieldState.getCellState(moveFromCell)
+        val cellTo = state.fieldState.getCellState(moveToCell)
 
-        // after move is resolved.
-        // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick, I guess
-        if (state.fieldState.getCellState(moveToCell).isAliveBlock) {
+        if (cellTo.isFreeForMove && cellFrom.isMovableBlock) {
+            processingInfo.changedData.add(ChangedData.SELECTION)
+
+            val repercussions = cellTo.type() == Cell.MARKED_FOR_SPAWN && state.configState.globalMultiplier == 1
+            if (repercussions) {
+                state.configState.spawnsDenied++
+            }
+            val stateBehind = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
+
+            processingInfo.updatedCells[moveToCell] = cellFrom
+            processingInfo.updatedCells[moveFromCell] = stateBehind
+
+            // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick, I guess
+            // TODO make sure that it's invalidated properly if cell is consumed in combo
             state.selectionState.selection = moveToCell
+
+            //TODO takeComboChanges whatever it means
         }
     }
 }

@@ -6,8 +6,12 @@ class MutableConfigState(
         settings: GameSettings,
         override var spawnsDenied: Int,
         override var gameScore: Int,
-        override var globalMultiplier: Int
-) : ConfigState(settings, spawnsDenied, gameScore, globalMultiplier) {
+        multiplier: Int
+) : ConfigState(settings, spawnsDenied, gameScore, multiplier) {
+    override var globalMultiplier: Int = multiplier
+        set(value) {
+            field = maxOf(value, 1)
+        }
 
     fun copyConfigState(): ConfigState {
         return MutableConfigState(settings, spawnsDenied, gameScore, globalMultiplier)

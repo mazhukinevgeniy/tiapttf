@@ -7,7 +7,7 @@ public class BlockValuePool {
     private LinkedList<Integer> available;
     private Random random; // TODO : tests, fixed random, you know the drill
 
-    BlockValuePool(int max, int total) {
+    public BlockValuePool(int max, int total) {
         if (total % max != 0) {
             throw new IllegalArgumentException("block value pool is supposed to have equal amount of all values");
         }

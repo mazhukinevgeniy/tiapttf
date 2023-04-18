@@ -16,9 +16,9 @@ enum class ChangedData {
 
 data class ProcessingInfo(
         var sourceEvent: GameEvent,
-        var updatedCells: Map<CellCode, CellState> = HashMap(),
-        var updatedLinks: Map<LinkCode, Direction> = HashMap(),
-        var updatedChains: Map<LinkCode, Int> = HashMap(),
+        var updatedCells: HashMap<CellCode, CellState> = HashMap(),
+        var updatedLinks: HashMap<LinkCode, Direction> = HashMap(),
+        var updatedChains: HashMap<LinkCode, Int> = HashMap(),
         var changedData: EnumSet<ChangedData> = EnumSet.noneOf(ChangedData::class.java)
 )
 

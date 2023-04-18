@@ -11,7 +11,7 @@ import homemade.game.state.*
 import homemade.game.state.impl.BlockValuePool
 import java.util.*
 
-class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) : GameEventHandler<GameEvent> {
+class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) {
     private val spawner: SpawnManager
     private val storedEffects: LinkedList<ComboEffect>
     private val updater: Updater
@@ -21,7 +21,7 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
                 gameLoop,
                 MutableGameState(
                         MutableFieldState(structure, BlockValuePool(settings.maxBlockValue, structure.fieldSize)),
-                        MutableSelectionState(),
+                        MutableSelectionState(null, HashSet()),
                         MutableConfigState(settings, 0, 0, 1)
                 )
         )

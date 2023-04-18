@@ -2,7 +2,6 @@ package homemade.game.model;
 
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
-import homemade.game.fieldstructure.FieldStructure;
 import homemade.game.fieldstructure.LinkCode;
 import homemade.game.model.cellstates.SimpleState;
 import homemade.game.model.combo.ComboDetector;
@@ -18,25 +17,16 @@ import java.util.Set;
  * Used by GameModelLinker for tasks such as updating cellmap and gamestate
  */
 class Updater {
-    private FieldStructure structure;
-
     private ComboDetector comboDetector;
-
-    private CellMap cellMap;
     private GameScore gameScore;
-    private ArrayBasedFieldState state;
 
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore, ArrayBasedFieldState state) {
-        structure = linker.getStructure();
-
+    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore) {
         this.comboDetector = comboDetector;
 
-        this.cellMap = cellMap;
         this.gameScore = gameScore;
-        this.state = state;
 
         storedChanges = new HashSet<>();
         storedCombos = new ComboPack();
@@ -100,7 +90,6 @@ class Updater {
                         cellMap.getCell(neighbour).type() == Cell.DEAD_BLOCK)
                     cellsToRemove.put(neighbour, empty);
             }
-            //TODO: check if this can or needs to be done more efficiently
         }
 
         return cellsToRemove;
