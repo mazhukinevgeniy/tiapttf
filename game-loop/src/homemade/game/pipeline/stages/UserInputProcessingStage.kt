@@ -16,11 +16,10 @@ class UserInputProcessingStage : PipelineStage() {
         val eventCell = event.cellCode
         if (state.fieldState.getCellState(eventCell).isMovableBlock) {
             state.changeSelection().selection = eventCell
-        } else {
-            val currentSelection = state.selectionState.selection
-            if (currentSelection?.let { it in state.selectionState.cellsToMove } == true) {
-                tryMove(currentSelection, eventCell, state, processingInfo)
-            }
+        } else if (eventCell in state.selectionState.cellsToMove) {
+            val selection = state.selectionState.selection
+            check(selection != null) { "inconsistent selection state ${state.selectionState}" }
+            tryMove(selection, eventCell, state, processingInfo)
         }
     }
 
@@ -41,11 +40,9 @@ class UserInputProcessingStage : PipelineStage() {
                     moveToCell to cellFrom,
                     moveFromCell to stateBehind
             ))
-            // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick, I guess
-            // TODO make sure that it's invalidated properly if cell is consumed in combo
-            state.changeSelection().selection = moveToCell
 
-            //TODO takeComboChanges whatever it means
+            // this feature helps cross 'crumbling bridges' in real-time mode. or correct a misclick
+            state.changeSelection().selection = moveToCell
         }
     }
 }

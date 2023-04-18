@@ -15,7 +15,7 @@ class SelectionProcessingStage : PipelineStage() {
             return
         }
 
-        if (!state.fieldState.getCellState(currentSelection).isAliveBlock) {
+        if (!state.fieldState.getCellState(currentSelection).isMovableBlock) {
             val mutableSelection = state.changeSelection()
             mutableSelection.selection = null
             mutableSelection.cellsToMove = HashSet()

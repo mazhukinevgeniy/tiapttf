@@ -2,8 +2,8 @@ package homemade.game.controller
 
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
-import homemade.game.model.GameModelLinker
 import homemade.game.model.GameSettings
+import homemade.game.pipeline.GameUpdatePipeline
 import homemade.game.state.GameState
 import homemade.game.view.GameView
 import homemade.game.view.ShownEffect
@@ -20,21 +20,20 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
     private val structure: FieldStructure = FieldStructure()
     private val gameLoop: GameLoop = GameLoop()
     private val keyboard: GameKeyboard = GameKeyboard(gameLoop.model)
-    private val model: GameModelLinker
     private val view: GameView
     private val mainTimer: Timer
     private var currentSnapshot: GameState? = null
 
     init {
+        GameUpdatePipeline.create(structure, settings, gameLoop)
+
         gameLoop.ui.subscribe<ShutDown>(this)
         gameLoop.ui.subscribe<SnapshotReady>(this)
         gameLoop.ui.subscribe<MultiplierChanged>(this)
 
         val viewListener = ViewListener(this, this, keyboard)
         view = GameView(structure, settings, viewListener, container)
-        model = GameModelLinker(structure, settings, gameLoop)
-        //model must be initialized after view because there could be combos in initialization
-        //TODO: if everything is done with eventLoop channels, this observation is invalid
+
         mainTimer = Timer(5, object : ActionListener {
             var previousTime: Long = 0
             var sum: Long = 0

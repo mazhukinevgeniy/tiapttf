@@ -1,12 +1,17 @@
 package homemade.game.pipeline
 
+import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
 import homemade.game.model.GameSettings
 import homemade.game.pipeline.operations.CellMarker
 import homemade.game.pipeline.stages.*
 import homemade.game.pipeline.starters.RegularSpawnPipeline
 import homemade.game.pipeline.starters.TurnBasedInitPipeline
+import homemade.game.state.MutableConfigState
+import homemade.game.state.MutableFieldState
 import homemade.game.state.MutableGameState
+import homemade.game.state.MutableSelectionState
+import homemade.game.state.impl.BlockValuePool
 
 /**
  * |----
@@ -56,12 +61,13 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
 
         val madeNoCombos = processingInfo.storedCombos.packTier() == 0
         val turnBased = mutableGameState.configState.settings.gameMode == GameSettings.GameMode.TURN_BASED
+        val movedBlocks = processingInfo.comboStarts.isNotEmpty()
 
-        if (turnBased && madeNoCombos) {
-            handleBlockSpawning(RequestBlockSpawning(1))
-        } else {
-            commonCleanup(processingInfo)
+        if (turnBased && madeNoCombos && movedBlocks) {
+            gameEventPoster.post(RequestBlockSpawning(1))
         }
+
+        commonCleanup(processingInfo)
     }
 
     private fun handleBlockSpawning(event: RequestBlockSpawning) {
@@ -101,5 +107,18 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
 
     private fun handleCreateSnapshot(event: CreateSnapshot) {
         uiLoop.post(SnapshotReady(mutableGameState.createImmutable()))
+    }
+
+    companion object {
+        fun create(structure: FieldStructure, settings: GameSettings, gameLoop: GameLoop): GameUpdatePipeline {
+            return GameUpdatePipeline(
+                    gameLoop,
+                    MutableGameState(
+                            MutableFieldState(structure, BlockValuePool(settings.maxBlockValue, structure.fieldSize)),
+                            MutableSelectionState(null, HashSet()),
+                            MutableConfigState(settings, 0, 0, 1)
+                    )
+            )
+        }
     }
 }

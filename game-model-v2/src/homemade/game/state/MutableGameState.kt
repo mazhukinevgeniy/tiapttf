@@ -9,10 +9,6 @@ class MutableGameState(
         selectionState: MutableSelectionState,
         configState: MutableConfigState
 ) : GameState() {
-    private var isDirtyField = false
-    private var isDirtySelection = false
-    private var lastSnapshot: GameState = createImmutable()
-
     // scenario: user created some nice combos, and earned a lot of good combo effects,
     // but there aren't enough blocks to mark with them. so the effects persist until the time comes
     val storedEffects = ArrayList<ComboEffect>()
@@ -32,6 +28,10 @@ class MutableGameState(
     override fun currentSpawnPeriod(): Int {
         return spawnPeriod.getSpawnPeriod(fieldState, configState)
     }
+
+    private var isDirtyField = true
+    private var isDirtySelection = true
+    private var lastSnapshot: GameState = createImmutable()
 
     fun changeField(): MutableFieldState {
         isDirtyField = true

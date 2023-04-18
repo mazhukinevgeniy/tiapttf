@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-abstract public class CellMap implements FieldState {
+abstract public class CellMap extends FieldState {
     private CellState cells[];
     private Link links[];
 

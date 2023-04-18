@@ -68,11 +68,11 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
 
         for (i in 0 until min(blocksToImmobilize, cells.size)) {
             val pos: Int = random.nextInt(cells.size)
-            changes[cells.removeAt(pos)] = BlockState(blockValuePool.takeBlockValue(), false, null)
+            changes[cells.removeAt(pos)] = BlockState(blockValuePool.takeBlockValue(), false, ComboEffect.UNDEFINED_COMBO_EFFECT)
         }
 
         for (item in cells) {
-            changes[item] = BlockState(blockValuePool.takeBlockValue(), true, null)
+            changes[item] = BlockState(blockValuePool.takeBlockValue(), true, ComboEffect.UNDEFINED_COMBO_EFFECT)
         }
         return changes
     }

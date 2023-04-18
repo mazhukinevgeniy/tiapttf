@@ -19,7 +19,7 @@ class GameStateEncoder {
     /**
      * Uses assumption that cellstate/linkstate types are immutable
      */
-    private class PlainFieldState(source: FieldState) : FieldState {
+    private class PlainFieldState(source: FieldState) : FieldState() {
         override val structure: FieldStructure = source.structure
         val cellStates = structure.cellCodeIterator.asSequence().map { source.getCellState(it) }.toList()
         val linkState = structure.linkCodeIterator.asSequence().map { source.getLinkBetweenCells(it) }.toList()

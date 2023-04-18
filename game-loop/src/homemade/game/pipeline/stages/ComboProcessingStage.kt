@@ -77,7 +77,8 @@ class ComboProcessingStage(private val uiLoop: EventPoster<UIEvent>) : PipelineS
             for (i in 0 until comboLength) {
                 currentCell = lastCell
                 nextCell = lastCell!!.neighbour(mainDirection)
-                val comboEffect: ComboEffect = field.getCellState(currentCell!!).effect()
+                val comboEffect: ComboEffect = currentCell?.let { field.getCellState(it).effect() }
+                        ?: throw RuntimeException("unexpected $currentCell")
                 if (comboEffect != ComboEffect.UNDEFINED_COMBO_EFFECT) {
                     comboTier += comboEffect.tierBonus()
                     pack.addMultiplier(comboEffect.multiplierBonus())
