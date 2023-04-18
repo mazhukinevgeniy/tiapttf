@@ -16,4 +16,3 @@ class Offset {
                 image.getHeight(null)) / 2;
     }
 }
-//TODO: check if this class is useful elsewhere
