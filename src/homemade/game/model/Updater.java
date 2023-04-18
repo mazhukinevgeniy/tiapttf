@@ -3,12 +3,10 @@ package homemade.game.model;
 import homemade.game.fieldstructure.CellCode;
 import homemade.game.fieldstructure.Direction;
 import homemade.game.fieldstructure.LinkCode;
-import homemade.game.model.cellstates.SimpleState;
-import homemade.game.model.combo.ComboDetector;
 import homemade.game.model.combo.ComboPack;
+import homemade.game.pipeline.operations.GameScore;
 import homemade.game.state.impl.CellMap;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,15 +15,12 @@ import java.util.Set;
  * Used by GameModelLinker for tasks such as updating cellmap and gamestate
  */
 class Updater {
-    private ComboDetector comboDetector;
     private GameScore gameScore;
 
     private Set<CellCode> storedChanges;
     private ComboPack storedCombos;
 
-    Updater(GameModelLinker linker, ComboDetector comboDetector, CellMap cellMap, GameScore gameScore) {
-        this.comboDetector = comboDetector;
-
+    Updater(GameModelLinker linker, CellMap cellMap, GameScore gameScore) {
         this.gameScore = gameScore;
 
         storedChanges = new HashSet<>();
@@ -66,33 +61,6 @@ class Updater {
 
     int comboPackTier() {
         return storedCombos.packTier();
-    }
-
-    private Map<CellCode, CellState> removeCombos(ComboPack combos) {
-        Map<CellCode, CellState> cellsToRemove = new HashMap<>();
-
-        CellState empty = SimpleState.getSimpleState(Cell.EMPTY);
-
-        Set<CellCode> comboCells = combos.cellSet();
-
-        for (CellCode cellCode : comboCells) {
-            cellsToRemove.put(cellCode, empty);
-        }
-
-        Direction[] directions = Direction.values();
-
-        for (CellCode cellCode : comboCells) {
-            for (Direction direction : directions) {
-                CellCode neighbour = cellCode.neighbour(direction);
-
-                if (neighbour != null &&
-                        !cellsToRemove.containsKey(neighbour) &&
-                        cellMap.getCell(neighbour).type() == Cell.DEAD_BLOCK)
-                    cellsToRemove.put(neighbour, empty);
-            }
-        }
-
-        return cellsToRemove;
     }
 
     private void updateState(Set<CellCode> changedCells) {

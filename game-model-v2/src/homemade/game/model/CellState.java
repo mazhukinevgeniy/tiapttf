@@ -1,5 +1,7 @@
 package homemade.game.model;
 
+import homemade.game.model.combo.ComboEffect;
+
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -11,7 +13,6 @@ public abstract class CellState {
     private static Set<Cell> blocks = EnumSet.of(Cell.OCCUPIED, Cell.DEAD_BLOCK);
 
     public final static int UNDEFINED_VALUE = -1;
-    public final static ComboEffect UNDEFINED_COMBO_EFFECT = null;
     public final static boolean UNDEFINED_PROPERTY = false;
 
     private final Cell cellType;
@@ -25,7 +26,7 @@ public abstract class CellState {
     }
 
     public ComboEffect effect() {
-        return UNDEFINED_COMBO_EFFECT;
+        return ComboEffect.UNDEFINED_COMBO_EFFECT;
     }
 
     public boolean isMovableBlock() {

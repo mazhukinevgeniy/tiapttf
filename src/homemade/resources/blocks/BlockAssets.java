@@ -1,6 +1,6 @@
 package homemade.resources.blocks;
 
-import homemade.game.model.ComboEffect;
+import homemade.game.model.combo.ComboEffect;
 import homemade.utils.AssetLoader;
 
 import java.awt.*;

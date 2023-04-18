@@ -2,9 +2,10 @@ package homemade.game.model
 
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.loop.*
-import homemade.game.model.combo.ComboDetector
+import homemade.game.model.combo.ComboEffect
 import homemade.game.model.spawn.SpawnManager
 import homemade.game.pipeline.GameUpdatePipeline
+import homemade.game.pipeline.operations.GameScore
 import homemade.game.scenarios.GameOverScenario
 import homemade.game.state.*
 import homemade.game.state.impl.BlockValuePool
@@ -13,7 +14,6 @@ import java.util.*
 class GameModelLinker(val structure: FieldStructure, val settings: GameSettings, private val gameLoop: GameLoop) {
     private val spawner: SpawnManager
     private val storedEffects: LinkedList<ComboEffect>
-    private val updater: Updater
 
     init {
         GameUpdatePipeline(
@@ -25,7 +25,6 @@ class GameModelLinker(val structure: FieldStructure, val settings: GameSettings,
                 )
         )
         storedEffects = LinkedList()
-        val comboDetector = ComboDetector(this, gameLoop.ui)
         val gameScore = GameScore(this)
         spawner = SpawnManager(this, blockValuePool)
         GameOverScenario(gameLoop, this)

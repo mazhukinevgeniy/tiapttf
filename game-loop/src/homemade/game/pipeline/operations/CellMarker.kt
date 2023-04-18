@@ -3,9 +3,9 @@ package homemade.game.pipeline.operations
 import homemade.game.fieldstructure.CellCode
 import homemade.game.model.Cell
 import homemade.game.model.CellState
-import homemade.game.model.ComboEffect
 import homemade.game.model.cellstates.BlockState
 import homemade.game.model.cellstates.SimpleState
+import homemade.game.model.combo.ComboEffect
 import homemade.game.state.FieldState
 import homemade.game.state.MutableGameState
 import homemade.game.state.impl.BlockValuePool
@@ -36,7 +36,7 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
         val changes: MutableMap<CellCode, CellState> = HashMap()
         val availableBlocks = iterator.asSequence().filter {
             val cellState = fieldState.getCellState(it)
-            cellState.isAliveBlock && cellState.effect() == null
+            cellState.isAliveBlock && cellState.effect() == ComboEffect.UNDEFINED_COMBO_EFFECT
         }.toMutableList()
         while (availableBlocks.isNotEmpty() && effects.isNotEmpty()) {
             val position = random.nextInt(availableBlocks.size)

@@ -1,6 +1,6 @@
-package homemade.game.model;
+package homemade.game.pipeline.operations;
 
-import homemade.game.Combo;
+import homemade.game.model.combo.Combo;
 import homemade.game.model.combo.ComboPack;
 
 import java.util.Iterator;
@@ -21,7 +21,7 @@ class GameScore {
         for (Iterator<Combo> iterator = pack.comboIterator(); iterator.hasNext(); ) {
             Combo next = iterator.next();
 
-            packScore += getScore(next.getTier());
+            packScore += getScore(next.tier);
         }
 
         if (packScore != 0)

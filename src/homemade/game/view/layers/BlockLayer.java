@@ -34,8 +34,9 @@ class BlockLayer extends RenderingLayer.Cells {
                 sprite = blockAssets.getBlock(cellState.isMovableBlock(), selectionState.isSelected(cellCode), cellState.effect());
             } else if (type == Cell.DEAD_BLOCK) {
                 sprite = blockAssets.getDeadBlock();
-            } else
+            } else {
                 throw new RuntimeException("unknown cell type");
+            }
 
             graphics.drawImage(sprite, canvasX, canvasY, null);
         }
