@@ -1,5 +1,6 @@
 package homemade.game.loop
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlin.reflect.KClass
 
@@ -16,6 +17,10 @@ open class GameLoopBase<EventType>(subclasses: List<KClass<out EventType>>) : Ev
     internal val channel = Channel<EventType>(Channel.UNLIMITED)
 
     val handlers: Map<KClass<out EventType>, ArrayList<GameEventHandler<EventType>>>
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isEmpty: Boolean
+        get() = channel.isEmpty
 
     init {
         handlers = subclasses.associateBy({ it }, { ArrayList() })

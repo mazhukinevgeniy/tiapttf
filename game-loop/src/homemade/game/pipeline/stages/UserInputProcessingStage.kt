@@ -15,7 +15,9 @@ class UserInputProcessingStage : PipelineStage() {
 
         val eventCell = event.cellCode
         if (state.fieldState.getCellState(eventCell).isMovableBlock) {
-            state.changeSelection().selection = eventCell
+            if (state.selectionState.selection != eventCell) {
+                state.changeSelection().selection = eventCell
+            }
         } else if (eventCell in state.selectionState.cellsToMove) {
             val selection = state.selectionState.selection
             check(selection != null) { "inconsistent selection state ${state.selectionState}" }
