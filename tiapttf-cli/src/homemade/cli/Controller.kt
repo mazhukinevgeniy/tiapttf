@@ -19,11 +19,25 @@ class Controller(private val fieldStructure: FieldStructure, gameSettings: GameS
                 snapshot = event.snapshot
             }
         })
+
+        waitUntilModelQueueEmpties()
+    }
+
+    private fun waitUntilModelQueueEmpties() {
+        while (!loop.model.isEmpty) {
+            try {
+                Thread.sleep(5)
+            } catch (e: InterruptedException) {
+                // okay
+            }
+        }
     }
 
     fun action(x: Int, y: Int): GameState {
         loop.model.post(UserClick(fieldStructure.getCellCode(x, y)))
+        waitUntilModelQueueEmpties()
         loop.model.post(CreateSnapshot)
+
         snapshot = null
         while (snapshot == null) {
             loop.ui.tryPropagateEvents()
