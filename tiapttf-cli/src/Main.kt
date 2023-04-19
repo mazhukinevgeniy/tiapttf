@@ -1,6 +1,8 @@
 import homemade.cli.Controller
 import homemade.game.fieldstructure.FieldStructure
 import homemade.game.model.GameSettings
+import homemade.game.model.JsonEncoder
+import homemade.game.state.GameState
 import kotlin.reflect.KMutableProperty
 import kotlin.system.exitProcess
 
@@ -20,6 +22,8 @@ object Main {
             "-t" to ::isTurnBased,
             "-c" to ::minCombo
     )
+
+    private val encoder = JsonEncoder()
 
     private fun parseArgs(args: Array<String>) {
         check(args.size % 2 == 0)
@@ -41,12 +45,16 @@ object Main {
         )
         val controller = Controller(structure, settings)
 
-        println("Hello world!")
+        printState(controller.getSnapshot())
 
         if (args.size == 42) {
-            controller.action(1, 2)
+            printState(controller.action(1, 2))
         }
 
         exitProcess(0)
+    }
+
+    private fun printState(state: GameState) {
+        println(encoder.encode(state))
     }
 }

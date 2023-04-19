@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/field-structure/field-structure.iml" filepath="$PROJECT_DIR$/field-structure/field-structure.iml" />
       <module fileurl="file://$PROJECT_DIR$/game-loop/game-loop.iml" filepath="$PROJECT_DIR$/game-loop/game-loop.iml" />
       <module fileurl="file://$PROJECT_DIR$/game-model-v2/game-model-v2.iml" filepath="$PROJECT_DIR$/game-model-v2/game-model-v2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/game-serializations/game-serializations.iml" filepath="$PROJECT_DIR$/game-serializations/game-serializations.iml" />
       <module fileurl="file://$PROJECT_DIR$/ml/ml.iml" filepath="$PROJECT_DIR$/ml/ml.iml" />
       <module fileurl="file://$PROJECT_DIR$/theres-a-pattern-there-to-follow.iml" filepath="$PROJECT_DIR$/theres-a-pattern-there-to-follow.iml" />
       <module fileurl="file://$PROJECT_DIR$/tiapttf-cli/tiapttf-cli.iml" filepath="$PROJECT_DIR$/tiapttf-cli/tiapttf-cli.iml" />

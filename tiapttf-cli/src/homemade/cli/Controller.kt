@@ -33,8 +33,7 @@ class Controller(private val fieldStructure: FieldStructure, gameSettings: GameS
         }
     }
 
-    fun action(x: Int, y: Int): GameState {
-        loop.model.post(UserClick(fieldStructure.getCellCode(x, y)))
+    fun getSnapshot(): GameState {
         waitUntilModelQueueEmpties()
         loop.model.post(CreateSnapshot)
 
@@ -43,5 +42,10 @@ class Controller(private val fieldStructure: FieldStructure, gameSettings: GameS
             loop.ui.tryPropagateEvents()
         }
         return snapshot!!
+    }
+
+    fun action(x: Int, y: Int): GameState {
+        loop.model.post(UserClick(fieldStructure.getCellCode(x, y)))
+        return getSnapshot()
     }
 }
