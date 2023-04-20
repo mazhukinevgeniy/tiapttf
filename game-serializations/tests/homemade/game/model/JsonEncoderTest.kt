@@ -1,5 +1,6 @@
 package homemade.game.model
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class JsonEncoderTest {
@@ -42,6 +43,6 @@ class JsonEncoderTest {
         val gs2 = encoder.decode(s2)
         val s3 = encoder.encode(gs2)
 
-        assert(begin == s3)
+        assertEquals(begin, s3)
     }
 }
