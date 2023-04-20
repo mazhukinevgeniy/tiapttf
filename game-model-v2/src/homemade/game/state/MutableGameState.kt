@@ -1,7 +1,7 @@
 package homemade.game.state
 
 import homemade.game.model.combo.ComboEffect
-import homemade.game.state.immutable.GameStateEncoder
+import homemade.game.state.immutable.PlainFieldState
 import homemade.game.state.impl.SpawnPeriod
 
 class MutableGameState(
@@ -51,7 +51,7 @@ class MutableGameState(
     fun createImmutable(): GameState {
         val field = if (isDirtyField) {
             isDirtyField = false
-            GameStateEncoder().encode(fieldState)
+            PlainFieldState(fieldState)
         } else lastSnapshot.fieldState
         val selectionState = if (isDirtySelection) {
             isDirtySelection = false
