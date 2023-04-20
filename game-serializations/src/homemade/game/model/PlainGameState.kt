@@ -16,7 +16,7 @@ internal data class PlainGameState(
 ) : GameState() {
 
     @Transient
-    override val fieldState = object : FieldState() {
+    override val fieldState = object : FieldState {
         override val structure = FieldStructure(width, height)
 
         override fun getCellState(cellCode: CellCode): CellState {
