@@ -20,6 +20,13 @@ class JsonEncoder {
                     }
                 }
             })
+            .registerTypeAdapter(GameState::class.java, object : JsonDeserializer<GameState> {
+                override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): GameState {
+                    val result: PlainGameState = context.deserialize(json.asJsonObject, PlainGameState::class.java)
+                    result.buildTransient()
+                    return result
+                }
+            })
             .create()
 
     fun encode(state: GameState): String {
@@ -27,6 +34,6 @@ class JsonEncoder {
     }
 
     fun decode(input: String): GameState {
-        return gson.fromJson(input, PlainGameState::class.java)
+        return gson.fromJson(input, GameState::class.java)
     }
 }

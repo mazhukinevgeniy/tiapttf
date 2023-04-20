@@ -20,28 +20,41 @@ internal data class PlainGameState(
 ) : GameState() {
 
     @Transient
-    override val fieldState: FieldState = PlainFieldState.buildConsistent(
-            FieldStructure(width, height),
-            cellStates,
-            settings.maxBlockValue
-    )
+    override lateinit var fieldState: FieldState
+        private set
 
     @Transient
-    override val selectionState: SelectionState = MutableSelectionState(
-            selection?.let { fieldState.structure.getCellCode(it.x, it.y) },
-            ReachableCellsCalculator().buildReachableCellSet(
-                    fieldState, selection?.let { fieldState.structure.getCellCode(it.x, it.y) }
-            )
-    )
+    override lateinit var selectionState: SelectionState
+        private set
 
     @Transient
-    override val configState = object : ConfigState(settings) {
-        override val spawnsDenied: Int
-            get() = denies
-        override val gameScore: Int
-            get() = score
-        override val globalMultiplier: Int
-            get() = multiplier
+    override lateinit var configState: ConfigState
+        private set
+
+    init {
+        buildTransient()
+    }
+
+    internal fun buildTransient() {
+        fieldState = PlainFieldState.buildConsistent(
+                FieldStructure(width, height),
+                cellStates,
+                settings.maxBlockValue
+        )
+        selectionState = MutableSelectionState(
+                selection?.let { fieldState.structure.getCellCode(it.x, it.y) },
+                ReachableCellsCalculator().buildReachableCellSet(
+                        fieldState, selection?.let { fieldState.structure.getCellCode(it.x, it.y) }
+                )
+        )
+        configState = object : ConfigState(settings) {
+            override val spawnsDenied: Int
+                get() = denies
+            override val gameScore: Int
+                get() = score
+            override val globalMultiplier: Int
+                get() = multiplier
+        }
     }
 
     constructor(source: GameState) : this(

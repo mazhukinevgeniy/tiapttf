@@ -35,8 +35,9 @@ class SpawnPeriod private constructor(private val basePeriod: PiecewiseConstantF
             val minCombo = settings.minCombo
             val saturationPoint = minCombo * 3
             val oversaturationPoint = fieldStructure.fieldSize - minCombo * 2
-            check(saturationPoint < oversaturationPoint) {
-                "minCombo is too big and fieldSize is too small"
+            if (saturationPoint < oversaturationPoint) {
+                // minCombo is too big and fieldSize is too small, return simple function
+                return SpawnPeriod(PiecewiseConstantFunction(emptyList<Int>(), listOf(settings.period)))
             }
             val separators = listOf(
                     saturationPoint / 2,
