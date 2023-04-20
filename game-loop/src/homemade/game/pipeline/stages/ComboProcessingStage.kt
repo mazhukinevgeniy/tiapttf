@@ -106,7 +106,7 @@ class ComboProcessingStage(private val uiLoop: EventPoster<UIEvent>) : PipelineS
 
     private fun removeCombos(combos: ComboPack): Map<CellCode, CellState> {
         val updateList: MutableMap<CellCode, CellState> = HashMap()
-        val empty = SimpleState.getSimpleState(Cell.EMPTY)
+        val empty = SimpleState.get(Cell.EMPTY)
         val comboCells = combos.cellSet()
 
         for (cellCode in comboCells) {
