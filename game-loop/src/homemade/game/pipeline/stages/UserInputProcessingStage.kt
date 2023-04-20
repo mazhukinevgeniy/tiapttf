@@ -36,7 +36,7 @@ class UserInputProcessingStage : PipelineStage() {
             if (repercussions) {
                 state.changeConfig().spawnsDenied++
             }
-            val stateBehind = SimpleState.getSimpleState(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
+            val stateBehind = SimpleState.get(if (repercussions) Cell.DEAD_BLOCK else Cell.EMPTY)
 
             CellMarker(state, processingInfo).execute(mapOf(
                     moveToCell to cellFrom,

@@ -21,9 +21,9 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
      *
      * @param percentage 0..100
      */
-    fun markAnyCell(iterator: Iterator<CellCode>, type: Cell?, percentage: Int): Map<CellCode, CellState> {
+    fun markAnyCell(iterator: Iterator<CellCode>, type: Cell, percentage: Int): Map<CellCode, CellState> {
         val changes: MutableMap<CellCode, CellState> = HashMap()
-        val state = SimpleState.getSimpleState(type) ?: throw RuntimeException("not a simple type")
+        val state = SimpleState.get(type)
         while (iterator.hasNext()) {
             val cellCode = iterator.next()
             if (random.nextInt(100) < percentage) {
@@ -52,7 +52,7 @@ internal class CellMarkerImpl(private val blockValuePool: BlockValuePool, privat
     fun markForSpawn(iterator: Iterator<CellCode>, targetAmount: Int): Map<CellCode, CellState> {
         val freeCells = iterator.asSequence().filter { fieldState.getCellState(it).isFreeForSpawn }.toMutableList()
         val cellsToMark = min(freeCells.size, min(targetAmount, blockValuePool.blocksAvailable()))
-        val marked = SimpleState.getSimpleState(Cell.MARKED_FOR_SPAWN)
+        val marked = SimpleState.get(Cell.MARKED_FOR_SPAWN)
 
         val changes: MutableMap<CellCode, CellState> = HashMap()
         for (i in 0 until cellsToMark) {

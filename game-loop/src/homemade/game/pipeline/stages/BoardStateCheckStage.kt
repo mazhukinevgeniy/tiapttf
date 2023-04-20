@@ -8,6 +8,8 @@ import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.pipeline.operations.CellMarker
 import homemade.game.state.MutableGameState
+import homemade.game.state.getNumberOfBlocks
+import homemade.game.state.getNumberOfMovableBlocks
 
 class BoardStateCheckStage(private val gameEventPoster: EventPoster<GameEvent>) : PipelineStage() {
 

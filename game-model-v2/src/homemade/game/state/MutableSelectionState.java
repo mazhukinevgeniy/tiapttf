@@ -30,16 +30,6 @@ public class MutableSelectionState implements SelectionState {
         return Collections.unmodifiableSet(cellsToMove);
     }
 
-    @Override
-    public boolean isSelected(CellCode cellCode) {
-        return selection == cellCode;
-    }
-
-    @Override
-    public boolean canMoveTo(CellCode cellCode) {
-        return cellsToMove.contains(cellCode);
-    }
-
     public SelectionState copySelectionState() {
         return new MutableSelectionState(selection, (HashSet<CellCode>) cellsToMove.clone());
     }
