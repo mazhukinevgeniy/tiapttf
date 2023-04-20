@@ -1,9 +1,9 @@
 package homemade.game.pipeline.stages
 
-import homemade.game.fieldstructure.CellCode
 import homemade.game.pipeline.PipelineStage
 import homemade.game.pipeline.ProcessingInfo
 import homemade.game.state.MutableGameState
+import homemade.game.state.impl.ReachableCellsCalculator
 
 class SelectionProcessingStage : PipelineStage() {
     override fun process(state: MutableGameState, processingInfo: ProcessingInfo) {
@@ -22,23 +22,8 @@ class SelectionProcessingStage : PipelineStage() {
             return
         }
 
-        val visited = hashSetOf(currentSelection)
-        val accessible = HashSet<CellCode>()
-        val toCheck = currentSelection.vicinity.toMutableList()
-        while (toCheck.isNotEmpty()) {
-            val next = toCheck.removeAt(toCheck.size - 1)
-            if (next !in visited) {
-                visited.add(next)
-                if (state.fieldState.getCellState(next).isFreeForMove) {
-                    accessible.add(next)
-                    for (item in next.vicinity) {
-                        if (item !in visited) {
-                            toCheck.add(item)
-                        }
-                    }
-                }
-            }
-        }
+        val accessible = ReachableCellsCalculator().buildReachableCellSet(state.fieldState, currentSelection)
+
         if (accessible != currentCellsToMove) {
             val mutableSelection = state.changeSelection()
             mutableSelection.cellsToMove = accessible

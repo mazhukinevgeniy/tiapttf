@@ -1,19 +1,19 @@
 package homemade.game.model
 
-import homemade.game.fieldstructure.CellCode
 import homemade.game.fieldstructure.FieldStructure
-import homemade.game.state.ConfigState
-import homemade.game.state.FieldState
-import homemade.game.state.GameState
-import homemade.game.state.SelectionState
+import homemade.game.state.*
 import homemade.game.state.immutable.PlainFieldState
+import homemade.game.state.impl.ReachableCellsCalculator
+
+internal data class Coordinates(val x: Int, val y: Int)
 
 internal data class PlainGameState(
         val width: Int,
         val height: Int,
         val spawnPeriod: Int,
         val settings: GameSettings,
-        val cellStates: List<CellState>
+        val cellStates: List<CellState>,
+        val selection: Coordinates?
 ) : GameState() {
 
     @Transient
@@ -24,12 +24,12 @@ internal data class PlainGameState(
     )
 
     @Transient
-    override val selectionState = object : SelectionState {
-        override val selection: CellCode?
-            get() = TODO("Not yet implemented")
-        override val cellsToMove: Set<CellCode>
-            get() = TODO("Not yet implemented")
-    }
+    override val selectionState: SelectionState = MutableSelectionState(
+            selection?.let { fieldState.structure.getCellCode(it.x, it.y) },
+            ReachableCellsCalculator().buildReachableCellSet(
+                    fieldState, selection?.let { fieldState.structure.getCellCode(it.x, it.y) }
+            )
+    )
 
     @Transient
     override val configState = object : ConfigState(settings) {
@@ -50,7 +50,8 @@ internal data class PlainGameState(
             height = source.fieldState.structure.height,
             spawnPeriod = source.currentSpawnPeriod(),
             settings = source.configState.settings,
-            cellStates = intermediateField.cellStates
+            cellStates = intermediateField.cellStates,
+            selection = source.selectionState.selection?.let { Coordinates(it.x, it.y) }
     )
 
     override fun currentSpawnPeriod(): Int {

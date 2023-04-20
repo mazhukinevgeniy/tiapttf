@@ -12,8 +12,8 @@ import homemade.game.state.impl.BlockValuePool
 class PlainFieldState(
         override val structure: FieldStructure,
         val cellStates: List<CellState>,
-        val linkState: List<Direction?>,
-        val lengths: List<Int>
+        private val linkState: List<Direction?>,
+        private val lengths: List<Int>
 ) : FieldState {
 
     constructor(source: FieldState) : this(
@@ -46,11 +46,12 @@ class PlainFieldState(
 
     companion object {
         fun buildConsistent(fieldStructure: FieldStructure, cellStates: List<CellState>, maxBlock: Int): PlainFieldState {
-            val tmp = MutableFieldState(fieldStructure, BlockValuePool(maxBlock, fieldStructure.fieldSize))
-            tmp.applyCascadeChanges(fieldStructure.cellCodeIterator.asSequence().associateBy(
+            check(fieldStructure.fieldSize == cellStates.size) { "incomplete cellStates" }
+            val linkCalculator = MutableFieldState(fieldStructure, BlockValuePool(maxBlock, fieldStructure.fieldSize))
+            linkCalculator.applyCascadeChanges(fieldStructure.cellCodeIterator.asSequence().associateBy(
                     { it }, { cellStates[it.hashCode()] })
             )
-            return PlainFieldState(tmp)
+            return PlainFieldState(linkCalculator)
         }
     }
 }
