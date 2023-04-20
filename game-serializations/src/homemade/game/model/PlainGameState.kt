@@ -11,7 +11,8 @@ import homemade.game.state.SelectionState
 
 internal data class PlainGameState(
         val width: Int,
-        val height: Int
+        val height: Int,
+        val settings: GameSettings
 ) : GameState() {
 
     @Transient
@@ -37,18 +38,10 @@ internal data class PlainGameState(
             get() = TODO("Not yet implemented")
         override val cellsToMove: Set<CellCode>
             get() = TODO("Not yet implemented")
-
-        override fun isSelected(cellCode: CellCode?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun canMoveTo(cellCode: CellCode?): Boolean {
-            TODO("Not yet implemented")
-        }
     }
 
     @Transient
-    override val configState = object : ConfigState(GameSettings()) {
+    override val configState = object : ConfigState(settings) {
         override val spawnsDenied: Int
             get() = TODO("Not yet implemented")
         override val gameScore: Int
@@ -59,7 +52,8 @@ internal data class PlainGameState(
 
     constructor(source: GameState) : this(
             source.fieldState.structure.width,
-            source.fieldState.structure.height
+            source.fieldState.structure.height,
+            source.configState.settings
     )
 
     override fun currentSpawnPeriod(): Int {
