@@ -13,7 +13,10 @@ internal data class PlainGameState(
         val spawnPeriod: Int,
         val settings: GameSettings,
         val cellStates: List<CellState>,
-        val selection: Coordinates?
+        val selection: Coordinates?,
+        val denies: Int,
+        val score: Int,
+        val multiplier: Int
 ) : GameState() {
 
     @Transient
@@ -34,25 +37,25 @@ internal data class PlainGameState(
     @Transient
     override val configState = object : ConfigState(settings) {
         override val spawnsDenied: Int
-            get() = TODO("Not yet implemented")
+            get() = denies
         override val gameScore: Int
-            get() = TODO("Not yet implemented")
+            get() = score
         override val globalMultiplier: Int
-            get() = TODO("Not yet implemented")
+            get() = multiplier
     }
 
     constructor(source: GameState) : this(
-            source, PlainFieldState(source.fieldState)
-    )
-
-    private constructor(source: GameState, intermediateField: PlainFieldState) : this(
             width = source.fieldState.structure.width,
             height = source.fieldState.structure.height,
             spawnPeriod = source.currentSpawnPeriod(),
             settings = source.configState.settings,
-            cellStates = intermediateField.cellStates,
-            selection = source.selectionState.selection?.let { Coordinates(it.x, it.y) }
+            cellStates = PlainFieldState(source.fieldState).cellStates,
+            selection = source.selectionState.selection?.let { Coordinates(it.x, it.y) },
+            denies = source.configState.spawnsDenied,
+            score = source.configState.gameScore,
+            multiplier = source.configState.globalMultiplier
     )
+    //TODO this loses stored effects, upsettingly. do i care? not yet
 
     override fun currentSpawnPeriod(): Int {
         return spawnPeriod
