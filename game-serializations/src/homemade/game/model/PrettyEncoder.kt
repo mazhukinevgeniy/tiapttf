@@ -7,9 +7,9 @@ import homemade.game.state.GameState
 import java.util.stream.IntStream.range
 import kotlin.streams.asSequence
 
-class PrettyEncoder {
-    fun prettyPrint(state: GameState): String {
-        check(state.configState.settings.maxBlockValue < 10)
+class PrettyEncoder : GameStateEncoder {
+    override fun encode(state: GameState): String {
+        require(state.configState.settings.maxBlockValue < 10)
 
         val builder = StringBuilder()
         builder.append(state.selectionState.selection?.let { "${it.x},${it.y}" } ?: "none")
@@ -42,10 +42,10 @@ class PrettyEncoder {
      * [2]mode,minCombo,spawnCount,maxBlockValue // mode = 1 if turn based, 0 if real time
      * [3+] field in ascii. 1-9 - blocks, . - empty, x - dead, o - spawning
      */
-    fun fromPrettyPrint(pretty: String): GameState {
+    override fun decode(pretty: String): GameState {
         val lineByLine = pretty.split('\n').filterNot { it == "" }
 
-        check(lineByLine.size >= 4)
+        require(lineByLine.size >= 4)
         val selection = run {
             if (lineByLine[0] == "none") {
                 return@run null
@@ -58,7 +58,7 @@ class PrettyEncoder {
 
         val height = lineByLine.size - 3
         val width = lineByLine[3].length
-        check(range(3, lineByLine.size).allMatch { lineByLine[it].length == width }) { "inconsistent field width" }
+        require(range(3, lineByLine.size).allMatch { lineByLine[it].length == width }) { "inconsistent field width" }
         val cellStates = range(3, lineByLine.size).asSequence().flatMap {
             lineByLine[it].map { charCode ->
                 when (charCode) {
@@ -67,8 +67,8 @@ class PrettyEncoder {
                     '.' -> SimpleState.get(Cell.EMPTY)
 
                     else -> {
-                        check(charCode.isDigit()) { "not a digit: '$charCode'" }
-                        check(charCode.digitToInt() in 1..maxBlockValue)
+                        require(charCode.isDigit()) { "not a digit: '$charCode'" }
+                        require(charCode.digitToInt() in 1..maxBlockValue)
                         BlockState(charCode.digitToInt(), true, ComboEffect.UNDEFINED_COMBO_EFFECT)
                     }
                 }

@@ -60,7 +60,7 @@ class FieldStructure @JvmOverloads constructor(@JvmField val width: Int = DEFAUL
     }
 
     fun getCellCode(x: Int, y: Int): CellCode {
-        assert(x in 0 until width && y in 0 until height)
+        require(x in 0 until width && y in 0 until height) { "valid coordinates are 0..${width - 1}, 0..${height - 1}" }
         return cellCodes[x + y * width]
     }
 
@@ -69,7 +69,7 @@ class FieldStructure @JvmOverloads constructor(@JvmField val width: Int = DEFAUL
     }
 
     fun getLinkCode(cellA: CellCode, cellB: CellCode): LinkCode {
-        assert(cellA.distance(cellB) == 1)
+        require(cellA.distance(cellB) == 1) { "can't get linkCode: cells aren't neighbours" }
         return linkCodes[linkCodeAsInt(cellA, cellB)]
     }
 

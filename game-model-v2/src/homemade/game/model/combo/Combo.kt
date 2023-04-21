@@ -9,7 +9,7 @@ class Combo(cells: Set<CellCode>, tier: Int) {
     val tier: Int = tier
 
     init {
-        check(tier > 0)
+        require(tier > 0)
         this.cells = cells
     }
 

@@ -26,7 +26,7 @@ class UserInputProcessingStage : PipelineStage() {
     }
 
     private fun tryMove(moveFromCell: CellCode, moveToCell: CellCode, state: MutableGameState, processingInfo: ProcessingInfo) {
-        check(moveFromCell != moveToCell)
+        require(moveFromCell != moveToCell)
 
         val cellFrom = state.fieldState.getCellState(moveFromCell)
         val cellTo = state.fieldState.getCellState(moveToCell)

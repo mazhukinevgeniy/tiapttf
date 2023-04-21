@@ -22,10 +22,8 @@ class BoardStateCheckStage(private val gameEventPoster: EventPoster<GameEvent>) 
             if (multiplier > 1) {
                 state.changeConfig().globalMultiplier = 1
                 CellMarker(state, processingInfo).removeRandomBlocks()
-                println("multiplier consumed")
             } else {
                 gameEventPoster.post(GameOver(1))
-                println("can't trade multiplier for blocks")
             }
         } else if (field.getNumberOfMovableBlocks() == 0) {
             //TODO improve 'movable' criterion here, and maybe help by clearing field if game is stuck

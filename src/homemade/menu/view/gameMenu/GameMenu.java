@@ -7,7 +7,5 @@ public class GameMenu extends MenuPanel {
     @Override
     public void onQuit() {
         removeAll();
-
-        //System.out.println("gameMenu.onQuit has been called");
     }
 }
