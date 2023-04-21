@@ -1,7 +1,9 @@
 import numpy as np
 import tensorflow as tf
-from keras import layers
 from tensorflow import keras
+
+from solvers.q_model import create_q_model
+from solvers.tiapttf_env import TiapttfEnv
 
 # Configuration parameters for the whole setup
 seed = 42
@@ -13,17 +15,11 @@ epsilon_interval = epsilon_max - epsilon_min  # Rate at which to reduce chance o
 batch_size = 32  # Size of batch taken from replay buffer
 max_steps_per_episode = 10000
 
+width = 9
+height = 9
+combo_size = 5
 
-class MockEnv:
-    def reset(self):
-        pass
-
-    def step(self, action):
-        pass
-
-
-env = MockEnv()
-# TODO setup env (game itself)
+env = TiapttfEnv(width, height, combo_size)
 """
 ## Implement the Deep Q-Network
 This network learns an approximation of the Q-table, which is a mapping between
@@ -34,34 +30,13 @@ is chosen by selecting the larger of the four Q-values predicted in the output l
 
 num_actions = 4
 
-
-def create_q_model():
-    # Network defined by the Deepmind paper
-    inputs = layers.Input(
-        shape=(84, 84, 4)  # todo what's my shape
-    )
-
-    # Convolutions on the frames on the screen
-    # TODO what are these numbers exactly
-    layer1 = layers.Conv2D(32, 8, strides=4, activation="relu")(inputs)
-    layer2 = layers.Conv2D(64, 4, strides=2, activation="relu")(layer1)
-    layer3 = layers.Conv2D(64, 3, strides=1, activation="relu")(layer2)
-
-    layer4 = layers.Flatten()(layer3)
-
-    layer5 = layers.Dense(512, activation="relu")(layer4)
-    action = layers.Dense(num_actions, activation="linear")(layer5)
-
-    return keras.Model(inputs=inputs, outputs=action)
-
-
 # The first model makes the predictions for Q-values which are used to
 # make a action.
-model = create_q_model()
+model = create_q_model(width, height)
 # Build a target model for the prediction of future rewards.
 # The weights of a target model get updated every 10000 steps thus when the
 # loss between the Q-values is calculated the target Q-value is stable.
-model_target = create_q_model()
+model_target = create_q_model(width, height)
 
 """
 ## Train

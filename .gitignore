@@ -9,3 +9,5 @@ theres-a-pattern-there-to-follow.userlibraries
 bin/
 sh.exe.stackdump
 save.xml
+ml/solvers/__pycache__
+tiapttf-cli/src/META-INF
