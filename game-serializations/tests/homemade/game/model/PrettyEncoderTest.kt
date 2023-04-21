@@ -25,7 +25,7 @@ class PrettyEncoderTest {
 
     @Test
     fun fromPrettyPrint() {
-        val parsedState = encoder.fromPrettyPrint(initial)
+        val parsedState = encoder.decode(initial)
         val structure = parsedState.fieldState.structure
 
         assertEquals(parsedState.selectionState.selection?.let { listOf(it.x, it.y) }, listOf(1, 1))
@@ -39,10 +39,10 @@ class PrettyEncoderTest {
 
     @Test
     fun stability() {
-        val state1 = encoder.fromPrettyPrint(initial)
-        val print1 = encoder.prettyPrint(state1)
-        val state2 = encoder.fromPrettyPrint(print1)
-        val print2 = encoder.prettyPrint(state2)
+        val state1 = encoder.decode(initial)
+        val print1 = encoder.encode(state1)
+        val state2 = encoder.decode(print1)
+        val print2 = encoder.encode(state2)
 
         assertEquals(initial, print1)
         assertEquals(initial, print2)

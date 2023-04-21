@@ -97,7 +97,6 @@ class ComboProcessingStage(private val uiLoop: EventPoster<UIEvent>) : PipelineS
                 uiLoop.post(BlockRemoved(currentCell))
                 lastCell = nextCell
             }
-            println("length $comboLength tier $comboTier")
             pack.add(Combo(comboCells, comboTier))
 
             //currentCell must be the last cell of combo after this block

@@ -7,7 +7,7 @@ import homemade.game.state.GameState
 import java.lang.reflect.Type
 
 
-class JsonEncoder {
+class JsonEncoder : GameStateEncoder {
     private val gson = GsonBuilder()
             .registerTypeAdapter(CellState::class.java, object : JsonDeserializer<CellState> {
                 override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): CellState {
@@ -29,11 +29,11 @@ class JsonEncoder {
             })
             .create()
 
-    fun encode(state: GameState): String {
+    override fun encode(state: GameState): String {
         return gson.toJson(PlainGameState(state))
     }
 
-    fun decode(input: String): GameState {
+    override fun decode(input: String): GameState {
         return gson.fromJson(input, GameState::class.java)
     }
 }

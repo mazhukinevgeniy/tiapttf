@@ -24,21 +24,21 @@ class PlainFieldState(
     )
 
     override fun getCellState(cellCode: CellCode): CellState {
-        check(cellCode.hashCode() in cellStates.indices) {
+        require(cellCode.hashCode() in cellStates.indices) {
             "bad cell $cellCode in structure ${structure.width}x${structure.height}"
         }
         return cellStates[cellCode.hashCode()]
     }
 
     override fun getLinkBetweenCells(linkCode: LinkCode): Direction? {
-        check(linkCode.hashCode() in linkState.indices) {
+        require(linkCode.hashCode() in linkState.indices) {
             "bad link $linkCode in structure ${structure.width}x${structure.height}"
         }
         return linkState[linkCode.hashCode()]
     }
 
     override fun getChainLength(linkCode: LinkCode): Int {
-        check(linkCode.hashCode() in lengths.indices) {
+        require(linkCode.hashCode() in lengths.indices) {
             "bad link $linkCode in structure ${structure.width}x${structure.height}"
         }
         return lengths[linkCode.hashCode()]
@@ -46,7 +46,7 @@ class PlainFieldState(
 
     companion object {
         fun buildConsistent(fieldStructure: FieldStructure, cellStates: List<CellState>, maxBlock: Int): PlainFieldState {
-            check(fieldStructure.fieldSize == cellStates.size) { "incomplete cellStates" }
+            require(fieldStructure.fieldSize == cellStates.size) { "incomplete cellStates" }
             val linkCalculator = MutableFieldState(fieldStructure, BlockValuePool(maxBlock, fieldStructure.fieldSize))
             linkCalculator.applyCascadeChanges(fieldStructure.cellCodeIterator.asSequence().associateBy(
                     { it }, { cellStates[it.hashCode()] })
