@@ -15,28 +15,25 @@ abstract class CellState protected constructor(private val cellType: Cell) {
         return ComboEffect.UNDEFINED_COMBO_EFFECT
     }
     //TODO somethings wrong with isMovableBlock and isAliveBlock
-    /**
-     * I think we need this method for view
-     */
-    fun type(): Cell {
+
+    fun type(): Cell { //TODO why extra method
         return cellType
     }
 
     val isAliveBlock: Boolean
-        get() =//TODO: find a better method name
-            cellType == Cell.OCCUPIED
+        get() = cellType == Cell.OCCUPIED
     val isAnyBlock: Boolean
         get() = blocks.contains(cellType)
     val isFreeForMove: Boolean
         get() = cellFreeToMove.contains(cellType)
     val isFreeForSpawn: Boolean
         get() = cellType == Cell.EMPTY
+    open val isMovableBlock: Boolean
+        get() = false
 
     companion object {
         private val cellFreeToMove: Set<Cell> = EnumSet.of(Cell.EMPTY, Cell.MARKED_FOR_SPAWN)
         private val blocks: Set<Cell> = EnumSet.of(Cell.OCCUPIED, Cell.DEAD_BLOCK)
         const val UNDEFINED_VALUE = -1
-        val isMovableBlock = false
-            get() = Companion.field
     }
 }
