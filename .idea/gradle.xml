@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/android" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common-legacy" />
+            <option value="$PROJECT_DIR$/desktop" />
+            <option value="$PROJECT_DIR$/field-structure" />
+            <option value="$PROJECT_DIR$/game-loop" />
+            <option value="$PROJECT_DIR$/game-model-v2" />
+            <option value="$PROJECT_DIR$/game-serializations" />
+            <option value="$PROJECT_DIR$/tiapttf-cli" />
+            <option value="$PROJECT_DIR$/tiapttf-swing" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

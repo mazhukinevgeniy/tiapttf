@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
-      <module name="game-loop" target="17" />
+    <bytecodeTargetLevel target="11">
+      <module name="tiapttf.util" target="17" />
+      <module name="tiapttf.util.main" target="17" />
+      <module name="tiapttf.util.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
