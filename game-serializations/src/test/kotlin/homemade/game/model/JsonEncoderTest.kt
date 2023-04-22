@@ -1,5 +1,6 @@
 package homemade.game.model
 
+import homemade.game.model.JsonEncoder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

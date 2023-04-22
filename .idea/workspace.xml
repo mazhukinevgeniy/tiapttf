@@ -1,379 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="ALL" />
+    <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5bf5b388-1f4b-4101-99bc-0a04edd9f7af" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/homemade/util/PiecewiseConstantFunction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/main/java/homemade/game/fieldstructure/CellCode.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/main/java/homemade/game/fieldstructure/CellCodePair.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/main/java/homemade/game/fieldstructure/Direction.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/main/java/homemade/game/fieldstructure/FieldStructure.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/main/java/homemade/game/fieldstructure/LinkCode.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/field-structure/src/test/java/homemade/game/fieldstructure/FieldStructureTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/loop/GameEvent.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/loop/GameEventHandler.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/loop/GameLoop.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/loop/GameLoopBase.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/loop/UIEvent.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/GameUpdatePipeline.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/PipelineStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/operations/CellMarker.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/operations/ComboEffectVendor.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/operations/GameScore.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/BoardStateCheckStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/ComboProcessingStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/EffectSpawningStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/ScoreUpdateStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/SelectionProcessingStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/SpawnProcessingStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/stages/UserInputProcessingStage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/starters/RegularSpawnPipeline.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/main/java/homemade/game/pipeline/starters/TurnBasedInitPipeline.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/test/java/homemade/game/pipeline/ComboProcessingStageTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/test/java/homemade/game/pipeline/SelectionProcessingStageTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-loop/src/test/java/homemade/game/pipeline/SpawnProcessingStageTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/Cell.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/CellState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/GameSettings.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/cellstates/BlockState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/cellstates/SimpleState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/combo/Combo.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/combo/ComboEffect.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/model/combo/ComboPack.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/ConfigState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/FieldState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/GameState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/MutableConfigState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/MutableFieldState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/MutableGameState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/MutableSelectionState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/SelectionState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/immutable/PlainFieldState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/impl/BlockValuePool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/impl/ReachableCellsCalculator.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/main/java/homemade/game/state/impl/SpawnPeriod.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/test/java/FieldStateEncodingTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-model-v2/src/test/java/homemade/game/model/combo/ComboEffectTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/main/java/homemade/game/model/GameStateEncoder.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/main/java/homemade/game/model/JsonEncoder.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/main/java/homemade/game/model/PlainGameState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/main/java/homemade/game/model/PrettyEncoder.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/test/java/homemade/game/model/JsonEncoderTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-serializations/src/test/java/homemade/game/model/PrettyEncoderTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/pyproject.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-cli/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-cli/src/main/java/Main.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-cli/src/main/java/homemade/cli/Controller.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/controller/GameController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/controller/GameKeyboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/controller/KeyboardInputHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/controller/MouseInputHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/controller/ViewListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/ControlledKeyListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/EffectManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/FpsTracker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/GameInfoPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/GameMouseAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/GameView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/ShownEffect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/BlockLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/DigitMetadata.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/EffectLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/LinkLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/NumberLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/Offset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/game/view/layers/RenderingLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/ButtonActionListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/HandlerButtons.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/MenuManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/records/RecordsManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/settings/CustomManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/settings/ModePanelManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/controller/settings/SettingsManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/records/Record.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/records/Records.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/save/LocalSaveManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/save/RecordsSave.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/save/Save.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/save/SettingsSave.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/Diapason.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/InSetChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/Parameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/Presets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/RangeChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/Settings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/ValidParameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/model/settings/ValueChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/MenuPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/Window.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/gameMenu/GameMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/mainMenu/MainMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/mainMenu/MainMenuButtonFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/records/RecordsButtonFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/records/RecordsMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/records/RowRecordFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/BoolParameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/CustomMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/ModePanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/NumberParameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/ParameterFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/SettingsButtonFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/menu/view/settings/SettingsMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/9.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/Assets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/BlockAssets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/corners.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/cross.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/expl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/gray_block.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/immovable_block.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/normal_block.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/normal_block_selected.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/special_block.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/special_block_selected.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/square.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/tria.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/EffectAssets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/field.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/glow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/grid.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/LinkAssets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/place2move.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/small_block.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/utils/AssetLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/common-legacy/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common-legacy/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/save.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_reflect_1_8_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/google_code_gson.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/jetbrains_kotlin_reflect.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/jetbrains_kotlinx_coroutines_core.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/jetbrains_kotlinx_coroutines_core_common.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/homemade/util/PiecewiseConstantFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/field-structure/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/field-structure.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/src/homemade/game/fieldstructure/CellCode.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/src/homemade/game/fieldstructure/CellCodePair.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/src/homemade/game/fieldstructure/Direction.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/src/homemade/game/fieldstructure/FieldStructure.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/src/homemade/game/fieldstructure/LinkCode.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/field-structure/tests/homemade/game/fieldstructure/FieldStructureTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/game-loop/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/game-loop.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/loop/GameEvent.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/loop/GameEventHandler.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/loop/GameLoop.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/loop/GameLoopBase.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/loop/UIEvent.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/GameUpdatePipeline.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/PipelineStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/operations/CellMarker.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/operations/ComboEffectVendor.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/operations/GameScore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/BoardStateCheckStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/ComboProcessingStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/EffectSpawningStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/ScoreUpdateStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/SelectionProcessingStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/SpawnProcessingStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/stages/UserInputProcessingStage.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/starters/RegularSpawnPipeline.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/src/homemade/game/pipeline/starters/TurnBasedInitPipeline.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/tests/homemade/game/pipeline/ComboProcessingStageTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/tests/homemade/game/pipeline/SelectionProcessingStageTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-loop/tests/homemade/game/pipeline/SpawnProcessingStageTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/game-model-v2/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/game-model-v2.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/Cell.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/CellState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/GameSettings.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/cellstates/BlockState.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/cellstates/SimpleState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/combo/Combo.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/combo/ComboEffect.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/model/combo/ComboPack.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/ConfigState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/FieldState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/GameState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/MutableConfigState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/MutableFieldState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/MutableGameState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/MutableSelectionState.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/SelectionState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/immutable/PlainFieldState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/impl/BlockValuePool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/impl/ReachableCellsCalculator.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/src/homemade/game/state/impl/SpawnPeriod.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/tests/FieldStateEncodingTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-model-v2/tests/homemade/game/model/combo/ComboEffectTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/game-serializations/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/game-serializations.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/src/homemade/game/model/GameStateEncoder.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/src/homemade/game/model/JsonEncoder.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/src/homemade/game/model/PlainGameState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/src/homemade/game/model/PrettyEncoder.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/tests/homemade/game/model/JsonEncoderTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-serializations/tests/homemade/game/model/PrettyEncoderTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml/ml.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/controller/GameController.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/controller/GameKeyboard.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/controller/KeyboardInputHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/controller/MouseInputHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/controller/ViewListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/ControlledKeyListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/EffectManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/FpsTracker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/GameInfoPanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/GameMouseAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/GameView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/ShownEffect.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/BlockLayer.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/DigitMetadata.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/EffectLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/LinkLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/NumberLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/Offset.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/game/view/layers/RenderingLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/ButtonActionListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/HandlerButtons.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/MenuManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/records/RecordsManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/settings/CustomManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/settings/ModePanelManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/controller/settings/SettingsManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/records/Record.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/records/Records.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/save/LocalSaveManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/save/RecordsSave.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/save/Save.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/save/SettingsSave.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/Diapason.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/InSetChecker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/Parameter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/Presets.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/RangeChecker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/Settings.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/ValidParameter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/model/settings/ValueChecker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/MenuPanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/Window.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/gameMenu/GameMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/mainMenu/MainMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/mainMenu/MainMenuButtonFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/records/RecordsButtonFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/records/RecordsMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/records/RowRecordFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/BoolParameter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/CustomMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/ModePanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/NumberParameter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/ParameterFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/SettingsButtonFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/menu/view/settings/SettingsMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/Assets.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/BlockAssets.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/corners.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/cross.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/expl.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/gray_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/immovable_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/normal_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/normal_block_selected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/special_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/special_block_selected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/square.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/blocks/tria.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/EffectAssets.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/dis_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/dis_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/dis_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/effects/stone_boom_6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/field.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/glow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/grid.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/LinkAssets.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/arrow_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/arrow_orange.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/links/arrow_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/place2move.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/resources/small_block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/homemade/utils/AssetLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/theres-a-pattern-there-to-follow.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiapttf-cli/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-cli/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiapttf-cli/src/Main.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiapttf-cli/src/homemade/cli/Controller.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiapttf-cli/tiapttf-cli.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/homemade/util/PiecewiseConstantFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-legacy/src/main/java/homemade/util/PiecewiseConstantFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/field-structure/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/field-structure/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-loop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/game-loop/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-model-v2/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/game-model-v2/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-serializations/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/game-serializations/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-serializations/src/test/java/homemade/game/model/JsonEncoderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game-serializations/src/test/kotlin/homemade/game/model/JsonEncoderTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-serializations/src/test/java/homemade/game/model/PrettyEncoderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game-serializations/src/test/kotlin/homemade/game/model/PrettyEncoderTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-cli/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-cli/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-cli/src/main/java/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-cli/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-cli/src/main/java/homemade/cli/Controller.kt" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-cli/src/main/kotlin/homemade/cli/Controller.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/0.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/6.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/7.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/8.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/9.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/corners.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/corners.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/cross.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/cross.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/expl.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/expl.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/gray_block.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/gray_block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/immovable_block.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/immovable_block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/normal_block.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/normal_block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/normal_block_selected.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/normal_block_selected.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/special_block.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/special_block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/special_block_selected.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/special_block_selected.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/square.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/square.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/blocks/tria.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/blocks/tria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/dis_1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/dis_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/dis_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/dis_3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_5.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/effects/stone_boom_6.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/effects/stone_boom_6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/field.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/field.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/glow.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/glow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/grid.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/grid.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/6.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/arrow_green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_orange.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/arrow_orange.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/links/arrow_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/links/arrow_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/place2move.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/place2move.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiapttf-swing/src/main/java/homemade/resources/small_block.png" beforeDir="false" afterPath="$PROJECT_DIR$/tiapttf-swing/src/main/resources/small_block.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -385,6 +82,52 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/tiapttf-swing">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="tiapttf" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="tiapttf" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="tiapttf" type="f1a62948:ProjectNode" />
+                <item name="tiapttf-swing" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="tiapttf" type="f1a62948:ProjectNode" />
+                <item name="tiapttf-swing" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="tiapttf" type="f1a62948:ProjectNode" />
+                <item name="tiapttf-swing" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -403,19 +146,44 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "jbr-17",
+    "last_opened_file_path": "C:/repos/tiapttf/tiapttf-swing/src/main/resources",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.20229885",
-    "settings.build.tools.auto.reload": "ALL",
+    "settings.build.tools.auto.reload": "SELECTIVE",
     "settings.editor.selected.configurable": "build.tools"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\repos\tiapttf\tiapttf-swing\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\repos\tiapttf\tiapttf-swing\src\main\java\homemade\resources" />
+      <recent name="C:\repos\tiapttf\tiapttf-swing\src\main\java\homemade\resources\links" />
+      <recent name="C:\repos\tiapttf\tiapttf-swing\src\main\java\homemade\resources\effects" />
+      <recent name="C:\repos\tiapttf\tiapttf-swing\src\main\java\homemade\resources\blocks" />
+      <recent name="C:\repos\tiapttf\common-legacy\src\main\resources" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle allTests" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="tiapttf.android.main" />
       <option name="DEPLOY" value="true" />
@@ -451,6 +219,119 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="tiapttf.tiapttf-swing.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonEncoderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":game-serializations:test" />
+            <option value="--tests" />
+            <option value="&quot;homemade.game.model.JsonEncoderTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="JsonEncoderTest.stability" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":game-serializations:test" />
+            <option value="--tests" />
+            <option value="&quot;homemade.game.model.JsonEncoderTest.stability&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'tiapttf'" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="Main" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="tiapttf.tiapttf-cli.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="mail_rl" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="ml" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ml/solvers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml/solvers/mail_rl.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Kotlin.Main" />
+        <item itemvalue="Gradle.JsonEncoderTest.stability" />
+        <item itemvalue="Gradle.JsonEncoderTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

@@ -23,6 +23,7 @@ kotlin {
         }
         val jvmTest by getting
     }
+    jvmToolchain(11)
 }
 
 compose.desktop {
@@ -34,4 +35,7 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+repositories {
+    mavenCentral()
 }

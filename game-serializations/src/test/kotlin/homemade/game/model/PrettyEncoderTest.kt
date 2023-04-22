@@ -1,5 +1,7 @@
 package homemade.game.model
 
+import homemade.game.model.Cell
+import homemade.game.model.PrettyEncoder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

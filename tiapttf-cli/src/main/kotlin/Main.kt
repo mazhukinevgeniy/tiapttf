@@ -70,6 +70,9 @@ object Main {
                 println("bad input, expecting format \"x,y\", where x in 0 until $width, y in 0 until $height")
             } catch (e: IllegalArgumentException) {
                 println("bad input, $e")
+            } catch (e: RuntimeException) {
+                println("amazing: $e")
+                break
             }
         }
 
