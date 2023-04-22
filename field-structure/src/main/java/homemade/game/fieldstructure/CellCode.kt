@@ -1,6 +1,7 @@
 package homemade.game.fieldstructure
 
 import java.util.*
+import kotlin.math.abs
 
 class CellCode internal constructor(val x: Int, val y: Int, width: Int, height: Int, val cellCode: Int) {
     private val isOnBorder: BooleanArray = BooleanArray(4)
@@ -69,6 +70,6 @@ class CellCode internal constructor(val x: Int, val y: Int, width: Int, height: 
         }
 
     fun distance(otherCell: CellCode): Int {
-        return Math.abs(x - otherCell.x) + Math.abs(y - otherCell.y)
+        return abs(x - otherCell.x) + abs(y - otherCell.y)
     }
 }

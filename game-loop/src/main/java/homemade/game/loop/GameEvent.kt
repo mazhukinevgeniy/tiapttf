@@ -6,7 +6,6 @@ sealed class GameEvent
 
 // user-generated
 class UserClick(val cellCode: CellCode) : GameEvent()
-object SaveAndQuit : GameEvent()
 object PauseToggle : GameEvent()
 
 // rules-generated

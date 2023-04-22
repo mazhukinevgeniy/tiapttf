@@ -46,7 +46,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
     override fun handle(event: GameEvent) {
         when (event) {
             is RequestBlockSpawning -> handleBlockSpawning(event)
-            is CreateSnapshot -> handleCreateSnapshot(event)
+            is CreateSnapshot -> handleCreateSnapshot()
             is UserClick -> handleUserInput(event)
             is GameOver -> handleGameOver(event)
             else -> throw RuntimeException("bad subscription $event")
@@ -105,7 +105,7 @@ class GameUpdatePipeline(gameLoop: GameLoop, private val mutableGameState: Mutab
         }
     }
 
-    private fun handleCreateSnapshot(event: CreateSnapshot) {
+    private fun handleCreateSnapshot() {
         uiLoop.post(SnapshotReady(mutableGameState.createImmutable()))
     }
 

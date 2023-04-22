@@ -53,10 +53,7 @@ public class Presets {
     public List<Parameter<?>> getPresets(Mode mode, Difficulty difficulty) {
         List<Parameter<?>> parameters = new ArrayList<>();
 
-        boolean isRealTime = false;
-        if (mode == Mode.REALTIME) {
-            isRealTime = true;
-        }
+        boolean isRealTime = mode == Mode.REALTIME;
         parameters.add(new Parameter<>(Settings.Code.IS_REALTIME, isRealTime));
 
         List<Integer> values = presetsMap.get(mode).get(difficulty);

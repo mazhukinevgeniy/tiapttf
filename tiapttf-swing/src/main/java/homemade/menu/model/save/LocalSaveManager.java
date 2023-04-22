@@ -32,9 +32,8 @@ public class LocalSaveManager implements SettingsSave, RecordsSave {
 
     private <T> T getValue(String blockName, String parameterName, Type type) {
         String value = save.getParameterValue(blockName, parameterName);
-        T parameterValue = convertStrValue(value, type);
 
-        return parameterValue;
+        return convertStrValue(value, type);
     }
 
     private <T> T convertStrValue(String value, Type type) {

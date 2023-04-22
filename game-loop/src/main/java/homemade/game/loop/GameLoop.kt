@@ -53,7 +53,7 @@ class UILoop : GameLoopBase<UIEvent>(UIEvent::class.sealedSubclasses) {
 /**
  * Twin channels are necessary for communicating with the UI thread (although we could have just used polling)
  */
-class GameLoop() {
+class GameLoop {
 
     val model = BackgroundLoop()
     val ui = UILoop()

@@ -67,7 +67,7 @@ class NumberParameter implements ParameterFactory<JPanel, Integer> {
             Integer value = lastValue;
             try {
                 value = Integer.valueOf(strValue);
-            } catch (Exception exception) {
+            } catch (Exception ignored) {
             }
 
             textField.setText(String.valueOf(value));

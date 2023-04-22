@@ -80,7 +80,7 @@ class MutableFieldState(
         val newDirection = linkDirection(cellA.value(), cellB.value(), lowerToHigher)
         link.direction = newDirection
         val alignedLinks: MutableSet<Link?> = HashSet(structure.maxDimension)
-        for (direction in EnumSet.of<Direction?>(lowerToHigher, lowerToHigher.opposite)) {
+        for (direction in EnumSet.of(lowerToHigher, lowerToHigher.opposite)) {
             val pair = CellCodePair(linkCode)
             val linksCollected = collectLinks(alignedLinks, pair, direction, newDirection)
             if (pair.isValid && linksCollected == 1) {
@@ -93,8 +93,7 @@ class MutableFieldState(
     }
 
     private fun linkDirection(lowerValue: Int, higherValue: Int, lowerToHigher: Direction): Direction? {
-        val direction: Direction?
-        direction = if (lowerValue == CellState.UNDEFINED_VALUE || higherValue == CellState.UNDEFINED_VALUE || lowerValue == higherValue) {
+        val direction: Direction? = if (lowerValue == CellState.UNDEFINED_VALUE || higherValue == CellState.UNDEFINED_VALUE || lowerValue == higherValue) {
             null
         } else if (lowerValue > higherValue) {
             lowerToHigher

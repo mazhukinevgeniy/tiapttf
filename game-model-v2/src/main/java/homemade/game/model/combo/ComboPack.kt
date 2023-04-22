@@ -35,10 +35,6 @@ class ComboPack {
         return combos.iterator()
     }
 
-    fun numberOfCombos(): Int {
-        return combos.size
-    }
-
     fun packTier(): Int {
         return tier
     }

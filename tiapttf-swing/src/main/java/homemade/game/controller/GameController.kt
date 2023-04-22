@@ -39,7 +39,7 @@ class GameController(private val menuManager: MenuManager, private val frame: Fr
             var sum: Long = 0
             override fun actionPerformed(e: ActionEvent) {
                 val newTime = System.currentTimeMillis()
-                if (previousTime > 0 && newTime > previousTime) {
+                if (previousTime in 1 until newTime) {
                     val diff = newTime - previousTime
                     gameLoop.model.post(TimeElapsed(diff.toInt()))
                     sum += diff
