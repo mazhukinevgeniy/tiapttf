@@ -12,12 +12,17 @@ public class AssetLoader {
     final protected Image getImage(String filename) {
         InputStream input = getClass().getResourceAsStream(filename);
 
-        for (int i = 0; i < TRIES_TO_GET_FILE; i++)
+        for (int i = 0; i < TRIES_TO_GET_FILE; i++) {
             try {
                 return ImageIO.read(input);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                System.out.println(System.getProperty("user.dir"));
+                throw e;
             }
+        }
 
         throw new RuntimeException("couldn't load asset");
     }
