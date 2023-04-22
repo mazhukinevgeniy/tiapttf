@@ -1,19 +1,17 @@
 package homemade.menu.model.settings;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 class InSetChecker<Type extends Comparable<Type>> extends ValueChecker<Type> {
     private Type defaultValue = null;
-    private Set<Type> elements = null;
+    private Set<Type> elements = new HashSet<>();
 
     public InSetChecker(final Type defaultValue, final Type... elements) {
         super(defaultValue);
 
-        this.elements = new HashSet<>();
-        for (Type element : elements) {
-            this.elements.add(element);
-        }
+        Collections.addAll(this.elements, elements);
         sedDefaultValue(defaultValue);
     }
 

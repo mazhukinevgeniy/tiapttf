@@ -37,7 +37,7 @@ class ComboProcessingStage(private val uiLoop: EventPoster<UIEvent>) : PipelineS
         CellMarker(state, processingInfo).execute(removeCombos(combos))
     }
 
-    fun findCombos(starts: Set<CellCode>): ComboPack {
+    private fun findCombos(starts: Set<CellCode>): ComboPack {
         val numberOfStarts = starts.size
         val horizontals: MutableSet<Int> = HashSet(numberOfStarts)
         val verticals: MutableSet<Int> = HashSet(numberOfStarts)
